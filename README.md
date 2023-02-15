@@ -18,7 +18,7 @@ series and parallel. The vehicle model is a coupled electrical and thermal
 model built using Simscape Battery&trade;, Simscape Driveline&trade;, 
 Simscape Electrical&trade;, and Simscape Fluids&trade; Libraries.
 
-![](Script_Data/BEVplantModelCanvas.png)
+![](ScriptData/BEVplantModelCanvas.png)
 
 In these examples, you learn how to:
 * Simulate an all wheel drive (AWD) or a forward wheel drive (FWD) vehicle.
@@ -26,7 +26,7 @@ In these examples, you learn how to:
 * Size your high-voltage (HV) battery pack to achieve your desired range.
 * Setup your electric motor test bench for system integration.
 
-![](Script_Data/BEVplantModelVehicle.png)
+![](ScriptData/BEVplantModelVehicle.png)
 
 ## Setup 
 * Clone the project repository.
