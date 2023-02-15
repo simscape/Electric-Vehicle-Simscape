@@ -1,4 +1,4 @@
-# Electric Vehicle Design with Simscape&trade;
+# Electric Vehicle Design with Simscape
 
 To reduce the greenhouse gas emissions, meet climate goals, and arrest 
 global warming, the automotive sector is rapidly developing and proposing 
@@ -15,7 +15,7 @@ The examples in this repository show you how to model an automotive
 battery electric vehicle (BEV) for range estimation and battery sizing. The 
 battery pack comprises several battery modules as combinations of cells in 
 series and parallel. The vehicle model is a coupled electrical and thermal 
-model built using Simscape Battery&trade;, Simscape Driveline&trade;, 
+model built using Simscape&trade Battery&trade;, Simscape Driveline&trade;, 
 Simscape Electrical&trade;, and Simscape Fluids&trade; Libraries.
 
 ![](ScriptData/BEVplantModelCanvas.png)
