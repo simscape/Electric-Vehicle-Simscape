@@ -1,0 +1,41 @@
+<?xml-stylesheet href="defaultstyles.css" type="text/css"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:d="http://www.mathworks.com/blockgraphics" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="svg_3" width="126" height="126" d:options="PreserveAspect:Off;Rotate:On;Resize:FitToBlock;Port:None">
+	<defs>
+		<style>
+			.sA {
+				fill: none;
+			stroke: #000000;
+			stroke-width: 0.9;
+			stroke-miterlimit: 20;}
+			.sB {
+				fill: #000000;
+			fillrule: evenodd;
+			stroke: #000000;
+			stroke-width: 0.9;
+			stroke-miterlimit: 20;}
+			.sC {
+				fill: none;
+			stroke: #FFFFFF;
+			stroke-width: 0.9;
+			stroke-miterlimit: 20;}
+					</style>
+	</defs>
+	<g id="layer_4" title="layer_0">
+		<g id="Battery">
+			<rect id="TopSealant" class="rect" style="stroke:#0072bd;stroke-width: 3;" x="28.39" y="46.97" width="70.32" height="2.4" rx="0" ry="0"/>
+			<rect id="BatteryBody" class="rect" style="stroke:#0072bd;stroke-width: 3;" x="27.37" y="49.37" width="72.25" height="27.85" rx="0" ry="0"/>
+			<rect id="BatteryTopCover" class="rect" style="stroke:#0072bd;stroke-width: 3;" x="27.37" y="42.92" width="72.25" height="4.05" rx="0" ry="0"/>
+			<rect id="BottomSealant" class="rect" style="stroke:#0072bd;stroke-width: 3;" x="28.83" y="77.22" width="69.32" height="2" rx="0" ry="0"/>
+			<rect id="BatteryBottomCover" class="rect" style="stroke:#0072bd;stroke-width: 3;" x="27.37" y="79.22" width="72.25" height="4.05" rx="0" ry="0"/>
+			<rect id="PlusSquare" class="rect" style="stroke: #ff6929;stroke-width: 3;" x="32.72" y="42.92" width="10.37" height="9.39" rx="0" ry="0"/>
+			<text id="PlusText" class="text" style="stroke: #ff6929;fill: #ff6929;" d:options="ScalingOnResize:WithParent" d:hcenter="PlusSquare.hcenter" d:vcenter="PlusSquare.vcenter" x="34.98" y="42.05" width="6" height="11">
+				<tspan dx="0" dy="0" x="34.98">+</tspan>
+			</text>
+			<rect id="MinusSquare" class="rect" style="stroke: #ff6929;stroke-width: 3;" x="84.31" y="42.92" width="10.27" height="9.39" rx="0" ry="0"/>
+			<text id="MinusText" class="text" style="stroke: #ff6929;fill: #ff6929;" d:options="ScalingOnResize:WithParent" d:hcenter="MinusSquare.hcenter" d:vcenter="MinusSquare.vcenter" x="87.78" y="41.15" width="3.34" height="11">
+				<tspan dx="0" dy="0" x="87.78">-</tspan>
+			</text>
+			<rect id="Frame" class="rect" style="fill:none;stroke: #0072bd;stroke-width: 3;" x="0" y="0" width="126" height="126" rx="0" ry="0"/>
+		</g>
+	</g>
+</svg>

@@ -1,0 +1,58 @@
+<?xml-stylesheet href="defaultstyles.css" type="text/css"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:d="http://www.mathworks.com/blockgraphics" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="svg_3" width="126" height="126" d:options="PreserveAspect:Off;Rotate:On;Port:None">
+	<defs>
+		<style>
+			.sA {
+				fill: none;
+			stroke: #000000;
+			stroke-width: 0.9;
+			stroke-miterlimit: 20;}
+			.sB {
+				fill: #000000;
+			fillrule: evenodd;
+			stroke: #000000;
+			stroke-width: 0.9;
+			stroke-miterlimit: 20;}
+			.sC {
+				fill: none;
+			stroke: #FFFFFF;
+			stroke-width: 0.9;
+			stroke-miterlimit: 20;}
+					</style>
+	</defs>
+	<g id="layer_4" title="layer_0">
+		<g id="BatteryIcon">
+			<line id="ParallelConnectionTop" class="line" style="stroke:#0072bd;stroke-width: 4;" transform="matrix(-1,0,0,-1,126.0000076294,176.7199859619)" x1="25.2" y1="88.36" x2="100.8" y2="88.36"/>
+			<line id="ParallelConnectionBottom" class="line" style="stroke:#0072bd;stroke-width: 4;" transform="matrix(-1,0,0,-1,126.0000076294,75.9199829102)" x1="25.2" y1="37.96" x2="100.8" y2="37.96"/>
+			<g id="ConnectionTopLeft">
+				<line id="Dot11" class="line" style="stroke:#0072bd;stroke-width: 4;" transform="matrix(-1,0,0,-1,25.6200065613,176.7199859619)" x1="14.28" y1="88.36" x2="11.34" y2="88.36"/>
+				<line id="Dot12" class="line" style="stroke:#0072bd;stroke-width: 4;" transform="matrix(-1,0,0,-1,34.0400047302,176.7199859619)" x1="18.49" y1="88.36" x2="15.55" y2="88.36"/>
+				<line id="Dot13" class="line" style="stroke:#0072bd;stroke-width: 4;" transform="matrix(-1,0,0,-1,42.7000045776,176.7199859619)" x1="22.82" y1="88.36" x2="19.88" y2="88.36"/>
+			</g>
+			<g id="ConnectionTopRight">
+				<line id="Dot21" class="line" style="stroke:#0072bd;stroke-width: 4;" transform="matrix(-1,0,0,-1,209.5800018311,176.7199859619)" x1="106.26" y1="88.36" x2="103.32" y2="88.36"/>
+				<line id="Dot22" class="line" style="stroke:#0072bd;stroke-width: 4;" transform="matrix(-1,0,0,-1,218,176.7199859619)" x1="110.47" y1="88.36" x2="107.53" y2="88.36"/>
+				<line id="Dot23" class="line" style="stroke:#0072bd;stroke-width: 4;" transform="matrix(-1,0,0,-1,226.6600036621,176.7199859619)" x1="114.8" y1="88.36" x2="111.86" y2="88.36"/>
+			</g>
+			<g id="ConnectionBottomLeft">
+				<line id="Dot31" class="line" style="stroke:#0072bd;stroke-width: 4;" transform="matrix(-1,0,0,-1,25.6200065613,75.9199829102)" x1="14.28" y1="37.96" x2="11.34" y2="37.96"/>
+				<line id="Dot32" class="line" style="stroke:#0072bd;stroke-width: 4;" transform="matrix(-1,0,0,-1,34.0400047302,75.9199829102)" x1="18.49" y1="37.96" x2="15.55" y2="37.96"/>
+				<line id="Dot33" class="line" style="stroke:#0072bd;stroke-width: 4;" transform="matrix(-1,0,0,-1,42.7000045776,75.9199829102)" x1="22.82" y1="37.96" x2="19.88" y2="37.96"/>
+			</g>
+			<g id="ConnectionBottomRight">
+				<line id="Dot41" class="line" style="stroke:#0072bd;stroke-width: 4;" transform="matrix(-1,0,0,-1,209.5800018311,75.9199829102)" x1="106.26" y1="37.96" x2="103.32" y2="37.96"/>
+				<line id="Dot42" class="line" style="stroke:#0072bd;stroke-width: 4;" transform="matrix(-1,0,0,-1,218,75.9199829102)" x1="110.47" y1="37.96" x2="107.53" y2="37.96"/>
+				<line id="Dot43" class="line" style="stroke:#0072bd;stroke-width: 4;" transform="matrix(-1,0,0,-1,226.6600036621,75.9199829102)" x1="114.8" y1="37.96" x2="111.86" y2="37.96"/>
+			</g>
+			<rect id="Battery1P" class="sB" style="fill:#0072bd;stroke:#0072bd;" transform="matrix(0,1,-1,0,102.8299998475,16.9899998474)" x="41.03" y="44.79" width="3.78" height="30.24" rx="0" ry="0"/>
+			<rect id="Battery1N" class="sB" style="fill:#0072bd;stroke:#0072bd;" transform="matrix(0,1,-1,0,110.4300012207,21.9500012207)" x="42.35" y="59.89" width="3.78" height="12.6" rx="0" ry="0"/>
+			<line id="Battery1BottomConnection" class="line" style="stroke:#0072bd;stroke-width: 4;" transform="matrix(0,1,-1,0,121.1199934387,32.9199858094)" x1="32.76" y1="77.02" x2="55.44" y2="77.02"/>
+			<line id="Battery1TopConnection" class="line" style="stroke:#0072bd;stroke-width: 4;" transform="matrix(0,1,-1,0,91.9499954223,4.0099877929)" x1="33.89" y1="47.98" x2="54.05" y2="47.98"/>
+			<rect id="Battery2N" class="sB" style="fill:#0072bd;stroke:#0072bd;" transform="matrix(0,1,-1,0,148.1499972534,-15.6100027466)" x="79.99" y="59.97" width="3.78" height="12.6" rx="0" ry="0"/>
+			<rect id="Battery2P" class="sB" style="fill:#0072bd;stroke:#0072bd;" transform="matrix(0,1,-1,0,142.0100028991,-21.8899971009)" x="80.06" y="44.94" width="3.78" height="30.24" rx="0" ry="0"/>
+			<line id="Battery2TopConnection" class="line" style="stroke:#0072bd;stroke-width: 4;" transform="matrix(0,1,-1,0,130.3899967957,-33.3700184632)" x1="71.17" y1="48.51" x2="92.59" y2="48.51"/>
+			<line id="Battery2BottomConnection" class="line" style="stroke:#0072bd;stroke-width: 4;" transform="matrix(0,1,-1,0,160.1799900818,-3.6200099182)" x1="71.82" y1="78.28" x2="91.98" y2="78.28"/>
+		</g>
+		<rect id="Frame" class="rect" style="fill:none;stroke: #0072bd;stroke-opacity: 1;stroke-width: 3;" x="0" y="0" width="126" height="126" rx="0" ry="0"/>
+	</g>
+</svg>
