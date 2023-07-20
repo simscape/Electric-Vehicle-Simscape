@@ -4,7 +4,7 @@ To reduce greenhouse gas emissions, meet climate goals, and arrest
 global warming, the automotive sector is rapidly developing and proposing 
 innovative low-carbon solutions. Among these solutions, electric vehicles (EVs) 
 have gained traction thanks to their reduced carbon footprint and 
-overall efficiency. The mass adoption of EVs depends onf actors including 
+overall efficiency. The mass adoption of EVs depends on factors including 
 the cost of ownership, safety, and range anxiety. Typically, these vehicles 
 employ large battery packs, which are often the most expensive component of
 the vehicle. Modeling and simulation play then an important role in reducing 
