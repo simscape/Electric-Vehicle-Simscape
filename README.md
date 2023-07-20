@@ -22,9 +22,10 @@ Simscape Electrical&trade;, and Simscape Fluids&trade; Libraries.
 
 There are workflows in this project where you learn how to:
 1. Simulate an all wheel drive (AWD) and a front wheel drive (FWD) vehicle.
+   
 ![](Script_Data/html/BatteryElectricVehicleModelOverview_02.png)
 
-2. Estimate the on-road range of the vehicle. Run drive cycles 
+3. Estimate the on-road range of the vehicle. Run drive cycles 
 with different ambient conditions to determine the range of the vehicle with 
 a given capacity.
 
