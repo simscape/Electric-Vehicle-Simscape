@@ -2,14 +2,15 @@
 
 To reduce greenhouse gas emissions, meet climate goals, and arrest 
 global warming, the automotive sector is rapidly developing and proposing 
-innovative low-carbon solutions. Among these solutions, electric vehicles (EV) 
-have strongly gained traction thanks to their reduced carbon footprint and 
-overall efficiency. The mass adoption of these EVs depends on multiple 
-factors including the cost of ownership, safety, and range anxiety. 
-Typically, these vehicles employ large battery packs, which often represent 
-the most expensive component of the vehicle. Modeling and simulation play 
-then an important role in reducing the development cost and enabling an even 
-greater adoption of these vehicles.
+innovative low-carbon solutions. Among these solutions, electric vehicles (EVs) 
+have gained traction thanks to their reduced carbon footprint and 
+overall efficiency. The mass adoption of EVs depends onf actors including 
+the cost of ownership, safety, and range anxiety. Typically, these vehicles 
+employ large battery packs, which are often the most expensive component of
+the vehicle. Modeling and simulation play then an important role in reducing 
+the development cost and enabling greater adoption of these vehicles.
+
+![](Script_Data/html/BatteryElectricVehicleModelOverview_01.png)
 
 The examples in this repository show you how to model an automotive 
 battery electric vehicle (BEV) for range estimation and battery sizing. The 
@@ -18,15 +19,35 @@ series and parallel. The vehicle model is a coupled electrical, mechanical,
 and thermal model built using Simscape&trade; Battery&trade;, Simscape Driveline&trade;, 
 Simscape Electrical&trade;, and Simscape Fluids&trade; Libraries.
 
-![](ScriptData/BEVplantModelCanvas.png)
 
-In these examples, you learn how to:
-* Simulate an all wheel drive (AWD) or a front wheel drive (FWD) vehicle.
-* Estimate the on-road range of the vehicle.
-* Size your high-voltage (HV) battery pack to achieve your desired range.
-* Setup your electric motor test bench for system integration.
+There are workflows in this project where you learn how to:
+1. Simulate an all wheel drive (AWD) and a front wheel drive (FWD) vehicle.
+![](Script_Data/html/BatteryElectricVehicleModelOverview_02.png)
 
-![](ScriptData/BEVplantModelVehicle.png)
+2. Estimate the on-road range of the vehicle. Run drive cycles 
+with different ambient conditions to determine the range of the vehicle with 
+a given capacity.
+
+![](Image/BEVrangeEstimationResults.png)
+
+3. Size your high-voltage (HV) battery pack to achieve your desired range.
+You learn how to simulate battery packs with different capacities and 
+weights, and compare them based on how these factors affect the range of the vehicle.
+
+4. Setup your electric motor test bench for system integration.
+
+5. Find the fixed gear ratio suitable for BEV application.
+![](Image/PMSMThermalTestGearResult.png)
+
+6. Generate a loss map for the motor and inverter.
+
+7. Estimate the inverter power module semiconductor device junction temperature 
+variation due to switching and predict the lifetime of the inverter.
+![](Image/PMSMThermalTestInverterResult.png)
+
+8. Build a neural network model to predict battery temperature.
+![](Image/BatteryNeuralNetResults.png)
+
 
 ## Setup 
 * Clone the project repository.
