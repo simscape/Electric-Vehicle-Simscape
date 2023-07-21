@@ -25,7 +25,7 @@ There are workflows in this project where you learn how to:
    
 ![](Script_Data/html/BatteryElectricVehicleModelOverview_02.png)
 
-3. Estimate the on-road range of the vehicle. Run drive cycles 
+2. Estimate the on-road range of the vehicle. Run drive cycles 
 with different ambient conditions to determine the range of the vehicle with 
 a given capacity.
 
@@ -38,15 +38,18 @@ weights, and compare them based on how these factors affect the range of the veh
 4. Setup your electric motor test bench for system integration.
 
 5. Find the fixed gear ratio suitable for BEV application.
+   
 ![](Image/PMSMThermalTestGearResult.png)
 
 6. Generate a loss map for the motor and inverter.
 
 7. Estimate the inverter power module semiconductor device junction temperature 
 variation due to switching and predict the lifetime of the inverter.
+
 ![](Image/PMSMThermalTestInverterResult.png)
 
 8. Build a neural network model to predict battery temperature.
+    
 ![](Image/BatteryNeuralNetResults.png)
 
 
