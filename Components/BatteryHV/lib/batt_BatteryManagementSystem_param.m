@@ -52,18 +52,20 @@ battery.Ns=110;    % Number of series connected strings
 battery.Np=3;      % Number of parallel cells per string
 
 %% Cell-to-cell variation
-battery.iniT=vehicleThermal.ambient*ones(1,battery.Ns*battery.Np);  % Module-1 Cell-to-Cell initial Temperature variation
+battery.iniT=vehicleThermal.ambient*ones(1,battery.Ns*battery.Np);  % [K] Module-1 Cell-to-Cell initial Temperature variation
 battery.iniSOC=battery.initialPackSOC*ones(1,battery.Ns*battery.Np);        % Module-1 Cell-to-Cell initial SOC variation
+
+%% Module Electrical
+battery.Ns=110;             % Number of series connected strings
+battery.Np=3;             % Number of parallel cells per string
 
 %% Cell Thermal
 battery.MdotCp=100;        % Cell thermal mass (mass times specific heat [J/K])
 battery.CoolantRes=1.2; % Cell level coolant thermal path resistance, K/W
 battery.CoolantSwitchOnTp=320; % [K] Temperature to switch on coolant flow
 battery.CoolantSwitchOffTp=303; % [K] temperature to switch of coolant flow
+battery.ThermalMass=100*battery.Np*battery.Ns; % [J/K] 
 
-%% Module Electrical
-battery.Ns=110;             % Number of series connected strings
-battery.Np=3;             % Number of parallel cells per string
 
 %% Battery CC-CV charger parameters
 battery.ChargeMaxVolt = 4.2; % Maximum voltage for charger V

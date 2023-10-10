@@ -10,40 +10,41 @@
 % Copyright 2022-2023 The MathWorks, Inc.
 
 %% Model Overview
-
-% <matlab:open_system("BEVsystemModel") Open the BEVsystemModel model>
-
+% <matlab:open_system("BEVsystemModel") Open the BEV system model>
 open_system("BEVsystemModel")
-
 %%
-% The model represents an electric vehicle platform with two electric
-% motors, one in front (the main drive) and one in rear (for boost and all
-% wheel drive modes). The coolant circuit maintains the temperature of the
-% Emotors and battery within an operable range. An electric heater, in the
-% coolant circuit, increases the battery temperature during startup in low
-% temperature conditions. Simple HVAC ( cabin heating and air conditioning)
-% and auxiliary loads are added for better estimation of the load on the
-% battery due to cooling and heating operations.
+% This model represents an electric vehicle platform with two electric
+% motors, one in front (the main drive) and one in rear (for boost and all-wheel 
+% drive modes). In this example, you add simple heating, ventilation, and air 
+% conditioning (HVAC) and auxiliary loads for better estimation of the load 
+% on the battery due to heating and cooling.% The coolant circuit maintains
+% the temperature of the electric motors and the battery within an operable range. An 
+% electric heater, in the coolant circuit, increases the battery temperature
+% during startup in low temperature conditions.
 %
-% <matlab:open_system("BEVsystemModel/Vehicle") Open the Vehicle Subsystem>
+% <matlab:open_system("BEVsystemModel");open_system("BEVsystemModel/Vehicle") Open the Vehicle Subsystem>
 
-open_system("BEVsystemModel/Vehicle")
+open_system('BEVsystemModel/Vehicle')
 
 
 %% Battery Subsystem
+% The Battery subsystem models the battery pack, a table-based battery, and
+% a battery management system (BMS).
 %
-% The battery pack is modeled using Simscape Battery™ and the Pack
-% subsystem is modeled using the Battery Pack Builder.
+% <html><h3>Battery Pack</h3></html>
+%
+% In this example, you model the battery pack using Simscape Battery™ and the Pack
+% subsystem using the Battery Pack Builder.
 %
 % <matlab:open_system("BEVsystemModel");open_system('BEVsystemModel/Vehicle/Battery') Open Battery Subsystem>
 
 open_system('BEVsystemModel/Vehicle/Battery')
 
 %%
-% The battery comprises a battery pack of 400V, generally used in electric
-% vehicles. Since a single cell cannot provide such voltage or power
-% levels, multiple cells are connected in series and parallel to create the
-% desired battery pack. The battery pack in this example comprises 10
+% The battery comprises a battery pack of 400V because this voltage is 
+% typically used for electric vehicles. Since a single cell cannot provide
+% such a high voltage, you connect multiple cells in series and parallel to
+% create the desired battery pack. The battery pack in this example comprises 10
 % modules, each with 11 series-connected parallel sets (p-sets). Each p-set
 % comprises three cells in series. All modules are connected in series to
 % form a pack of 330 cells. The pack in the example is of 400V , 40KW i.e.
@@ -51,26 +52,40 @@ open_system('BEVsystemModel/Vehicle/Battery')
 % example <matlab:web(fullfile(docroot,'simscape-battery/ug/build-battery-module-thermal-effects.html')) Build Model of Battery Module With Thermal Effects example.>
 %
 % <<BatteryElectricVehicleModelOverviewPackDiagram.png>>
-
-%%
+%
 % <matlab:open_system("BEVsystemModel");open_system('BEVsystemModel/Vehicle/Battery/Pack') Open Battery Pack Subsystem>
 open_system('BEVsystemModel/Vehicle/Battery/Pack')
 
 %%
+% 
+% <html><h3>Table based battery</h3></html>
+%
+% The table based battery model tabulates battery characteristics as
+% functions of state of charge (SOC) and temperature and scales the characteristics 
+% upto the capacity of the pack. For quick deployment the Battery block has a selection of
+% predefined battery characteristics.
+%
+% <matlab:open_system("BatteryPlantModel_Table") Open Battery table Subsystem>
+open_system('BatteryPlantModel_Table')
+
+%%
+% 
+% <html><h3>Battery Management System</h3></html>
+%
 % The battery management system (BMS) manages all the battery operations
-% and keeps it within operational limits. The BMS maintains the current,
+% and keeps the battery within operational limits. The BMS maintains the current,
 % voltage, and temperature of the pack within safe limits during the
 % charging and discharging operations. In this example, the BMS controls
 % the circuit breakers to protect the battery pack based on the pack sensor
-% data and on estimated parameters such as the state-of charge (SOC) and
-% the discharge and charge current limits. 
+% data and on estimated parameters such as the state of charge (SOC) and
+% the current limits for charging and discharging. 
 % 
 % <matlab:open_system("BEVsystemModel");open_system('BEVsystemModel/Controller/BMS') Open Battery Management Subsystem>
 
 open_system('BEVsystemModel/Controller/BMS')
 
 %%
-% The BMS in this example comprises four different components: SoC
+% The BMS in this example comprises four different components: SOC
 % estimation, MinMax Current Limiter, Thermal Management, and Battery
 % Protection Logic. 
  
@@ -87,7 +102,7 @@ open_system('BEVsystemModel/Controller/BMS')
 % operations, and indication lamps.
 %
 % <<BatteryElectricVehicleModelOverviewHMI.png>>
-%
+% 
 % Use the rotary switch to choose between the charging and discharging modes manually. The position of the rotary switch affects the battery mode:
 % Off — The battery is disconnected.
 %

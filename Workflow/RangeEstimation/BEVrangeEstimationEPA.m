@@ -31,8 +31,9 @@ batt_packBTMSExampleLib_param;
 
 
 %% the model is setup to stop simulation when the SoC value reaches '0'
-% Run the simulation for the specified Simulation time
+% Run the simulation for the specified Simulation time 
 simoutPack=sim('BEVsystemModel','StopTime','inf');
+bdclose('BEVsystemModel');
 timeDetailed=simoutPack.SimulationMetadata.TimingInfo.ExecutionElapsedWallTime;
 
 % record data
@@ -56,4 +57,4 @@ EPArange.Energy = Vals.Data(end);
 
 %% Save the data to mat file
 proj = matlab.project.rootProject;
-save(proj.RootFolder+'\Workflow\RangeEstimation\EPArangedata.mat','EPArangedata','EPArange')
+save(proj.RootFolder+'\Workflow\RangeEstimation\EPArangedata.mat','EPArange')

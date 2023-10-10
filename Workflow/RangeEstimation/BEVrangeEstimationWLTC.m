@@ -128,6 +128,7 @@ vehicleThermal.AConoff=0;          % AC on/off variable, 0 AC off, 1 AC On
 
 % Run the simulation for the specified Simulation time
 simoutPack=sim('BEVsystemModel','StopTime',SimulationTime);
+bdclose('BEVsystemModel');
 timeDetailed=simoutPack.SimulationMetadata.TimingInfo.ExecutionElapsedWallTime;
 
 % record data
@@ -152,5 +153,5 @@ WLTChiTpNoAC.Energy = Vals.Data(end);
 
 %% Save the data to mat file
 proj = matlab.project.rootProject;
-save(proj.RootFolder+'\Workflow\RangeEstimation\WLTCrangeData.mat','WLTCloTpACdata','WLTCloTpNoACdata','WLTChiTpACdata','WLTChiTpNoACdata', ...
+save(proj.RootFolder+'\Workflow\RangeEstimation\WLTCrangeData.mat', ...
       'WLTCloTpAC','WLTCloTpNoAC','WLTChiTpAC','WLTChiTpNoAC')

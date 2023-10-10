@@ -4,7 +4,7 @@ To reduce greenhouse gas emissions, meet climate goals, and arrest
 global warming, the automotive sector is rapidly developing and proposing 
 innovative low-carbon solutions. Among these solutions, electric vehicles (EVs) 
 have gained traction thanks to their reduced carbon footprint and 
-overall efficiency. The mass adoption of EVs depends onf actors including 
+overall efficiency. The mass adoption of EVs depends on factors including 
 the cost of ownership, safety, and range anxiety. Typically, these vehicles 
 employ large battery packs, which are often the most expensive component of
 the vehicle. Modeling and simulation play then an important role in reducing 
@@ -22,6 +22,7 @@ Simscape Electrical&trade;, and Simscape Fluids&trade; Libraries.
 
 There are workflows in this project where you learn how to:
 1. Simulate an all wheel drive (AWD) and a front wheel drive (FWD) vehicle.
+   
 ![](Script_Data/html/BatteryElectricVehicleModelOverview_02.png)
 
 2. Estimate the on-road range of the vehicle. Run drive cycles 
@@ -37,21 +38,24 @@ weights, and compare them based on how these factors affect the range of the veh
 4. Setup your electric motor test bench for system integration.
 
 5. Find the fixed gear ratio suitable for BEV application.
+   
 ![](Image/PMSMThermalTestGearResult.png)
 
 6. Generate a loss map for the motor and inverter.
 
 7. Estimate the inverter power module semiconductor device junction temperature 
 variation due to switching and predict the lifetime of the inverter.
+
 ![](Image/PMSMThermalTestInverterResult.png)
 
 8. Build a neural network model to predict battery temperature.
+    
 ![](Image/BatteryNeuralNetResults.png)
 
 
 ## Setup 
 * Clone the project repository.
 * Open ElectricVehicleSimscape.prj to get started with the project. 
-* Requires MATLAB&reg; release R2022b or newer.
+* Requires MATLAB&reg; release R2023a or newer.
 
 Copyright 2022 - 2023 The MathWorks, Inc.
