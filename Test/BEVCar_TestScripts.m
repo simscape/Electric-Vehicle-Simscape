@@ -11,7 +11,7 @@ prjRoot = currentProject().RootFolder;
 
 %% Suite and Runner
 
-BEVsuite = matlab.unittest.TestSuite.fromFile(fullfile(prjRoot, "test", "BEVCar_RunScriptsTest.m"));
+BEVsuite = matlab.unittest.TestSuite.fromFile(fullfile(prjRoot, "Test", "BEVCar_RunScriptsTest.m"));
 
 suite = BEVsuite;
 

@@ -10,6 +10,10 @@ employ large battery packs, which are often the most expensive component of
 the vehicle. Modeling and simulation play then an important role in reducing 
 the development cost and enabling greater adoption of these vehicles.
 
+[![View Electric Vehicle Design with Simscape on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/124795-electric-vehicle-design-with-simscape)
+
+[![Open in MATLAB Online](https://www.mathworks.com/images/responsive/global/open-in-matlab-online.svg)](https://matlab.mathworks.com/open/github/v1?repo=simscape/Electric-Vehicle-Simscape)
+
 ![](Script_Data/html/BatteryElectricVehicleModelOverview_01.png)
 
 The examples in this repository show you how to model an automotive 

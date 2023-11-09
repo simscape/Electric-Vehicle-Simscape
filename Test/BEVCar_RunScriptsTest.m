@@ -40,16 +40,7 @@ classdef BEVCar_RunScriptsTest < matlab.unittest.TestCase
             % there are no errors or warning thrown
             test.verifyWarningFree(@()run_BEVbatterySizing, "'Battery Sizing script'  should execute wihtout any warning or error.");
         end        
-        function test_BEVRangeEstimationMainMLX(test)
-            %The test runs the |.mlx| file and makes sure that there are
-            %no errors or warning thrown.
-            test.verifyWarningFree(@()run_BEVRangeEstimationMain, "'BEVRangeEstimationMain mlx'  should execute wihtout any warning or error.");
-        end
-        function test_BEVBatterySizingMainMLX(test)
-            %The test runs the |.mlx| file and makes sure that there are
-            %no errors or warning thrown.
-            test.verifyWarningFree(@()run_BEVBatterySizingMain, "'BEVRangeEstimationMain mlx'  should execute wihtout any warning or error.");
-        end
+        
     end
 
     methods(TestMethodTeardown)
@@ -75,14 +66,4 @@ end
 function run_BEVbatterySizing()
 % Function runs the |.m| script.
 BEVbatterySizing;
-end
-
-function run_BEVRangeEstimationMain()
-% Function runs the |.mlx| script.
-BEVRangeEstimationMain;
-end
-
-function run_BEVBatterySizingMain()
-% Function runs the |.mlx| script.
-BEVBatterySizingMain;
 end

@@ -9,7 +9,7 @@ prjRoot = currentProject().RootFolder;
 
 relstr = matlabRelease().Release;
 disp("This MATLAB Release: " + relstr)
-PMSMsuiteScripts = matlab.unittest.TestSuite.fromFile(fullfile(prjRoot, "test", "PMSMtestbench_RunScriptsTest.m"));
+PMSMsuiteScripts = matlab.unittest.TestSuite.fromFile(fullfile(prjRoot, "Test", "PMSMtestbench_RunScriptsTest.m"));
 
 suite = [PMSMsuiteScripts];
 runner = matlab.unittest.TestRunner.withTextOutput(OutputDetail = matlab.unittest.Verbosity.Detailed);

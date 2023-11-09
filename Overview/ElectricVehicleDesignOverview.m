@@ -37,7 +37,7 @@ open_system('BEVsystemModel')
 
 %% Documentation
 % 
-% * <matlab:open('BatteryElectricVehicleModelOverview.html') Battery Electric Vehicle Model>
+% * <matlab:web('BatteryElectricVehicleModelOverview.html') Battery Electric Vehicle Model>
 % * <matlab:open('PMSMmotorTestBenchDescription.mlx') PMSM Thermal Model>
 % 
 
