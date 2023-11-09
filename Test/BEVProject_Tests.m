@@ -14,13 +14,13 @@ disp("This is MATLAB " + relstr + ".")
 prjRoot = currentProject().RootFolder;
 
 suite_1 = matlab.unittest.TestSuite.fromFolder( ...
-  fullfile(prjRoot, "Components\BatteryHV"), IncludingSubfolders = true);
+  fullfile(prjRoot, "Components","BatteryHV"), IncludingSubfolders = true);
 
 suite_2 = matlab.unittest.TestSuite.fromFile( ...
     fullfile(prjRoot, "Test", "BEV_System_UnitTest_MQC.m"));
 
 suite_3 = matlab.unittest.TestSuite.fromFolder( ...
-  fullfile(prjRoot, "Components\MotorDrive"), IncludingSubfolders = true);
+  fullfile(prjRoot, "Components","MotorDrive"), IncludingSubfolders = true);
 
 
 
