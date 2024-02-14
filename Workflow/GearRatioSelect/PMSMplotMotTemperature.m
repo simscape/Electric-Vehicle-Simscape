@@ -4,7 +4,7 @@
 
 % Copyright 2022 - 2023 The MathWorks, Inc.
 function PMSMplotMotTemperature(tst,Ngrr)
-load('PMSMbatchRunTemp.mat');
+allResults = load('PMSMbatchRunTemp.mat');
 compT=["W-EUDC","W-US06","M-EUDC","M-US06"];
 GrstrArr = string(zeros(size(Ngrr)));
 for test = 1:numel(tst)
@@ -12,7 +12,7 @@ for test = 1:numel(tst)
    
     for grr= 1:numel(Ngrr)
         GrstrArr(1,grr) = "Gear Ratio " + num2str(Ngrr(grr));
-        plot(PMSMallTempBatch{grr,test,1},PMSMallTempBatch{grr,test,2});
+        plot(allResults.PMSMallTempBatch{grr,test,1},allResults.PMSMallTempBatch{grr,test,2});
         hold on
     end
     hold off;
@@ -28,7 +28,7 @@ for test = 1:numel(tst)
     figure("Name",compT(test+2));
     
     for grr= 1:numel(Ngrr)
-        plot(PMSMallTempBatch{grr,test,1},PMSMallTempBatch{grr,test,3});
+        plot(allResults.PMSMallTempBatch{grr,test,1},allResults.PMSMallTempBatch{grr,test,3});
         hold on
     end
     hold off;

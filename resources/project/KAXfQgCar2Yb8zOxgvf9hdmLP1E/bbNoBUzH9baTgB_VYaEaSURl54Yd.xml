@@ -1,2 +1,2 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<Info Type="Basic" GroupUUID="" Visible="1" Icon="" File="Script_Data/OpenElectricVehicleModelOverview.m" Name="Electric Vehicle Model Overview"/>
+<Info File="Script_Data/OpenElectricVehicleModelOverview.m" GroupUUID="" Icon="" Name="Electric Vehicle Model Overview" Type="Basic" Visible="1"/>

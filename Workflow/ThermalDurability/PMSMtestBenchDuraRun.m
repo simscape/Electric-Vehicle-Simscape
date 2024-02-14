@@ -52,12 +52,12 @@ function DUdurabilityTable = PMSMtestBenchDuraRun(sumpT,testcycle,prfLS,prfHS)
             set_param([thermalTB,'/Drive Cycle Source'],'cycleVar','Workspace variable','wsVar',testcycle(tst),'srcUnit','km/h')
             
             % Run the simulation
-            sim("PMSMThermalTestbench");
+            simOut = sim("PMSMThermalTestbench");
             
             % Get the magnet and coil temperatures
-            Tmag = simlogPmsmThermalTestbench.EM.Temperature.Rotor_Thermal_Block.Magnet_Temperature.T.series.values;
-            allTime = simlogPmsmThermalTestbench.EM.Temperature.Rotor_Thermal_Block.Magnet_Temperature.T.series.time;
-            Tcoil = simlogPmsmThermalTestbench.EM.Temperature.Stator_Thermal_Block.Stator_winding.T.series.values;
+            Tmag = simOut.simlogPmsmThermalTestbench.EM.Temperature.Rotor_Thermal_Block.Magnet_Temperature.T.series.values;
+            allTime = simOut.simlogPmsmThermalTestbench.EM.Temperature.Rotor_Thermal_Block.Magnet_Temperature.T.series.time;
+            Tcoil = simOut.simlogPmsmThermalTestbench.EM.Temperature.Stator_Thermal_Block.Stator_winding.T.series.values;
                               
             % Store simulation results into cell array
             PMSMallTempBatch(tmp,tst,1) = {allTime};

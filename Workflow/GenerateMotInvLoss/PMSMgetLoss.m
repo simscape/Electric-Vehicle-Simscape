@@ -56,7 +56,7 @@ end
                 if spMat(i)*tqMat(j)*2*pi/60 < powMax
                     
                     % Run the simulation and calculate the losses
-                    simModel=sim('PMSMfocControlLossMapGen','StopTime',simTm);
+                    simModel = sim('PMSMfocControlLossMapGen','StopTime',simTm);
                     lossTable = table2array(simModel.yout.extractTimetable);
                     lossMatIgbt(i,j,tm) = mean(lossTable(:,1));       
                     lossMatDiode(i,j,tm) = mean(lossTable(:,2));
@@ -72,13 +72,13 @@ end
             if spMat(i)*tqMat(j)*2*pi/60 < powMax
 
                 % Calculate losses due to copper and iron losses
-                lossMatCu(i,j)=3*mean(simModel.simlogPMSMfocControlLossMapGen.Heat_Flow_Rate_Sensor.H.series.values);       
-                lossMatIr(i,j)=mean(simModel.simlogPMSMfocControlLossMapGen.Heat_Flow_Rate_Sensor1.H.series.values);
+                lossMatCu(i,j) = 3*mean(simModel.simlogPMSMfocControlLossMapGen.Heat_Flow_Rate_Sensor.H.series.values);       
+                lossMatIr(i,j) = mean(simModel.simlogPMSMfocControlLossMapGen.Heat_Flow_Rate_Sensor1.H.series.values);
             
             % If the power exceeds the power limit, calculate the losses using a fixed efficiency
             else
-                lossMatCu(i,j)=0.4*spMat(i)*tqMat(j)*2*pi/60;    
-                lossMatIr(i,j)=0.1*spMat(i)*tqMat(j)*2*pi/60;
+                lossMatCu(i,j) = 0.4*spMat(i)*tqMat(j)*2*pi/60;    
+                lossMatIr(i,j) = 0.1*spMat(i)*tqMat(j)*2*pi/60;
             end
 
             disp(['*** Completed Run ',num2str(i),'-',num2str(j)])

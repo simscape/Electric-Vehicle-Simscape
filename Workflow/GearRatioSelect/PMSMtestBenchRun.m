@@ -16,7 +16,7 @@ function tstResultTable = PMSMtestBenchRun(gearRatio,testcycle,testduration)
        % Display an error message if the test cycle is not found
        disp("Plese Install desired test cycle using Drive Cycle Source block in the slx model")
        % Set the test cycle to a default cycle (FTP75)
-       disp("Running available Default cycle FTP75")
+       disp("Running available Default cycle FTP75 - selected gear ratios may fail for originally intended test cycles")
        testcycle = ["FTP75"];
    end
 
@@ -42,15 +42,15 @@ function tstResultTable = PMSMtestBenchRun(gearRatio,testcycle,testduration)
             set_param([thermalTB,'/Drive Cycle Source'],'cycleVar',testcycle(j))
 
             % Run the simulation
-            sim("PMSMThermalTestbench");
+           simOut = sim("PMSMThermalTestbench");
 
             % Get the magnet and coil temperatures
-            Tmag = simlogPmsmThermalTestbench.EM.Temperature.Rotor_Thermal_Block.Magnet_Temperature.T.series.values;
-            allTime = simlogPmsmThermalTestbench.EM.Temperature.Rotor_Thermal_Block.Magnet_Temperature.T.series.time;
-            Tcoil = simlogPmsmThermalTestbench.EM.Temperature.Stator_Thermal_Block.Stator_winding.T.series.values;
+            Tmag = simOut.simlogPmsmThermalTestbench.EM.Temperature.Rotor_Thermal_Block.Magnet_Temperature.T.series.values;
+            allTime = simOut.simlogPmsmThermalTestbench.EM.Temperature.Rotor_Thermal_Block.Magnet_Temperature.T.series.time;
+            Tcoil = simOut.simlogPmsmThermalTestbench.EM.Temperature.Stator_Thermal_Block.Stator_winding.T.series.values;
 
             % Get the maximum fault value for each simulation
-            motFault(i,j) = max(yout(:,2));
+            motFault(i,j) = max(simOut.yout(:,2));
 
             % Set the test result for each simulation
             if motFault(i,j) > 0
@@ -74,4 +74,6 @@ function tstResultTable = PMSMtestBenchRun(gearRatio,testcycle,testduration)
 
     % Close the simulink model
     close_system ('PMSMThermalTestbench.slx',0);
+    PMSMplotMotTemperature(testcycle,gearRatio);
+    
 end

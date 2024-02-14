@@ -1,2 +1,2 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<Info Type="Basic" GroupUUID="850626d1-c580-486a-b289-fdb00ba6270b" Visible="1" Icon="" File="Workflow/InverterLife/PMSMinverterTestCycle.slx" Name="PMSMinverterTestCycle"/>
+<Info File="Workflow/InverterLife/PMSMinverterTestCycle.slx" GroupUUID="850626d1-c580-486a-b289-fdb00ba6270b" Icon="" Name="PMSMinverterTestCycle" Type="Basic" Visible="1"/>
