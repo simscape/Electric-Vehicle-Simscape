@@ -41,11 +41,9 @@ jobs:
     steps:
 
       - name: Check out repository
-        using: 'node20'
         uses: actions/checkout@v3
 
       - name: Setup MATLAB
-        using: 'node20'
         uses: matlab-actions/setup-matlab@v1
         with:
           release: R2023b
