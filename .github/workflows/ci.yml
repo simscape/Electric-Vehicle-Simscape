@@ -51,7 +51,7 @@ jobs:
       - name: Run tests
         uses: matlab-actions/run-command@v1
         with:
-          command: openProject(pwd); BEVProject_runtests_CheckProject;
+          command: openProject(pwd); BEVProjectRuntestsCheckProject;
 
   job-run-tests:
 
@@ -72,4 +72,4 @@ jobs:
       - name: Run tests
         uses: matlab-actions/run-command@v1
         with:
-          command: openProject(pwd); BEVProject_Tests;
+          command: openProject(pwd); BEVProjectTests;
