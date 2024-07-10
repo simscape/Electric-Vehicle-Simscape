@@ -5,6 +5,7 @@
 %% Setup the model for EPA cycle
 
 open_system("BEVsystemModel")
+SetupPlantElectroThermal;
 load('EPADriveCycle.mat')
 driveCycle='DriveCycleEPA'; % drive cycle type, choose from drive cycle source block in model
 SimulationTime=inf; % drive simulation time, put as per the drive cycle selection

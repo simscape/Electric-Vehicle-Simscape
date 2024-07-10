@@ -9,6 +9,8 @@
 
 %% Setup the model for NEDC cycle
 open_system("BEVsystemModel")
+SetupPlantElectroThermal; % Setup plant for ElectroThermal configuration
+
 BEVplantModelParam; % Load model parameters
 driveCycle='NEDC'; % drive cycle type, choose from drive cycle source block in model
 SimulationTime='1180'; % drive simulation time, put as per the drive cycle selection

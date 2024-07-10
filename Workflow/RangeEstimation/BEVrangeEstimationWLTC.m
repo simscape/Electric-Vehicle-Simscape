@@ -9,6 +9,8 @@
 
 %% Setup the model for WLTC cycle
 open_system("BEVsystemModel")
+SetupPlantElectroThermal; % Setup plant for ElectroThermal configuration
+
 BEVplantModelParam; % Load model parameters
 driveCycle='WLTP Class 3'; % drive cycle type, choose from drive cycle source block in model
 SimulationTime='1800'; % drive simulation time, put as per the drive cycle selection

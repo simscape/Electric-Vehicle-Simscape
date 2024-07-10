@@ -8,10 +8,15 @@ vehicleThermal.cabin_p_init = 0.101325; % [MPa] Initial air pressure
 vehicleThermal.cabin_RH_init = 0.4; % Initial relative humidity
 vehicleThermal.cabin_CO2_init = 4e-4; % Initial CO2 mole fraction
 
+
 %% Vehicle Cabin
 
 vehicleThermal.cabin_duct_area = 0.04; % [m^2] Air duct cross-sectional area
 vehicleThermal.cabin_duct_volume= 0.0015; % [m^3] Aier duct volume
+vehicleThermal.cabin_perPersonCO2 = 0.01; % [g/s] Adult CO2 exhale rate 
+vehicleThermal.cabin_perPersonMoisture = 0.04; % [g/s] Adult moisture exhale rate
+vehicleThermal.cabin_perPersonHeat = 70; % Average heat tranfer from human body
+vehicleThermal.cabin_exhaleTemperature = 30; % [degC] Adult exhale air temperature
 
 %% Liquid Coolant System
 

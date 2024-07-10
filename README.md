@@ -60,6 +60,6 @@ variation due to switching and predict the lifetime of the inverter.
 ## Setup 
 * Clone the project repository.
 * Open ElectricVehicleSimscape.prj to get started with the project. 
-* Requires MATLAB&reg; release R2023b or newer.
+* Requires MATLAB&reg; release R2023a or newer.
 
 Copyright 2022 - 2023 The MathWorks, Inc.
