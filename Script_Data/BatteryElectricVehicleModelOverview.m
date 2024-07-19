@@ -21,6 +21,9 @@ open_system("BEVsystemModel")
 % the temperature of the electric motors and the battery within an operable range. An 
 % electric heater, in the coolant circuit, increases the battery temperature
 % during startup in low temperature conditions.
+% In this example, you have two fidelity of the vehicle model, an abstract 
+% vehicle model and a eltro-thermal model. You can select the fidelity from
+% the model canvas hyperlinks.
 %
 % <matlab:open_system("BEVsystemModel");open_system("BEVsystemModel/Vehicle") Open the Vehicle Subsystem>
 
@@ -250,7 +253,7 @@ open_system('BEVsystemModel/Vehicle/HVAC/Cabin/Cabin Plant');
 %
 % <matlab:open_system("BEVsystemModel");open_system('BEVsystemModel/Vehicle/HVAC/Cabin/Cabin%20Control'); Open Cabin Control Subsystem>
 % 
-open_system('BEVsystemModel/Vehicle/HVAC/Cabin/Cabin Control');
+open_system('BEVsystemModel/Controller/Cabin Control/Cabin Air Control');
 
 %% Useful Links
 % <matlab:web('ElectricVehicleDesignOverview.html'); Electric Vehicle Design with Simscape>
