@@ -17,6 +17,8 @@ vehicleThermal.cabin_perPersonCO2 = 0.01; % [g/s] Adult CO2 exhale rate
 vehicleThermal.cabin_perPersonMoisture = 0.04; % [g/s] Adult moisture exhale rate
 vehicleThermal.cabin_perPersonHeat = 70; % Average heat tranfer from human body
 vehicleThermal.cabin_exhaleTemperature = 30; % [degC] Adult exhale air temperature
+vehicleThermal.cabin_numberPassanger = 1; % Number of onboard passangers
+vehicleThermal.cabin_airRecirculation = 0.5; % Cabin air recirculation 
 
 %% Liquid Coolant System
 

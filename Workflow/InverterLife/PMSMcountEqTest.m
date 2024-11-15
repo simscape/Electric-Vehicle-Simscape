@@ -1,28 +1,27 @@
-%% Function for Estimating temperature swing
+% Function for estimating equivalent count of temperature fluctuations during a real life vehicle run 
 % The script runs PMSMThermalTestbenchFst.slx in batch mode based on user input 
 
 % Copyright 2022 - 2023 The MathWorks, Inc.
 
 function eqTest = PMSMcountEqTest(peakItest)
-
-    load PMSMinverterTemp.mat
-    load PMSMtestCycleTemp.mat
-    tsrIGBT = [allTime,TigbtJ];
-    TinitTest = 25;
-% High frequency peak to vally difference for IGBT
+load PMSMinverterTemp.mat
+load PMSMtestCycleTemp.mat
+tsrIGBT = [allTime,TigbtJ];
+TinitTest = 25;
+% High frequency peak to valley temperature difference for IGBT
 [Tpks,locs] = findpeaks(TigbtJ);
 invTigbt = -1*TigbtJ;
-[Tvally,Ivloc] = findpeaks(invTigbt);
-TdeltaIGBT = Tpks-(-1*Tvally);
+[Tvalley,Ivloc] = findpeaks(invTigbt);
+TdeltaIGBT = Tpks-(-1*Tvalley);
 %Plotting
 [Tpkspt,locspt] = findpeaks(TigbtJ,"MinPeakProminence",1);
 invTigbt = -1*TigbtJ;
-[Tvallypt,Ivlocpt] = findpeaks(invTigbt,"MinPeakProminence",1);
+[Tvalleypt,Ivlocpt] = findpeaks(invTigbt,"MinPeakProminence",1);
 
 figure("Name","IGBT_duty");
 plot(tsrIGBT(:,1),tsrIGBT(:,2),allTime(locspt),Tpkspt,'o');
 hold on
-plot(allTime(Ivlocpt),-1*Tvallypt,'*');
+plot(allTime(Ivlocpt),-1*Tvalleypt,'*');
 title('IGBT Junction Temperature For Duty cycle (C)');
 xlabel('Time [s]')
 hold Off
@@ -58,59 +57,58 @@ dt5_10 = dtime.*(5<TdeltaIGBT & TdeltaIGBT<10);
 dt5_10(dt5_10 == 0) = [];
 mdt5_10 = mean(dt5_10);
 
-% Low frequency peak to vally delta Temperature for IGBT
+% Low frequency peak to valley temperature delta for IGBT
 
- [Tpkslf,locslf] = findpeaks(TigbtJ,MinPeakDistance=5);
- 
- [Tvallylf,Ivloclf] = findpeaks(invTigbt,MinPeakDistance=5);
- Tpkslf = Tpkslf(1:numel(Tvallylf),:);
- TdeltaIGBTlf = Tpkslf-(-1*Tvallylf);
- Tdelta_countlf = sum(TdeltaIGBTlf>5);
- TdeltaIGBTlf(TdeltaIGBTlf<5) = [];
- mTdeltaTlf = mean(TdeltaIGBTlf);
- mcurlf = mean(abs(cur(locslf)));
+[Tpkslf,locslf] = findpeaks(TigbtJ,MinPeakDistance=5);
 
- mjuncTlf = mean(Tpkslf);
- locslf=locslf(1:numel(Ivloclf),:);
+[Tvalleylf,Ivloclf] = findpeaks(invTigbt,MinPeakDistance=5);
+Tpkslf = Tpkslf(1:numel(Tvalleylf),:);
+TdeltaIGBTlf = Tpkslf-(-1*Tvalleylf);
+Tdelta_countlf = sum(TdeltaIGBTlf>5);
+TdeltaIGBTlf(TdeltaIGBTlf<5) = [];
+mTdeltaTlf = mean(TdeltaIGBTlf);
+mcurlf = mean(abs(cur(locslf)));
 
- timeDeltaLf = mean(abs(allTime(Ivloclf)- allTime(locslf)));
+mjuncTlf = mean(Tpkslf);
+locslf=locslf(1:numel(Ivloclf),:);
 
- % Test cycle delta Temperature calculation
- [TpksTest,locsTest] = findpeaks(TigbtTest);
+timeDeltaLf = mean(abs(allTime(Ivloclf)- allTime(locslf)));
 
- invTigbtTest =-1*TigbtTest;
- [TvallyTest,vlocsTest] = findpeaks(invTigbtTest);
- figure("Name","IGBT_test");
- plot(allTimeTest,TigbtTest,allTimeTest(locsTest),TpksTest,'o');
- hold on
- plot(allTimeTest(vlocsTest),-1*TvallyTest,'*');
- title("IGBT Junction Temperature For Test (C)")
- xlabel('Time [s]')
- hold Off
- 
- TpksTest = TpksTest(1:end-1,:);
- deltaTtest = TpksTest-(-1*TvallyTest);
- mdeltaTtest = mean(deltaTtest);
- TdeltaCountTest = sum(deltaTtest>0.01);
+% Test cycle temperature delta calculation
+[TpksTest,locsTest] = findpeaks(TigbtTest);
 
- mjunctTest = mean(TpksTest);
- locsTest = locsTest(1:numel(vlocsTest));
- dtTest = abs(allTimeTest(locsTest)-allTimeTest(vlocsTest));
- dtTest(dtTest == 0) = [];
- mdtTest = mean(dtTest);
+invTigbtTest =-1*TigbtTest;
+[TvalleyTest,vlocsTest] = findpeaks(invTigbtTest);
+figure("Name","IGBT_test");
+plot(allTimeTest,TigbtTest,allTimeTest(locsTest),TpksTest,'o');
+hold on
+plot(allTimeTest(vlocsTest),-1*TvalleyTest,'*');
+title("IGBT Junction Temperature For Test (C)")
+xlabel('Time [s]')
+hold Off
 
- maxdeltaTtest = max(TigbtTest)-TinitTest;
- maxjunctTest = max(TigbtTest);
-% Calculation of equvelent to test high frequency temperature fluctuations cycles 
+TpksTest = TpksTest(1:end-1,:);
+deltaTtest = TpksTest-(-1*TvalleyTest);
+mdeltaTtest = mean(deltaTtest);
+TdeltaCountTest = sum(deltaTtest>0.01);
+
+mjunctTest = mean(TpksTest);
+locsTest = locsTest(1:numel(vlocsTest));
+dtTest = abs(allTimeTest(locsTest)-allTimeTest(vlocsTest));
+dtTest(dtTest == 0) = [];
+mdtTest = mean(dtTest);
+
+maxdeltaTtest = max(TigbtTest)-TinitTest;
+maxjunctTest = max(TigbtTest);
+% Calculation of equivalent to test high frequency temperature fluctuations cycles
 num1to5hf = (mTdeltaT1to5^(-3.483))*exp(1917/(mjuncT1_5+273))*mdt1_5^(-0.438)*mcur1_5^(-0.717);
 num5to10hf = (mTdeltaT5to10^(-3.483))*exp(1917/(mjuncT5_10+273))*mdt5_10^(-0.438)*mcur5_10^(-0.717);
 numtesthf = (mdeltaTtest^(-3.483))*exp(1917/(mjunctTest+273))*mdtTest^(-0.438)*(0.707*peakItest)^(-0.717);
 eqtestHf = (numtesthf/num1to5hf)*(Tdelta_count1to5/TdeltaCountTest) + (numtesthf/num5to10hf)*(Tdelta_count5to10/TdeltaCountTest);
-% Calculation of equvellent to test  low frequency temperature cycles 
+% Calculation of equivalent to test  low frequency temperature cycles
 numlfDuty = (mTdeltaTlf^(-3.483))*exp(1917/(mjuncTlf+273))*timeDeltaLf^(-0.438)*mcurlf^(-0.717);
 numtestlf = (maxdeltaTtest^(-3.483))*exp(1917/(maxjunctTest+273))*2^(-0.438)*(0.707*peakItest)^(-0.717);
 eqtestLf = (numtestlf/numlfDuty)*Tdelta_countlf;
 eqtestAvg = (eqtestHf+2*eqtestLf)/3;
 eqTest = eqtestAvg;
-
 end 

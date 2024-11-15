@@ -55,7 +55,7 @@ classdef PMSMtestbenchRunScriptsTest < matlab.unittest.TestCase
             assignin('base', "LSHT", LSHT);
             assignin('base', "HSLT", HSLT);
             driveTest= ["LSHT" "HSLT"];
-            test.verifyWarningFree(@()PMSMtestBenchDuraRun(50,driveTest, LSHT, HSLT), "'PMSMrunInverterLife'  should execute wihtout any warning or error.");
+            test.verifyWarningFree(@()PMSMtestBenchDuraRun(50,driveTest), "'PMSMrunInverterLife'  should execute wihtout any warning or error.");
         end
 
         function test_PMSMtestBenchRunAndPlotFunction(test)

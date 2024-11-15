@@ -1,7 +1,7 @@
 %% NEDC range calculation workflow
 % BEV model is run with 1 NEDC cycles 
 % Three scenarios are run 
-% 1. -5 degC ambient with AC ON
+% 1. -20 degC ambient with AC ON
 % 2. 35 degC ambient with AC ON
 % To see the effect of ambient temperature and cooling on range
 
@@ -36,10 +36,10 @@ batt_packBTMSExampleLib_param;
 
 %% Sub Zero run with AC ON
 % Ambient setting
-vehicleThermal.ambient=-5 +273.15;        % [K] Ambient temperature
-vehicleThermal.coolant_T_init=-5 +273.15;  % [K] Coolant initial temperature
+vehicleThermal.ambient=-20 +273.15;        % [K] Ambient temperature
+vehicleThermal.coolant_T_init=-20 +273.15;  % [K] Coolant initial temperature
 vehicleThermal.CabinSpTp=20 +273.15;       % [K] Cabin setpoint temperature
-vehicleThermal.cabin_T_init=-5 +273.15;    % [K] Cabin initial temperature
+vehicleThermal.cabin_T_init=-20 +273.15;    % [K] Cabin initial temperature
 vehicleThermal.AConoff=1;          % AC on/off variable, 0 AC off, 1 AC On
 
 
@@ -96,8 +96,8 @@ NEDCloTpNoAC.Energy = Vals.Data(end);
 
 %% Hot ambient condition run
 % Ambient setting
-vehicleThermal.ambient=35 +273.15;         % [K] Ambient temperature in
-vehicleThermal.coolant_T_init=35 +273.15;  % [K] Coolant initial temperature
+vehicleThermal.ambient=25 +273.15;         % [K] Ambient temperature in
+vehicleThermal.coolant_T_init=25 +273.15;  % [K] Coolant initial temperature
 vehicleThermal.CabinSpTp=20 +273.15;       % [K] Cabin setpoint temperature
 vehicleThermal.cabin_T_init=35 +273.15;    % [K] Cabin initial temperature
 vehicleThermal.AConoff=1;                  % AC on/off variable, 0 AC off, 1 AC On
@@ -134,7 +134,7 @@ vehicleThermal.AConoff=0;          % AC on/off variable, 0 AC off, 1 AC On
 
 % Run the simulation for the specified Simulation time
 simoutPack=sim('BEVsystemModel','StopTime',SimulationTime);
-bdclose('BEVsystemModel');
+
 timeDetailed=simoutPack.SimulationMetadata.TimingInfo.ExecutionElapsedWallTime;
 
 % record data
@@ -155,7 +155,7 @@ Vals = getValuesFromLogsout(simoutPack.logsout.get("RangeRating"));
 NEDChiTpNoAC.RangeRating = Vals.Data(end);
 Vals = getValuesFromLogsout(simoutPack.logsout.get("Energy"));
 NEDChiTpNoAC.Energy = Vals.Data(end);
-
+bdclose('BEVsystemModel');
 %% Save the data to mat file
 proj = matlab.project.rootProject;
 save(proj.RootFolder+'\Workflow\RangeEstimation\NEDCrangeData.mat', ...

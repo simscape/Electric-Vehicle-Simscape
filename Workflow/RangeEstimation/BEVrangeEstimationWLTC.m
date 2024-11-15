@@ -1,7 +1,7 @@
 %% WLTC range calculation workflow
 % BEV model is run with WLTC cycle
 % Two scenarios are run 
-% 1. -5 degC ambient with AC ON
+% 1. -20 degC ambient with AC ON
 % 2. 35 degC ambient with AC ON
 % To see the effect of ambient temperature and cooling on range
 
@@ -32,10 +32,10 @@ batt_packBTMSExampleLib_param;
 
 %% Sub Zero run with AC ON
 % Ambient setting
-vehicleThermal.ambient=-5 +273.15;        % Ambient temperature in K
-vehicleThermal.coolant_T_init=-5 +273.15;  % Coolant initial temperature
+vehicleThermal.ambient=-20 +273.15;        % Ambient temperature in K
+vehicleThermal.coolant_T_init=-20 +273.15;  % Coolant initial temperature
 vehicleThermal.CabinSpTp=20 +273.15;       % Cabin setpoint temperature
-vehicleThermal.cabin_T_init=-5 +273.15;    % Cabin initial temperature
+vehicleThermal.cabin_T_init=-20 +273.15;    % Cabin initial temperature
 vehicleThermal.AConoff=1;          % AC on/off variable, 0 AC off, 1 AC On
 
 
@@ -92,11 +92,11 @@ WLTCloTpNoAC.Energy = Vals.Data(end);
 
 %% Hot ambient condition run
 % Ambient setting
-vehicleThermal.ambient=35 +273.15;        % Ambient temperature in K
-vehicleThermal.coolant_T_init=35 +273.15;  % Coolant initial temperature
-vehicleThermal.CabinSpTp=20 +273.15;       % Cabin setpoint temperature
-vehicleThermal.cabin_T_init=35 +273.15;    % Cabin initial temperature
-vehicleThermal.AConoff=1;          % AC on/off variable, 0 AC off, 1 AC On
+vehicleThermal.ambient = 25+273.15;        % Ambient temperature in K
+vehicleThermal.coolant_T_init = 25+273.15;  % Coolant initial temperature
+vehicleThermal.CabinSpTp = 20+273.15;       % Cabin setpoint temperature
+vehicleThermal.cabin_T_init = 25+273.15;    % Cabin initial temperature
+vehicleThermal.AConoff = 1;          % AC on/off variable, 0 AC off, 1 AC On
 
 % Run parameter file for battery
 batt_BatteryManagementSystem_param;

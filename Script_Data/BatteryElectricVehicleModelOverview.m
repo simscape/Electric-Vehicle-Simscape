@@ -203,17 +203,18 @@ open_system('BEVsystemModel/Controller/Vehicle Control')
 %%
 % The chiller extracts a fixed amount of heat from the coolant.
 %
-% <matlab:open_system("BEVsystemModel");open_system('BEVsystemModel/Vehicle/Chiller'); Open Chiller Subsystem>
+% <matlab:load_system("VehicleElectroThermal");open_system('VehicleElectroThermal/Vehicle/Chiller'); Open Chiller Subsystem>
 %
-open_system('BEVsystemModel/Vehicle/Chiller');
+load_system('VehicleElectroThermal.slx')
+open_system('VehicleElectroThermal/Chiller');
 
 %%
 %
 % The heater adds a fixed amount of heat to the coolant in the circuit.
 %
-% <matlab:open_system('BEVsystemModel/Vehicle/Heater'); Open Heater Subsytem>
+% <matlab:load_system("VehicleElectroThermal");open_system('VehicleElectroThermal/Heater'); Open Heater Subsytem>
 
-open_system('BEVsystemModel/Vehicle/Heater');
+open_system('VehicleElectroThermal/Heater');
 
 %%
 % The pump and the valves are actuated based on the coolant temperature and
@@ -228,32 +229,46 @@ open_system('BEVsystemModel/Vehicle/Heater');
 % temperature is high, the heater is switched off as the battery can
 % sustain the temperature. 
 % 
-% <matlab:open_system("BEVsystemModel");open_system('BEVsystemModel/Controller/Thermal%20Control'); Open Thermal Control Subsystem>
-
-open_system('BEVsystemModel/Controller/Thermal Control');
+% <matlab:load_system("Controller_HVAC");open_system('Controller_HVAC/Cabin%20Control/Cabin%20Air%20Control'); Open Thermal Control Subsystem>
+%
+load_system('Controller_HVAC');
+open_system('Controller_HVAC/Cabin Control/Cabin Air Control');
 
 %% Cabin HVAC
+%
+% <html><h3>Abstract Refrigeration</h3></html>
+%
 % The battery powers the cooling or heating of the cabin. In near zero
 % ambient temperature conditions, heating the cabin consumes 10-15% of the
-% battery capacity. The PTC heater, cooler and the blower are in loop. The
+% battery capacity. The PTC heater, cooler, and the blower are in loop. The
 % blower circulates the air from the vent through the cabin to heat or cool
 % the cabin. 
 %
-% <matlab:open_system("BEVsystemModel");open_system('BEVsystemModel/Vehicle/HVAC/Cabin/Cabin%20Plant'); Open Cabin Subsystem>
+% <matlab:load_system("VehicleElectroThermal");open_system('VehicleElectroThermal/HVAC/Cabin/Cabin%20Plant'); Open Cabin Subsystem>
 %
-open_system('BEVsystemModel/Vehicle/HVAC/Cabin/Cabin Plant');
+open_system('VehicleElectroThermal/HVAC/Cabin/Cabin Plant');
 
 %%
-% The cabin loses heat to the environment through the vehicle door, windows and roof.
+% The cabin loses heat to the environment through the vehicle door, windows, and roof.
 % 
-% The cabin setpoint temperature and the AC on/off control is set in the
-% Scenarios subsystem and the HVAC controller modulates the air flow in the
-% cabin through the vent. The power required for the heater and cooler is
-% taken out from the main battery high voltage bus. 
+% The Scenarios subsystem sets the cabin setpoint temperature and the AC on/off control.
+% The HVAC controller modulates the air flow in the
+% cabin through the vent. The heater and cooler draw the required power
+% from the main battery high voltage bus.
 %
-% <matlab:open_system("BEVsystemModel");open_system('BEVsystemModel/Vehicle/HVAC/Cabin/Cabin%20Control'); Open Cabin Control Subsystem>
-% 
-open_system('BEVsystemModel/Controller/Cabin Control/Cabin Air Control');
+% <html><h3>Lumped Thermal Refrigeration</h3></html>
+%
+% When the cabin setpoint temperature is lower than the environmental temperature, 
+% the lumped thermal refrigeration subsystem handles the cabin latent and sensible heat loads. 
+% To manage the CO2 concentration in cabin, the Cabin Air subsystem vents out a fixed percentage of cabin air, 
+% while maintaining the cabin pressure. 
+% The compressor draws the power required to run the Refrigeration subsystem from the battery pack.
+%
+% <matlab:load_system("VehicleElectroThermalLowTemp");open_system('VehicleElectroThermalLowTemp/HVAC/Cabin%20air%20and%20refrigeration/Cabin%20Air'); Open Cabin Subsystem>
+%
+load_system('VehicleElectroThermalLowTemp.slx')
+open_system('VehicleElectroThermalLowTemp/HVAC/Cabin air and refrigeration/Cabin Air');
+
 
 %% Useful Links
 % <matlab:web('ElectricVehicleDesignOverview.html'); Electric Vehicle Design with Simscape>

@@ -3,19 +3,11 @@
 
 % Copyright 2022 - 2023 The MathWorks, Inc.
 
-function DUdurabilityTable = PMSMtestBenchDuraRun(sumpT,testcycle,prfLS,prfHS)
+function DUdurabilityTable = PMSMtestBenchDuraRun(sumpT,testcycle)
 
    % Initialize test result array with zeros
    tstResult = zeros(numel(sumpT),numel(testcycle));
-   
-   % These arrays contain the maximum high speed and low speed limit test duration 
-   LSHT = [0 0;1 5; 2 10; 3 15; 4 20; 5 20]; 
-   HSLT = [0 0;2 20;4 30; 6 45; 8 60; 10 75; 12 85; 14 90;16 100; 18 100];
-   
-   % These arrays store the desired low speed and high speed limit test duration
-   LSHT = prfLS;
-   HSLT = prfHS; 
-   
+      
    % Add 273.15 to sump temperature to convert it into Kelvin
    sumpT = sumpT+273.15;
    

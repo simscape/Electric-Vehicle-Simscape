@@ -1,0 +1,28 @@
+component (Propagation = blocks) compressorPower
+% This block computes theoretical compressor power.  
+% This block Computes theoretical compressor power. Carnot coefficient of performance is computed from the input evaporator and condenser temperature.
+% Ideal compressor power is obtained by dividing condenser heat Qcond with Carnot coefficient of performance.
+% The output compressor power is obtained by dividing ideal compressor with system efficiency.
+
+% Copyright 2024 The MathWorks, Inc.
+
+inputs
+    compOn = {1,'1'};
+    Tevap = {0, 'K'};
+    Qcond = {0, 'W'};
+    Tcond = {0, 'K'};
+end
+outputs
+    compressPow = {0, 'W'};
+end
+parameters
+    systemEfficiency = {0.7, '1'}; % Overall system efficiency
+end
+intermediates (ExternalAccess = none)
+    denomAdd =  {((Tcond - Tevap)==0)*eps,'K'}
+    carnotCOP = Tcond/((Tcond - Tevap) + denomAdd); % Carnot CoP for an Ideal refrigeration cycle
+end
+equations
+    compressPow == compOn*(Qcond*(Qcond>0))/(systemEfficiency*carnotCOP); % Compressor power
+end
+end
