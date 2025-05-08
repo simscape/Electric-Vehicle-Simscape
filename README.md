@@ -31,6 +31,14 @@ workflows**:
   </tr>
 </table>
 
+<table>
+  <tr>
+    <td class="text-column" width=1200></td>
+  </tr>
+</table>
+
+<hr color="gray" size="10">
+
 ## 2. Size Battery for Electric Vehicle
 <table>
   <tr>
@@ -38,6 +46,14 @@ workflows**:
     <td class="text-column" width=600>Size your high-voltage (HV) battery pack to achieve your desired range. You will learn how to simulate battery packs with different capacities and weights, and compare them based on how these factors affect the range of the vehicle. See <strong>Workflow/BatterySizing</strong>.</td>
   </tr>
 </table>
+
+<table>
+  <tr>
+    <td class="text-column" width=1200></td>
+  </tr>
+</table>
+
+<hr color="gray" size="10">
 
 ## 3. Characterize Battery using HPPC Test Data
 <table>
@@ -48,6 +64,14 @@ workflows**:
   </tr>
 </table>
 
+<table>
+  <tr>
+    <td class="text-column" width=1200></td>
+  </tr>
+</table>
+
+<hr color="gray" size="10">
+
 ## 4. Create Battery Virtual Sensors (Neural Networks)
 <table>
   <tr>
@@ -55,6 +79,14 @@ workflows**:
     <td class="text-column" width=300>Build a neural network model to predict battery temperature. This Neural network model takes in battery voltage and current measurements to predict battery temperature. This, when deployed, can help in eliminating some thermal sensors in the battery pack and reduce cost of development. See <strong>Workflow/BatteryNeuralNetModel</strong>.</td>
   </tr>
 </table>
+
+<table>
+  <tr>
+    <td class="text-column" width=1200></td>
+  </tr>
+</table>
+
+<hr color="gray" size="10">
 
 ## 5. Estimate Efficient Gear Ratio for Electric Drive
 <table>
@@ -64,6 +96,14 @@ workflows**:
   </tr>
 </table>
 
+<table>
+  <tr>
+    <td class="text-column" width=1200></td>
+  </tr>
+</table>
+
+<hr color="gray" size="10">
+
 ## 6. Setup Electric Motor Test Bench for System Integration
 <table>
   <tr>
@@ -71,6 +111,14 @@ workflows**:
     <td class="image-column" width=600><img src="Overview/Image/PMSMlossMapGen.PNG" alt="Motor Loss Map"></td>
   </tr>
 </table>
+
+<table>
+  <tr>
+    <td class="text-column" width=1200></td>
+  </tr>
+</table>
+
+<hr color="gray" size="10">
 
 ## 7. Verify Electric Drive Durability and Life
 <table>
@@ -80,6 +128,13 @@ workflows**:
   </tr>
 </table>
 
+<table>
+  <tr>
+    <td class="text-column" width=1200></td>
+  </tr>
+</table>
+
+<hr color="gray" size="10">
 
 ## Setup 
 * Clone the project repository.
