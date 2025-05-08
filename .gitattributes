@@ -1,4 +1,4 @@
-*.fig binary
+ *.fig binary
 *.mat binary
 *.mdl binary diff merge=mlAutoMerge
 *.mdlp binary

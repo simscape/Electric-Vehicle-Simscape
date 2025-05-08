@@ -45,8 +45,8 @@ save('PMSMinverterTemp','allTime',"TigbtJ","TdiodeJ","curTime","cur");
 simOutTst = sim ("PMSMinverterTestCycle");
 
 % Get the IGBT junction temperature and times from the inverter life test cycle simulation
-TigbtTest = simOutTst.simlogInverterTest.inverter.IGBTAH.IGBT.junction_temperature.series.values;
-allTimeTest = simOutTst.simlogInverterTest.inverter.IGBTAH.IGBT.junction_temperature.series.time;
+TigbtTest = simOutTst.simlogInverterTest.inverter.IGBTAH.IGBT.IGBT_junction_temperature.series.values;
+allTimeTest = simOutTst.simlogInverterTest.inverter.IGBTAH.IGBT.IGBT_junction_temperature.series.time;
 
 % Get the peak currents from the inverter life test cycle simulation
 PeakItest = max(max(simOutTst.simlogInverterTest.Load.IL.series.values));

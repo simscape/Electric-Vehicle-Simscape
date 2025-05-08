@@ -21,6 +21,17 @@ classdef BEVCarRunScriptsTest < matlab.unittest.TestCase
         end
     end
 
+    methods(TestMethodTeardown)
+        function closeOpenedFigures(testCase)
+            % Close all figure opened during test
+            figureListAfter = findall(0,'Type','Figure');
+            figuresOpenedByTest = setdiff(figureListAfter, testCase.openfigureListBefore);
+            arrayfun(@close, figuresOpenedByTest);
+            close_system('BEVsystemModel', 0);
+
+        end
+    end
+
     methods (Test)
 
         function test_BEVrangeNEDCscript(test)
@@ -43,14 +54,6 @@ classdef BEVCarRunScriptsTest < matlab.unittest.TestCase
         
     end
 
-    methods(TestMethodTeardown)
-        function closeOpenedFigures(test)
-            % Close all figure opened during test
-            figureListAfter = findall(0,'Type','Figure');
-            figuresOpenedByTest = setdiff(figureListAfter, test.openfigureListBefore);
-            arrayfun(@close, figuresOpenedByTest);
-        end
-    end
 end
 
 function run_BEVrangeEstimationNEDC()

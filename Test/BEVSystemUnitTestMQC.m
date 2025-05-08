@@ -25,6 +25,15 @@ classdef BEVSystemUnitTestMQC < matlab.unittest.TestCase
         end
     end
 
+    methods(TestMethodTeardown)
+        function closeOpenedFigures(testCase)
+            % Close all figure opened during test
+            figureListAfter = findall(0,'Type','Figure');
+            figuresOpenedByTest = setdiff(figureListAfter, testCase.openfigureListBefore);
+            arrayfun(@close, figuresOpenedByTest);
+            bdclose all
+        end
+    end
 
     methods (Test)
 
@@ -72,11 +81,16 @@ classdef BEVSystemUnitTestMQC < matlab.unittest.TestCase
             %The test runs the |.mlx| file and makes sure that there are
             %no errors or warning thrown.
             test.verifyWarningFree(@()run_BEVRangeEstimationMain, "'BEVRangeEstimationMain mlx'  should execute wihtout any warning or error.");
+            test.addTeardown(@()close_system('BEVsystemModel', 0));
+
+            
         end
         function test_BEVBatterySizingMainMLX(test)
             %The test runs the |.mlx| file and makes sure that there are
             %no errors or warning thrown.
             test.verifyWarningFree(@()run_BEVBatterySizingMain, "'BEVRangeEstimationMain mlx'  should execute wihtout any warning or error.");
+            test.addTeardown(@()close_system('BEVsystemModel', 0));
+
         end
     end
 

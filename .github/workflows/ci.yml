@@ -46,7 +46,7 @@ jobs:
       - name: Setup MATLAB
         uses: matlab-actions/setup-matlab@v1
         with:
-          release: R2023b
+          release: R2024b
 
       - name: Run tests
         uses: matlab-actions/run-command@v1
@@ -67,7 +67,7 @@ jobs:
       - name: Setup MATLAB
         uses: matlab-actions/setup-matlab@v1
         with:
-          release: R2023b
+          release: R2024b
 
       - name: Run tests
         uses: matlab-actions/run-command@v1
