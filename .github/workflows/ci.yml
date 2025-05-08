@@ -72,7 +72,7 @@ jobs:
           products: |
             Simscape
             Simulink
-            Simscape_Fluid
+            Simscape_Fluids
             Stateflow
             Simscape_Driveline
             Simscape_Electrical
