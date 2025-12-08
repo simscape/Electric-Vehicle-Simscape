@@ -96,8 +96,8 @@ NEDCloTpNoAC.Energy = Vals.Data(end);
 
 %% Hot ambient condition run
 % Ambient setting
-vehicleThermal.ambient=25 +273.15;         % [K] Ambient temperature in
-vehicleThermal.coolant_T_init=25 +273.15;  % [K] Coolant initial temperature
+vehicleThermal.ambient=35 +273.15;         % [K] Ambient temperature in
+vehicleThermal.coolant_T_init=35 +273.15;  % [K] Coolant initial temperature
 vehicleThermal.CabinSpTp=20 +273.15;       % [K] Cabin setpoint temperature
 vehicleThermal.cabin_T_init=35 +273.15;    % [K] Cabin initial temperature
 vehicleThermal.AConoff=1;                  % AC on/off variable, 0 AC off, 1 AC On
