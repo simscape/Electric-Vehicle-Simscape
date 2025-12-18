@@ -70,5 +70,5 @@ end
 
 function runBatteryNeuralNetModel()
     % Function runs the |.mlx| script.
-    BatteryNeuralNetModel;
+    VirtualSensorNeuralNetModel;
 end

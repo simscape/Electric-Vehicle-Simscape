@@ -16,7 +16,7 @@ classdef PMSMtestbenchRunScriptsTest < matlab.unittest.TestCase
 
         function setupWorkingFolder(test)
             % Set up working folder
-            import matlab.unittest.fixtures.WorkingFolderFixture;    
+            import matlab.unittest.fixtures.WorkingFolderFixture;
             test.applyFixture(WorkingFolderFixture);
         end
     end
@@ -26,25 +26,25 @@ classdef PMSMtestbenchRunScriptsTest < matlab.unittest.TestCase
         function test_PMSMcountEqTestFunction(test)
             % The test runs the function under test and makes sure that
             % there are no errors or warning thrown
-            test.verifyWarningFree(@()PMSMcountEqTest(67.5), "'PMSMcountEqTest'  should execute wihtout any warning or error.");
+            test.verifyWarningFree(@()countEqTest(67.5), "'PMSMcountEqTest'  should execute wihtout any warning or error.");
         end
 
         function test_PMSMgetDutyLifeFunction(test)
             % The test runs the function under test and makes sure that
             % there are no errors or warning thrown
-            test.verifyWarningFree(@()PMSMgetDutyLife(67.5, 0.2, 108.3), "'PMSMgetDutyLife'  should execute wihtout any warning or error.");
+            test.verifyWarningFree(@()getDutyLife(67.5, 0.2, 108.3), "'PMSMgetDutyLife'  should execute wihtout any warning or error.");
         end
 
         function test_PMSMgetLossFunction(test)
             % The test runs the function under test and makes sure that
             % there are no errors or warning thrown
-            test.verifyWarningFree(@()PMSMgetLoss(10,500,298.15,60000), "'PMSMgetLoss'  should execute wihtout any warning or error.");
+            test.verifyWarningFree(@()getLossTable(10,500,298.15,60000), "'PMSMgetLoss'  should execute wihtout any warning or error.");
         end
-        
+
         function test_PMSMrunInverterLifeFunction(test)
             % The test runs the function under test and makes sure that
             % there are no errors or warning thrown
-            test.verifyWarningFree(@()PMSMrunInverterLife("FTP75"), "'PMSMrunInverterLife'  should execute wihtout any warning or error.");
+            test.verifyWarningFree(@()runInverterLife("FTP75"), "'PMSMrunInverterLife'  should execute wihtout any warning or error.");
         end
 
         function test_PMSMtestBenchDuraRunFunction(test)
@@ -55,20 +55,14 @@ classdef PMSMtestbenchRunScriptsTest < matlab.unittest.TestCase
             assignin('base', "LSHT", LSHT);
             assignin('base', "HSLT", HSLT);
             driveTest= ["LSHT" "HSLT"];
-            test.verifyWarningFree(@()PMSMtestBenchDuraRun(50,driveTest), "'PMSMrunInverterLife'  should execute wihtout any warning or error.");
+            test.verifyWarningFree(@()testBenchDuraRun(50,driveTest), "'PMSMrunInverterLife'  should execute wihtout any warning or error.");
         end
 
         function test_PMSMtestBenchRunAndPlotFunction(test)
             % The test runs the function under test and makes sure that
             % there are no errors or warning thrown.
-            test.verifyWarningFree(@()PMSMtestBenchRun(3.4,"FTP75",400), "'PMSMtestBenchRun'  should execute wihtout any warning or error.");
-            test.verifyWarningFree(@()PMSMplotMotTemperature("FTP75",3.4), "'PMSMplotMotTemperature'  should execute wihtout any warning or error.");
-        end
-
-        function test_PMSMmotorTestBenchMLX(test)
-            % The test runs the |.mlx| file and makes sure that there are
-            % no errors or warning thrown.
-            test.verifyWarningFree(@()run_PMSMmotorTestBench, "'PMSMmotorTestBench'  should execute wihtout any warning or error.");
+            test.verifyWarningFree(@()testThermalBenchRun(3.4,"FTP75",400), "'PMSMtestBenchRun'  should execute wihtout any warning or error.");
+            test.verifyWarningFree(@()plotMotTemperature("FTP75",3.4), "'PMSMplotMotTemperature'  should execute wihtout any warning or error.");
         end
     end
 
@@ -80,9 +74,4 @@ classdef PMSMtestbenchRunScriptsTest < matlab.unittest.TestCase
             arrayfun(@close, figuresOpenedByTest);
         end
     end
-end
-
-function run_PMSMmotorTestBench()
-% Function runs the |.mlx| script.
-PMSMmotorTestBench;
 end

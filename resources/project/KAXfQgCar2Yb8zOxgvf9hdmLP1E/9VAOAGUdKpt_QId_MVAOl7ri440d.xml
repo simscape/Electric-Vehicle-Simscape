@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Info File="Model/PMSMThermalTestbench.slx" GroupUUID="850626d1-c580-486a-b289-fdb00ba6270b" Icon="" Name="PMSMThermalTestbench" Type="Basic" Visible="1"/>
+<Info File="Workflow/MotorDrive/Model/MotorDriveThermalTestbench.slx" GroupUUID="850626d1-c580-486a-b289-fdb00ba6270b" Icon="" Name="MotorDriveThermalTestbench" Type="Basic" Visible="1"/>

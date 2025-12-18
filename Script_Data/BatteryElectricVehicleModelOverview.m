@@ -68,8 +68,8 @@ open_system('BEVsystemModel/Vehicle/Battery/Pack')
 % upto the capacity of the pack. For quick deployment the Battery block has a selection of
 % predefined battery characteristics.
 %
-% <matlab:open_system("BatteryPlantModel_Table") Open Battery table Subsystem>
-open_system('BatteryPlantModel_Table')
+% <matlab:open_system("BatteryTableBased") Open Battery table Subsystem>
+open_system('BatteryTableBased')
 
 %%
 % 

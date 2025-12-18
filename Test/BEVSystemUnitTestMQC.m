@@ -71,7 +71,7 @@ classdef BEVSystemUnitTestMQC < matlab.unittest.TestCase
             mdl = "BEVsystemModel";
             load_system(mdl)
             SetupPlantElectroThermal
-            set_param('BEVsystemModel/Vehicle/Battery', 'ReferencedSubsystem', 'BatteryPlantModel_Table')
+            set_param('BEVsystemModel/Vehicle/Battery', 'ReferencedSubsystem', 'BatteryTableBased')
             testCase.addTeardown(@()close_system(mdl, 0));
             sim(mdl);
 
