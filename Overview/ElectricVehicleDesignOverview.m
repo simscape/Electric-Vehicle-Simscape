@@ -3,7 +3,7 @@
 % This repository contains model and code to help engineers design battery electric
 % vehicle (BEV), including range estimation and battery sizing workflows.
 %
-% Copyright 2022 - 2023 The MathWorks, Inc.
+% Copyright 2022 - 2025 The MathWorks, Inc.
 
 
 
@@ -32,14 +32,14 @@ open_system('BEVsystemModel')
 %
 % * <matlab:open('BEVRangeEstimationMain.mlx') Range Estimation for Battery Electric Vehicles>
 % * <matlab:open('BEVBatterySizingMain.mlx') Sizing Battery for Electric Vehicles>
-% * <matlab:open('BatteryNeuralNetModel.mlx') Battery Neural Network Model for Temperature Prediction>
-% * <matlab:open('PMSMmotorTestBench.mlx') PMSM Thermal Test Bench for Battery Electric Vehicle (BEV)>
+% * <matlab:open('VirtualSensorNeuralNetModel.mlx') Battery Neural Network Model for Temperature Prediction>
+% * <matlab:open('generateDULossMap.mlx') Generate loss map for PMSM (BEV)>
 %
 
 %% Documentation
 % 
 % * <matlab:web('BatteryElectricVehicleModelOverview.html') Battery Electric Vehicle Model>
-% * <matlab:open('PMSMmotorTestBenchDescription.mlx') PMSM Thermal Model>
+% * <matlab:open('MotorDriveThermalTestBenchDescription.mlx') PMSM Thermal Model>
 % 
 
 %% Models

@@ -7,9 +7,9 @@ This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
       -->
 <title>Electric Vehicle Design with Simscape&trade;</title>
-<meta name="generator" content="MATLAB 23.2">
+<meta name="generator" content="MATLAB 24.2">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2024-07-18">
+<meta name="DC.date" content="2026-01-05">
 <meta name="DC.source" content="ElectricVehicleDesignOverview.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
@@ -112,10 +112,10 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <a href="matlab:open('BEVBatterySizingMain.mlx')">Sizing Battery for Electric Vehicles</a>
 </li>
 <li>
-<a href="matlab:open('BatteryNeuralNetModel.mlx')">Battery Neural Network Model for Temperature Prediction</a>
+<a href="matlab:open('VirtualSensorNeuralNetModel.mlx')">Battery Neural Network Model for Temperature Prediction</a>
 </li>
 <li>
-<a href="matlab:open('PMSMmotorTestBench.mlx')">PMSM Thermal Test Bench for Battery Electric Vehicle (BEV)</a>
+<a href="matlab:open('generateDULossMap.mlx')">Generate loss map for PMSM (BEV)</a>
 </li>
 </ul>
 </div>
@@ -126,7 +126,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <a href="matlab:web('BatteryElectricVehicleModelOverview.html')">Battery Electric Vehicle Model</a>
 </li>
 <li>
-<a href="matlab:open('PMSMmotorTestBenchDescription.mlx')">PMSM Thermal Model</a>
+<a href="matlab:open('MotorDriveThermalTestBenchDescription.mlx')">PMSM Thermal Model</a>
 </li>
 </ul>
 </div>
@@ -147,8 +147,8 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <li>FWD : Forward Wheel Drive</li>
 </ul>
 </div>
-<p class="footer">Copyright 2022 - 2023 The MathWorks, Inc.<br>
-<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2023b</a>
+<p class="footer">Copyright 2022 - 2025 The MathWorks, Inc.<br>
+<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2024b</a>
 <br>
 </p>
 </div>
@@ -159,7 +159,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 % This repository contains model and code to help engineers design battery electric
 % vehicle (BEV), including range estimation and battery sizing workflows.
 %
-% Copyright 2022 - 2023 The MathWorks, Inc.
+% Copyright 2022 - 2025 The MathWorks, Inc.
 
 
 
@@ -188,14 +188,14 @@ open_system('BEVsystemModel')
 %
 % * <matlab:open('BEVRangeEstimationMain.mlx') Range Estimation for Battery Electric Vehicles>
 % * <matlab:open('BEVBatterySizingMain.mlx') Sizing Battery for Electric Vehicles>
-% * <matlab:open('BatteryNeuralNetModel.mlx') Battery Neural Network Model for Temperature Prediction>
-% * <matlab:open('PMSMmotorTestBench.mlx') PMSM Thermal Test Bench for Battery Electric Vehicle (BEV)>
+% * <matlab:open('VirtualSensorNeuralNetModel.mlx') Battery Neural Network Model for Temperature Prediction>
+% * <matlab:open('generateDULossMap.mlx') Generate loss map for PMSM (BEV)>
 %
 
 %% Documentation
 % 
 % * <matlab:web('BatteryElectricVehicleModelOverview.html') Battery Electric Vehicle Model>
-% * <matlab:open('PMSMmotorTestBenchDescription.mlx') PMSM Thermal Model>
+% * <matlab:open('MotorDriveThermalTestBenchDescription.mlx') PMSM Thermal Model>
 % 
 
 %% Models
