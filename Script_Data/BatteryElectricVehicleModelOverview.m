@@ -150,7 +150,7 @@ open_system('BEVsystemModel/Vehicle/Rear Motor (EM2)');
 % Simscape Bus. 
 %
 % The electric motor loss map is generated using the PMSM test bench, as described
-% in <matlab:open('PMSMmotorTestBench.mlx'); PMSM Thermal Test Bench for Battery Electric Vehicle.>
+% in <matlab:open('generateDULossMap.mlx'); PMSM Thermal Test Bench for Battery Electric Vehicle.>
 %
 % <matlab:open_system("BEVsystemModel");open_system('BEVsystemModel/Vehicle/Front%20Motor%20(EM1)'); Open Front Motor Subsystem>
 
@@ -203,7 +203,7 @@ open_system('BEVsystemModel/Controller/Vehicle Control')
 %%
 % The chiller extracts a fixed amount of heat from the coolant.
 %
-% <matlab:load_system("VehicleElectroThermal");open_system('VehicleElectroThermal/Vehicle/Chiller'); Open Chiller Subsystem>
+% <matlab:load_system("VehicleElectroThermal");open_system('VehicleElectroThermal/Chiller'); Open Chiller Subsystem>
 %
 load_system('VehicleElectroThermal.slx')
 open_system('VehicleElectroThermal/Chiller');
@@ -229,10 +229,10 @@ open_system('VehicleElectroThermal/Heater');
 % temperature is high, the heater is switched off as the battery can
 % sustain the temperature. 
 % 
-% <matlab:load_system("Controller_HVAC");open_system('Controller_HVAC/Cabin%20Control/Cabin%20Air%20Control'); Open Thermal Control Subsystem>
+% <matlab:load_system("Controller");open_system('Controller/Cabin%20Control/Cabin%20Air%20Control'); Open Thermal Control Subsystem>
 %
-load_system('Controller_HVAC');
-open_system('Controller_HVAC/Cabin Control/Cabin Air Control');
+load_system('Controller');
+open_system('Controller/Cabin Control/Cabin Air Control');
 
 %% Cabin HVAC
 %
@@ -244,9 +244,9 @@ open_system('Controller_HVAC/Cabin Control/Cabin Air Control');
 % blower circulates the air from the vent through the cabin to heat or cool
 % the cabin. 
 %
-% <matlab:load_system("VehicleElectroThermal");open_system('VehicleElectroThermal/HVAC/Cabin/Cabin%20Plant'); Open Cabin Subsystem>
+% <matlab:load_system("VehicleElectroThermal");open_system('VehicleElectroThermal/HVAC/Cabin%20Plant'); Open Cabin Subsystem>
 %
-open_system('VehicleElectroThermal/HVAC/Cabin/Cabin Plant');
+open_system('VehicleElectroThermal/HVAC/Cabin Plant');
 
 %%
 % The cabin loses heat to the environment through the vehicle door, windows, and roof.
