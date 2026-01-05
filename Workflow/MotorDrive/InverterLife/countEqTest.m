@@ -1,5 +1,4 @@
 % Function for estimating equivalent count of temperature fluctuations during a real life vehicle run 
-% The script runs PMSMThermalTestbenchFst.slx in batch mode based on user input 
 
 % Copyright 2022 - 2023 The MathWorks, Inc.
 

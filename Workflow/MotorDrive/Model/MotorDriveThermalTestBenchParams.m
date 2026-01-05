@@ -7,7 +7,7 @@ ControllerParams;
 EmotorLibParams;
 InverterParams;
 InverterThermalParams;
-
+DrivelineParams;
 
 vehicleThermal.coolant_T_init = 300;
 %% Test Environment/Plant Model Parameters
