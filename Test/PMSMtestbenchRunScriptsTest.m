@@ -26,25 +26,25 @@ classdef PMSMtestbenchRunScriptsTest < matlab.unittest.TestCase
         function test_PMSMcountEqTestFunction(test)
             % The test runs the function under test and makes sure that
             % there are no errors or warning thrown
-            test.verifyWarningFree(@()countEqTest(67.5), "'PMSMcountEqTest'  should execute wihtout any warning or error.");
+            test.verifyWarningFree(@()countEqTest(67.5), "'countEqTest'  should execute wihtout any warning or error.");
         end
 
         function test_PMSMgetDutyLifeFunction(test)
             % The test runs the function under test and makes sure that
             % there are no errors or warning thrown
-            test.verifyWarningFree(@()getDutyLife(67.5, 0.2, 108.3), "'PMSMgetDutyLife'  should execute wihtout any warning or error.");
+            test.verifyWarningFree(@()getDutyLife(67.5, 0.2, 108.3), "'getDutyLife'  should execute wihtout any warning or error.");
         end
 
         function test_PMSMgetLossFunction(test)
             % The test runs the function under test and makes sure that
             % there are no errors or warning thrown
-            test.verifyWarningFree(@()getLossTable(10,500,298.15,60000), "'PMSMgetLoss'  should execute wihtout any warning or error.");
+            test.verifyWarningFree(@()getLossTable(10,500,298.15,60000), "'getLossTable'  should execute wihtout any warning or error.");
         end
 
         function test_PMSMrunInverterLifeFunction(test)
             % The test runs the function under test and makes sure that
             % there are no errors or warning thrown
-            test.verifyWarningFree(@()runInverterLife("FTP75"), "'PMSMrunInverterLife'  should execute wihtout any warning or error.");
+            test.verifyWarningFree(@()runInverterLife("FTP75"), "'inverterPowerModuleLife'  should execute wihtout any warning or error.");
         end
 
         function test_PMSMtestBenchDuraRunFunction(test)
@@ -55,7 +55,7 @@ classdef PMSMtestbenchRunScriptsTest < matlab.unittest.TestCase
             assignin('base', "LSHT", LSHT);
             assignin('base', "HSLT", HSLT);
             driveTest= ["LSHT" "HSLT"];
-            test.verifyWarningFree(@()testBenchDuraRun(50,driveTest), "'PMSMrunInverterLife'  should execute wihtout any warning or error.");
+            test.verifyWarningFree(@()testBenchDuraRun(50,driveTest), "'DUThermalDurability'  should execute wihtout any warning or error.");
         end
 
         function test_PMSMtestBenchRunAndPlotFunction(test)
