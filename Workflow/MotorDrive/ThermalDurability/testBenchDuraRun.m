@@ -1,5 +1,5 @@
 %% Function for running Motor thermal test bench for continous thermal test at constant load  
-% The script runs MotorDriveThermalTestbenchFst.slx in batch mode based on user input 
+% The script runs MotorDriveThermalTestbench.slx in batch mode based on user input 
 
 % Copyright 2022 - 2025 The MathWorks, Inc.
 
