@@ -15,7 +15,7 @@ name: CI using MATLAB
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
     paths-ignore:
       - 'docs/**'
       - '**.md'
@@ -25,7 +25,7 @@ on:
       - '**.xml'
 
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
     paths-ignore:
       - 'docs/**'
       - '**.md'
