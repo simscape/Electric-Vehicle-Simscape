@@ -1,34 +1,8 @@
-classdef BatteryWorkflowTests < matlab.unittest.TestCase
-    %% Class implementation of unit test
+classdef BatteryWorkflowTests < BaseTest
+    % The test class runs the live scripts and models of Vehicle Workflows
+    % to make sure that they run without any error or warning.
 
-    % Copyright 2024 The MathWorks, Inc.
-
-    properties
-        openfigureListBefore;
-    end
-
-    methods(TestMethodSetup)
-        function listOpenFigures(test)
-            % List all open figures
-            test.openfigureListBefore = findall(0,'Type','Figure');
-        end
-
-        function setupWorkingFolder(test)
-            % Set up working folder
-            import matlab.unittest.fixtures.WorkingFolderFixture;
-            test.applyFixture(WorkingFolderFixture);
-        end
-    end
-
-    methods(TestMethodTeardown)
-        function closeOpenedFigures(testCase)
-            % Close all figure opened during test
-            figureListAfter = findall(0,'Type','Figure');
-            figuresOpenedByTest = setdiff(figureListAfter, testCase.openfigureListBefore);
-            arrayfun(@close, figuresOpenedByTest);
-        end
-    end
-
+    % Copyright 2024-2026 The MathWorks, Inc.
     methods (Test)
         function CellCharacterizationHPPCModel(testCase)
             mdl = "CellCharacterizationHPPC";
@@ -49,26 +23,51 @@ classdef BatteryWorkflowTests < matlab.unittest.TestCase
             %no errors or warning thrown.
             test.verifyWarningFree(@()runCellCharacterizationForBEV, "'CellCharacterizationForBEV mlx'  should execute wihtout any warning or error.");
             test.addTeardown(@()close_system('CellCharacterizationHPPC', 0));
-            
+
         end
 
-        function MLXBatteryNeuralNetModel(test)
+        function MLXVirtualSensorNeuralNetModel(test)
             %The test runs the |.mlx| file and makes sure that there are
             %no errors or warning thrown.
-            test.verifyWarningFree(@()runBatteryNeuralNetModel, "'BatteryNeuralNetModel mlx'  should execute wihtout any warning or error.");
+            test.verifyWarningFree(@()runVirtualSensorNeuralNetModel, "'VirtualSensorNeuralNetModel mlx'  should execute wihtout any warning or error.");
             test.addTeardown(@()close_system('BatteryTestHarness', 0));
 
         end
+
+        function MLXBatterySizing(test)
+            %The test runs the |.mlx| file and makes sure that there are
+            %no errors or warning thrown.
+            test.verifyWarningFree(@()runBatterySizing, "'BEVRangeEstimationMain mlx'  should execute wihtout any warning or error.");
+            test.addTeardown(@()close_system('BEVsystemModel', 0));
+
+        end
+
+        function test_BEVbatterySizingscript(test)
+            % The test runs the function under test and makes sure that
+            % there are no errors or warning thrown
+            test.verifyWarningFree(@()run_BEVbatterySizing, "'Battery Sizing script'  should execute wihtout any warning or error.");
+        end
+
     end
 
 end  % classdef
 
 function runCellCharacterizationForBEV()
-    % Function runs the |.mlx| script.
-    CellCharacterizationForBEV;
+% Function runs the |.mlx| script.
+CellCharacterizationForBEV;
 end
 
-function runBatteryNeuralNetModel()
-    % Function runs the |.mlx| script.
-    VirtualSensorNeuralNetModel;
+function runVirtualSensorNeuralNetModel()
+% Function runs the |.mlx| script.
+VirtualSensorNeuralNetModel;
+end
+
+function runBatterySizing()
+% Function runs the |.mlx| script.
+BEVBatterySizingMain;
+end
+
+function run_BEVbatterySizing()
+% Function runs the |.m| script.
+BEVbatterySizing;
 end

@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Configure and Export a BEV Model Using the BEV App</title>
+
+  <style>
+    :root{
+      --mw-orange:#D95319;
+      --text:#222;
+      --muted:#555;
+      --line:#e6e6e6;
+      --bg:#ffffff;
+      --code-bg:#f7f7f7;
+    }
+
+    body{
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.55;
+    }
+
+    .wrap{
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px 18px 48px;
+    }
+
+    h1{
+      margin: 0 0 10px 0;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--mw-orange);
+    }
+
+    h2{
+      margin: 28px 0 8px 0;
+      font-size: 20px;
+      color: var(--mw-orange);
+    }
+
+    h3{
+      margin: 18px 0 6px 0;
+      font-size: 16px;
+      color: var(--mw-orange);
+    }
+
+    p{
+      margin: 8px 0;
+    }
+
+    .intro{
+      color: var(--muted);
+      max-width: 90ch;
+    }
+
+    .contents{
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px 16px;
+      background: #fafafa;
+      margin: 18px 0 26px;
+    }
+
+    .contents h2{
+      margin-top: 0;
+      font-size: 16px;
+      color: var(--text);
+    }
+
+    .contents ol{
+      margin: 6px 0 0 18px;
+    }
+
+    ul, ol{
+      margin: 8px 0 10px;
+    }
+
+    ul li, ol li{
+      margin: 6px 0;
+    }
+
+    img{
+      max-width: 100%;
+      height: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      margin: 10px 0 14px;
+      display: block;
+    }
+
+    code{
+      background: var(--code-bg);
+      padding: 0 4px;
+      border-radius: 4px;
+    }
+
+    pre{
+      background: var(--code-bg);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px 12px;
+      overflow-x: auto;
+      margin: 10px 0;
+      white-space: pre;
+    }
+
+    .note{
+      border-left: 3px solid var(--mw-orange);
+      padding: 8px 12px;
+      background: #fff7f2;
+      border-radius: 6px;
+      margin: 12px 0;
+    }
+
+    footer{
+      border-top: 1px solid var(--line);
+      margin-top: 36px;
+      padding-top: 14px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <h1>Configure and Export a BEV Model Using the BEV App</h1>
+    <p class="intro">
+      This workflow shows how to configure and export a battery electric vehicle model using the BEV App.
+      You will select a vehicle platform, choose component models and controls, set environment and HVAC options,
+      configure the driver and drive cycle, and export a Simulink model and parameter scripts.
+    </p>
+
+    <div class="contents">
+      <h2>Contents</h2>
+      <ol>
+        <li><a href="#prepare">Prepare the required files and products</a></li>
+        <li><a href="#select-platform">Select a vehicle platform</a></li>
+        <li><a href="#choose-components">Choose component models</a></li>
+        <li><a href="#review-preview">Review the preview and description</a></li>
+        <li><a href="#define-environment">Define environment and initial conditions</a></li>
+        <li><a href="#configure-hvac">Configure HVAC settings</a></li>
+        <li><a href="#setup-driver">Set up driver, controls, and drive cycle</a></li>
+        <li><a href="#export">Export the model and parameters</a></li>
+      </ol>
+    </div>
+
+    <h2 id="prepare">Prepare the required files and products</h2>
+    <p>
+      In this section, you prepare the software products and input files needed to complete the configuration and export workflow.
+    </p>
+
+    <p>The following list describes what you need before you begin.</p>
+    <ul>
+      <li>MATLAB&reg;.</li>
+      <li>Simulink&reg;.</li>
+      <li>Simscape&reg; and relevant add ons such as Simscape Electrical&trade;, Simscape Driveline&trade;, and Simscape Thermal&trade;.</li>
+      <li>A base BEV host model file in SLX format that the app updates.</li>
+      <li>Platform configuration files in JSON format.</li>
+      <li>Repository folders for components such as Battery, MotorDrive, Charger, and HVAC.</li>
+    </ul>
+
+    <div class="note">
+      Keep the base SLX model under version control and create a copy for experiments.
+    </div>
+
+    <p>The following image shows the BEV App main window used during this workflow.</p>
+    <img src="BEVappWindow.png" alt="BEV App main window" />
+
+    <h2 id="select-platform">Select a vehicle platform</h2>
+    <p>
+      In this section, you select a base model and a vehicle configuration so the app can determine which component and control options are available.
+    </p>
+
+    <p>The following image shows the vehicle platform selection panel.</p>
+    <img src="VehicleConfigPanel.png" alt="Vehicle platform selection panel" width="250" />
+
+    <p>The following list describes what each dropdown does.</p>
+    <ol>
+      <li>Select the Base Model that contains the BEV layout canvas.</li>
+      <li>Select the Design Scenario that defines the platform configuration.</li>
+      <li>Select the vehicle configuration template that defines the model architecture.</li>
+    </ol>
+
+    <p>The following image shows an example base model structure.</p>
+    <img src="BEVmodel.png" alt="Example base model structure" />
+
+    <p>The following image shows an example vehicle configuration model.</p>
+    <img src="VehicleConfiguration.png" alt="Example vehicle configuration model" />
+
+    <h2 id="choose-components">Choose component models</h2>
+    <p>
+      In this section, you select the component variants used to build the exported model.
+      The app uses your platform JSON to match each instance in the base model to a list of allowed component models.
+    </p>
+
+    <p>The following image shows the component selection panel.</p>
+    <img src="ComponentPanel.png" alt="Component selection panel" width="250" />
+
+    <p>
+      The label text in each row comes from the JSON <code>Instances</code> list and must match a subsystem name in your base model.
+      The dropdown lists model files defined under <code>Models</code> in the JSON, filtered to show only valid options.
+    </p>
+
+    <h3>How the dropdown gets populated</h3>
+    <p>The following list describes how dropdown options are built.</p>
+    <ul>
+      <li>The app scans your component repository for available model files.</li>
+      <li>It filters them using the JSON <code>Models</code> list for each component.</li>
+      <li>Only matching models appear in the dropdown.</li>
+    </ul>
+
+    <p>The following example shows how component entries in the JSON map to instances and dropdown options.</p>
+    <pre>
+"Components": {
+  "BatteryHV": {
+    "Instances": ["Battery"],
+    "Models": [
+      "BatteryLumped.slx",
+      "BatteryTableBased.slx"
+    ]
+  },
+  "MotorDrive": {
+    "Instances": ["Rear Motor (EM2)"],
+    "Models": [
+      "MotorDriveGear.slx",
+      "MotorDriveGear_NoTh.slx"
+    ]
+  }
+}
+    </pre>
+
+    <h3>Controls in each component row</h3>
+    <p>The following list describes what each UI element is used for.</p>
+    <ul>
+      <li><b>Label</b> identifies the component instance name from JSON <code>Instances</code> and should match the subsystem name in the base model.</li>
+      <li><b>Dropdown</b> selects a component model from the JSON filtered <code>Models</code> list.</li>
+      <li><b>Open</b> opens the selected component model.</li>
+      <li><b>Param</b> opens the parameter script for that component.</li>
+      <li><b>Question mark</b> opens the preview and description for the selection.</li>
+    </ul>
+
+    <h3>Link parameter files</h3>
+    <p>
+      In this section, you link a parameter file to a component so the Param button opens the correct script during setup and export.
+      When linked, the Param button opens the associated parameter file that follows the convention <code>&lt;SelectedComponentName&gt;Param.m</code>.
+      You can link any parameter file to the component. Right click the Param button to link or unlink a parameter file.
+    </p>
+
+    <p>The following image shows the right click menu used to link and unlink a parameter file.</p>
+    <img src="ComponentPanelParam.png" alt="Right click Param menu used to link and unlink a parameter file" width="250" />
+
+    <div class="note">
+      Start with no thermal variants to check connectivity, then switch to detailed electro thermal variants after the setup is stable.
+    </div>
+
+    <h2 id="review-preview">Review the preview and description</h2>
+    <p>
+      In this section, you confirm that the selected component model and control model match what you intend to export.
+      When you change a selection in the Components panel, the app updates the preview and description automatically.
+    </p>
+
+    <h3>Preview panel</h3>
+    <p>The following list describes what the preview panel helps you check.</p>
+    <ul>
+      <li>Shows a snapshot of the selected model canvas.</li>
+      <li>Updates when you change a dropdown selection.</li>
+      <li>Helps catch missing lines, wrong number of ports, or wrong instance selection before export.</li>
+    </ul>
+
+    <p>The following image shows an example preview panel for a selected model.</p>
+    <img src="SelectionPreviewPanel.png" alt="Preview panel for a selected model" width="300" />
+
+    <h3>Description panel</h3>
+    <p>The following list describes what the description panel provides.</p>
+    <ul>
+      <li>Summarizes the purpose of the selected model.</li>
+      <li>Describes the main interfaces and key assumptions for the model.</li>
+      <li>Provides selection context when multiple variants exist.</li>
+    </ul>
+
+    <p>The following image shows an example description panel for a selected model.</p>
+    <img src="SelectionDescriptionPanel.png" alt="Description panel for a selected model" width="300" />
+
+    <h2 id="define-environment">Define environment and initial conditions</h2>
+    <p>
+      In this section, you define ambient environment and initial state values used by thermal and gas based components.
+      These values are applied through the environment subsystem in the base model.
+    </p>
+
+    <p>The following list describes the parameters in this panel.</p>
+    <ul>
+      <li><b>Amb. Temp</b> is the ambient air temperature around the vehicle. Default is <code>25</code> degrees Celsius.</li>
+      <li><b>Amb. Press Init</b> is the initial atmospheric pressure. Default is <code>1</code> bar.</li>
+      <li><b>Rel. Humidity Init</b> is the initial relative humidity of ambient air. Default is <code>0.3</code>.</li>
+      <li><b>CO2 Fraction Init</b> is the carbon dioxide volume fraction in ambient air. Default is <code>0.0004</code>.</li>
+    </ul>
+
+    <p>
+      When you change these values in the app, they propagate to the environment subsystem of the base model.
+      For most components, the updated conditions take effect the next time you export or simulate.
+    </p>
+
+    <p>The following image shows the environment and initial condition panel.</p>
+    <img src="EnvInitPanel.png" alt="Environment and initial condition panel" width="300" />
+
+    <div class="note">
+      Define multiple environment presets such as Hot City, Cold Highway, and Altitude Test, then compare results by switching presets.
+    </div>
+
+    <h2 id="configure-hvac">Configure HVAC settings</h2>
+    <p>
+      In this section, you control whether cabin air conditioning is active during simulation and set the target cabin temperature.
+      This panel is enabled only when the selected configuration includes an HVAC component.
+    </p>
+
+    <p>The following list describes the controls in this panel.</p>
+    <ul>
+      <li><b>AC Status</b> toggles the air conditioning system on and off. Default is off.</li>
+      <li><b>Cabin Temperature Setpoint</b> defines the desired cabin air temperature. Default is <code>20</code> degrees Celsius.</li>
+    </ul>
+
+    <p>
+      Turning AC on increases total power demand and thermal load, which affects battery drain and range.
+      For baseline studies, run with AC off first, then enable AC to measure the impact on efficiency.
+    </p>
+
+    <p>The following image shows the HVAC configuration panel.</p>
+    <img src="HVACConfigPanel.png" alt="HVAC configuration panel" width="300" />
+
+    <h2 id="setup-driver">Set up driver, controls, and drive cycle</h2>
+    <p>
+      In this section, you set drive mode options, select a controller model, and choose a drive cycle.
+      These settings define how the vehicle is driven in simulation and which speed profile the driver follows.
+    </p>
+
+    <p>The following image shows the driver setup panel.</p>
+    <img src="DriverSetupPanel.png" alt="Driver setup panel" width="300" />
+
+    <h3>Drive mode buttons</h3>
+    <p>The following list describes what each drive mode toggle does.</p>
+    <ul>
+      <li><b>AWD</b> enables or disables all wheel drive mode. When enabled, front and rear motor drives are active. When disabled, rear motor drive is active.</li>
+      <li><b>Regen</b> enables or disables regenerative braking. When disabled, ensure the model includes a mechanical brake subsystem to provide braking torque.</li>
+      <li><b>Charging</b> switches the vehicle to charging mode and disables propulsion related settings such as AWD and Regen.</li>
+    </ul>
+
+    <h3>Control selection</h3>
+    <p>
+      The controller dropdown is populated from the JSON <code>Controls</code> section. It lists control models available for the selected configuration.
+      Selecting a control model updates the driver and control logic used in simulation.
+    </p>
+
+    <p>The following example shows how the controls section is represented in the JSON.</p>
+    <pre>
+"Controls": {
+  "Instances": ["Controller"],
+  "Models": ["ControllerFRM", "ControllerHVAC"]
+}
+    </pre>
+
+    <p>The following list describes the controller UI elements.</p>
+    <ul>
+      <li><b>Dropdown</b> lists the control models defined under JSON <code>Models</code>.</li>
+      <li><b>Question mark</b> shows the control description and preview of the control block layout.</li>
+    </ul>
+
+    <h3>Drive cycle selection</h3>
+    <p>
+      The drive cycle dropdown defines which speed versus time profile the driver follows.
+      The list is populated from options available in the drive cycle source block inside the base model.
+    </p>
+
+    <p>The following list describes drive cycle selection behavior and requirements.</p>
+    <ul>
+      <li>Common examples include <code>FTP72</code>, <code>WLTP</code>, <code>NEDC</code>, and <code>US06</code>.</li>
+      <li>If no options appear, install the Vehicle Drive Cycle Blocks package from the Simulink Support Package for Vehicle Drive Cycles.</li>
+      <li>The question mark opens the description and preview of the selected drive cycle profile.</li>
+    </ul>
+
+    <div class="note">
+      Start with a short cycle such as FTP72 to verify setup, then switch to longer cycles such as WLTP for performance studies.
+    </div>
+
+    <h2 id="export">Export the model and parameters</h2>
+    <p>
+      In this section, you generate the Simulink model and parameter scripts that match your selections.
+      Use model export when you want the model structure updated, and use parameter export when you want parameter values scripted.
+    </p>
+
+    <p>The following image shows the export controls.</p>
+    <img src="ExportPanel.png" alt="Export controls" width="300" />
+
+    <h3>Model Export</h3>
+    <p>
+      Use Model Export to create or update the BEV model using the selections you made in the app.
+      The following list describes what Model Export does.
+    </p>
+    <ul>
+      <li>Opens the selected base model.</li>
+      <li>Locates subsystem instances defined by JSON <code>Instances</code> inside the base model.</li>
+      <li>Replaces or configures those subsystems with the component models selected in the Components panel.</li>
+      <li>Applies environment and HVAC settings.</li>
+      <li>Applies driver, controls, and drive cycle selections.</li>
+    </ul>
+
+    <h3>Parameter Export</h3>
+    <p>
+      Use Parameter Export to generate MATLAB parameter scripts that correspond to the selected components and controls.
+      The following list describes what Parameter Export does.
+    </p>
+    <ul>
+      <li>Creates or updates a parameter file for the current configuration.</li>
+      <li>Collects linked component parameter files that you linked in the Components panel.</li>
+      <li>Writes HVAC, environment, and driver related variables when they are exposed by the configuration.</li>
+    </ul>
+
+    <h3>Missing parameter link panel</h3>
+    <p>
+      If one or more components do not have a parameter file linked, the app opens a link parameter file panel when you press Parameter Export.
+      The following list describes what you can do in that panel.
+    </p>
+    <ul>
+      <li>Browse to an existing parameter file and link it.</li>
+      <li>Continue with defaults for components that remain unlinked.</li>
+    </ul>
+
+    <p>
+      This uses the same linking mechanism as the right click link param file option in the Components panel.
+      Parameter Export checks this to avoid generating an incomplete setup script.
+    </p>
+
+    <h3>Model Setup</h3>
+    <p>
+      Model Setup runs the recommended export sequence in one action.
+      Use it when you want a single button workflow that updates both the model structure and parameter scripts.
+    </p>
+
+    <footer>
+      <p>
+        You have completed the workflow to configure and export a battery electric vehicle model using the BEV App.
+        Rerun the workflow with different selections to compare configurations, operating conditions, and component variants.
+      </p>
+      <p>
+        This workflow guide is based on the original help content and is intended to support repeatable and consistent model setup.
+      </p>
+    </footer>
+
+  </div>
+</body>
+</html>

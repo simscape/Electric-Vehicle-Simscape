@@ -1,0 +1,38 @@
+{
+    
+    "VehicleElectroThermal": {
+        "Description": "Electric Vehicle with Full Thermal",
+        "Components": {
+            "BatteryHV": {
+                "Instances":["Battery"],
+                "Models": ["BatteryTableBased", "BatteryLumpedThermal"]
+            },
+            "MotorDrive": {
+                "Instances": ["Rear Motor (EM2)", "Front Motor (EM1)"],
+                "Models": ["MotorDriveGear","MotorDriveLube"]
+            },
+            "HVAC": {
+                "Instances": ["HVAC"],
+                "Models": ["HVACsimpleTh","HVACEmpiricalRef"]
+            },
+            "Charger": {
+                "Instances": ["Charger"],
+                "Models": ["ChargerThermal"]
+            },
+            "Chiller": {
+                "Instances": ["Chiller"],
+                "Models": ["Chiller"]
+            },
+            "BatteryHeater": {
+                "Instances": ["Heater"],
+                "Models": ["Heater"]
+            },
+            "Driveline": {
+                "Instances": ["Driveline"],
+                "Models": ["Driveline","DrivelineWithBraking"]
+            }
+        }
+    }
+
+    
+}
