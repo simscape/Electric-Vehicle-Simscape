@@ -93,4 +93,4 @@ flowchart TD
     T --> V[ComponentDescription]
 ```
 
-Copyright 2022 - 2025 The MathWorks, Inc.
+Copyright 2026 The MathWorks, Inc.
