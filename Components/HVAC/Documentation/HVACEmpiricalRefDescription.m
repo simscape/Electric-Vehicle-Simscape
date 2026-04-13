@@ -35,10 +35,10 @@ open_system('HVACEmpiricalRef')
 % * *Blower/Cooler/PTC States* - Operating states of HVAC actuators.
 
 %% Workflows
-% The HVACEmpiricalRef block is listed in the *VehicleElectroThermal*
-% configuration in |BEV_configs.m|. It is suitable for cabin comfort
-% studies and HVAC energy-demand evaluation without modeling the
-% refrigerant loop. It is the default fidelity in the HVAC test harness.
+% The HVACEmpiricalRef block is listed in the *VehicleElecAux* and
+% *VehicleElectroThermal* templates in |VehicleTemplateConfig.json|. It is
+% suitable for cabin comfort studies and HVAC energy-demand evaluation
+% without modeling the refrigerant loop. It is the default fidelity in the HVAC test harness.
 
 %% Parameters
 %

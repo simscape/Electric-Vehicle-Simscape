@@ -31,10 +31,9 @@ open_system('ChillerNoCoolant')
 % * *HV Power* - Electrical power consumed.
 
 %% Workflows
-% The ChillerNoCoolant block is used in the *VehicleElectric* template
-% (|BEV_configs.m|) where the coolant loop is not modeled. It is suitable
-% for fast electrical-only simulations where auxiliary power consumption
-% matters.
+% The ChillerNoCoolant block is a simplified variant used as a standalone
+% auxiliary load model where the coolant loop is not modeled, suitable for
+% fast electrical-only simulations where auxiliary power consumption matters.
 
 %% See Also
 % * <ChillerDescription.html Chiller>

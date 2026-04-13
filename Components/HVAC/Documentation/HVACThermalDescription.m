@@ -36,10 +36,11 @@ open_system('HVACThermal')
 % * *Blower/Cooler/PTC Thermal States* - Actuator thermal operating states.
 
 %% Workflows
-% The HVACThermal block is listed in the *VehicleElectroThermal*
-% configuration in |BEV_configs.m|. It is used for HVAC control strategy
-% development and detailed thermal management analysis. Parameters are
-% loaded via |HVACThermalParams.m| and |BEVThermalManagementparam.m|.
+% The HVACThermal block is compatible with the *VehicleElecAux* and
+% *VehicleElectroThermal* templates defined in |VehicleTemplateConfig.json|.
+% It is used for HVAC control strategy development and detailed thermal
+% management analysis. Parameters are loaded via |HVACThermalParams.m| and
+% |BEVThermalManagementparam.m|.
 
 %% Parameters
 %

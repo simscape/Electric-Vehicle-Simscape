@@ -17,8 +17,7 @@ function createComponentDropdowns(app)
     compNames = fieldnames(rawCfg.(tmpl).Components);
     entries   = struct('Comp',{},'Label',{},'CfgModels',{});
     try
-        validateVehicleSelectedConfig(app);
-        % configValid = validateVehicleConfig(app);
+        validateVehicleConfig(app, app.VehicleTemplateDropDown.Value);
         app.DriveCycleDropDown.Enable = "on";
         app.DriveCycleDesc.Enable = "on";
         app.CreateModelButton.Enable = "on";
@@ -55,7 +54,7 @@ function createComponentDropdowns(app)
 
     % Check if HVAC present in the component list or not
     if ~any(strcmp({entries.Comp}, 'HVAC'))
-        disp('HVAC is present');
+        % disp('HVAC is present');
         app.ACButton.Enable = 'off';
         app.CabinTempSetpointEditField.Enable = 'off';
     else
@@ -329,7 +328,8 @@ function createComponentDropdowns(app)
         updateParamTooltip(compParamOpen, compDropDown, root);
 
         if isempty(itemsValid) || startsWith(string(compDropDown.Value),"__MISSING__")
-            compOpen.Enable = 'off'; compExport.Enable = 'off';
+            compOpen.Enable = 'off'; 
+            % compExport.Enable = 'off';
         end
 
         % Row 4: red note label (combine model-missing + param-missing in ONE line)
@@ -519,12 +519,7 @@ function s = normName(x)
     s = regexprep(s, '\s+', '');
 end
 
-function out = ensureSlxList(in)
-    in = string(in);
-    add = ~endsWith(lower(in), ".slx");
-    in(add) = in(add) + ".slx";
-    out = cellstr(in);
-end
+% ensureSlxList is now a shared utility in APP/API/ensureSlxList.m
 
 %% param file selection linking and the context menu funxtions
 function openParamForCurrentSelection(app, compName, dd, rootFolder)

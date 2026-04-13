@@ -52,7 +52,7 @@ Simplified chiller model without coolant loop coupling. The electrical load on t
 
 ### Workflows
 
-- Used in the **VehicleElectric** template (`BEV_configs.m`) where the coolant loop is not modeled.
+- A simplified variant used as a standalone auxiliary load where the coolant loop is not modeled.
 - Suitable for fast electrical-only simulations where auxiliary power consumption matters.
 
 ### Inputs

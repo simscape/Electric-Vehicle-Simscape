@@ -205,15 +205,12 @@ function info = collectComponentParamLinks(app)
 end
 
 function root = resolveProjectRoot(app)
-% Use app.ProjectRoot if set; else MATLAB Project; else pwd.
-root = getBEVProjectRoot(app);              % full path to the root folder
-if isempty(root)
+% Use MATLAB Project root; else pwd.
     try
-        root = getBEVProjectRoot(app);                          % project root
+        root = getBEVProjectRoot(app);
     catch
         root = pwd;
     end
-end
 end
 
 % function name = resolveTopModelName(app)

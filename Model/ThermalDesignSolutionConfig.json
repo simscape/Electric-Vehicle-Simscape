@@ -31,7 +31,11 @@
                 "Instances": ["Driveline"],
                 "Models": ["Driveline","DrivelineWithBraking"]
             }
-        }
+        },
+        "Controls": {
+                        "Instances":["Controller"],
+                          "Models":["Controller"]
+                   }
     }
 
     

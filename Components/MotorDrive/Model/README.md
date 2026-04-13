@@ -16,7 +16,7 @@ Electric motor with lumped electrical and mechanical dynamics and a fixed gear f
 
 ### Workflows
 
-- Listed in the **VehicleElectric** and **VehicleElectroThermal** configurations in `BEV_configs.m` as an available motor variant.
+- Listed in the **VehicleElectric** and **VehicleElecAux** templates in `VehicleTemplateConfig.json` as an available motor variant.
 - Used when fast simulation is needed without thermal effects.
 
 ### Inputs

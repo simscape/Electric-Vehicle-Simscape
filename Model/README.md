@@ -1,6 +1,6 @@
 # Model
 
-System-level vehicle models and configuration for the BEV Simscape project. The main system model (`BEVsystemModel.slx`) assembles components from `Components/` via subsystem references. Vehicle templates define pre-configured component combinations for different simulation scopes. Display models provide energy visualization dashboards.
+System-level vehicle model and configuration for the BEV Simscape project. `BEVsystemModel.slx` assembles components from `Components/` via subsystem references.
 
 ---
 
@@ -9,38 +9,43 @@ System-level vehicle models and configuration for the BEV Simscape project. The 
 ```
 Model/
   BEVsystemModel.slx              - Main system model (top-level wiring diagram)
-  VehicleTemplateConfig.json       - Template-to-component mapping
+  VehicleTemplateConfig.json       - Template-to-component fidelity mapping
   ThermalDesignSolutionConfig.json - Thermal design solution mapping
   VehicleTemplate/                 - Pre-configured vehicle templates
   Display/                         - Energy flow display subsystems
 ```
 
----
-
-## Vehicle Templates
-
-| Template | Description | Components |
-|----------|-------------|------------|
-| VehicleElectric | Electrical-only, no thermal or auxiliary | Battery, Motor, Charger, Driveline |
-| VehicleElecAux | Electrical with auxiliary loads (HVAC, pumps) | Battery, Motor, Charger, HVAC, Driveline |
-| VehicleElectroThermal | Full electro-thermal plant | Battery, Motor, Charger, HVAC, Chiller, Heater, Driveline |
-| VehicleElectroThermalLowTemp | Electro-thermal for cold-climate scenarios | Same as ElectroThermal with cold-start focus |
-
-Each template is a standalone `.slx` in `VehicleTemplate/` that references the appropriate component fidelities defined in `VehicleTemplateConfig.json`.
+Vehicle templates are documented in [VehicleTemplate/README.md](VehicleTemplate/README.md). Display models (`EnergyElectric`, `EnergyElectroThermal`) provide energy flow visualization during simulation.
 
 ---
 
-## Display Models
+## VehicleTemplateConfig.json
 
-| Model | Description |
-|-------|-------------|
-| EnergyElectric | Energy flow visualization for electrical-only templates |
-| EnergyElectroThermal | Energy flow visualization for electro-thermal templates |
+Maps each vehicle template to its component fidelity selections:
 
----
+| Component | VehicleElectric | VehicleElecAux | VehicleElectroThermal |
+|-----------|----------------|----------------|----------------------|
+| BatteryHV | BatteryLumped | BatteryLumped | BatteryTableBased, BatteryLumpedThermal |
+| MotorDrive | MotorDriveGear | MotorDriveGear | MotorDriveGearTh, MotorDriveLube |
+| Charger | Charger, ChargerDummy | Charger, ChargerDummy | ChargerThermal, ChargerThermalDummy |
+| Controller | ControllerFRM | ControllerHVAC | Controller |
+| Driveline | Driveline, DrivelineWithBraking | Driveline, DrivelineWithBraking | Driveline, DrivelineWithBraking |
+| HVAC | -- | HVACsimpleTh, HVACEmpiricalRef | HVACsimpleTh, HVACEmpiricalRef |
+| Chiller | -- | -- | Chiller |
+| BatteryHeater | -- | -- | Heater |
 
-## Configuration
+## ThermalDesignSolutionConfig.json
 
-`VehicleTemplateConfig.json` maps each template to its component fidelities. For example, `VehicleElectric` uses `BatteryLumped` and `MotorDriveGear` (no thermal), while `VehicleElectroThermal` uses `BatteryTableBased` and `MotorDriveGearTh` (thermal-coupled). This configuration drives fidelity selection without modifying the system model itself.
+Defines the thermal-only design solution for `VehicleElectroThermal`:
+
+| Component | Available Models |
+|-----------|-----------------|
+| BatteryHV | BatteryTableBased, BatteryLumpedThermal |
+| MotorDrive | MotorDriveGear, MotorDriveLube |
+| Charger | ChargerThermal |
+| HVAC | HVACsimpleTh, HVACEmpiricalRef |
+| Chiller | Chiller |
+| BatteryHeater | Heater |
+| Driveline | Driveline, DrivelineWithBraking |
 
 Copyright 2026 The MathWorks, Inc.

@@ -219,17 +219,11 @@
 "Components": {
   "BatteryHV": {
     "Instances": ["Battery"],
-    "Models": [
-      "BatteryLumped.slx",
-      "BatteryTableBased.slx"
-    ]
+    "Models": ["BatteryLumped", "BatteryLumpedThermal", "BatteryTableBased"]
   },
   "MotorDrive": {
-    "Instances": ["Rear Motor (EM2)"],
-    "Models": [
-      "MotorDriveGear.slx",
-      "MotorDriveGear_NoTh.slx"
-    ]
+    "Instances": ["Rear Motor (EM2)", "Front Motor (EM1)"],
+    "Models": ["MotorDriveGear", "MotorDriveGearTh", "MotorDriveLube"]
   }
 }
     </pre>

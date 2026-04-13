@@ -69,9 +69,4 @@ function controlSelectionDropdown(app)
 
 end
 
-function out = ensureSlxList(in)
-    in = string(in);
-    add = ~endsWith(lower(in), ".slx");
-    in(add) = in(add) + ".slx";
-    out = cellstr(in);
-end
+% ensureSlxList is now a shared utility in APP/API/ensureSlxList.m

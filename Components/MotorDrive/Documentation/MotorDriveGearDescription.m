@@ -40,7 +40,7 @@ open_system('MotorDriveGear')
 
 %% Workflows
 % The MotorDriveGear block is listed in the *VehicleElectric* and
-% *VehicleElectroThermal* configurations in |BEV_configs.m| as an available
+% *VehicleElecAux* templates in |VehicleTemplateConfig.json| as an available
 % motor variant. It is used when fast simulation is needed without thermal
 % effects.
 

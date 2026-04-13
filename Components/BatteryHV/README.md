@@ -29,6 +29,6 @@ BatteryHV/
 
 ## Vehicle Configurations
 
-All three fidelities are listed in the BEV app configuration (`APP/API/BEV_configs.m`) for the VehicleElectric, VehicleElectroThermal, and VehicleElecAux templates. The electro-thermal plant setup (`Script_Data/SetupPlantElectroThermal.m`) and the main parameter file (`Script_Data/BEVSystemModelParams.m`) default to BatteryTableBased.
+All three fidelities are listed in `VehicleTemplateConfig.json`. BatteryLumped is used in VehicleElectric and VehicleElecAux; BatteryTableBased and BatteryLumpedThermal are used in VehicleElectroThermal. The electro-thermal plant setup (`Script_Data/SetupPlantElectroThermal.m`) and the main parameter file (`Script_Data/BEVSystemModelParams.m`) default to BatteryTableBased.
 
 Copyright 2022 - 2025 The MathWorks, Inc.

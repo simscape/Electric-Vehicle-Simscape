@@ -1,33 +1,42 @@
-function fullValid = validateVehicleConfig(app)
-    % Read JSON
+function valid = validateVehicleConfig(app, platformName)
+%VALIDATEVEHICLECONFIG Validate the JSON config structure.
+%   valid = validateVehicleConfig(app) validates ALL platforms in the config.
+%   valid = validateVehicleConfig(app, platformName) validates one platform.
+
     data = jsondecode(fileread(app.ConfigDropDown.Value));
-    platforms = fieldnames(data);
-    fullValid = true;
-    selectionValid = true;
-    for p = 1:numel(platforms)
-        platName = platforms{p};
+    allPlatforms = fieldnames(data);
+    valid = true;
+
+    if nargin < 2 || isempty(platformName)
+        % Validate all platforms
+        targets = allPlatforms;
+    else
+        % Validate selected platform only
+        platformName = erase(string(platformName), ".slx");
+        idx = find(strcmp(allPlatforms, platformName), 1);
+        if isempty(idx)
+            error("Platform '%s' not found in config.", platformName);
+        end
+        targets = allPlatforms(idx);
+    end
+
+    for p = 1:numel(targets)
+        platName = targets{p};
         platData = data.(platName);
-        fprintf('Checking platform: %s\n', platName);
 
-        % 1) Required fields
-        % mustHave(platData, "Description", platName);
-        mustHave(platData, "Components",  platName);
-        % mustHave(platData, "Controls",    platName);
-
-        % 2) Components: map -> { componentName: {Instances[], Models[]} }
+        mustHave(platData, "Components", platName);
         checkComponentsSection(platData.Components, platName);
 
-        % 3) Controls: single object -> { Instances[], Models[] }
-        checkControlsSection(platData.Controls, platName);
+        if isfield(platData, 'Controls')
+            checkControlsSection(platData.Controls, platName);
+        end
     end
-    disp("✅ JSON structure validated successfully.");
 end
 
 function mustHave(S, f, platName)
     if ~isfield(S, f)
         error("Platform '%s' missing required field: %s", platName, f);
     end
-    return;
 end
 
 function checkComponentsSection(components, platName)
@@ -56,12 +65,10 @@ function checkControlsSection(controls, platName)
     if ~isfield(controls, 'Instances') || ~isfield(controls, 'Models')
         warning("In platform '%s', 'Controls' must have top-level 'Instances' and 'Models'.", platName);
     end
-    % assertStringList(controls.Instances, platName, "Controls.Instances");
-    % assertStringList(controls.Models,    platName, "Controls.Models");
 end
 
 function assertStringList(val, platName, fieldPath)
-    ok = (iscellstr(val)) || (isstring(val) && isvector(val) && all(strlength(val) >= 0));
+    ok = iscellstr(val) || (isstring(val) && isvector(val));
     if ~ok
         error("In platform '%s', '%s' must be a list/array of strings.", platName, fieldPath);
     end

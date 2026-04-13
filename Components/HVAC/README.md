@@ -27,7 +27,7 @@ HVAC/
 
 ## Vehicle Configurations
 
-- **VehicleElectroThermal**: Uses HVACThermal or HVACEmpiricalRef (configured via `BEV_configs.m`).
+- **VehicleElecAux** and **VehicleElectroThermal**: Uses HVACsimpleTh or HVACEmpiricalRef (configured via `VehicleTemplateConfig.json`).
 - **BEVSystemModelParams.m**: Loads `HVACsimpleThParams.m` by default.
 - **ControllerHVAC**: The HVAC-aware controller variant coordinates blower, compressor, and PTC commands with drivetrain torque control.
 

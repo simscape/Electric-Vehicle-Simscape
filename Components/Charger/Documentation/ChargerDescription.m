@@ -32,8 +32,8 @@ open_system('Charger')
 % * *HV Power* - Electrical power drawn from the grid.
 
 %% Workflows
-% The Charger block is listed in the *VehicleElectric* configuration in
-% |BEV_configs.m|. It is suitable for electrical-only charging studies
+% The Charger block is listed in the *VehicleElectric* and *VehicleElecAux*
+% templates in |VehicleTemplateConfig.json|. It is suitable for electrical-only charging studies
 % without thermal management.
 
 %% Parameters

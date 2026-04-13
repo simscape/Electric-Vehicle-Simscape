@@ -16,7 +16,7 @@ Constant-current / constant-voltage (CC-CV) charging controller without thermal 
 
 ### Workflows
 
-- Listed in the **VehicleElectric** configuration in `BEV_configs.m`.
+- Listed in the **VehicleElectric** and **VehicleElecAux** templates in `VehicleTemplateConfig.json`.
 - Suitable for electrical-only charging studies without thermal management.
 
 ### Inputs

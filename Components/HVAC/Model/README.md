@@ -16,7 +16,7 @@ Empirical-based HVAC model with cabin and refrigeration subsystems. Cabin blower
 
 ### Workflows
 
-- Listed in the **VehicleElectroThermal** configuration in `BEV_configs.m`.
+- Listed in the **VehicleElecAux** and **VehicleElectroThermal** templates in `VehicleTemplateConfig.json`.
 - Suitable for cabin comfort studies and HVAC energy-demand evaluation without modeling the refrigerant loop.
 
 ### Inputs
@@ -85,7 +85,7 @@ Full thermal HVAC model with detailed cabin and refrigerant loop dynamics. Provi
 
 ### Workflows
 
-- Listed in the **VehicleElectroThermal** configuration in `BEV_configs.m`.
+- Compatible with the **VehicleElecAux** and **VehicleElectroThermal** templates defined in `VehicleTemplateConfig.json`. Provides higher fidelity than the default HVAC options.
 - Used for HVAC control strategy development and detailed thermal management analysis.
 - Parameters loaded via `HVACThermalParams.m` and `BEVThermalManagementparam.m`.
 
