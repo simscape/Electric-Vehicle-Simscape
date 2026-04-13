@@ -1,0 +1,261 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      -->
+<title>BMS</title>
+<meta name="generator" content="MATLAB 24.2">
+<link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
+<meta name="DC.date" content="2026-04-13">
+<meta name="DC.source" content="BMSDescription.m">
+<style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style>
+</head>
+<body>
+<div class="content">
+<h1>BMS</h1>
+<!--introduction-->
+<p>Battery management system with voltage, current, and thermal fault monitoring for the BEV high-voltage battery.</p>
+<p>
+<b>Model:</b> <tt>BMS.slx</tt>
+</p>
+<p>
+<b>Parameters:</b> <tt>BMSParams.m</tt>
+</p>
+<p>
+<b>Thermal Coupling:</b> Yes (temperature monitoring and thermal fault limits)</p>
+<!--/introduction-->
+<h2>Contents</h2>
+<div>
+<ul>
+<li>
+<a href="#1">Overview</a>
+</li>
+<li>
+<a href="#2">Ports</a>
+</li>
+<li>
+<a href="#3">Workflows</a>
+</li>
+<li>
+<a href="#4">Parameters</a>
+</li>
+<li>
+<a href="#5">See Also</a>
+</li>
+</ul>
+</div>
+<h2 id="1">Overview</h2>
+<p>The BMS monitors cell voltages, currents, and temperatures against configurable safety limits. It issues positive and negative relay commands, provides SOC estimation, and raises fault flags when operating limits are exceeded. Thermal monitoring includes coolant switch-on/off temperature thresholds for thermal management coordination.</p>
+<pre class="codeinput">open_system(<span class="string">'BMS'</span>)
+</pre>
+<img vspace="5" hspace="5" src="../images/BMSDescription_01.png" alt=""> <h2 id="2">Ports</h2>
+<p>
+<b>Inputs</b>
+</p>
+<div>
+<ul>
+<li>
+<b>Cell voltage</b> - Measured cell terminal voltage.</li>
+<li>
+<b>Pack current</b> - Measured pack current.</li>
+<li>
+<b>Cell temperature</b> - Measured cell temperature.</li>
+<li>
+<b>Charge command</b> - Requested charge/discharge mode.</li>
+</ul>
+</div>
+<p>
+<b>Outputs</b>
+</p>
+<div>
+<ul>
+<li>
+<b>Positive relay command</b> - Connects battery positive terminal.</li>
+<li>
+<b>Negative relay command</b> - Connects battery negative terminal.</li>
+<li>
+<b>SOC estimate</b> - Estimated state of charge.</li>
+<li>
+<b>Fault flags</b> - Over-voltage, under-voltage, over-current, over-temperature.</li>
+<li>
+<b>Coolant command</b> - Thermal management enable based on temperature thresholds.</li>
+</ul>
+</div>
+<h2 id="3">Workflows</h2>
+<p>The BMS is the core protection and monitoring subsystem used in all vehicle configurations that include a high-voltage battery. It is referenced by the BMS test harness (<tt>BMS/TestBench/BMSTestHarness.slx</tt>). Parameters are loaded by <tt>BMSParams.m</tt>.</p>
+<h2 id="4">Parameters</h2>
+<p>
+<table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+<tr><th>Name</th><th>Default</th><th>Description</th></tr>
+<tr><td>Min cell voltage limit</td><td>3.0 V</td><td>Under-voltage fault threshold</td></tr>
+<tr><td>Max cell voltage limit</td><td>4.2 V</td><td>Over-voltage fault threshold</td></tr>
+<tr><td>Max charging current</td><td>100 A</td><td>Charging current protection limit</td></tr>
+<tr><td>Max discharging current</td><td>120 A</td><td>Discharging current protection limit</td></tr>
+<tr><td>Charger CC value</td><td>50 A</td><td>Constant-current charging setpoint</td></tr>
+<tr><td>Min thermal limit</td><td>233.15 K (-40 &deg;C)</td><td>Low temperature fault threshold</td></tr>
+<tr><td>Max thermal limit</td><td>333.15 K (60 &deg;C)</td><td>High temperature fault threshold</td></tr>
+<tr><td>Series strings</td><td>110</td><td>Number of series-connected strings</td></tr>
+<tr><td>Parallel cells per string</td><td>3</td><td>Cells in parallel per string</td></tr>
+<tr><td>Coolant switch-on temperature</td><td>320 K</td><td>Temp to activate coolant flow</td></tr>
+<tr><td>Coolant switch-off temperature</td><td>303 K</td><td>Temp to deactivate coolant flow</td></tr>
+</table>
+</p>
+<p>See <tt>BMSParams.m</tt> for a complete list.</p>
+<h2 id="5">See Also</h2>
+<div>
+<ul>
+<li>
+<a href="BMSSoCDirectDescription.html">BMSSoCDirect</a>
+</li>
+<li>
+<a href="BMSSoCEKFDescription.html">BMSSoCEKF</a>
+</li>
+<li>
+<a href="matlab:web('ControllerDescription.html')">Controller</a>
+</li>
+</ul>
+</div>
+<p class="footer">Copyright 2022 - 2025 The MathWorks, Inc.<br>
+<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2024b</a>
+<br>
+</p>
+</div>
+<!--
+##### SOURCE BEGIN #####
+%% BMS
+% Battery management system with voltage, current, and thermal fault
+% monitoring for the BEV high-voltage battery.
+%
+% *Model:* |BMS.slx|
+%
+% *Parameters:* |BMSParams.m|
+%
+% *Thermal Coupling:* Yes (temperature monitoring and thermal fault limits)
+
+%% Overview
+% The BMS monitors cell voltages, currents, and temperatures against
+% configurable safety limits. It issues positive and negative relay
+% commands, provides SOC estimation, and raises fault flags when operating
+% limits are exceeded. Thermal monitoring includes coolant switch-on/off
+% temperature thresholds for thermal management coordination.
+
+open_system('BMS')
+
+%% Ports
+% *Inputs*
+%
+% * *Cell voltage* - Measured cell terminal voltage.
+% * *Pack current* - Measured pack current.
+% * *Cell temperature* - Measured cell temperature.
+% * *Charge command* - Requested charge/discharge mode.
+%
+% *Outputs*
+%
+% * *Positive relay command* - Connects battery positive terminal.
+% * *Negative relay command* - Connects battery negative terminal.
+% * *SOC estimate* - Estimated state of charge.
+% * *Fault flags* - Over-voltage, under-voltage, over-current, over-temperature.
+% * *Coolant command* - Thermal management enable based on temperature thresholds.
+
+%% Workflows
+% The BMS is the core protection and monitoring subsystem used in all
+% vehicle configurations that include a high-voltage battery. It is
+% referenced by the BMS test harness (|BMS/TestBench/BMSTestHarness.slx|).
+% Parameters are loaded by |BMSParams.m|.
+
+%% Parameters
+%
+% <html>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Name</th><th>Default</th><th>Description</th></tr>
+% <tr><td>Min cell voltage limit</td><td>3.0 V</td><td>Under-voltage fault threshold</td></tr>
+% <tr><td>Max cell voltage limit</td><td>4.2 V</td><td>Over-voltage fault threshold</td></tr>
+% <tr><td>Max charging current</td><td>100 A</td><td>Charging current protection limit</td></tr>
+% <tr><td>Max discharging current</td><td>120 A</td><td>Discharging current protection limit</td></tr>
+% <tr><td>Charger CC value</td><td>50 A</td><td>Constant-current charging setpoint</td></tr>
+% <tr><td>Min thermal limit</td><td>233.15 K (-40 &deg;C)</td><td>Low temperature fault threshold</td></tr>
+% <tr><td>Max thermal limit</td><td>333.15 K (60 &deg;C)</td><td>High temperature fault threshold</td></tr>
+% <tr><td>Series strings</td><td>110</td><td>Number of series-connected strings</td></tr>
+% <tr><td>Parallel cells per string</td><td>3</td><td>Cells in parallel per string</td></tr>
+% <tr><td>Coolant switch-on temperature</td><td>320 K</td><td>Temp to activate coolant flow</td></tr>
+% <tr><td>Coolant switch-off temperature</td><td>303 K</td><td>Temp to deactivate coolant flow</td></tr>
+% </table>
+% </html>
+%
+% See |BMSParams.m| for a complete list.
+
+%% See Also
+% * <BMSSoCDirectDescription.html BMSSoCDirect>
+% * <BMSSoCEKFDescription.html BMSSoCEKF>
+% * <matlab:web('ControllerDescription.html') Controller>
+
+% Copyright 2022 - 2025 The MathWorks, Inc.
+
+##### SOURCE END #####
+-->
+</body>
+</html>

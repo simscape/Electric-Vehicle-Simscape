@@ -1,0 +1,208 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      -->
+<title>Driveline Test Harness</title>
+<meta name="generator" content="MATLAB 24.2">
+<link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
+<meta name="DC.date" content="2026-04-13">
+<meta name="DC.source" content="DrivelineTestHarnessDescription.m">
+<style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style>
+</head>
+<body>
+<div class="content">
+<h1>Driveline Test Harness</h1>
+<!--introduction-->
+<p>Standalone test environment for the Driveline component.</p>
+<p>
+<b>Harness:</b> <tt>DriveLineTestHarness.slx</tt>
+</p>
+<p>
+<b>Test Case:</b> <tt>DrivelinePassTests.m</tt>
+</p>
+<p>
+<b>Fidelity:</b> DrivelineWithBraking</p>
+<!--/introduction-->
+<h2>Contents</h2>
+<div>
+<ul>
+<li>
+<a href="#1">Overview</a>
+</li>
+<li>
+<a href="#2">Setup</a>
+</li>
+<li>
+<a href="#3">Run Simulation and Results</a>
+</li>
+<li>
+<a href="#4">Running Unit Tests</a>
+</li>
+<li>
+<a href="#5">See Also</a>
+</li>
+</ul>
+</div>
+<h2 id="1">Overview</h2>
+<p>The DriveLineTestHarness provides a standalone simulation environment for validating the vehicle driveline. The harness supplies front and rear axle torque commands and brake inputs to exercise the driveline through acceleration and braking maneuvers.</p>
+<p>The default fidelity in the harness is <b>DrivelineWithBraking</b>, which includes an integrated braking system on the rear axle for blended regenerative/friction braking analysis. Parameters are initialized by <tt>DriveLineTestHarnessParams.m</tt>, which loads <tt>DrivelineWithBrakingParams.m</tt>.</p>
+<p>The harness scope captures:</p>
+<div>
+<ul>
+<li>
+<b>Input Torque</b> - Torque commands applied to the driveline.</li>
+<li>
+<b>Road Load</b> - Mechanical load and vehicle response.</li>
+</ul>
+</div>
+<h2 id="2">Setup</h2>
+<p>Load parameters and open the test harness.</p>
+<pre class="codeinput">model = <span class="string">'DriveLineTestHarness'</span>;
+DriveLineTestHarnessParams;
+load_system(model)
+</pre>
+<h2 id="3">Run Simulation and Results</h2>
+<pre class="codeinput">simout = sim(model, <span class="string">'SrcWorkspace'</span>, <span class="string">'current'</span>);
+plotDrivelineHarnessResults(simout.logsout)
+</pre>
+<img vspace="5" hspace="5" src="../images/DrivelineTestHarnessDescription_01.png" alt=""> <img vspace="5" hspace="5" src="../images/DrivelineTestHarnessDescription_02.png" alt=""> <img vspace="5" hspace="5" src="../images/DrivelineTestHarnessDescription_03.png" alt=""> <img vspace="5" hspace="5" src="../images/DrivelineTestHarnessDescription_04.png" alt=""> <h2 id="4">Running Unit Tests</h2>
+<p>Run the MQC test suite from the command line:</p>
+<pre class="language-matlab">results = runtests(<span class="string">'DrivelinePassTests'</span>);
+disp(results)
+</pre>
+<h2 id="5">See Also</h2>
+<div>
+<ul>
+<li>
+<a href="DrivelineDescription.html">Driveline</a>
+</li>
+<li>
+<a href="DrivelineWithBrakingDescription.html">DrivelineWithBraking</a>
+</li>
+</ul>
+</div>
+<p class="footer">Copyright 2022 - 2025 The MathWorks, Inc.<br>
+<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2024b</a>
+<br>
+</p>
+</div>
+<!--
+##### SOURCE BEGIN #####
+%% Driveline Test Harness
+% Standalone test environment for the Driveline component.
+%
+% *Harness:* |DriveLineTestHarness.slx|
+%
+% *Test Case:* |DrivelinePassTests.m|
+%
+% *Fidelity:* DrivelineWithBraking
+
+%% Overview
+% The DriveLineTestHarness provides a standalone simulation environment for
+% validating the vehicle driveline. The harness supplies front and rear
+% axle torque commands and brake inputs to exercise the driveline through
+% acceleration and braking maneuvers.
+%
+% The default fidelity in the harness is *DrivelineWithBraking*, which
+% includes an integrated braking system on the rear axle for blended
+% regenerative/friction braking analysis. Parameters are initialized by
+% |DriveLineTestHarnessParams.m|, which loads |DrivelineWithBrakingParams.m|.
+%
+% The harness scope captures:
+%
+% * *Input Torque* - Torque commands applied to the driveline.
+% * *Road Load* - Mechanical load and vehicle response.
+
+%% Setup
+% Load parameters and open the test harness.
+
+model = 'DriveLineTestHarness';
+DriveLineTestHarnessParams;
+load_system(model)
+
+%% Run Simulation and Results
+
+simout = sim(model, 'SrcWorkspace', 'current');
+plotDrivelineHarnessResults(simout.logsout)
+
+%% Running Unit Tests
+% Run the MQC test suite from the command line:
+%
+%   results = runtests('DrivelinePassTests');
+%   disp(results)
+
+%% See Also
+% * <DrivelineDescription.html Driveline>
+% * <DrivelineWithBrakingDescription.html DrivelineWithBraking>
+
+% Copyright 2022 - 2025 The MathWorks, Inc.
+
+##### SOURCE END #####
+-->
+</body>
+</html>

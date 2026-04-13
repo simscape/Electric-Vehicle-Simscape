@@ -32,7 +32,7 @@ battery.initialPackSOC=0.75;	% Pack intial SOC (-)
 batt_BatteryManagementSystem_param;
 batt_packBTMSExampleLib_param;
 % Vehicle weight 
-vehicle.vehMass_kg= 1600; % [Kg] Vehicle mass for 40KWh battery
+driveline.vehMass_kg= 1600; % [Kg] Vehicle mass for 40KWh battery
 
 % Run the simulation for the specified Simulation time
 simoutPack=sim('BEVsystemModel','StopTime',SimulationTime);
@@ -68,7 +68,7 @@ battery.initialPackSOC=0.75;	% Pack intial SOC (-)
 batt_BatteryManagementSystem_param;
 batt_packBTMSExampleLib_param;
 % Vehicle weight 
-vehicle.vehMass_kg= 1736; % [Kg] Vehicle mass for 40KWh battery
+driveline.vehMass_kg= 1736; % [Kg] Vehicle mass for 40KWh battery
 
 % Run the simulation for the specified Simulation time
 simoutPack=sim('BEVsystemModel','StopTime',SimulationTime);

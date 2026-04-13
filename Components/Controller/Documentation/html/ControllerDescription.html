@@ -1,0 +1,244 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      -->
+<title>Controller</title>
+<meta name="generator" content="MATLAB 24.2">
+<link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
+<meta name="DC.date" content="2026-04-13">
+<meta name="DC.source" content="ControllerDescription.m">
+<style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style>
+</head>
+<body>
+<div class="content">
+<h1>Controller</h1>
+<!--introduction-->
+<p>Full vehicle controller with torque control, motor torque split, and regenerative braking for the BEV system model.</p>
+<p>
+<b>Model:</b> <tt>Controller.slx</tt>
+</p>
+<p>
+<b>Parameters:</b> <tt>ControllerParams.m</tt>
+</p>
+<p>
+<b>Thermal Coupling:</b> No</p>
+<!--/introduction-->
+<h2>Contents</h2>
+<div>
+<ul>
+<li>
+<a href="#1">Overview</a>
+</li>
+<li>
+<a href="#2">Ports</a>
+</li>
+<li>
+<a href="#3">Workflows</a>
+</li>
+<li>
+<a href="#4">Parameters</a>
+</li>
+<li>
+<a href="#5">See Also</a>
+</li>
+</ul>
+</div>
+<h2 id="1">Overview</h2>
+<p>The Controller implements torque control with motor torque split between front and rear axles, AWD/FWD mode selection, regenerative braking logic, and drive-cycle speed tracking. This is the default controller used in the electro-thermal vehicle configuration.</p>
+<pre class="codeinput">open_system(<span class="string">'Controller'</span>)
+</pre>
+<img vspace="5" hspace="5" src="../images/ControllerDescription_01.png" alt=""> <h2 id="2">Ports</h2>
+<p>
+<b>Inputs</b>
+</p>
+<div>
+<ul>
+<li>
+<b>Drive cycle speed reference</b> - Target vehicle speed from the drive cycle source.</li>
+<li>
+<b>Vehicle speed feedback</b> - Measured vehicle speed from the driveline.</li>
+<li>
+<b>Battery status</b> - SOC, voltage, and current from the BMS.</li>
+<li>
+<b>BMS relay commands</b> - Battery connection state.</li>
+</ul>
+</div>
+<p>
+<b>Outputs</b>
+</p>
+<div>
+<ul>
+<li>
+<b>Front axle torque command</b> - Torque request to front motor (EM1).</li>
+<li>
+<b>Rear axle torque command</b> - Torque request to rear motor (EM2).</li>
+<li>
+<b>Brake command</b> - Mechanical braking torque request.</li>
+<li>
+<b>Battery command</b> - Charge/discharge mode signal.</li>
+</ul>
+</div>
+<h2 id="3">Workflows</h2>
+<p>The Controller is the <b>default vehicle controller</b> selected by <tt>SetupPlantElectroThermal.m</tt> for the VehicleElectroThermal template. It is used in all range estimation workflows (NEDC, WLTC, EPA) and battery sizing workflows. Dashboard parameters (AWD, regen, charging mode) are set by <tt>modelDashboardSetup.m</tt> in the BEV Setup App.</p>
+<h2 id="4">Parameters</h2>
+<p>
+<table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+<tr><th>Name</th><th>Default</th><th>Description</th></tr>
+<tr><td>Tire rolling radius</td><td>30 cm</td><td>Effective tire radius for speed calculation</td></tr>
+<tr><td>Brake factor</td><td>0.4</td><td>Fraction of braking from mechanical brakes</td></tr>
+<tr><td>Max vehicle speed</td><td>140 km/h</td><td>Speed limiter threshold</td></tr>
+<tr><td>Motor drive max torque</td><td>360 Nm</td><td>Combined motor torque limit</td></tr>
+</table>
+</p>
+<p>See <tt>ControllerParams.m</tt> for a complete list.</p>
+<h2 id="5">See Also</h2>
+<div>
+<ul>
+<li>
+<a href="ControllerFRMDescription.html">ControllerFRM</a>
+</li>
+<li>
+<a href="ControllerHVACDescription.html">ControllerHVAC</a>
+</li>
+<li>
+<a href="matlab:web('BMSDescription.html')">BMS</a>
+</li>
+</ul>
+</div>
+<p class="footer">Copyright 2022 - 2025 The MathWorks, Inc.<br>
+<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2024b</a>
+<br>
+</p>
+</div>
+<!--
+##### SOURCE BEGIN #####
+%% Controller
+% Full vehicle controller with torque control, motor torque split, and
+% regenerative braking for the BEV system model.
+%
+% *Model:* |Controller.slx|
+%
+% *Parameters:* |ControllerParams.m|
+%
+% *Thermal Coupling:* No
+
+%% Overview
+% The Controller implements torque control with motor torque split between
+% front and rear axles, AWD/FWD mode selection, regenerative braking logic,
+% and drive-cycle speed tracking. This is the default controller used in
+% the electro-thermal vehicle configuration.
+
+open_system('Controller')
+
+%% Ports
+% *Inputs*
+%
+% * *Drive cycle speed reference* - Target vehicle speed from the drive cycle source.
+% * *Vehicle speed feedback* - Measured vehicle speed from the driveline.
+% * *Battery status* - SOC, voltage, and current from the BMS.
+% * *BMS relay commands* - Battery connection state.
+%
+% *Outputs*
+%
+% * *Front axle torque command* - Torque request to front motor (EM1).
+% * *Rear axle torque command* - Torque request to rear motor (EM2).
+% * *Brake command* - Mechanical braking torque request.
+% * *Battery command* - Charge/discharge mode signal.
+
+%% Workflows
+% The Controller is the *default vehicle controller* selected by
+% |SetupPlantElectroThermal.m| for the VehicleElectroThermal template. It
+% is used in all range estimation workflows (NEDC, WLTC, EPA) and battery
+% sizing workflows. Dashboard parameters (AWD, regen, charging mode) are
+% set by |modelDashboardSetup.m| in the BEV Setup App.
+
+%% Parameters
+%
+% <html>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Name</th><th>Default</th><th>Description</th></tr>
+% <tr><td>Tire rolling radius</td><td>30 cm</td><td>Effective tire radius for speed calculation</td></tr>
+% <tr><td>Brake factor</td><td>0.4</td><td>Fraction of braking from mechanical brakes</td></tr>
+% <tr><td>Max vehicle speed</td><td>140 km/h</td><td>Speed limiter threshold</td></tr>
+% <tr><td>Motor drive max torque</td><td>360 Nm</td><td>Combined motor torque limit</td></tr>
+% </table>
+% </html>
+%
+% See |ControllerParams.m| for a complete list.
+
+%% See Also
+% * <ControllerFRMDescription.html ControllerFRM>
+% * <ControllerHVACDescription.html ControllerHVAC>
+% * <matlab:web('BMSDescription.html') BMS>
+
+% Copyright 2022 - 2025 The MathWorks, Inc.
+
+##### SOURCE END #####
+-->
+</body>
+</html>

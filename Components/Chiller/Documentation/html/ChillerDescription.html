@@ -1,0 +1,247 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      -->
+<title>Chiller</title>
+<meta name="generator" content="MATLAB 24.2">
+<link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
+<meta name="DC.date" content="2026-04-13">
+<meta name="DC.source" content="ChillerDescription.m">
+<style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style>
+</head>
+<body>
+<div class="content">
+<h1>Chiller</h1>
+<!--introduction-->
+<p>Battery coolant chiller with HV bus power draw and coolant loop coupling.</p>
+<!--/introduction-->
+<h2>Contents</h2>
+<div>
+<ul>
+<li>
+<a href="#1">Overview</a>
+</li>
+<li>
+<a href="#2">Open Model</a>
+</li>
+<li>
+<a href="#3">Ports</a>
+</li>
+<li>
+<a href="#4">Workflows</a>
+</li>
+<li>
+<a href="#5">Parameters</a>
+</li>
+<li>
+<a href="#6">See Also</a>
+</li>
+</ul>
+</div>
+<h2 id="1">Overview</h2>
+<p>The Chiller block models the battery coolant chiller as a controlled current source drawing power from the HV bus. A thermal mass block captures heat absorption and storage, and the chiller volume is coupled to the coolant loop for active heat exchange. Energy drawn from the HV bus is tracked for efficiency and range studies.</p>
+<p>During hot-ambient simulations (e.g., 35 degC) the chiller actively cools the battery pack by removing heat from the coolant loop, keeping cell temperatures within safe operating limits.</p>
+<p>
+<b>Model:</b> <tt>Chiller.slx</tt>
+</p>
+<p>
+<b>Parameters:</b> <tt>ChillerParams.m</tt>
+</p>
+<p>
+<b>Thermal Coupling:</b> Yes (thermal mass, coolant loop)</p>
+<h2 id="2">Open Model</h2>
+<pre class="codeinput">open_system(<span class="string">'Chiller'</span>)
+</pre>
+<img vspace="5" hspace="5" src="../images/ChillerDescription_01.png" alt=""> <h2 id="3">Ports</h2>
+<p>
+<b>Inputs</b>
+</p>
+<div>
+<ul>
+<li>
+<b>Battery status</b> - Pack temperature and thermal state from the BMS.</li>
+<li>
+<b>Chiller bypass control</b> - On/off or bypass command from the thermal controller.</li>
+<li>
+<b>HV bus connection</b> - Electrical connection for chiller power draw.</li>
+<li>
+<b>Coolant port</b> - Thermal-liquid interface for coolant loop heat exchange.</li>
+</ul>
+</div>
+<p>
+<b>Outputs</b>
+</p>
+<div>
+<ul>
+<li>
+<b>Chiller Current</b> - Current drawn from the HV bus.</li>
+<li>
+<b>HV Power</b> - Electrical power consumed.</li>
+<li>
+<b>Thermal States</b> - Chiller temperature and heat flow to coolant.</li>
+</ul>
+</div>
+<h2 id="4">Workflows</h2>
+<p>The Chiller block is part of the <b>VehicleElectroThermal</b> template for full-thermal vehicle simulations. It is active during hot-ambient range estimation runs. Parameters are loaded by <tt>BEVSystemModelParams.m</tt> via <tt>ChillerParams.m</tt>. The model is validated through <tt>ChillerTestHarness.slx</tt>.</p>
+<h2 id="5">Parameters</h2>
+<p>
+<table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+<tr><th>Name</th><th>Default</th><th>Description</th></tr>
+<tr><td>Maximum chiller power</td><td>6000 W</td><td>Peak electrical power draw from the HV bus</td></tr>
+<tr><td>Coolant pipe diameter</td><td>0.019 m</td><td>Inner diameter of coolant piping</td></tr>
+<tr><td>Initial coolant temperature</td><td>298.15 K</td><td>Coolant temperature at simulation start</td></tr>
+<tr><td>Initial coolant pressure</td><td>0.101325 MPa</td><td>Coolant pressure at simulation start</td></tr>
+</table>
+</p>
+<p>See <tt>ChillerParams.m</tt> for a complete list of parameters.</p>
+<h2 id="6">See Also</h2>
+<div>
+<ul>
+<li>
+<a href="ChillerNoCoolantDescription.html">ChillerNoCoolant</a>
+</li>
+<li>
+<a href="ChillerTestHarnessDescription.html">Chiller Test Harness</a>
+</li>
+</ul>
+</div>
+<p class="footer">Copyright 2022 - 2025 The MathWorks, Inc.<br>
+<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2024b</a>
+<br>
+</p>
+</div>
+<!--
+##### SOURCE BEGIN #####
+%% Chiller
+% Battery coolant chiller with HV bus power draw and coolant loop coupling.
+
+%% Overview
+% The Chiller block models the battery coolant chiller as a controlled
+% current source drawing power from the HV bus. A thermal mass block
+% captures heat absorption and storage, and the chiller volume is coupled
+% to the coolant loop for active heat exchange. Energy drawn from the HV
+% bus is tracked for efficiency and range studies.
+%
+% During hot-ambient simulations (e.g., 35 degC) the chiller actively
+% cools the battery pack by removing heat from the coolant loop, keeping
+% cell temperatures within safe operating limits.
+%
+% *Model:* |Chiller.slx|
+%
+% *Parameters:* |ChillerParams.m|
+%
+% *Thermal Coupling:* Yes (thermal mass, coolant loop)
+
+%% Open Model
+
+open_system('Chiller')
+
+%% Ports
+% *Inputs*
+%
+% * *Battery status* - Pack temperature and thermal state from the BMS.
+% * *Chiller bypass control* - On/off or bypass command from the thermal controller.
+% * *HV bus connection* - Electrical connection for chiller power draw.
+% * *Coolant port* - Thermal-liquid interface for coolant loop heat exchange.
+%
+% *Outputs*
+%
+% * *Chiller Current* - Current drawn from the HV bus.
+% * *HV Power* - Electrical power consumed.
+% * *Thermal States* - Chiller temperature and heat flow to coolant.
+
+%% Workflows
+% The Chiller block is part of the *VehicleElectroThermal* template for
+% full-thermal vehicle simulations. It is active during hot-ambient range
+% estimation runs. Parameters are loaded by |BEVSystemModelParams.m| via
+% |ChillerParams.m|. The model is validated through |ChillerTestHarness.slx|.
+
+%% Parameters
+%
+% <html>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Name</th><th>Default</th><th>Description</th></tr>
+% <tr><td>Maximum chiller power</td><td>6000 W</td><td>Peak electrical power draw from the HV bus</td></tr>
+% <tr><td>Coolant pipe diameter</td><td>0.019 m</td><td>Inner diameter of coolant piping</td></tr>
+% <tr><td>Initial coolant temperature</td><td>298.15 K</td><td>Coolant temperature at simulation start</td></tr>
+% <tr><td>Initial coolant pressure</td><td>0.101325 MPa</td><td>Coolant pressure at simulation start</td></tr>
+% </table>
+% </html>
+%
+% See |ChillerParams.m| for a complete list of parameters.
+
+%% See Also
+% * <ChillerNoCoolantDescription.html ChillerNoCoolant>
+% * <ChillerTestHarnessDescription.html Chiller Test Harness>
+
+% Copyright 2022 - 2025 The MathWorks, Inc.
+
+##### SOURCE END #####
+-->
+</body>
+</html>
