@@ -47,6 +47,7 @@ open_system('Pump')
 % See |PumpParams.m| for a complete list.
 
 %% See Also
+% * <PumpDummyDescription.html PumpDummy>
 % * <PumpTestHarnessDescription.html Pump Test Harness>
 
 % Copyright 2022 - 2025 The MathWorks, Inc.

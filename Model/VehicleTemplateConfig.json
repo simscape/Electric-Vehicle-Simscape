@@ -54,6 +54,10 @@
             "Driveline": {
                 "Instances": ["Driveline"],
                 "Models": ["Driveline","DrivelineWithBraking"]
+            },
+            "Pump": {
+                "Instances": ["Pump"],
+                "Models": ["Pump","PumpDummy"]
             }
         },
         "Controls": {

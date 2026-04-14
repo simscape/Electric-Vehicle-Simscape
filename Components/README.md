@@ -9,15 +9,15 @@ Self-contained, reusable subsystem modules for the Battery Electric Vehicle (BEV
 | Component | Description | Fidelities | Thermal | Test Harness |
 |-----------|-------------|:----------:|:-------:|:------------:|
 | [BatteryHV](BatteryHV/README.md) | High-voltage battery pack (lumped, lumped-thermal, table-based) | 3 | Yes | Yes |
-| [BatteryHeater](BatteryHeater/README.md) | PTC heater for cold-climate battery warming | 1 | Yes | Yes |
+| [BatteryHeater](BatteryHeater/README.md) | PTC heater for cold-climate battery warming (full, dummy) | 2 | Yes | Yes |
 | [BMS](BMS/README.md) | Battery management system with SOC estimation variants | 3 | Yes | Yes |
 | [Charger](Charger/README.md) | On-board charger with CC-CV control and thermal variants | 5 | Yes | Yes |
-| [Chiller](Chiller/README.md) | Refrigerant-to-coolant chiller for battery thermal management | 2 | Yes | Yes |
+| [Chiller](Chiller/README.md) | Refrigerant-to-coolant chiller for battery thermal management (full, no-coolant, dummy) | 3 | Yes | Yes |
 | [Controller](Controller/README.md) | Vehicle-level supervisory controller (standard, FRM, HVAC) | 3 | No | No |
 | [Driveline](Driveline/README.md) | Mechanical driveline with optional braking | 2 | No | Yes |
-| [HVAC](HVAC/README.md) | Cabin climate system (empirical, simple-thermal, full-thermal) | 3 | Yes | Yes |
+| [HVAC](HVAC/README.md) | Cabin climate system (empirical, simple-thermal) | 2 | Yes | Yes |
 | [MotorDrive](MotorDrive/README.md) | Electric motor drive unit with gear, thermal, and lubrication variants | 3 + library | Yes | Yes |
-| [Pump](Pump/README.md) | Coolant circulation pump | 1 | Yes | Yes |
+| [Pump](Pump/README.md) | Coolant circulation pump (full, dummy) | 2 | Yes | Yes |
 | [PumpDriver](PumpDriver/README.md) | DC-DC converter driving the coolant pump | 1 | Yes | Yes |
 | [Radiator](Radiator/README.md) | Coolant-to-air radiator with fan | 1 | Yes | Yes |
 
@@ -60,7 +60,7 @@ BEVsystemModel.slx
   ├── Controller        → Components/Controller/Model/ControllerHVAC.slx
   ├── Driveline         → Components/Driveline/Model/DrivelineWithBraking.slx
   ├── Charger           → Components/Charger/Model/ChargerWithThermal.slx
-  ├── HVAC              → Components/HVAC/Model/HVACThermal.slx
+  ├── HVAC              → Components/HVAC/Model/HVACsimpleTh.slx
   ├── Pump              → Components/Pump/Model/Pump.slx
   ├── PumpDriver        → Components/PumpDriver/Model/PumpDriver.slx
   ├── Radiator          → Components/Radiator/Model/Radiator.slx

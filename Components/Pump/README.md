@@ -7,6 +7,7 @@ Coolant circulation pump component for the BEV thermal management system. The pu
 | Model | Description | Thermal | Use Case |
 |-------|-------------|:-------:|----------|
 | [Pump](Model/README.md#pump) | Volumetric displacement pump with configurable speed and displacement. Circulates coolant through the thermal management loop at a flow rate set by the pump controller. | N/A | All electro-thermal vehicle configurations that include a coolant loop. Required whenever thermal-coupled battery, motor, or charger models are used. |
+| [PumpDummy](Model/README.md#pumpdummy) | Minimal stub with fixed electrical load on the LV bus. Coolant passes through with no active pumping. | No | Integration testing or fast simulations where the pump is not the focus of the study. |
 
 ## Folder Structure
 

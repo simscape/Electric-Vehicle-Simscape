@@ -43,6 +43,5 @@ plotHVACHarnessResults(simout.logsout)
 %% See Also
 % * <HVACEmpiricalRefDescription.html HVACEmpiricalRef>
 % * <HVACSimpleThDescription.html HVACsimpleTh>
-% * <HVACThermalDescription.html HVACThermal>
 
 % Copyright 2022 - 2025 The MathWorks, Inc.

@@ -73,43 +73,6 @@ HVAC model with a cabin thermal plant. The cabin air volume is linked with cabin
 
 ---
 
-## HVACThermal
-
-**File:** `HVACThermal.slx`
-**Parameter File:** `HVACThermalParams.m`
-**Thermal Coupling:** Yes
-
-### Description
-
-Full thermal HVAC model with detailed cabin and refrigerant loop dynamics. Provides the highest fidelity cabin comfort and thermal management representation. Includes physical modeling of the refrigerant cycle, evaporator, and condenser in addition to cabin air volume dynamics.
-
-### Workflows
-
-- Compatible with the **VehicleElecAux** and **VehicleElectroThermal** templates defined in `VehicleTemplateConfig.json`. Provides higher fidelity than the default HVAC options.
-- Used for HVAC control strategy development and detailed thermal management analysis.
-- Parameters loaded via `HVACThermalParams.m` and `BEVThermalManagementparam.m`.
-
-### Inputs
-
-| Signal | Description |
-|--------|-------------|
-| Environment temperature | Ambient air temperature |
-| Blower command | Blower speed or enable signal |
-| PTC command | Cabin heater power command |
-| Compressor command | AC compressor enable |
-| Coolant port | Thermal-liquid interface for HVAC-coolant interaction |
-
-### Outputs
-
-| Signal | Description |
-|--------|-------------|
-| Cabin Temperature | Cabin air temperature |
-| HVAC Energy | Cumulative energy consumption |
-| Refrigerant States | Evaporator and condenser thermal states |
-| Blower/Cooler/PTC Thermal States | Actuator thermal operating states |
-
----
-
 ## Key Parameters
 
 | Parameter | Typical Value | Unit |

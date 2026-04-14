@@ -57,7 +57,6 @@ open_system('HVACEmpiricalRef')
 
 %% See Also
 % * <HVACSimpleThDescription.html HVACsimpleTh>
-% * <HVACThermalDescription.html HVACThermal>
 % * <HVACTestHarnessDescription.html HVAC Test Harness>
 
 % Copyright 2022 - 2025 The MathWorks, Inc.
