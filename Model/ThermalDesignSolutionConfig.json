@@ -9,7 +9,7 @@
             },
             "MotorDrive": {
                 "Instances": ["Rear Motor (EM2)", "Front Motor (EM1)"],
-                "Models": ["MotorDriveGear","MotorDriveLube"]
+                "Models": ["MotorDriveGearTh","MotorDriveLube"]
             },
             "HVAC": {
                 "Instances": ["HVAC"],
@@ -21,11 +21,11 @@
             },
             "Chiller": {
                 "Instances": ["Chiller"],
-                "Models": ["Chiller"]
+                "Models": ["Chiller","ChillerDummy"]
             },
             "BatteryHeater": {
                 "Instances": ["Heater"],
-                "Models": ["Heater"]
+                "Models": ["Heater","HeaterDummy"]
             },
             "Driveline": {
                 "Instances": ["Driveline"],

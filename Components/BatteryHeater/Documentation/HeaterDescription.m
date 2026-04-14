@@ -59,6 +59,7 @@ open_system('Heater')
 % See |HeaterParams.m| for a complete list of parameters.
 
 %% See Also
+% * <HeaterDummyDescription.html HeaterDummy>
 % * <HeaterTestHarnessDescription.html Heater Test Harness>
 
 % Copyright 2022 - 2025 The MathWorks, Inc.

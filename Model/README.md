@@ -38,7 +38,7 @@ Maps each vehicle template to its component fidelity selections:
 
 Defines the thermal-only design solution for `VehicleElectroThermal`:
 
-| Component | Available Models |
+| Component | VehicleElectroThermal |
 |-----------|-----------------|
 | BatteryHV | BatteryTableBased, BatteryLumpedThermal |
 | MotorDrive | MotorDriveGear, MotorDriveLube |

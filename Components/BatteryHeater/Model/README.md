@@ -36,6 +36,41 @@ Models the battery pack heater as a controlled current source drawing power from
 | HV Power | Electrical power consumed by the heater |
 | Thermal States | Heater temperature and heat flow to coolant |
 
+---
+
+## HeaterDummy
+
+**File:** `HeaterDummy.slx`
+**Parameter File:** `HeaterDummyParams.m`
+**Thermal Coupling:** No (coolant pass-through, no heat exchange)
+
+### Description
+
+Minimal heater stub with the same port interface as the full Heater model. Internally draws a fixed electrical current from the HV bus when the heater is active (`cmdHeater = 1`). Coolant ports A and B are connected through a simple pipe so the coolant loop stays closed but no heat is exchanged. Used when the heater subsystem is not the focus but the system model needs a connected heater block to simulate.
+
+### Workflows
+
+- Placeholder variant for integration testing or fast electrical-only studies.
+- Can replace `Heater` in the VehicleElectroThermal template without breaking the coolant loop.
+- Build the model by running `createHeaterDummy.m` from this folder.
+
+### Inputs
+
+| Signal | Description |
+|--------|-------------|
+| Battery status | Pack state signals (terminated internally) |
+| Heater command | 1 = active (draws load), 0 = off (no load) |
+| HV bus connection | Electrical connection for fixed power draw |
+| Coolant port | Thermal-liquid interface (pass-through, no heat exchange) |
+
+### Outputs
+
+| Signal | Description |
+|--------|-------------|
+| Heater Current | Fixed current when active, zero when off |
+
+---
+
 ### Key Parameters
 
 | Parameter | Typical Value | Unit |

@@ -7,6 +7,7 @@ Battery heater component for the BEV thermal management system. The heater draws
 | Model | Description | Thermal | Use Case |
 |-------|-------------|:-------:|----------|
 | [Heater](Model/README.md#heater) | Controlled current source with thermal mass and coolant loop coupling. Models heater electrical load, heat storage, and transfer to the coolant system. | Yes | Cold-climate range estimation, thermal management strategy evaluation, and auxiliary power consumption studies. |
+| [HeaterDummy](Model/README.md#heaterdummy) | Minimal stub with same port interface as Heater. Draws a fixed electrical load when active; coolant passes through with no heat exchange. | No | Integration testing or fast simulations where heater behavior is not under study but the model needs a connected heater block. |
 
 ## Folder Structure
 

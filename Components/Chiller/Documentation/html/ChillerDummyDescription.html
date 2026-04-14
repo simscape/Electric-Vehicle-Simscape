@@ -6,11 +6,11 @@
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
       -->
-<title>Chiller</title>
+<title>ChillerDummy</title>
 <meta name="generator" content="MATLAB 24.2">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
 <meta name="DC.date" content="2026-04-14">
-<meta name="DC.source" content="ChillerDescription.m">
+<meta name="DC.source" content="ChillerDummyDescription.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
@@ -76,9 +76,9 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 </head>
 <body>
 <div class="content">
-<h1>Chiller</h1>
+<h1>ChillerDummy</h1>
 <!--introduction-->
-<p>Battery coolant chiller with HV bus power draw and coolant loop coupling.</p>
+<p>Minimal chiller stub with fixed electrical load.</p>
 <!--/introduction-->
 <h2>Contents</h2>
 <div>
@@ -104,31 +104,31 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 </ul>
 </div>
 <h2 id="1">Overview</h2>
-<p>The Chiller block models the battery coolant chiller as a controlled current source drawing power from the HV bus. A thermal mass block captures heat absorption and storage, and the chiller volume is coupled to the coolant loop for active heat exchange. Energy drawn from the HV bus is tracked for efficiency and range studies.</p>
-<p>During hot-ambient simulations (e.g., 35 degC) the chiller actively cools the battery pack by removing heat from the coolant loop, keeping cell temperatures within safe operating limits.</p>
+<p>The ChillerDummy block is a minimal stub that maintains the same port interface as the full Chiller model. It draws a fixed electrical current from the HV bus when the chiller is active (<tt>cmdChillerByp = 0</tt>) and zero current when bypassed. Coolant ports A and B are connected through a simple pipe so the coolant loop stays closed, but no heat is exchanged.</p>
+<p>This fidelity is used when the chiller subsystem is not the focus of the study but the system model needs a connected chiller block to simulate without errors.</p>
 <p>
-<b>Model:</b> <tt>Chiller.slx</tt>
+<b>Model:</b> <tt>ChillerDummy.slx</tt>
 </p>
 <p>
-<b>Parameters:</b> <tt>ChillerParams.m</tt>
+<b>Parameters:</b> <tt>ChillerDummyParams.m</tt>
 </p>
 <p>
-<b>Thermal Coupling:</b> Yes (thermal mass, coolant loop)</p>
+<b>Thermal Coupling:</b> No (coolant pass-through, no heat exchange)</p>
 <h2 id="2">Open Model</h2>
-<img vspace="5" hspace="5" src="../images/ChillerDescription_01.png" alt=""> <h2 id="3">Ports</h2>
+<img vspace="5" hspace="5" src="../images/ChillerDummyDescription_01.png" alt=""> <h2 id="3">Ports</h2>
 <p>
 <b>Inputs</b>
 </p>
 <div>
 <ul>
 <li>
-<b>Battery status</b> - Pack temperature and thermal state from the BMS.</li>
+<b>Battery status</b> - Pack state signals (terminated internally).</li>
 <li>
-<b>Chiller bypass control</b> - On/off or bypass command from the thermal controller.</li>
+<b>Chiller bypass control</b> - 0 = active (draws load), 1 = bypassed (no load).</li>
 <li>
-<b>HV bus connection</b> - Electrical connection for chiller power draw.</li>
+<b>HV bus connection</b> - Electrical connection for fixed power draw.</li>
 <li>
-<b>Coolant port</b> - Thermal-liquid interface for coolant loop heat exchange.</li>
+<b>Coolant port</b> - Thermal-liquid interface (pass-through, no heat exchange).</li>
 </ul>
 </div>
 <p>
@@ -137,34 +137,30 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <div>
 <ul>
 <li>
-<b>Chiller Current</b> - Current drawn from the HV bus.</li>
-<li>
-<b>HV Power</b> - Electrical power consumed.</li>
-<li>
-<b>Thermal States</b> - Chiller temperature and heat flow to coolant.</li>
+<b>Chiller Current</b> - Fixed current when active, zero when bypassed.</li>
 </ul>
 </div>
 <h2 id="4">Workflows</h2>
-<p>The Chiller block is part of the <b>VehicleElectroThermal</b> template for full-thermal vehicle simulations. It is active during hot-ambient range estimation runs. Parameters are loaded by <tt>BEVSystemModelParams.m</tt> via <tt>ChillerParams.m</tt>. The model is validated through <tt>ChillerTestHarness.slx</tt>.</p>
+<p>The ChillerDummy block is a placeholder variant for integration testing or fast simulations. It can replace the full Chiller in the <b>VehicleElectroThermal</b> template without breaking the coolant loop. Parameters are loaded by <tt>ChillerDummyParams.m</tt>.</p>
 <h2 id="5">Parameters</h2>
 <p>
 <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
 <tr><th>Name</th><th>Default</th><th>Description</th></tr>
-<tr><td>Maximum chiller power</td><td>6000 W</td><td>Peak electrical power draw from the HV bus</td></tr>
-<tr><td>Coolant pipe diameter</td><td>0.019 m</td><td>Inner diameter of coolant piping</td></tr>
+<tr><td>Maximum chiller power</td><td>6000 W</td><td>Fixed electrical power draw when active</td></tr>
+<tr><td>Coolant pipe diameter</td><td>0.019 m</td><td>Inner diameter of coolant piping (pass-through)</td></tr>
 <tr><td>Initial coolant temperature</td><td>298.15 K</td><td>Coolant temperature at simulation start</td></tr>
 <tr><td>Initial coolant pressure</td><td>0.101325 MPa</td><td>Coolant pressure at simulation start</td></tr>
 </table>
 </p>
-<p>See <tt>ChillerParams.m</tt> for a complete list of parameters.</p>
+<p>See <tt>ChillerDummyParams.m</tt> for a complete list of parameters.</p>
 <h2 id="6">See Also</h2>
 <div>
 <ul>
 <li>
-<a href="ChillerNoCoolantDescription.html">ChillerNoCoolant</a>
+<a href="ChillerDescription.html">Chiller</a>
 </li>
 <li>
-<a href="ChillerDummyDescription.html">ChillerDummy</a>
+<a href="ChillerNoCoolantDescription.html">ChillerNoCoolant</a>
 </li>
 <li>
 <a href="ChillerTestHarnessDescription.html">Chiller Test Harness</a>
@@ -178,67 +174,65 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 </div>
 <!--
 ##### SOURCE BEGIN #####
-%% Chiller
-% Battery coolant chiller with HV bus power draw and coolant loop coupling.
+%% ChillerDummy
+% Minimal chiller stub with fixed electrical load.
 
 %% Overview
-% The Chiller block models the battery coolant chiller as a controlled
-% current source drawing power from the HV bus. A thermal mass block
-% captures heat absorption and storage, and the chiller volume is coupled
-% to the coolant loop for active heat exchange. Energy drawn from the HV
-% bus is tracked for efficiency and range studies.
+% The ChillerDummy block is a minimal stub that maintains the same port
+% interface as the full Chiller model. It draws a fixed electrical current
+% from the HV bus when the chiller is active (|cmdChillerByp = 0|) and
+% zero current when bypassed. Coolant ports A and B are connected through
+% a simple pipe so the coolant loop stays closed, but no heat is exchanged.
 %
-% During hot-ambient simulations (e.g., 35 degC) the chiller actively
-% cools the battery pack by removing heat from the coolant loop, keeping
-% cell temperatures within safe operating limits.
+% This fidelity is used when the chiller subsystem is not the focus of
+% the study but the system model needs a connected chiller block to
+% simulate without errors.
 %
-% *Model:* |Chiller.slx|
+% *Model:* |ChillerDummy.slx|
 %
-% *Parameters:* |ChillerParams.m|
+% *Parameters:* |ChillerDummyParams.m|
 %
-% *Thermal Coupling:* Yes (thermal mass, coolant loop)
+% *Thermal Coupling:* No (coolant pass-through, no heat exchange)
 
 %% Open Model
 
-open_system('Chiller')
+open_system('ChillerDummy')
 
 %% Ports
 % *Inputs*
 %
-% * *Battery status* - Pack temperature and thermal state from the BMS.
-% * *Chiller bypass control* - On/off or bypass command from the thermal controller.
-% * *HV bus connection* - Electrical connection for chiller power draw.
-% * *Coolant port* - Thermal-liquid interface for coolant loop heat exchange.
+% * *Battery status* - Pack state signals (terminated internally).
+% * *Chiller bypass control* - 0 = active (draws load), 1 = bypassed (no load).
+% * *HV bus connection* - Electrical connection for fixed power draw.
+% * *Coolant port* - Thermal-liquid interface (pass-through, no heat exchange).
 %
 % *Outputs*
 %
-% * *Chiller Current* - Current drawn from the HV bus.
-% * *HV Power* - Electrical power consumed.
-% * *Thermal States* - Chiller temperature and heat flow to coolant.
+% * *Chiller Current* - Fixed current when active, zero when bypassed.
 
 %% Workflows
-% The Chiller block is part of the *VehicleElectroThermal* template for
-% full-thermal vehicle simulations. It is active during hot-ambient range
-% estimation runs. Parameters are loaded by |BEVSystemModelParams.m| via
-% |ChillerParams.m|. The model is validated through |ChillerTestHarness.slx|.
+% The ChillerDummy block is a placeholder variant for integration testing
+% or fast simulations. It can replace the full Chiller in the
+% *VehicleElectroThermal* template without breaking the coolant loop.
+% Parameters are loaded by |ChillerDummyParams.m|.
 
 %% Parameters
 %
 % <html>
 % <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
 % <tr><th>Name</th><th>Default</th><th>Description</th></tr>
-% <tr><td>Maximum chiller power</td><td>6000 W</td><td>Peak electrical power draw from the HV bus</td></tr>
-% <tr><td>Coolant pipe diameter</td><td>0.019 m</td><td>Inner diameter of coolant piping</td></tr>
+% <tr><td>Maximum chiller power</td><td>6000 W</td><td>Fixed electrical power draw when active</td></tr>
+% <tr><td>Coolant pipe diameter</td><td>0.019 m</td><td>Inner diameter of coolant piping (pass-through)</td></tr>
 % <tr><td>Initial coolant temperature</td><td>298.15 K</td><td>Coolant temperature at simulation start</td></tr>
 % <tr><td>Initial coolant pressure</td><td>0.101325 MPa</td><td>Coolant pressure at simulation start</td></tr>
 % </table>
 % </html>
 %
-% See |ChillerParams.m| for a complete list of parameters.
+% See |ChillerDummyParams.m| for a complete list of parameters.
 
 %% See Also
+% * <ChillerDescription.html Chiller>
 % * <ChillerNoCoolantDescription.html ChillerNoCoolant>
-% * <ChillerDummyDescription.html ChillerDummy>
 % * <ChillerTestHarnessDescription.html Chiller Test Harness>
 
 % Copyright 2022 - 2025 The MathWorks, Inc.

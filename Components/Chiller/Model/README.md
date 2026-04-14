@@ -72,6 +72,40 @@ Simplified chiller model without coolant loop coupling. The electrical load on t
 
 ---
 
+## ChillerDummy
+
+**File:** `ChillerDummy.slx`
+**Parameter File:** `ChillerDummyParams.m`
+**Thermal Coupling:** No (coolant pass-through, no heat exchange)
+
+### Description
+
+Minimal chiller stub with the same port interface as the full Chiller model. Internally draws a fixed electrical current from the HV bus when the chiller is active (`cmdChillerByp = 0`). Coolant ports A and B are connected through a simple pipe so the coolant loop stays closed but no heat is exchanged. Used when the chiller subsystem is not the focus but the system model needs a connected chiller block to simulate.
+
+### Workflows
+
+- Placeholder variant for integration testing or fast electrical-only studies.
+- Can replace `Chiller` in any vehicle template without breaking the coolant loop.
+- Build the model by running `createChillerDummy.m` from this folder.
+
+### Inputs
+
+| Signal | Description |
+|--------|-------------|
+| Battery status | Pack state signals (terminated internally) |
+| Chiller bypass control | 0 = active (draws load), 1 = bypassed (no load) |
+| HV bus connection | Electrical connection for fixed power draw |
+| Coolant port | Thermal-liquid interface (pass-through, no heat exchange) |
+
+### Outputs
+
+| Signal | Description |
+|--------|-------------|
+| Chiller Current | Fixed current when active, zero when bypassed |
+| HV Power | Nominal electrical power consumed |
+
+---
+
 ## Parameter Summary
 
 | Parameter | Typical Value | Unit |

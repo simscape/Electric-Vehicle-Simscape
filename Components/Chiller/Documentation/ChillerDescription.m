@@ -58,6 +58,7 @@ open_system('Chiller')
 
 %% See Also
 % * <ChillerNoCoolantDescription.html ChillerNoCoolant>
+% * <ChillerDummyDescription.html ChillerDummy>
 % * <ChillerTestHarnessDescription.html Chiller Test Harness>
 
 % Copyright 2022 - 2025 The MathWorks, Inc.
