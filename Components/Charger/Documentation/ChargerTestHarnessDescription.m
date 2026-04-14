@@ -47,6 +47,5 @@ plotChargerHarnessResults(simout.logsout)
 %% See Also
 % * <ChargerDescription.html Charger>
 % * <ChargerThermalDescription.html ChargerThermal>
-% * <ChargerWithThermalDescription.html ChargerWithThermal>
 
 % Copyright 2022 - 2025 The MathWorks, Inc.

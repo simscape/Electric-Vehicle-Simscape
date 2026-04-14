@@ -135,40 +135,6 @@ Dummy variant of the thermal charger. Exposes the same thermal ports as ChargerT
 
 ---
 
-## ChargerWithThermal
-
-**File:** `ChargerWithThermal.slx`
-**Parameter File:** `ChargerWithThermalParams.m`
-**Thermal Coupling:** Yes
-
-### Description
-
-Combined charger model that integrates electrical CC-CV control and thermal converter dynamics into a single subsystem reference block. This simplifies vehicle-level model assembly by providing one reference block instead of separate electrical and thermal charger subsystems.
-
-### Workflows
-
-- Used in electro-thermal vehicle configurations where a unified charger subsystem reference is preferred.
-- Configured through the BEV Setup App for streamlined model creation.
-
-### Inputs
-
-| Signal | Description |
-|--------|-------------|
-| Relay command | Charger enable |
-| Battery cell voltage | CC-CV transition feedback |
-| Charging status | Charge mode from BMS |
-| Coolant port | Thermal-liquid interface for converter cooling |
-
-### Outputs
-
-| Signal | Description |
-|--------|-------------|
-| Charging Current | Current delivered to the battery |
-| HV Power | Electrical power consumed |
-| Converter Thermal States | Converter temperature and heat flow |
-
----
-
 ## Parameter Summary
 
 | Parameter | Typical Value | Unit |

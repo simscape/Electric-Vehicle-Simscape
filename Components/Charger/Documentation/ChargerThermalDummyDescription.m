@@ -40,6 +40,5 @@ open_system('ChargerThermalDummy')
 % * <ChargerDescription.html Charger>
 % * <ChargerDummyDescription.html ChargerDummy>
 % * <ChargerThermalDescription.html ChargerThermal>
-% * <ChargerWithThermalDescription.html ChargerWithThermal>
 
 % Copyright 2022 - 2025 The MathWorks, Inc.

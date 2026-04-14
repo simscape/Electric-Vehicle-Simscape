@@ -11,7 +11,7 @@ Self-contained, reusable subsystem modules for the Battery Electric Vehicle (BEV
 | [BatteryHV](BatteryHV/README.md) | High-voltage battery pack (lumped, lumped-thermal, table-based) | 3 | Yes | Yes |
 | [BatteryHeater](BatteryHeater/README.md) | PTC heater for cold-climate battery warming (full, dummy) | 2 | Yes | Yes |
 | [BMS](BMS/README.md) | Battery management system with SOC estimation variants | 3 | Yes | Yes |
-| [Charger](Charger/README.md) | On-board charger with CC-CV control and thermal variants | 5 | Yes | Yes |
+| [Charger](Charger/README.md) | On-board charger with CC-CV control and thermal variants | 4 | Yes | Yes |
 | [Chiller](Chiller/README.md) | Refrigerant-to-coolant chiller for battery thermal management (full, no-coolant, dummy) | 3 | Yes | Yes |
 | [Controller](Controller/README.md) | Vehicle-level supervisory controller (standard, FRM, HVAC) | 3 | No | No |
 | [Driveline](Driveline/README.md) | Mechanical driveline with optional braking | 2 | No | Yes |
@@ -59,7 +59,7 @@ BEVsystemModel.slx
   ├── MotorDrive        → Components/MotorDrive/Model/MotorDriveGearTh.slx
   ├── Controller        → Components/Controller/Model/ControllerHVAC.slx
   ├── Driveline         → Components/Driveline/Model/DrivelineWithBraking.slx
-  ├── Charger           → Components/Charger/Model/ChargerWithThermal.slx
+  ├── Charger           → Components/Charger/Model/ChargerThermal.slx
   ├── HVAC              → Components/HVAC/Model/HVACsimpleTh.slx
   ├── Pump              → Components/Pump/Model/Pump.slx
   ├── PumpDriver        → Components/PumpDriver/Model/PumpDriver.slx

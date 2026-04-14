@@ -9,7 +9,7 @@ To make changes, update the MATLAB code and republish this document.
 <title>Charger Test Harness</title>
 <meta name="generator" content="MATLAB 24.2">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2026-04-13">
+<meta name="DC.date" content="2026-04-15">
 <meta name="DC.source" content="ChargerTestHarnessDescription.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
@@ -133,8 +133,9 @@ load_system(model)
 plotChargerHarnessResults(simout.logsout)
 </pre>
 <pre class="codeoutput">Warning: Remapping selected signal 'Batt.BattSensor.CellVoltMax' to
-'BattSensor.CellVoltMax' in 'ChargerTestHarness/ChargerWithThermal/BusElementIn'
-to match the bus hierarchy. Save your file to make this change permanent. 
+'BattSensor.CellVoltMax' in
+'ChargerTestHarness/ChargerWithThermal/BusElementIn' to match the bus
+hierarchy. Save your file to make this change permanent. 
 </pre>
 <img vspace="5" hspace="5" src="../images/ChargerTestHarnessDescription_01.png" alt=""> <img vspace="5" hspace="5" src="../images/ChargerTestHarnessDescription_02.png" alt=""> <img vspace="5" hspace="5" src="../images/ChargerTestHarnessDescription_03.png" alt=""> <h2 id="4">Running Unit Tests</h2>
 <p>Run the MQC test suite from the command line:</p>
@@ -149,9 +150,6 @@ disp(results)
 </li>
 <li>
 <a href="ChargerThermalDescription.html">ChargerThermal</a>
-</li>
-<li>
-<a href="ChargerWithThermalDescription.html">ChargerWithThermal</a>
 </li>
 </ul>
 </div>
@@ -211,7 +209,6 @@ plotChargerHarnessResults(simout.logsout)
 %% See Also
 % * <ChargerDescription.html Charger>
 % * <ChargerThermalDescription.html ChargerThermal>
-% * <ChargerWithThermalDescription.html ChargerWithThermal>
 
 % Copyright 2022 - 2025 The MathWorks, Inc.
 
