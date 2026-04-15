@@ -19,9 +19,9 @@
 % thermal-liquid interface, allowing the harness to capture
 % temperature-dependent electrical behavior and heat rejection to coolant.
 %
-% Parameters are initialized by |BatteryTestHarnessParams.m|, which loads
-% cell electrical data, BMS limits, and coolant system settings from
-% |BatteryLumpedThermalParams.m|, |BMSParams.m|, and |BEVThermalParams.m|.
+% Parameters are initialized by |BatteryTestHarnessParams.m|, which defines
+% environment and coolant boundary conditions, then loads cell electrical
+% data from |BatteryLumpedThermalParams.m|.
 
 %% Setup
 % Load parameters and open the test harness.

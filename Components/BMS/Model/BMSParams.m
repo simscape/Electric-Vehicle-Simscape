@@ -24,7 +24,7 @@ BMSData.Np=3;      % Number of parallel cells per string
 BMSData.ambient=25+273.15;          %[K] Ambient temperature in K
 BMSData.CoolantSwitchOnTp=320; % [K] Temperature to switch on coolant flow
 BMSData.CoolantSwitchOffTp=303; % [K] temperature to switch of coolant flow
-BMSData.coolant_T_init=25+273.155;  % [K] Coolant initial temperature
+BMSData.coolant_T_init=25+273.15;  % [K] Coolant initial temperature
 
 %Bus Data
 load('BMSBusInspector.mat'); % BMS bus data

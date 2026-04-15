@@ -11,5 +11,5 @@ batteryCharger.CC_A=50;      % Charger constant current value (A)
 
 % Thermal parameters
 vehicleThermal.coolant_p_init = 0.101325;
-vehicleThermal.coolant_T_init=25+273.155;  % [K] Coolant initial temperature
+vehicleThermal.coolant_T_init=25+273.15;  % [K] Coolant initial temperature
 vehicleThermal.coolant_channel_D = 0.0092; % [m] Coolant jacket channels diameter

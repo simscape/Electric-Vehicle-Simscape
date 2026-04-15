@@ -5,4 +5,4 @@ PumpParams;
 
 %Vehicle params
 vehicleThermal.coolant_channel_D = 0.0092; % [m] Coolant jacket channels diameter
-vehicleThermal.coolant_T_init=25+273.155;  % [K] Coolant initial temperature
+vehicleThermal.coolant_T_init=25+273.15;  % [K] Coolant initial temperature

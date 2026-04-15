@@ -1,6 +1,6 @@
 # Workflow
 
-Design workflows and analysis scripts for the BEV project. Each workflow is a self-contained study that uses the component models and vehicle templates to answer a specific engineering question. Workflows are organized by subsystem.
+Design workflows and analysis scripts for the BEV project. Each workflow is a self-contained study organized by subsystem.
 
 ---
 
@@ -29,38 +29,31 @@ Workflow/
 
 ### Battery
 
-| Workflow | Description | Key Files |
-|----------|-------------|-----------|
-| BatterySizing | Sweep battery configurations against range targets using NEDC drive cycle data | `BEVBatterySizingMain.mlx`, `BEVbatterySizing.m` |
-| CellCharacterization | Extract equivalent-circuit parameters from HPPC pulse test data and verify against drive profile | `CellCharacterizationForBEV.mlx`, `CellCharacterizationHPPC.slx` |
+| Workflow | Description | Entry Point |
+|----------|-------------|-------------|
+| BatterySizing | Sweep battery configurations against range targets using NEDC drive cycle data | `BEVBatterySizingMain.mlx` |
+| CellCharacterization | Extract equivalent-circuit parameters from HPPC pulse test data and verify against drive profile | `CellCharacterizationForBEV.mlx` |
 | VirtualSensorNeuralNetModel | Train and verify a neural network model for battery state estimation | `VirtualSensorNeuralNetModel.mlx` |
 
 ### MotorDrive
 
-| Workflow | Description | Key Files |
-|----------|-------------|-----------|
+| Workflow | Description | Entry Point |
+|----------|-------------|-------------|
 | GearRatioSelect | Batch-sweep gear ratios to find the most efficient fixed ratio for a drive cycle | `minimumRequiredGearRatio.mlx` |
-| GenerateMotInvLoss | Generate motor and inverter loss maps from detailed PMSM FOC simulation | `generateDULossMap.mlx`, `PMSMfocControlLossMapGen.slx` |
-| InverterLife | Estimate inverter power module lifetime from thermal cycling data | `inverterPowerModuleLife.mlx`, `InverterTestCycle.slx` |
+| GenerateMotInvLoss | Generate motor and inverter loss maps from detailed PMSM FOC simulation. Includes `PMSMdetailTestbench.slx` for motor-level characterization | `generateDULossMap.mlx` |
+| InverterLife | Estimate inverter power module lifetime from thermal cycling data | `inverterPowerModuleLife.mlx` |
+| Model | Motor drive thermal and detailed test benches | `MotorDriveThermalTestBenchDescription.mlx` |
+| ScriptsData | PMSM motor characterization | `PMSMmotorTestBench.mlx` |
 | ThermalDurability | Evaluate drive unit thermal behavior over extended duty cycles | `DUThermalDurability.mlx` |
 
 ### Vehicle
 
-| Workflow | Description | Key Files |
-|----------|-------------|-----------|
-| RangeEstimation | Estimate vehicle range over standard drive cycles (EPA, NEDC, WLTC) | `BEVRangeEstimationMain.mlx`, `BEVrangeEstimation*.m` |
+| Workflow | Description | Entry Point |
+|----------|-------------|-------------|
+| RangeEstimation | Estimate vehicle range over standard drive cycles (EPA, NEDC, WLTC) | `BEVRangeEstimationMain.mlx` |
 
 ---
 
-## Workflow Pattern
+Open the MATLAB project (`ElectricVehicleSimscape.prj`) before running any workflow.
 
-Each workflow folder typically contains:
-
-- **Live script** (`.mlx`) -- interactive entry point with documentation, code, and results
-- **Simulink models** (`.slx`) -- simulation environments specific to the study
-- **Support scripts** (`.m`) -- computation functions and automation
-- **Data files** (`.mat`) -- drive cycle data, pre-computed results, and parameters
-
-Workflows depend on the component models in `Components/` and the vehicle templates in `Model/`. Open the MATLAB project (`ElectricVehicleSimscape.prj`) before running any workflow.
-
-Copyright 2026 The MathWorks, Inc.
+Copyright 2022 - 2025 The MathWorks, Inc.

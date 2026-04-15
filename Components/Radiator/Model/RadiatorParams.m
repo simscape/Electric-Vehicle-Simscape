@@ -28,5 +28,5 @@ vehicleThermal.cabin_CO2_init = 4e-4;
 vehicleThermal.coolant_p_init = 0.101325;
 vehicleThermal.ambient=25+273.15;          %[K] Ambient temperature in K
 
-vehicleThermal.coolant_T_init=25+273.155;  % [K] Coolant initial temperature
+vehicleThermal.coolant_T_init=25+273.15;  % [K] Coolant initial temperature
 vehicleThermal.coolant_pipe_D = 0.019; % [m] Coolant pipe diameter

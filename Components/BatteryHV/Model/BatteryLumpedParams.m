@@ -21,8 +21,5 @@ run('batt_packBTMSExampleLib_param');      % battery module parameter filefile
 % %% Liquid Coolant System
 % battery.coolant_pipe_D = 0.019; % [m] Coolant pipe diameter
 % vehicleThermal.coolant_p_init = 0.101325;
-% vehicleThermal.coolant_T_init=25+273.155;  % [K] Coolant initial temperature
+% vehicleThermal.coolant_T_init=25+273.15;  % [K] Coolant initial temperature
 
-
-% Load BMS parameter
-BMSParams;
