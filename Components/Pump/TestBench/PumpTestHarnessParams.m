@@ -1,6 +1,6 @@
 % Copyright 2025 The MathWorks, Inc.
 
-%Battery Pump params
+%% Component Parameters
 PumpParams;
 
 %Vehicle params

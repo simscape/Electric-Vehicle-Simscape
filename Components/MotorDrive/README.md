@@ -17,9 +17,9 @@ Electric motor drive unit component for the BEV system model. The motor drive co
 | File | Description |
 |------|-------------|
 | EmotorLib.slx | Reusable motor library blocks |
-| EmotorLibParams.m | Motor library parameters |
-| MotorThermalParams.m | Motor thermal parameters (thermal mass, coolant jacket) |
+| InverterMotorDriveParam.m | Inverter Cauer thermal, heatsink, and loss map parameters |
 | MotorLossMap.mat | Pre-computed motor loss map data |
+| InverterLossMap.mat | Pre-computed inverter loss map data |
 
 ## Folder Structure
 

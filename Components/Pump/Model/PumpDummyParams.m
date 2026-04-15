@@ -3,5 +3,5 @@
 
 % Copyright 2025 The MathWorks, Inc.
 
-batteryPump.pumpMaxCurrent = 10; % [A] Fixed current draw at full command
-batteryPump.coolant_pipe_D = 0.019; % [m] Coolant pipe diameter
+pump.pumpMaxCurrent = 10; % [A] Fixed current draw at full command
+pump.coolant_pipe_D = 0.019; % [m] Coolant pipe diameter

@@ -17,7 +17,7 @@
 % full thermal coupling for motor windings, inverter, and coolant jacket.
 % The core motor model is provided by the EmotorLib library. Parameters are
 % initialized by |MotorTestHarnessParams.m|, which loads
-% |EmotorLibParams.m| and |MotorThermalParams.m|.
+% |MotorDriveGearThParams.m| and |InverterMotorDriveParam.m|.
 %
 % The harness scopes capture:
 %

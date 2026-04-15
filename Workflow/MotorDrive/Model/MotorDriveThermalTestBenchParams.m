@@ -4,8 +4,7 @@
 
 %Other Parameters
 ControllerParams;
-EmotorLibParams;
-InverterParams;
+MotorDriveGearThParams;
 InverterThermalParams;
 DrivelineParams;
 

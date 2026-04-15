@@ -63,7 +63,8 @@
         "Controls": {
                         "Instances":["Controller"],
                           "Models":["Controller"]
-                   }
+                   },
+        "SystemParams": ["BEVThermalParams"]
     },
 
     "VehicleElectric": {

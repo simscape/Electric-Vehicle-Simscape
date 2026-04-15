@@ -9,7 +9,7 @@ To make changes, update the MATLAB code and republish this document.
 <title>EmotorLib</title>
 <meta name="generator" content="MATLAB 24.2">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2026-04-13">
+<meta name="DC.date" content="2026-04-16">
 <meta name="DC.source" content="EmotorLibDescription.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
@@ -83,7 +83,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <b>Library:</b> <tt>Library/EmotorLib.slx</tt>
 </p>
 <p>
-<b>Parameters:</b> <tt>EmotorLibParams.m</tt>, <tt>MotorThermalParams.m</tt>
+<b>Parameters:</b> <tt>MotorDriveGearThParams.m</tt>, <tt>InverterMotorDriveParam.m</tt>
 </p>
 <p>
 <b>Loss Map:</b> <tt>MotorLossMap.mat</tt>
@@ -117,15 +117,15 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 </div>
 <h2 id="1">Library Overview</h2>
 <p>The EmotorLib library provides two motor subsystem blocks that are referenced by all MotorDrive fidelity models. The library separates the motor plant into a non-thermal variant (<b>Emotor</b>) and a thermal variant (<b>Emotor Thermal</b>) so that each vehicle-level fidelity can select the appropriate level of detail.</p>
-<p>Motor losses are defined by a speed-torque-loss lookup table stored in <tt>MotorLossMap.mat</tt>. Electrical parameters (max torque, max power, time constant) are defined in <tt>EmotorLibParams.m</tt>. Thermal geometry and material properties are defined in <tt>MotorThermalParams.m</tt>.</p>
+<p>Motor losses are defined by a speed-torque-loss lookup table stored in <tt>MotorLossMap.mat</tt>. Electrical parameters (max torque, max power, time constant) are defined in <tt>MotorDriveGearThParams.m</tt>. Inverter thermal and heatsink properties are defined in <tt>InverterMotorDriveParam.m</tt>.</p>
 <pre class="codeinput">open_system(<span class="string">'EmotorLib'</span>)
 </pre>
-<img vspace="5" hspace="5" src="EmotorLibDescription_01.png" alt=""> <h2 id="2">Emotor (Non-Thermal)</h2>
+<img vspace="5" hspace="5" src="../images/EmotorLibDescription_01.png" alt=""> <h2 id="2">Emotor (Non-Thermal)</h2>
 <p>The <b>Emotor</b> block is the non-thermal variant of the motor plant. It models the electrical and mechanical behavior of the motor without any temperature dependence or thermal coupling.</p>
 <pre class="codeinput">open_system(<span class="string">'EmotorLib/Emotor'</span>)
 captureSubsystemImage(<span class="string">'EmotorLib/Emotor'</span>)
 </pre>
-<img vspace="5" hspace="5" src="EmotorLibDescription_02.png" alt=""> <p>The Emotor block contains the following subsystems:</p>
+<img vspace="5" hspace="5" src="../images/EmotorLibDescription_02.png" alt=""> <p>The Emotor block contains the following subsystems:</p>
 <div>
 <ul>
 <li>
@@ -160,13 +160,13 @@ captureSubsystemImage(<span class="string">'EmotorLib/Emotor'</span>)
 <tr><td>Motor loss map</td><td>MotorLossMap.mat</td><td>Speed-torque-loss lookup table</td></tr>
 </table>
 </p>
-<p>See <tt>EmotorLibParams.m</tt> for a complete list.</p>
+<p>See <tt>MotorDriveGearThParams.m</tt> for a complete list.</p>
 <h2 id="5">Emotor Thermal</h2>
 <p>The <b>Emotor Thermal</b> block extends the non-thermal variant with full thermal dynamics. In addition to the electrical and mechanical model it includes loss estimation and thermal coupling for motor windings, rotor, and coolant jacket.</p>
 <pre class="codeinput">open_system(<span class="string">'EmotorLib/Emotor Thermal'</span>)
 captureSubsystemImage(<span class="string">'EmotorLib/Emotor Thermal'</span>)
 </pre>
-<img vspace="5" hspace="5" src="EmotorLibDescription_03.png" alt=""> <p>The Emotor Thermal block adds the following subsystems on top of the base Emotor model:</p>
+<img vspace="5" hspace="5" src="../images/EmotorLibDescription_03.png" alt=""> <p>The Emotor Thermal block adds the following subsystems on top of the base Emotor model:</p>
 <div>
 <ul>
 <li>
@@ -206,7 +206,7 @@ captureSubsystemImage(<span class="string">'EmotorLib/Emotor Thermal'</span>)
 <tr><td>Oil flow rate</td><td>5/60000 m^3/s</td><td>ATF flow rate for winding cooling</td></tr>
 </table>
 </p>
-<p>See <tt>MotorThermalParams.m</tt> for a complete list.</p>
+<p>See <tt>MotorDriveGearThParams.m</tt> for a complete list.</p>
 <h2 id="8">Differences Between Variants</h2>
 <p>
 <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
@@ -249,7 +249,7 @@ captureSubsystemImage(<span class="string">'EmotorLib/Emotor Thermal'</span>)
 %
 % *Library:* |Library/EmotorLib.slx|
 %
-% *Parameters:* |EmotorLibParams.m|, |MotorThermalParams.m|
+% *Parameters:* |MotorDriveGearThParams.m|, |InverterMotorDriveParam.m|
 %
 % *Loss Map:* |MotorLossMap.mat|
 
@@ -262,8 +262,8 @@ captureSubsystemImage(<span class="string">'EmotorLib/Emotor Thermal'</span>)
 %
 % Motor losses are defined by a speed-torque-loss lookup table stored in
 % |MotorLossMap.mat|. Electrical parameters (max torque, max power, time
-% constant) are defined in |EmotorLibParams.m|. Thermal geometry and
-% material properties are defined in |MotorThermalParams.m|.
+% constant) are defined in |MotorDriveGearThParams.m|. Inverter thermal
+% and heatsink properties are defined in |InverterMotorDriveParam.m|.
 
 open_system('EmotorLib')
 
@@ -311,7 +311,7 @@ captureSubsystemImage('EmotorLib/Emotor')
 % </table>
 % </html>
 %
-% See |EmotorLibParams.m| for a complete list.
+% See |MotorDriveGearThParams.m| for a complete list.
 
 %% Emotor Thermal
 % The *Emotor Thermal* block extends the non-thermal variant with full
@@ -367,7 +367,7 @@ captureSubsystemImage('EmotorLib/Emotor Thermal')
 % </table>
 % </html>
 %
-% See |MotorThermalParams.m| for a complete list.
+% See |MotorDriveGearThParams.m| for a complete list.
 
 
 %% Differences Between Variants

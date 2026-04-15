@@ -9,7 +9,7 @@ To make changes, update the MATLAB code and republish this document.
 <title>Motor Test Harness</title>
 <meta name="generator" content="MATLAB 24.2">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2026-04-13">
+<meta name="DC.date" content="2026-04-16">
 <meta name="DC.source" content="MotorTestHarnessDescription.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
@@ -110,7 +110,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 </div>
 <h2 id="1">Overview</h2>
 <p>The MotorTestHarness provides a standalone simulation environment for validating the electric motor drive unit. The harness supplies torque commands, control signals, battery state, and coolant boundary conditions to exercise the motor through acceleration and load profiles.</p>
-<p>The default fidelity in the harness is <b>MotorDriveGearTh</b>, which includes full thermal coupling for motor windings, inverter, and coolant jacket. The core motor model is provided by the EmotorLib library. Parameters are initialized by <tt>MotorTestHarnessParams.m</tt>, which loads <tt>EmotorLibParams.m</tt> and <tt>MotorThermalParams.m</tt>.</p>
+<p>The default fidelity in the harness is <b>MotorDriveGearTh</b>, which includes full thermal coupling for motor windings, inverter, and coolant jacket. The core motor model is provided by the EmotorLib library. Parameters are initialized by <tt>MotorTestHarnessParams.m</tt>, which loads <tt>MotorDriveGearThParams.m</tt> and <tt>InverterMotorDriveParam.m</tt>.</p>
 <p>The harness scopes capture:</p>
 <div>
 <ul>
@@ -186,7 +186,7 @@ disp(results)
 % full thermal coupling for motor windings, inverter, and coolant jacket.
 % The core motor model is provided by the EmotorLib library. Parameters are
 % initialized by |MotorTestHarnessParams.m|, which loads
-% |EmotorLibParams.m| and |MotorThermalParams.m|.
+% |MotorDriveGearThParams.m| and |InverterMotorDriveParam.m|.
 %
 % The harness scopes capture:
 %

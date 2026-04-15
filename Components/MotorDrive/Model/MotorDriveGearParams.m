@@ -5,6 +5,5 @@
 electricDrive.max_torque = 220;
 electricDrive.max_power = 50e3; 
 electricDrive.Tctc= 0.002; % Motor torque control time constant(s)
-electricDrive.coolant_T_init = 25+273.15;
 electricDrive.motor_loss_map=load('MotorLossMap.mat');
 

@@ -4,7 +4,7 @@
 %
 % *Library:* |Library/EmotorLib.slx|
 %
-% *Parameters:* |EmotorLibParams.m|, |MotorThermalParams.m|
+% *Parameters:* |MotorDriveGearThParams.m|, |InverterMotorDriveParam.m|
 %
 % *Loss Map:* |MotorLossMap.mat|
 
@@ -17,8 +17,8 @@
 %
 % Motor losses are defined by a speed-torque-loss lookup table stored in
 % |MotorLossMap.mat|. Electrical parameters (max torque, max power, time
-% constant) are defined in |EmotorLibParams.m|. Thermal geometry and
-% material properties are defined in |MotorThermalParams.m|.
+% constant) are defined in |MotorDriveGearThParams.m|. Inverter thermal
+% and heatsink properties are defined in |InverterMotorDriveParam.m|.
 
 open_system('EmotorLib')
 
@@ -66,7 +66,7 @@ captureSubsystemImage('EmotorLib/Emotor')
 % </table>
 % </html>
 %
-% See |EmotorLibParams.m| for a complete list.
+% See |MotorDriveGearThParams.m| for a complete list.
 
 %% Emotor Thermal
 % The *Emotor Thermal* block extends the non-thermal variant with full
@@ -122,7 +122,7 @@ captureSubsystemImage('EmotorLib/Emotor Thermal')
 % </table>
 % </html>
 %
-% See |MotorThermalParams.m| for a complete list.
+% See |MotorDriveGearThParams.m| for a complete list.
 
 
 %% Differences Between Variants
