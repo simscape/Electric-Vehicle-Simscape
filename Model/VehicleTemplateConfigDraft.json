@@ -12,7 +12,7 @@
             },
             "Charger": ["Charger"]
         },
-        "systemParam": ""
+        "SystemParameter": [""]
     },
     "VehicleElectroThermal": {
         "Description": "Electric Vehicle with Full Thermal",
@@ -24,7 +24,7 @@
             },
             "HVAC": ["HVACthermal","HVACEmpiricalRef"]
         },
-        "systemParam": "BEVthermalparam"
+        "SystemParameter": ["BEVThermalParams"]
     },
 
     "VehicleElectric": {
@@ -47,6 +47,6 @@
                         "Instances":["Controller"],
                           "Models":["ControllerFR"]
                    },
-        "systemParam": ""
+        "SystemParameter": [""]
     }
 }

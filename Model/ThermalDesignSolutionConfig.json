@@ -40,7 +40,7 @@
                         "Instances":["Controller"],
                           "Models":["Controller"]
                    },
-        "systemParam": "BEVthermalparam"
+        "SystemParameter": ["BEVThermalParams"]
     }
 
     

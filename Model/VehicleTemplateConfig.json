@@ -23,7 +23,7 @@
                         "Instances":["Controller"],
                           "Models":["ControllerHVAC"]
                    },
-        "systemParam": ""
+        "SystemParameter": [""]
     },
     "VehicleElectroThermal": {
         "Description": "Electric Vehicle with Full Thermal",
@@ -65,7 +65,7 @@
                         "Instances":["Controller"],
                           "Models":["Controller"]
                    },
-        "systemParam": "BEVthermalparam"
+        "SystemParameter": ["BEVThermalParams"]
     },
 
     "VehicleElectric": {
@@ -92,7 +92,7 @@
                         "Instances":["Controller"],
                           "Models":["ControllerFRM"]
                    },
-        "systemParam": ""
+        "SystemParameter": [""]
     }
 
 }

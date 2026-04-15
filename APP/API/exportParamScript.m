@@ -129,10 +129,7 @@ function exportParamScript(app, outFile)
 
     % Optional derived/thermal section
     L = [L;
-        "%%VehicleThermal based parameters"
-        "% (Place any derived vehicle thermal params here if needed)"
-        ""
-        "%% Initialization from the UI for thermal and HVAC, only used when present"
+         "%% Initialization from the UI for thermal and HVAC, only used when present"
         ];
     if app.ACButton.Enable == "on"
     L = [L;
@@ -153,6 +150,24 @@ function exportParamScript(app, outFile)
         sprintf("vehicleThermal.coolant_P_init  = %s;   %% [Mpa] Coolant initital pressure",ambPress)
         ""
         ];
+    % -------- System params from JSON config --------
+    try
+        rawCfg = jsondecode(fileread(app.ConfigDropDown.Value));
+        vehicleConfig = erase(app.VehicleTemplateDropDown.Value, ".slx");
+        sysParam = rawCfg.(vehicleConfig).SystemParameter;
+        if iscell(sysParam), sysParam = string(sysParam); end
+        sysParam = sysParam(strlength(sysParam) > 0);  % drop empty entries
+        if ~isempty(sysParam)
+            L = [L; "%% System parameters"];
+            for sp = 1:numel(sysParam)
+                L = [L; sprintf('%s;', sysParam(sp))]; %#ok<AGROW>
+            end
+            L = [L; ""];
+        end
+    catch
+        % No SystemParameter defined for this template — skip silently
+    end
+
     % -------- Write file --------
     fid = fopen(outFile,'w');
     if fid <= 0
