@@ -9,7 +9,7 @@ To make changes, update the MATLAB code and republish this document.
 <title>ChillerNoCoolant</title>
 <meta name="generator" content="MATLAB 24.2">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2026-04-14">
+<meta name="DC.date" content="2026-04-16">
 <meta name="DC.source" content="ChillerNoCoolantDescription.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
@@ -103,14 +103,16 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <h2 id="1">Overview</h2>
 <p>The ChillerNoCoolant block represents the chiller electrical load on the HV bus without thermal-liquid ports. The power draw is modeled but there is no coolant loop interaction. This fidelity is used when the vehicle model does not include a coolant loop but the chiller power consumption still needs to be accounted for in range and efficiency calculations.</p>
 <p>
-<b>Model:</b> <tt>ChillerNoCoolant.slx</tt>
+<b>Model:</b> <a href="matlab:open_system('ChillerNoCoolant')">ChillerNoCoolant.slx</a>
 </p>
 <p>
-<b>Parameters:</b> <tt>ChillerNoCoolantParams.m</tt>
+<b>Parameters:</b> <a href="matlab:edit('ChillerNoCoolantParams.m')">ChillerNoCoolantParams.m</a>
 </p>
 <p>
 <b>Thermal Coupling:</b> None</p>
 <h2 id="2">Open Model</h2>
+<pre class="codeinput">open_system(<span class="string">'ChillerNoCoolant'</span>)
+</pre>
 <img vspace="5" hspace="5" src="../images/ChillerNoCoolantDescription_01.png" alt=""> <h2 id="3">Ports</h2>
 <p>
 <b>Inputs</b>
@@ -169,9 +171,9 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 % model does not include a coolant loop but the chiller power consumption
 % still needs to be accounted for in range and efficiency calculations.
 %
-% *Model:* |ChillerNoCoolant.slx|
+% *Model:* <matlab:open_system('ChillerNoCoolant') ChillerNoCoolant.slx>
 %
-% *Parameters:* |ChillerNoCoolantParams.m|
+% *Parameters:* <matlab:edit('ChillerNoCoolantParams.m') ChillerNoCoolantParams.m>
 %
 % *Thermal Coupling:* None
 

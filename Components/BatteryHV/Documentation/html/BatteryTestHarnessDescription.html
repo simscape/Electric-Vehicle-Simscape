@@ -9,7 +9,7 @@ To make changes, update the MATLAB code and republish this document.
 <title>Battery Test Harness</title>
 <meta name="generator" content="MATLAB 24.2">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2026-04-13">
+<meta name="DC.date" content="2026-04-16">
 <meta name="DC.source" content="BatteryTestHarnessDescription.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
@@ -79,14 +79,6 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <h1>Battery Test Harness</h1>
 <!--introduction-->
 <p>Standalone test environment for the BatteryHV component.</p>
-<p>
-<b>Harness:</b> <tt>BatteryTestHarness.slx</tt>
-</p>
-<p>
-<b>Test Case:</b> <tt>BatteryHVPassTests.m</tt>
-</p>
-<p>
-<b>Fidelity:</b> BatteryLumpedThermal</p>
 <!--/introduction-->
 <h2>Contents</h2>
 <div>
@@ -114,7 +106,18 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <h2 id="1">Overview</h2>
 <p>The BatteryTestHarness provides a standalone simulation environment for validating the high-voltage battery pack. The harness drives the battery through charge and discharge cycles by supplying relay commands, a current load profile, and coolant boundary conditions.</p>
 <p>The default fidelity in the harness is <b>BatteryLumpedThermal</b>, which represents the pack as a lumped equivalent circuit with a single thermal mass node. The thermal node is coupled to the coolant loop through a thermal-liquid interface, allowing the harness to capture temperature-dependent electrical behavior and heat rejection to coolant.</p>
-<p>Parameters are initialized by <tt>BatteryTestHarnessParams.m</tt>, which loads cell electrical data, BMS limits, and coolant system settings from <tt>BatteryLumpedThermalParams.m</tt>, <tt>BMSParams.m</tt>, and <tt>BEVThermalParams.m</tt>.</p>
+<p>Parameters are initialized by <tt>BatteryTestHarnessParams.m</tt>, which defines environment and coolant boundary conditions, then loads cell electrical data from <tt>BatteryLumpedThermalParams.m</tt>.</p>
+<p>
+<b>Harness:</b> <a href="matlab:open_system('BatteryTestHarness')">BatteryTestHarness.slx</a>
+</p>
+<p>
+<b>Parameters:</b> <a href="matlab:edit('BatteryTestHarnessParams.m')">BatteryTestHarnessParams.m</a>
+</p>
+<p>
+<b>Test Case:</b> <a href="matlab:edit('BatteryHVPassTests.m')">BatteryHVPassTests.m</a>
+</p>
+<p>
+<b>Fidelity:</b> BatteryLumpedThermal</p>
 <h2 id="2">Setup</h2>
 <p>Load parameters and open the test harness.</p>
 <pre class="codeinput">model = <span class="string">'BatteryTestHarness'</span>;
@@ -161,12 +164,6 @@ disp(results)
 ##### SOURCE BEGIN #####
 %% Battery Test Harness
 % Standalone test environment for the BatteryHV component.
-%
-% *Harness:* |BatteryTestHarness.slx|
-%
-% *Test Case:* |BatteryHVPassTests.m|
-%
-% *Fidelity:* BatteryLumpedThermal
 
 %% Overview
 % The BatteryTestHarness provides a standalone simulation environment for
@@ -180,9 +177,17 @@ disp(results)
 % thermal-liquid interface, allowing the harness to capture
 % temperature-dependent electrical behavior and heat rejection to coolant.
 %
-% Parameters are initialized by |BatteryTestHarnessParams.m|, which loads
-% cell electrical data, BMS limits, and coolant system settings from
-% |BatteryLumpedThermalParams.m|, |BMSParams.m|, and |BEVThermalParams.m|.
+% Parameters are initialized by |BatteryTestHarnessParams.m|, which defines
+% environment and coolant boundary conditions, then loads cell electrical
+% data from |BatteryLumpedThermalParams.m|.
+%
+% *Harness:* <matlab:open_system('BatteryTestHarness') BatteryTestHarness.slx>
+%
+% *Parameters:* <matlab:edit('BatteryTestHarnessParams.m') BatteryTestHarnessParams.m>
+%
+% *Test Case:* <matlab:edit('BatteryHVPassTests.m') BatteryHVPassTests.m>
+%
+% *Fidelity:* BatteryLumpedThermal
 
 %% Setup
 % Load parameters and open the test harness.

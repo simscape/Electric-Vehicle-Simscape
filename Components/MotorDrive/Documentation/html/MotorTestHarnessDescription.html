@@ -79,14 +79,6 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <h1>Motor Test Harness</h1>
 <!--introduction-->
 <p>Standalone test environment for the MotorDrive component.</p>
-<p>
-<b>Harness:</b> <tt>MotorTestHarness.slx</tt>
-</p>
-<p>
-<b>Test Case:</b> <tt>MotorDrivePassTests.m</tt>
-</p>
-<p>
-<b>Fidelity:</b> MotorDriveGearTh</p>
 <!--/introduction-->
 <h2>Contents</h2>
 <div>
@@ -111,23 +103,17 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <h2 id="1">Overview</h2>
 <p>The MotorTestHarness provides a standalone simulation environment for validating the electric motor drive unit. The harness supplies torque commands, control signals, battery state, and coolant boundary conditions to exercise the motor through acceleration and load profiles.</p>
 <p>The default fidelity in the harness is <b>MotorDriveGearTh</b>, which includes full thermal coupling for motor windings, inverter, and coolant jacket. The core motor model is provided by the EmotorLib library. Parameters are initialized by <tt>MotorTestHarnessParams.m</tt>, which loads <tt>MotorDriveGearThParams.m</tt> and <tt>InverterMotorDriveParam.m</tt>.</p>
-<p>The harness scopes capture:</p>
-<div>
-<ul>
-<li>
-<b>Motor Current</b> - Phase current drawn by the motor.</li>
-<li>
-<b>Motor Speed</b> - Rotor speed in rpm.</li>
-<li>
-<b>Motor Voltage</b> - Terminal voltage.</li>
-<li>
-<b>Coil Temperature</b> - Stator winding temperature.</li>
-<li>
-<b>Magnet Temperature</b> - Rotor magnet temperature.</li>
-<li>
-<b>Input / Load</b> - Torque command and mechanical load profiles.</li>
-</ul>
-</div>
+<p>
+<b>Harness:</b> <a href="matlab:open_system('MotorTestHarness')">MotorTestHarness.slx</a>
+</p>
+<p>
+<b>Parameters:</b> <a href="matlab:edit('MotorTestHarnessParams.m')">MotorTestHarnessParams.m</a>
+</p>
+<p>
+<b>Test Case:</b> <a href="matlab:edit('MotorDrivePassTests.m')">MotorDrivePassTests.m</a>
+</p>
+<p>
+<b>Fidelity:</b> MotorDriveGearTh</p>
 <h2 id="2">Setup</h2>
 <p>Load parameters and open the test harness.</p>
 <pre class="codeinput">model = <span class="string">'MotorTestHarness'</span>;
@@ -169,12 +155,6 @@ disp(results)
 ##### SOURCE BEGIN #####
 %% Motor Test Harness
 % Standalone test environment for the MotorDrive component.
-%
-% *Harness:* |MotorTestHarness.slx|
-%
-% *Test Case:* |MotorDrivePassTests.m|
-%
-% *Fidelity:* MotorDriveGearTh
 
 %% Overview
 % The MotorTestHarness provides a standalone simulation environment for
@@ -188,14 +168,13 @@ disp(results)
 % initialized by |MotorTestHarnessParams.m|, which loads
 % |MotorDriveGearThParams.m| and |InverterMotorDriveParam.m|.
 %
-% The harness scopes capture:
+% *Harness:* <matlab:open_system('MotorTestHarness') MotorTestHarness.slx>
 %
-% * *Motor Current* - Phase current drawn by the motor.
-% * *Motor Speed* - Rotor speed in rpm.
-% * *Motor Voltage* - Terminal voltage.
-% * *Coil Temperature* - Stator winding temperature.
-% * *Magnet Temperature* - Rotor magnet temperature.
-% * *Input / Load* - Torque command and mechanical load profiles.
+% *Parameters:* <matlab:edit('MotorTestHarnessParams.m') MotorTestHarnessParams.m>
+%
+% *Test Case:* <matlab:edit('MotorDrivePassTests.m') MotorDrivePassTests.m>
+%
+% *Fidelity:* MotorDriveGearTh
 
 %% Setup
 % Load parameters and open the test harness.

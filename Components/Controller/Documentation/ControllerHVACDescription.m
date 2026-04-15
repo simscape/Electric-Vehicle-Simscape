@@ -1,12 +1,6 @@
 %% ControllerHVAC
 % Controller variant with integrated HVAC thermal management control logic
 % in addition to standard drivetrain torque control.
-%
-% *Model:* |ControllerHVAC.slx|
-%
-% *Parameters:* |ControllerParams.m|
-%
-% *Thermal Coupling:* No
 
 %% Overview
 % The ControllerHVAC adds HVAC thermal management control logic on top of
@@ -14,6 +8,14 @@
 % setpoints, blower commands, and compressor operation alongside motor
 % torque management. This variant is used in vehicle configurations that
 % include active HVAC thermal models.
+%
+% *Model:* <matlab:open_system('ControllerHVAC') ControllerHVAC.slx>
+%
+% *Parameters:* <matlab:edit('ControllerHVACParams.m') ControllerHVACParams.m>
+%
+% *Thermal Coupling:* No
+
+%% Open Model
 
 open_system('ControllerHVAC')
 

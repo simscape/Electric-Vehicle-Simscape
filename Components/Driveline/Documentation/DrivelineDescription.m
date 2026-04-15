@@ -9,9 +9,9 @@
 % longitudinal and lateral dynamics. Torque inputs from front and rear
 % motor drive units are transmitted through the axles to the wheels.
 %
-% *Model:* |Driveline.slx|
+% *Model:* <matlab:open_system('Driveline') Driveline.slx>
 %
-% *Parameters:* |DrivelineParams.m|
+% *Parameters:* <matlab:edit('DrivelineParams.m') DrivelineParams.m>
 %
 % *Thermal Coupling:* None
 

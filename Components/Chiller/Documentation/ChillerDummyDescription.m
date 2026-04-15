@@ -12,9 +12,9 @@
 % the study but the system model needs a connected chiller block to
 % simulate without errors.
 %
-% *Model:* |ChillerDummy.slx|
+% *Model:* <matlab:open_system('ChillerDummy') ChillerDummy.slx>
 %
-% *Parameters:* |ChillerDummyParams.m|
+% *Parameters:* <matlab:edit('ChillerDummyParams.m') ChillerDummyParams.m>
 %
 % *Thermal Coupling:* No (coolant pass-through, no heat exchange)
 

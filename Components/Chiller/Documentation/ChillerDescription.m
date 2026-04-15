@@ -12,9 +12,9 @@
 % cools the battery pack by removing heat from the coolant loop, keeping
 % cell temperatures within safe operating limits.
 %
-% *Model:* |Chiller.slx|
+% *Model:* <matlab:open_system('Chiller') Chiller.slx>
 %
-% *Parameters:* |ChillerParams.m|
+% *Parameters:* <matlab:edit('ChillerParams.m') ChillerParams.m>
 %
 % *Thermal Coupling:* Yes (thermal mass, coolant loop)
 

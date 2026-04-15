@@ -1,11 +1,5 @@
 %% Battery Test Harness
 % Standalone test environment for the BatteryHV component.
-%
-% *Harness:* |BatteryTestHarness.slx|
-%
-% *Test Case:* |BatteryHVPassTests.m|
-%
-% *Fidelity:* BatteryLumpedThermal
 
 %% Overview
 % The BatteryTestHarness provides a standalone simulation environment for
@@ -22,6 +16,14 @@
 % Parameters are initialized by |BatteryTestHarnessParams.m|, which defines
 % environment and coolant boundary conditions, then loads cell electrical
 % data from |BatteryLumpedThermalParams.m|.
+%
+% *Harness:* <matlab:open_system('BatteryTestHarness') BatteryTestHarness.slx>
+%
+% *Parameters:* <matlab:edit('BatteryTestHarnessParams.m') BatteryTestHarnessParams.m>
+%
+% *Test Case:* <matlab:edit('BatteryHVPassTests.m') BatteryHVPassTests.m>
+%
+% *Fidelity:* BatteryLumpedThermal
 
 %% Setup
 % Load parameters and open the test harness.

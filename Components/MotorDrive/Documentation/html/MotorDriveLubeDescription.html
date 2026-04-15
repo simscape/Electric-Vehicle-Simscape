@@ -9,7 +9,7 @@ To make changes, update the MATLAB code and republish this document.
 <title>MotorDriveLube</title>
 <meta name="generator" content="MATLAB 24.2">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2026-04-13">
+<meta name="DC.date" content="2026-04-16">
 <meta name="DC.source" content="MotorDriveLubeDescription.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
@@ -107,10 +107,10 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <p>The MotorDriveLube block extends MotorDriveGearTh by adding a gearbox thermal interface and oil-related friction and churning losses. The motor, inverter, and gearbox each have thermal ports connected to the coolant loop. This provides the highest fidelity powertrain efficiency and thermal model, suitable for evaluating the effect of lubricant viscosity and gear losses on vehicle range.</p>
 <p>The core motor model is provided by the <b>EmotorLib</b> library (<tt>Library/EmotorLib.slx</tt>). See <a href="EmotorLibDescription.html">EmotorLib</a> for details on the underlying PMSM model and loss map.</p>
 <p>
-<b>Model:</b> <tt>MotorDriveLube.slx</tt>
+<b>Model:</b> <a href="matlab:open_system('MotorDriveLube')">MotorDriveLube.slx</a>
 </p>
 <p>
-<b>Parameters:</b> <tt>MotorDriveGearParams.m</tt>, <tt>MotorDriveGearThParams.m</tt>
+<b>Parameters:</b> <a href="matlab:edit('MotorDriveLubeParams.m')">MotorDriveLubeParams.m</a>, <tt>MotorDriveGearThParams.m</tt>
 </p>
 <p>
 <b>Thermal Coupling:</b> Yes (motor, inverter, gearbox, oil cooling)</p>
@@ -205,9 +205,9 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 % (|Library/EmotorLib.slx|). See <EmotorLibDescription.html EmotorLib> for
 % details on the underlying PMSM model and loss map.
 %
-% *Model:* |MotorDriveLube.slx|
+% *Model:* <matlab:open_system('MotorDriveLube') MotorDriveLube.slx>
 %
-% *Parameters:* |MotorDriveGearParams.m|, |MotorDriveGearThParams.m|
+% *Parameters:* <matlab:edit('MotorDriveLubeParams.m') MotorDriveLubeParams.m>, |MotorDriveGearThParams.m|
 %
 % *Thermal Coupling:* Yes (motor, inverter, gearbox, oil cooling)
 

@@ -11,9 +11,9 @@
 % required cooling or heating power. Energy monitoring tracks HVAC
 % consumption from the HV bus.
 %
-% *Model:* |HVACsimpleTh.slx|
+% *Model:* <matlab:open_system('HVACsimpleTh') HVACsimpleTh.slx>
 %
-% *Parameters:* |HVACsimpleThParams.m|
+% *Parameters:* <matlab:edit('HVACsimpleThParams.m') HVACsimpleThParams.m>
 %
 % *Thermal Coupling:* Yes (cabin thermal plant)
 

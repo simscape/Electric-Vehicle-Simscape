@@ -13,9 +13,9 @@
 % to keep battery temperature within operating limits, preventing capacity
 % loss and protecting the cells from low-temperature charging damage.
 %
-% *Model:* |Heater.slx|
+% *Model:* <matlab:open_system('Heater') Heater.slx>
 %
-% *Parameters:* |HeaterParams.m|
+% *Parameters:* <matlab:edit('HeaterParams.m') HeaterParams.m>
 %
 % *Thermal Coupling:* Yes (thermal mass, coolant jacket)
 

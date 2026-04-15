@@ -9,9 +9,9 @@
 % coolant loop and battery heater. Positive and negative relays manage
 % HV bus connectivity.
 %
-% *Model:* |BatteryTableBased.slx|
+% *Model:* <matlab:open_system('BatteryTableBased') BatteryTableBased.slx>
 %
-% *Parameters:* |BatteryTableBasedParams.m|
+% *Parameters:* <matlab:edit('BatteryTableBasedParams.m') BatteryTableBasedParams.m>
 %
 % *Thermal Coupling:* Yes (lookup-table-driven, coolant port)
 
@@ -59,5 +59,6 @@ open_system('BatteryTableBased')
 %% See Also
 % * <BatteryLumpedDescription.html BatteryLumped>
 % * <BatteryLumpedThermalDescription.html BatteryLumpedThermal>
+% * <BatteryTestHarnessDescription.html Battery Test Harness>
 
 % Copyright 2022 - 2025 The MathWorks, Inc.

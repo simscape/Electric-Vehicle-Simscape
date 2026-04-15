@@ -1,27 +1,24 @@
 %% PumpDriver Test Harness
 % Standalone test environment for the PumpDriver component.
-%
-% *Harness:* |PumpDriverTestHarness.slx|
-%
-% *Test Case:* |PumpDriverPassTests.m|
 
 %% Overview
 % The PumpDriverTestHarness provides a standalone simulation environment
 % for validating the pump driver controller. The harness supplies a DC
 % voltage input, coolant boundary conditions, and pump enable signals.
-% Scoped outputs capture voltage levels and coolant temperatures.
 %
 % Parameters are initialized by |PumpDriverTestHarnessParams.m|, which
 % loads |PumpDriverParams.m|.
 %
-% The harness scopes capture:
+% *Harness:* <matlab:open_system('PumpDriverTestHarness') PumpDriverTestHarness.slx>
 %
-% * *DC Input Voltage* - Supply voltage to the pump driver.
-% * *DC Output Voltage* - Voltage output from the driver.
-% * *Coolant Inlet Temperature* - Coolant temperature entering the system.
-% * *Coolant Outlet Temperature* - Coolant temperature leaving the system.
+% *Parameters:* <matlab:edit('PumpDriverTestHarnessParams.m') PumpDriverTestHarnessParams.m>
+%
+% *Test Case:* <matlab:edit('PumpDriverPassTests.m') PumpDriverPassTests.m>
+%
+% *Fidelity:* PumpDriver
 
 %% Setup
+% Load parameters and open the test harness.
 
 model = 'PumpDriverTestHarness';
 PumpDriverTestHarnessParams;

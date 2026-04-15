@@ -11,7 +11,8 @@
                 "Models": ["MotorDriveGear","MotorDriveGear_NoTh","MotorDriveGear_Th"]
             },
             "Charger": ["Charger"]
-        }
+        },
+        "systemParam": ""
     },
     "VehicleElectroThermal": {
         "Description": "Electric Vehicle with Full Thermal",
@@ -22,7 +23,8 @@
                 "Models": ["MotorDriveGear","MotorDriveGear_NoTh"]
             },
             "HVAC": ["HVACthermal","HVACEmpiricalRef"]
-        }
+        },
+        "systemParam": "BEVthermalparam"
     },
 
     "VehicleElectric": {
@@ -44,6 +46,7 @@
         "Controls": {
                         "Instances":["Controller"],
                           "Models":["ControllerFR"]
-                   }
+                   },
+        "systemParam": ""
     }
 }

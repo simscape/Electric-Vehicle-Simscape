@@ -8,9 +8,9 @@
 % yet available or when the charger thermal behavior is not the focus of
 % the study.
 %
-% *Model:* |ChargerThermalDummy.slx|
+% *Model:* <matlab:open_system('ChargerThermalDummy') ChargerThermalDummy.slx>
 %
-% *Parameters:* |ChargerThermalDummyParams.m|
+% *Parameters:* <matlab:edit('ChargerThermalDummyParams.m') ChargerThermalDummyParams.m>
 %
 % *Thermal Coupling:* Yes (port-compatible pass-through)
 
@@ -40,5 +40,6 @@ open_system('ChargerThermalDummy')
 % * <ChargerDescription.html Charger>
 % * <ChargerDummyDescription.html ChargerDummy>
 % * <ChargerThermalDescription.html ChargerThermal>
+% * <ChargerTestHarnessDescription.html Charger Test Harness>
 
 % Copyright 2022 - 2025 The MathWorks, Inc.

@@ -14,9 +14,9 @@
 % (|Library/EmotorLib.slx|). See <EmotorLibDescription.html EmotorLib> for
 % details on the underlying PMSM model and loss map.
 %
-% *Model:* |MotorDriveGearTh.slx|
+% *Model:* <matlab:open_system('MotorDriveGearTh') MotorDriveGearTh.slx>
 %
-% *Parameters:* |MotorDriveGearThParams.m|
+% *Parameters:* <matlab:edit('MotorDriveGearThParams.m') MotorDriveGearThParams.m>
 %
 % *Thermal Coupling:* Yes (motor windings, inverter, coolant jacket)
 

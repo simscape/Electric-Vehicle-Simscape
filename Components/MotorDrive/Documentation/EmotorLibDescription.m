@@ -4,7 +4,7 @@
 %
 % *Library:* |Library/EmotorLib.slx|
 %
-% *Parameters:* |MotorDriveGearThParams.m|, |InverterMotorDriveParam.m|
+% *Parameters:* <matlab:edit('EmotorLibParams.m') EmotorLibParams.m>, |InverterMotorDriveParam.m|
 %
 % *Loss Map:* |MotorLossMap.mat|
 

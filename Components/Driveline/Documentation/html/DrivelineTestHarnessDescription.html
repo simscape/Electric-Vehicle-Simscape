@@ -9,7 +9,7 @@ To make changes, update the MATLAB code and republish this document.
 <title>Driveline Test Harness</title>
 <meta name="generator" content="MATLAB 24.2">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2026-04-13">
+<meta name="DC.date" content="2026-04-16">
 <meta name="DC.source" content="DrivelineTestHarnessDescription.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
@@ -79,14 +79,6 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <h1>Driveline Test Harness</h1>
 <!--introduction-->
 <p>Standalone test environment for the Driveline component.</p>
-<p>
-<b>Harness:</b> <tt>DriveLineTestHarness.slx</tt>
-</p>
-<p>
-<b>Test Case:</b> <tt>DrivelinePassTests.m</tt>
-</p>
-<p>
-<b>Fidelity:</b> DrivelineWithBraking</p>
 <!--/introduction-->
 <h2>Contents</h2>
 <div>
@@ -111,15 +103,17 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <h2 id="1">Overview</h2>
 <p>The DriveLineTestHarness provides a standalone simulation environment for validating the vehicle driveline. The harness supplies front and rear axle torque commands and brake inputs to exercise the driveline through acceleration and braking maneuvers.</p>
 <p>The default fidelity in the harness is <b>DrivelineWithBraking</b>, which includes an integrated braking system on the rear axle for blended regenerative/friction braking analysis. Parameters are initialized by <tt>DriveLineTestHarnessParams.m</tt>, which loads <tt>DrivelineWithBrakingParams.m</tt>.</p>
-<p>The harness scope captures:</p>
-<div>
-<ul>
-<li>
-<b>Input Torque</b> - Torque commands applied to the driveline.</li>
-<li>
-<b>Road Load</b> - Mechanical load and vehicle response.</li>
-</ul>
-</div>
+<p>
+<b>Harness:</b> <a href="matlab:open_system('DriveLineTestHarness')">DriveLineTestHarness.slx</a>
+</p>
+<p>
+<b>Parameters:</b> <a href="matlab:edit('DriveLineTestHarnessParams.m')">DriveLineTestHarnessParams.m</a>
+</p>
+<p>
+<b>Test Case:</b> <a href="matlab:edit('DrivelinePassTests.m')">DrivelinePassTests.m</a>
+</p>
+<p>
+<b>Fidelity:</b> DrivelineWithBraking</p>
 <h2 id="2">Setup</h2>
 <p>Load parameters and open the test harness.</p>
 <pre class="codeinput">model = <span class="string">'DriveLineTestHarness'</span>;
@@ -155,12 +149,6 @@ disp(results)
 ##### SOURCE BEGIN #####
 %% Driveline Test Harness
 % Standalone test environment for the Driveline component.
-%
-% *Harness:* |DriveLineTestHarness.slx|
-%
-% *Test Case:* |DrivelinePassTests.m|
-%
-% *Fidelity:* DrivelineWithBraking
 
 %% Overview
 % The DriveLineTestHarness provides a standalone simulation environment for
@@ -173,10 +161,13 @@ disp(results)
 % regenerative/friction braking analysis. Parameters are initialized by
 % |DriveLineTestHarnessParams.m|, which loads |DrivelineWithBrakingParams.m|.
 %
-% The harness scope captures:
+% *Harness:* <matlab:open_system('DriveLineTestHarness') DriveLineTestHarness.slx>
 %
-% * *Input Torque* - Torque commands applied to the driveline.
-% * *Road Load* - Mechanical load and vehicle response.
+% *Parameters:* <matlab:edit('DriveLineTestHarnessParams.m') DriveLineTestHarnessParams.m>
+%
+% *Test Case:* <matlab:edit('DrivelinePassTests.m') DrivelinePassTests.m>
+%
+% *Fidelity:* DrivelineWithBraking
 
 %% Setup
 % Load parameters and open the test harness.

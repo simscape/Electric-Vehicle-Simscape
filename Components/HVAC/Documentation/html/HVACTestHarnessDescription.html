@@ -9,7 +9,7 @@ To make changes, update the MATLAB code and republish this document.
 <title>HVAC Test Harness</title>
 <meta name="generator" content="MATLAB 24.2">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2026-04-14">
+<meta name="DC.date" content="2026-04-16">
 <meta name="DC.source" content="HVACTestHarnessDescription.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
@@ -79,14 +79,6 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <h1>HVAC Test Harness</h1>
 <!--introduction-->
 <p>Standalone test environment for the HVAC component.</p>
-<p>
-<b>Harness:</b> <tt>HVACTestHarness.slx</tt>
-</p>
-<p>
-<b>Test Case:</b> <tt>HVACPassTests.m</tt>
-</p>
-<p>
-<b>Fidelity:</b> HVACEmpiricalRef</p>
 <!--/introduction-->
 <h2>Contents</h2>
 <div>
@@ -111,7 +103,17 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <h2 id="1">Overview</h2>
 <p>The HVACTestHarness provides a standalone simulation environment for validating the HVAC subsystem. The harness supplies ambient temperature, blower/PTC/compressor commands, battery voltage, and SOC to exercise the HVAC model through heating and cooling scenarios.</p>
 <p>The default fidelity in the harness is <b>HVACEmpiricalRef</b>, which uses empirical performance curves for the cabin blower, PTC heater, and compressor. A controlled current source represents the electrical load on the HV bus. Parameters are initialized by <tt>HVACTestHarnessParams.m</tt>, which loads <tt>HVACEmpiricalRefParams.m</tt>.</p>
-<p>The harness scope captures the HVAC output signal including cabin temperature and actuator states.</p>
+<p>
+<b>Harness:</b> <a href="matlab:open_system('HVACTestHarness')">HVACTestHarness.slx</a>
+</p>
+<p>
+<b>Parameters:</b> <a href="matlab:edit('HVACTestHarnessParams.m')">HVACTestHarnessParams.m</a>
+</p>
+<p>
+<b>Test Case:</b> <a href="matlab:edit('HVACPassTests.m')">HVACPassTests.m</a>
+</p>
+<p>
+<b>Fidelity:</b> HVACEmpiricalRef</p>
 <h2 id="2">Setup</h2>
 <p>Load parameters and open the test harness.</p>
 <pre class="codeinput">model = <span class="string">'HVACTestHarness'</span>;
@@ -147,12 +149,6 @@ disp(results)
 ##### SOURCE BEGIN #####
 %% HVAC Test Harness
 % Standalone test environment for the HVAC component.
-%
-% *Harness:* |HVACTestHarness.slx|
-%
-% *Test Case:* |HVACPassTests.m|
-%
-% *Fidelity:* HVACEmpiricalRef
 
 %% Overview
 % The HVACTestHarness provides a standalone simulation environment for
@@ -166,8 +162,13 @@ disp(results)
 % on the HV bus. Parameters are initialized by |HVACTestHarnessParams.m|,
 % which loads |HVACEmpiricalRefParams.m|.
 %
-% The harness scope captures the HVAC output signal including cabin
-% temperature and actuator states.
+% *Harness:* <matlab:open_system('HVACTestHarness') HVACTestHarness.slx>
+%
+% *Parameters:* <matlab:edit('HVACTestHarnessParams.m') HVACTestHarnessParams.m>
+%
+% *Test Case:* <matlab:edit('HVACPassTests.m') HVACPassTests.m>
+%
+% *Fidelity:* HVACEmpiricalRef
 
 %% Setup
 % Load parameters and open the test harness.

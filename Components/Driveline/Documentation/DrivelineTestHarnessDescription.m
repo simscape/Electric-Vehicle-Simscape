@@ -1,11 +1,5 @@
 %% Driveline Test Harness
 % Standalone test environment for the Driveline component.
-%
-% *Harness:* |DriveLineTestHarness.slx|
-%
-% *Test Case:* |DrivelinePassTests.m|
-%
-% *Fidelity:* DrivelineWithBraking
 
 %% Overview
 % The DriveLineTestHarness provides a standalone simulation environment for
@@ -18,10 +12,13 @@
 % regenerative/friction braking analysis. Parameters are initialized by
 % |DriveLineTestHarnessParams.m|, which loads |DrivelineWithBrakingParams.m|.
 %
-% The harness scope captures:
+% *Harness:* <matlab:open_system('DriveLineTestHarness') DriveLineTestHarness.slx>
 %
-% * *Input Torque* - Torque commands applied to the driveline.
-% * *Road Load* - Mechanical load and vehicle response.
+% *Parameters:* <matlab:edit('DriveLineTestHarnessParams.m') DriveLineTestHarnessParams.m>
+%
+% *Test Case:* <matlab:edit('DrivelinePassTests.m') DrivelinePassTests.m>
+%
+% *Fidelity:* DrivelineWithBraking
 
 %% Setup
 % Load parameters and open the test harness.

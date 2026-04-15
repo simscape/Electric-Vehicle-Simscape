@@ -1,11 +1,5 @@
 %% Charger Test Harness
 % Standalone test environment for the Charger component.
-%
-% *Harness:* |ChargerTestHarness.slx|
-%
-% *Test Case:* |ChargerPassTests.m|
-%
-% *Fidelity:* ChargerThermal
 
 %% Overview
 % The ChargerTestHarness provides a standalone simulation environment for
@@ -20,11 +14,13 @@
 % during extended charging events. Parameters are initialized by
 % |ChargerTestHarnessParams.m|, which loads |ChargerThermalParams.m|.
 %
-% The harness scope captures:
+% *Harness:* <matlab:open_system('ChargerTestHarness') ChargerTestHarness.slx>
 %
-% * *Charging Current* - Current delivered to the battery during CC-CV.
-% * *Coolant Inlet Temperature* - Coolant temperature entering the charger.
-% * *Coolant Outlet Temperature* - Coolant temperature leaving the charger.
+% *Parameters:* <matlab:edit('ChargerTestHarnessParams.m') ChargerTestHarnessParams.m>
+%
+% *Test Case:* <matlab:edit('ChargerPassTests.m') ChargerPassTests.m>
+%
+% *Fidelity:* ChargerThermal
 
 %% Setup
 % Load parameters and open the test harness.

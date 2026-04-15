@@ -9,7 +9,7 @@ To make changes, update the MATLAB code and republish this document.
 <title>Radiator Test Harness</title>
 <meta name="generator" content="MATLAB 24.2">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2026-04-13">
+<meta name="DC.date" content="2026-04-16">
 <meta name="DC.source" content="RadiatorTestHarnessDescription.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
@@ -79,12 +79,6 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <h1>Radiator Test Harness</h1>
 <!--introduction-->
 <p>Standalone test environment for the Radiator component.</p>
-<p>
-<b>Harness:</b> <tt>RadiatorTestHarness.slx</tt>
-</p>
-<p>
-<b>Test Case:</b> <tt>RadiatorPassTests.m</tt>
-</p>
 <!--/introduction-->
 <h2>Contents</h2>
 <div>
@@ -107,18 +101,21 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 </ul>
 </div>
 <h2 id="1">Overview</h2>
-<p>The RadiatorTestHarness provides a standalone simulation environment for validating the radiator heat exchanger. The harness supplies ambient air temperature, fan airflow, and hot coolant at the inlet. Scoped outputs capture coolant temperatures at the inlet and outlet to verify heat rejection performance.</p>
+<p>The RadiatorTestHarness provides a standalone simulation environment for validating the radiator heat exchanger. The harness supplies ambient air temperature, fan airflow, and hot coolant at the inlet.</p>
 <p>Parameters are initialized by <tt>RadiatorTestHarnessParams.m</tt>, which loads <tt>RadiatorParams.m</tt>.</p>
-<p>The harness scopes capture:</p>
-<div>
-<ul>
-<li>
-<b>Coolant Inlet Temperature</b> - Hot coolant temperature entering the radiator.</li>
-<li>
-<b>Coolant Outlet Temperature</b> - Cooled coolant temperature leaving the radiator.</li>
-</ul>
-</div>
+<p>
+<b>Harness:</b> <a href="matlab:open_system('RadiatorTestHarness')">RadiatorTestHarness.slx</a>
+</p>
+<p>
+<b>Parameters:</b> <a href="matlab:edit('RadiatorTestHarnessParams.m')">RadiatorTestHarnessParams.m</a>
+</p>
+<p>
+<b>Test Case:</b> <a href="matlab:edit('RadiatorPassTests.m')">RadiatorPassTests.m</a>
+</p>
+<p>
+<b>Fidelity:</b> Radiator</p>
 <h2 id="2">Setup</h2>
+<p>Load parameters and open the test harness.</p>
 <pre class="codeinput">model = <span class="string">'RadiatorTestHarness'</span>;
 RadiatorTestHarnessParams;
 load_system(model)
@@ -149,27 +146,25 @@ disp(results)
 ##### SOURCE BEGIN #####
 %% Radiator Test Harness
 % Standalone test environment for the Radiator component.
-%
-% *Harness:* |RadiatorTestHarness.slx|
-%
-% *Test Case:* |RadiatorPassTests.m|
 
 %% Overview
 % The RadiatorTestHarness provides a standalone simulation environment for
 % validating the radiator heat exchanger. The harness supplies ambient air
-% temperature, fan airflow, and hot coolant at the inlet. Scoped outputs
-% capture coolant temperatures at the inlet and outlet to verify heat
-% rejection performance.
+% temperature, fan airflow, and hot coolant at the inlet.
 %
 % Parameters are initialized by |RadiatorTestHarnessParams.m|, which loads
 % |RadiatorParams.m|.
 %
-% The harness scopes capture:
+% *Harness:* <matlab:open_system('RadiatorTestHarness') RadiatorTestHarness.slx>
 %
-% * *Coolant Inlet Temperature* - Hot coolant temperature entering the radiator.
-% * *Coolant Outlet Temperature* - Cooled coolant temperature leaving the radiator.
+% *Parameters:* <matlab:edit('RadiatorTestHarnessParams.m') RadiatorTestHarnessParams.m>
+%
+% *Test Case:* <matlab:edit('RadiatorPassTests.m') RadiatorPassTests.m>
+%
+% *Fidelity:* Radiator
 
 %% Setup
+% Load parameters and open the test harness.
 
 model = 'RadiatorTestHarness';
 RadiatorTestHarnessParams;

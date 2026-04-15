@@ -1,18 +1,20 @@
 %% ControllerFRM
 % Fast-running model (FRM) variant of the vehicle controller with
 % simplified control logic for reduced simulation time.
-%
-% *Model:* |ControllerFRM.slx|
-%
-% *Parameters:* |ControllerParams.m|
-%
-% *Thermal Coupling:* No
 
 %% Overview
 % The ControllerFRM uses simplified control logic to reduce simulation time
 % while preserving the same port interface as the full Controller. It is
 % suitable for parameter sweeps and quick trade studies where controller
 % fidelity is secondary to simulation throughput.
+%
+% *Model:* <matlab:open_system('ControllerFRM') ControllerFRM.slx>
+%
+% *Parameters:* <matlab:edit('ControllerFRMParams.m') ControllerFRMParams.m>
+%
+% *Thermal Coupling:* No
+
+%% Open Model
 
 open_system('ControllerFRM')
 

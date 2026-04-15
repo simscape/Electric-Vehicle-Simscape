@@ -9,7 +9,7 @@ To make changes, update the MATLAB code and republish this document.
 <title>HeaterDummy</title>
 <meta name="generator" content="MATLAB 24.2">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2026-04-14">
+<meta name="DC.date" content="2026-04-16">
 <meta name="DC.source" content="HeaterDummyDescription.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
@@ -107,10 +107,10 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <p>The HeaterDummy block is a minimal stub that maintains the same port interface as the full Heater model. It draws a fixed electrical current from the HV bus when the heater is active (<tt>cmdHeater = 1</tt>) and zero current when off. Coolant ports A and B are connected through a simple pipe so the coolant loop stays closed, but no heat is exchanged.</p>
 <p>This fidelity is used when the heater subsystem is not the focus of the study but the system model needs a connected heater block to simulate without errors.</p>
 <p>
-<b>Model:</b> <tt>HeaterDummy.slx</tt>
+<b>Model:</b> <a href="matlab:open_system('HeaterDummy')">HeaterDummy.slx</a>
 </p>
 <p>
-<b>Parameters:</b> <tt>HeaterDummyParams.m</tt>
+<b>Parameters:</b> <a href="matlab:edit('HeaterDummyParams.m')">HeaterDummyParams.m</a>
 </p>
 <p>
 <b>Thermal Coupling:</b> No (coolant pass-through, no heat exchange)</p>
@@ -187,9 +187,9 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 % the study but the system model needs a connected heater block to
 % simulate without errors.
 %
-% *Model:* |HeaterDummy.slx|
+% *Model:* <matlab:open_system('HeaterDummy') HeaterDummy.slx>
 %
-% *Parameters:* |HeaterDummyParams.m|
+% *Parameters:* <matlab:edit('HeaterDummyParams.m') HeaterDummyParams.m>
 %
 % *Thermal Coupling:* No (coolant pass-through, no heat exchange)
 

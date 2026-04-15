@@ -9,7 +9,7 @@ To make changes, update the MATLAB code and republish this document.
 <title>Pump Test Harness</title>
 <meta name="generator" content="MATLAB 24.2">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2026-04-13">
+<meta name="DC.date" content="2026-04-16">
 <meta name="DC.source" content="PumpTestHarnessDescription.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
@@ -79,12 +79,6 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <h1>Pump Test Harness</h1>
 <!--introduction-->
 <p>Standalone test environment for the Pump component.</p>
-<p>
-<b>Harness:</b> <tt>PumpTestHarness.slx</tt>
-</p>
-<p>
-<b>Test Case:</b> <tt>PumpPassTests.m</tt>
-</p>
 <!--/introduction-->
 <h2>Contents</h2>
 <div>
@@ -107,22 +101,21 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 </ul>
 </div>
 <h2 id="1">Overview</h2>
-<p>The PumpTestHarness provides a standalone simulation environment for validating the coolant circulation pump. The harness supplies a DC voltage input to drive the pump and provides coolant boundary conditions at the inlet and outlet. Scoped outputs capture pump current draw and coolant temperatures.</p>
+<p>The PumpTestHarness provides a standalone simulation environment for validating the coolant circulation pump. The harness supplies a DC voltage input to drive the pump and provides coolant boundary conditions at the inlet and outlet.</p>
 <p>Parameters are initialized by <tt>PumpTestHarnessParams.m</tt>, which loads <tt>PumpParams.m</tt>.</p>
-<p>The harness scopes capture:</p>
-<div>
-<ul>
-<li>
-<b>Pump Current</b> - Electrical current drawn by the pump motor.</li>
-<li>
-<b>DC Input Voltage</b> - Supply voltage to the pump.</li>
-<li>
-<b>Coolant Inlet Temperature</b> - Coolant temperature entering the pump.</li>
-<li>
-<b>Coolant Outlet Temperature</b> - Coolant temperature leaving the pump.</li>
-</ul>
-</div>
+<p>
+<b>Harness:</b> <a href="matlab:open_system('PumpTestHarness')">PumpTestHarness.slx</a>
+</p>
+<p>
+<b>Parameters:</b> <a href="matlab:edit('PumpTestHarnessParams.m')">PumpTestHarnessParams.m</a>
+</p>
+<p>
+<b>Test Case:</b> <a href="matlab:edit('PumpPassTests.m')">PumpPassTests.m</a>
+</p>
+<p>
+<b>Fidelity:</b> Pump</p>
 <h2 id="2">Setup</h2>
+<p>Load parameters and open the test harness.</p>
 <pre class="codeinput">model = <span class="string">'PumpTestHarness'</span>;
 PumpTestHarnessParams;
 load_system(model)
@@ -153,29 +146,26 @@ disp(results)
 ##### SOURCE BEGIN #####
 %% Pump Test Harness
 % Standalone test environment for the Pump component.
-%
-% *Harness:* |PumpTestHarness.slx|
-%
-% *Test Case:* |PumpPassTests.m|
 
 %% Overview
 % The PumpTestHarness provides a standalone simulation environment for
 % validating the coolant circulation pump. The harness supplies a DC
 % voltage input to drive the pump and provides coolant boundary conditions
-% at the inlet and outlet. Scoped outputs capture pump current draw and
-% coolant temperatures.
+% at the inlet and outlet.
 %
 % Parameters are initialized by |PumpTestHarnessParams.m|, which loads
 % |PumpParams.m|.
 %
-% The harness scopes capture:
+% *Harness:* <matlab:open_system('PumpTestHarness') PumpTestHarness.slx>
 %
-% * *Pump Current* - Electrical current drawn by the pump motor.
-% * *DC Input Voltage* - Supply voltage to the pump.
-% * *Coolant Inlet Temperature* - Coolant temperature entering the pump.
-% * *Coolant Outlet Temperature* - Coolant temperature leaving the pump.
+% *Parameters:* <matlab:edit('PumpTestHarnessParams.m') PumpTestHarnessParams.m>
+%
+% *Test Case:* <matlab:edit('PumpPassTests.m') PumpPassTests.m>
+%
+% *Fidelity:* Pump
 
 %% Setup
+% Load parameters and open the test harness.
 
 model = 'PumpTestHarness';
 PumpTestHarnessParams;

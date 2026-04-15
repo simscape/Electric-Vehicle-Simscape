@@ -9,7 +9,7 @@ To make changes, update the MATLAB code and republish this document.
 <title>Controller</title>
 <meta name="generator" content="MATLAB 24.2">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2026-04-13">
+<meta name="DC.date" content="2026-04-16">
 <meta name="DC.source" content="ControllerDescription.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
@@ -79,14 +79,6 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <h1>Controller</h1>
 <!--introduction-->
 <p>Full vehicle controller with torque control, motor torque split, and regenerative braking for the BEV system model.</p>
-<p>
-<b>Model:</b> <tt>Controller.slx</tt>
-</p>
-<p>
-<b>Parameters:</b> <tt>ControllerParams.m</tt>
-</p>
-<p>
-<b>Thermal Coupling:</b> No</p>
 <!--/introduction-->
 <h2>Contents</h2>
 <div>
@@ -95,24 +87,36 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <a href="#1">Overview</a>
 </li>
 <li>
-<a href="#2">Ports</a>
+<a href="#2">Open Model</a>
 </li>
 <li>
-<a href="#3">Workflows</a>
+<a href="#3">Ports</a>
 </li>
 <li>
-<a href="#4">Parameters</a>
+<a href="#4">Workflows</a>
 </li>
 <li>
-<a href="#5">See Also</a>
+<a href="#5">Parameters</a>
+</li>
+<li>
+<a href="#6">See Also</a>
 </li>
 </ul>
 </div>
 <h2 id="1">Overview</h2>
 <p>The Controller implements torque control with motor torque split between front and rear axles, AWD/FWD mode selection, regenerative braking logic, and drive-cycle speed tracking. This is the default controller used in the electro-thermal vehicle configuration.</p>
+<p>
+<b>Model:</b> <a href="matlab:open_system('Controller')">Controller.slx</a>
+</p>
+<p>
+<b>Parameters:</b> <a href="matlab:edit('ControllerParams.m')">ControllerParams.m</a>
+</p>
+<p>
+<b>Thermal Coupling:</b> No</p>
+<h2 id="2">Open Model</h2>
 <pre class="codeinput">open_system(<span class="string">'Controller'</span>)
 </pre>
-<img vspace="5" hspace="5" src="../images/ControllerDescription_01.png" alt=""> <h2 id="2">Ports</h2>
+<img vspace="5" hspace="5" src="../images/ControllerDescription_01.png" alt=""> <h2 id="3">Ports</h2>
 <p>
 <b>Inputs</b>
 </p>
@@ -143,9 +147,9 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <b>Battery command</b> - Charge/discharge mode signal.</li>
 </ul>
 </div>
-<h2 id="3">Workflows</h2>
+<h2 id="4">Workflows</h2>
 <p>The Controller is the <b>default vehicle controller</b> selected by <tt>SetupPlantElectroThermal.m</tt> for the VehicleElectroThermal template. It is used in all range estimation workflows (NEDC, WLTC, EPA) and battery sizing workflows. Dashboard parameters (AWD, regen, charging mode) are set by <tt>modelDashboardSetup.m</tt> in the BEV Setup App.</p>
-<h2 id="4">Parameters</h2>
+<h2 id="5">Parameters</h2>
 <p>
 <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
 <tr><th>Name</th><th>Default</th><th>Description</th></tr>
@@ -156,7 +160,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 </table>
 </p>
 <p>See <tt>ControllerParams.m</tt> for a complete list.</p>
-<h2 id="5">See Also</h2>
+<h2 id="6">See Also</h2>
 <div>
 <ul>
 <li>
@@ -180,18 +184,20 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 %% Controller
 % Full vehicle controller with torque control, motor torque split, and
 % regenerative braking for the BEV system model.
-%
-% *Model:* |Controller.slx|
-%
-% *Parameters:* |ControllerParams.m|
-%
-% *Thermal Coupling:* No
 
 %% Overview
 % The Controller implements torque control with motor torque split between
 % front and rear axles, AWD/FWD mode selection, regenerative braking logic,
 % and drive-cycle speed tracking. This is the default controller used in
 % the electro-thermal vehicle configuration.
+%
+% *Model:* <matlab:open_system('Controller') Controller.slx>
+%
+% *Parameters:* <matlab:edit('ControllerParams.m') ControllerParams.m>
+%
+% *Thermal Coupling:* No
+
+%% Open Model
 
 open_system('Controller')
 

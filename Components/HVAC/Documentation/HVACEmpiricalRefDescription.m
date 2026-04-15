@@ -10,9 +10,9 @@
 % source represents the HVAC electrical power draw from the HV bus, and an
 % energy monitoring block tracks total HVAC consumption.
 %
-% *Model:* |HVACEmpiricalRef.slx|
+% *Model:* <matlab:open_system('HVACEmpiricalRef') HVACEmpiricalRef.slx>
 %
-% *Parameters:* |HVACEmpiricalRefParams.m|
+% *Parameters:* <matlab:edit('HVACEmpiricalRefParams.m') HVACEmpiricalRefParams.m>
 %
 % *Thermal Coupling:* No (empirical performance curves, no physical fluid dynamics)
 

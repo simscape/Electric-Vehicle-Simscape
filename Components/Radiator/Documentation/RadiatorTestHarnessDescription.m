@@ -1,26 +1,24 @@
 %% Radiator Test Harness
 % Standalone test environment for the Radiator component.
-%
-% *Harness:* |RadiatorTestHarness.slx|
-%
-% *Test Case:* |RadiatorPassTests.m|
 
 %% Overview
 % The RadiatorTestHarness provides a standalone simulation environment for
 % validating the radiator heat exchanger. The harness supplies ambient air
-% temperature, fan airflow, and hot coolant at the inlet. Scoped outputs
-% capture coolant temperatures at the inlet and outlet to verify heat
-% rejection performance.
+% temperature, fan airflow, and hot coolant at the inlet.
 %
 % Parameters are initialized by |RadiatorTestHarnessParams.m|, which loads
 % |RadiatorParams.m|.
 %
-% The harness scopes capture:
+% *Harness:* <matlab:open_system('RadiatorTestHarness') RadiatorTestHarness.slx>
 %
-% * *Coolant Inlet Temperature* - Hot coolant temperature entering the radiator.
-% * *Coolant Outlet Temperature* - Cooled coolant temperature leaving the radiator.
+% *Parameters:* <matlab:edit('RadiatorTestHarnessParams.m') RadiatorTestHarnessParams.m>
+%
+% *Test Case:* <matlab:edit('RadiatorPassTests.m') RadiatorPassTests.m>
+%
+% *Fidelity:* Radiator
 
 %% Setup
+% Load parameters and open the test harness.
 
 model = 'RadiatorTestHarness';
 RadiatorTestHarnessParams;

@@ -9,7 +9,7 @@ To make changes, update the MATLAB code and republish this document.
 <title>HVACEmpiricalRef</title>
 <meta name="generator" content="MATLAB 24.2">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2026-04-14">
+<meta name="DC.date" content="2026-04-16">
 <meta name="DC.source" content="HVACEmpiricalRefDescription.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
@@ -106,10 +106,10 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <h2 id="1">Overview</h2>
 <p>The HVACEmpiricalRef block models the HVAC system using empirical performance curves rather than physical refrigerant dynamics. Cabin blower, PTC heater, and compressor are driven by control commands, and their performance is captured through lookup tables. A controlled current source represents the HVAC electrical power draw from the HV bus, and an energy monitoring block tracks total HVAC consumption.</p>
 <p>
-<b>Model:</b> <tt>HVACEmpiricalRef.slx</tt>
+<b>Model:</b> <a href="matlab:open_system('HVACEmpiricalRef')">HVACEmpiricalRef.slx</a>
 </p>
 <p>
-<b>Parameters:</b> <tt>HVACEmpiricalRefParams.m</tt>
+<b>Parameters:</b> <a href="matlab:edit('HVACEmpiricalRefParams.m')">HVACEmpiricalRefParams.m</a>
 </p>
 <p>
 <b>Thermal Coupling:</b> No (empirical performance curves, no physical fluid dynamics)</p>
@@ -189,9 +189,9 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 % source represents the HVAC electrical power draw from the HV bus, and an
 % energy monitoring block tracks total HVAC consumption.
 %
-% *Model:* |HVACEmpiricalRef.slx|
+% *Model:* <matlab:open_system('HVACEmpiricalRef') HVACEmpiricalRef.slx>
 %
-% *Parameters:* |HVACEmpiricalRefParams.m|
+% *Parameters:* <matlab:edit('HVACEmpiricalRefParams.m') HVACEmpiricalRefParams.m>
 %
 % *Thermal Coupling:* No (empirical performance curves, no physical fluid dynamics)
 

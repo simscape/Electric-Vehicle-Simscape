@@ -1,11 +1,5 @@
 %% BMSSoCEKF
 % BMS variant with extended Kalman filter (EKF) SOC estimation.
-%
-% *Model:* |SOC/BMSSoCEKF.slx|
-%
-% *Parameters:* |BMSParams.m|
-%
-% *Thermal Coupling:* Yes
 
 %% Overview
 % The BMSSoCEKF combines a battery equivalent-circuit model with noisy
@@ -13,6 +7,14 @@
 % improved accuracy compared to direct coulomb counting. The extended
 % Kalman filter provides noise rejection and corrects for model
 % uncertainties during the estimation process.
+%
+% *Model:* |SOC/BMSSoCEKF.slx|
+%
+% *Parameters:* <matlab:edit('BMSSoCEKFParams.m') BMSSoCEKFParams.m>
+%
+% *Thermal Coupling:* Yes
+
+%% Open Model
 
 open_system('BMSSoCEKF')
 

@@ -9,9 +9,9 @@
 % but the system model needs a connected charger block to simulate without
 % errors.
 %
-% *Model:* |ChargerDummy.slx|
+% *Model:* <matlab:open_system('ChargerDummy') ChargerDummy.slx>
 %
-% *Parameters:* |ChargerDummyParams.m|
+% *Parameters:* <matlab:edit('ChargerDummyParams.m') ChargerDummyParams.m>
 %
 % *Thermal Coupling:* None
 
@@ -39,5 +39,6 @@ open_system('ChargerDummy')
 % * <ChargerDescription.html Charger>
 % * <ChargerThermalDescription.html ChargerThermal>
 % * <ChargerThermalDummyDescription.html ChargerThermalDummy>
+% * <ChargerTestHarnessDescription.html Charger Test Harness>
 
 % Copyright 2022 - 2025 The MathWorks, Inc.

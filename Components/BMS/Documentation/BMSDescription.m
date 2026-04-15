@@ -1,12 +1,6 @@
 %% BMS
 % Battery management system with voltage, current, and thermal fault
 % monitoring for the BEV high-voltage battery.
-%
-% *Model:* |BMS.slx|
-%
-% *Parameters:* |BMSParams.m|
-%
-% *Thermal Coupling:* Yes (temperature monitoring and thermal fault limits)
 
 %% Overview
 % The BMS monitors cell voltages, currents, and temperatures against
@@ -14,6 +8,14 @@
 % commands, provides SOC estimation, and raises fault flags when operating
 % limits are exceeded. Thermal monitoring includes coolant switch-on/off
 % temperature thresholds for thermal management coordination.
+%
+% *Model:* <matlab:open_system('BMS') BMS.slx>
+%
+% *Parameters:* <matlab:edit('BMSParams.m') BMSParams.m>
+%
+% *Thermal Coupling:* Yes (temperature monitoring and thermal fault limits)
+
+%% Open Model
 
 open_system('BMS')
 

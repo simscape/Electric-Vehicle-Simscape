@@ -9,7 +9,7 @@ To make changes, update the MATLAB code and republish this document.
 <title>MotorDriveGearTh</title>
 <meta name="generator" content="MATLAB 24.2">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2026-04-13">
+<meta name="DC.date" content="2026-04-16">
 <meta name="DC.source" content="MotorDriveGearThDescription.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
@@ -107,10 +107,10 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <p>The MotorDriveGearTh block extends MotorDriveGear with full thermal coupling. The motor plant has electrical, mechanical, and thermal ports. A coolant jacket manages motor temperature, and inverter thermal dynamics capture semiconductor heating. The gear block transmits torque to the axle. This is the default motor fidelity for electro-thermal vehicle configurations.</p>
 <p>The core motor model is provided by the <b>EmotorLib</b> library (<tt>Library/EmotorLib.slx</tt>). See <a href="EmotorLibDescription.html">EmotorLib</a> for details on the underlying PMSM model and loss map.</p>
 <p>
-<b>Model:</b> <tt>MotorDriveGearTh.slx</tt>
+<b>Model:</b> <a href="matlab:open_system('MotorDriveGearTh')">MotorDriveGearTh.slx</a>
 </p>
 <p>
-<b>Parameters:</b> <tt>MotorDriveGearThParams.m</tt>
+<b>Parameters:</b> <a href="matlab:edit('MotorDriveGearThParams.m')">MotorDriveGearThParams.m</a>
 </p>
 <p>
 <b>Thermal Coupling:</b> Yes (motor windings, inverter, coolant jacket)</p>
@@ -204,9 +204,9 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 % (|Library/EmotorLib.slx|). See <EmotorLibDescription.html EmotorLib> for
 % details on the underlying PMSM model and loss map.
 %
-% *Model:* |MotorDriveGearTh.slx|
+% *Model:* <matlab:open_system('MotorDriveGearTh') MotorDriveGearTh.slx>
 %
-% *Parameters:* |MotorDriveGearThParams.m|
+% *Parameters:* <matlab:edit('MotorDriveGearThParams.m') MotorDriveGearThParams.m>
 %
 % *Thermal Coupling:* Yes (motor windings, inverter, coolant jacket)
 

@@ -9,7 +9,7 @@ To make changes, update the MATLAB code and republish this document.
 <title>Pump</title>
 <meta name="generator" content="MATLAB 24.2">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2026-04-14">
+<meta name="DC.date" content="2026-04-16">
 <meta name="DC.source" content="PumpDescription.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
@@ -79,14 +79,6 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <h1>Pump</h1>
 <!--introduction-->
 <p>Coolant circulation pump for the BEV thermal management system.</p>
-<p>
-<b>Model:</b> <tt>Pump.slx</tt>
-</p>
-<p>
-<b>Parameters:</b> <tt>PumpParams.m</tt>
-</p>
-<p>
-<b>Thermal Coupling:</b> N/A (supporting thermal infrastructure component)</p>
 <!--/introduction-->
 <h2>Contents</h2>
 <div>
@@ -95,24 +87,36 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <a href="#1">Overview</a>
 </li>
 <li>
-<a href="#2">Ports</a>
+<a href="#2">Open Model</a>
 </li>
 <li>
-<a href="#3">Workflows</a>
+<a href="#3">Ports</a>
 </li>
 <li>
-<a href="#4">Parameters</a>
+<a href="#4">Workflows</a>
 </li>
 <li>
-<a href="#5">See Also</a>
+<a href="#5">Mask Parameters</a>
+</li>
+<li>
+<a href="#6">See Also</a>
 </li>
 </ul>
 </div>
 <h2 id="1">Overview</h2>
 <p>The Pump block is a volumetric displacement pump that circulates coolant through the BEV thermal management loop. The pump speed is controlled by the thermal management controller (via the PumpDriver) and determines the coolant flow rate through the battery, motor drive, charger, chiller, heater, and radiator subsystems.</p>
+<p>
+<b>Model:</b> <a href="matlab:open_system('Pump')">Pump.slx</a>
+</p>
+<p>
+<b>Parameters:</b> <a href="matlab:edit('PumpParams.m')">PumpParams.m</a>
+</p>
+<p>
+<b>Thermal Coupling:</b> N/A (supporting thermal infrastructure component)</p>
+<h2 id="2">Open Model</h2>
 <pre class="codeinput">open_system(<span class="string">'Pump'</span>)
 </pre>
-<img vspace="5" hspace="5" src="../images/PumpDescription_01.png" alt=""> <h2 id="2">Ports</h2>
+<img vspace="5" hspace="5" src="../images/PumpDescription_01.png" alt=""> <h2 id="3">Ports</h2>
 <p>
 <b>Inputs</b>
 </p>
@@ -135,19 +139,19 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <b>Pump power</b> - Mechanical power consumed.</li>
 </ul>
 </div>
-<h2 id="3">Workflows</h2>
-<p>The Pump block is part of the coolant loop in the <b>VehicleElectroThermal</b> template. It works in conjunction with the PumpDriver component, which translates thermal controller commands into pump speed. Parameters are loaded by <tt>BEVThermalParams.m</tt>.</p>
-<h2 id="4">Parameters</h2>
+<h2 id="4">Workflows</h2>
+<p>The Pump block is part of the coolant loop in the <b>VehicleElectroThermal</b> template. It works in conjunction with the PumpDriver component, which translates thermal controller commands into pump speed. Parameters are set via the model mask, with defaults from <tt>PumpParams.m</tt>.</p>
+<h2 id="5">Mask Parameters</h2>
+<p>The model exposes the following mask parameters. Defaults are read from the <tt>pump</tt> struct defined in <tt>PumpParams.m</tt>.</p>
 <p>
 <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
-<tr><th>Name</th><th>Default</th><th>Description</th></tr>
-<tr><td>Pump displacement</td><td>0.02 L/rev</td><td>Coolant pump volumetric displacement</td></tr>
-<tr><td>Max pump speed</td><td>1000 rpm</td><td>Maximum pump shaft speed</td></tr>
-<tr><td>Coolant pipe diameter</td><td>0.019 m</td><td>Diameter of coolant piping</td></tr>
+<tr><th>Mask Variable</th><th>Default Source</th><th>Unit</th><th>Description</th></tr>
+<tr><td><tt>pump_displacement</tt></td><td><tt>pump.pump_displacement</tt></td><td>L/rev</td><td>Coolant pump volumetric displacement</td></tr>
+<tr><td><tt>pump_speed_max</tt></td><td><tt>pump.pump_speed_max</tt></td><td>rpm</td><td>Maximum pump shaft speed</td></tr>
+<tr><td><tt>coolant_pipe_D</tt></td><td><tt>pump.coolant_pipe_D</tt></td><td>m</td><td>Diameter of coolant piping</td></tr>
 </table>
 </p>
-<p>See <tt>PumpParams.m</tt> for a complete list.</p>
-<h2 id="5">See Also</h2>
+<h2 id="6">See Also</h2>
 <div>
 <ul>
 <li>
@@ -167,12 +171,6 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 ##### SOURCE BEGIN #####
 %% Pump
 % Coolant circulation pump for the BEV thermal management system.
-%
-% *Model:* |Pump.slx|
-%
-% *Parameters:* |PumpParams.m|
-%
-% *Thermal Coupling:* N/A (supporting thermal infrastructure component)
 
 %% Overview
 % The Pump block is a volumetric displacement pump that circulates coolant
@@ -180,6 +178,14 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 % the thermal management controller (via the PumpDriver) and determines the
 % coolant flow rate through the battery, motor drive, charger, chiller,
 % heater, and radiator subsystems.
+%
+% *Model:* <matlab:open_system('Pump') Pump.slx>
+%
+% *Parameters:* <matlab:edit('PumpParams.m') PumpParams.m>
+%
+% *Thermal Coupling:* N/A (supporting thermal infrastructure component)
+
+%% Open Model
 
 open_system('Pump')
 
@@ -198,20 +204,20 @@ open_system('Pump')
 % The Pump block is part of the coolant loop in the *VehicleElectroThermal*
 % template. It works in conjunction with the PumpDriver component, which
 % translates thermal controller commands into pump speed. Parameters are
-% loaded by |BEVThermalParams.m|.
+% set via the model mask, with defaults from |PumpParams.m|.
 
-%% Parameters
+%% Mask Parameters
+% The model exposes the following mask parameters. Defaults are read from
+% the |pump| struct defined in |PumpParams.m|.
 %
 % <html>
 % <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
-% <tr><th>Name</th><th>Default</th><th>Description</th></tr>
-% <tr><td>Pump displacement</td><td>0.02 L/rev</td><td>Coolant pump volumetric displacement</td></tr>
-% <tr><td>Max pump speed</td><td>1000 rpm</td><td>Maximum pump shaft speed</td></tr>
-% <tr><td>Coolant pipe diameter</td><td>0.019 m</td><td>Diameter of coolant piping</td></tr>
+% <tr><th>Mask Variable</th><th>Default Source</th><th>Unit</th><th>Description</th></tr>
+% <tr><td><tt>pump_displacement</tt></td><td><tt>pump.pump_displacement</tt></td><td>L/rev</td><td>Coolant pump volumetric displacement</td></tr>
+% <tr><td><tt>pump_speed_max</tt></td><td><tt>pump.pump_speed_max</tt></td><td>rpm</td><td>Maximum pump shaft speed</td></tr>
+% <tr><td><tt>coolant_pipe_D</tt></td><td><tt>pump.coolant_pipe_D</tt></td><td>m</td><td>Diameter of coolant piping</td></tr>
 % </table>
 % </html>
-%
-% See |PumpParams.m| for a complete list.
 
 %% See Also
 % * <PumpDummyDescription.html PumpDummy>

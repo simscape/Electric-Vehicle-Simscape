@@ -9,7 +9,7 @@ To make changes, update the MATLAB code and republish this document.
 <title>Charger</title>
 <meta name="generator" content="MATLAB 24.2">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2026-04-15">
+<meta name="DC.date" content="2026-04-16">
 <meta name="DC.source" content="ChargerDescription.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
@@ -106,10 +106,10 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <h2 id="1">Overview</h2>
 <p>The Charger block implements a CC-CV charging algorithm that generates a charging current command and applies it to the HV bus. The controller transitions from constant-current to constant-voltage mode based on battery cell voltage feedback. No thermal dynamics are modeled, making this fidelity suitable for fast electrical-only charging studies.</p>
 <p>
-<b>Model:</b> <tt>Charger.slx</tt>
+<b>Model:</b> <a href="matlab:open_system('Charger')">Charger.slx</a>
 </p>
 <p>
-<b>Parameters:</b> <tt>ChargerParams.m</tt>
+<b>Parameters:</b> <a href="matlab:edit('ChargerParams.m')">ChargerParams.m</a>
 </p>
 <p>
 <b>Thermal Coupling:</b> None</p>
@@ -189,9 +189,9 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 % battery cell voltage feedback. No thermal dynamics are modeled, making
 % this fidelity suitable for fast electrical-only charging studies.
 %
-% *Model:* |Charger.slx|
+% *Model:* <matlab:open_system('Charger') Charger.slx>
 %
-% *Parameters:* |ChargerParams.m|
+% *Parameters:* <matlab:edit('ChargerParams.m') ChargerParams.m>
 %
 % *Thermal Coupling:* None
 

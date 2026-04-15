@@ -13,9 +13,9 @@
 % the study but the system model needs a connected pump block to
 % simulate without errors.
 %
-% *Model:* |PumpDummy.slx|
+% *Model:* <matlab:open_system('PumpDummy') PumpDummy.slx>
 %
-% *Parameters:* |PumpDummyParams.m|
+% *Parameters:* <matlab:edit('PumpDummyParams.m') PumpDummyParams.m>
 %
 % *Thermal Coupling:* No (coolant pass-through, no active pumping)
 
@@ -41,19 +41,18 @@ open_system('PumpDummy')
 % The PumpDummy block is a placeholder variant for integration testing
 % or fast simulations. It can replace the full Pump in the
 % *VehicleElectroThermal* template without breaking the coolant loop.
-% Parameters are loaded by |PumpDummyParams.m|.
+% Parameters are set via the model mask, with defaults from |PumpDummyParams.m|.
 
-%% Parameters
+%% Mask Parameters
+% The model exposes the following mask parameters. Defaults are read from
+% the |pump| struct defined in |PumpDummyParams.m|.
 %
 % <html>
 % <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
-% <tr><th>Name</th><th>Default</th><th>Description</th></tr>
-% <tr><td>Maximum pump current</td><td>10 A</td><td>Fixed current draw at full command</td></tr>
-% <tr><td>Coolant pipe diameter</td><td>0.019 m</td><td>Inner diameter of coolant piping (pass-through)</td></tr>
+% <tr><th>Mask Variable</th><th>Default Source</th><th>Unit</th><th>Description</th></tr>
+% <tr><td><tt>pumpMaxCurrent</tt></td><td><tt>pump.pumpMaxCurrent</tt></td><td>A</td><td>Fixed current draw at full command</td></tr>
 % </table>
 % </html>
-%
-% See |PumpDummyParams.m| for a complete list of parameters.
 
 %% See Also
 % * <PumpDescription.html Pump>

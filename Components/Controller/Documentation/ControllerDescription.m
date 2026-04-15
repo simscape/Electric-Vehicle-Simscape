@@ -1,18 +1,20 @@
 %% Controller
 % Full vehicle controller with torque control, motor torque split, and
 % regenerative braking for the BEV system model.
-%
-% *Model:* |Controller.slx|
-%
-% *Parameters:* |ControllerParams.m|
-%
-% *Thermal Coupling:* No
 
 %% Overview
 % The Controller implements torque control with motor torque split between
 % front and rear axles, AWD/FWD mode selection, regenerative braking logic,
 % and drive-cycle speed tracking. This is the default controller used in
 % the electro-thermal vehicle configuration.
+%
+% *Model:* <matlab:open_system('Controller') Controller.slx>
+%
+% *Parameters:* <matlab:edit('ControllerParams.m') ControllerParams.m>
+%
+% *Thermal Coupling:* No
+
+%% Open Model
 
 open_system('Controller')
 

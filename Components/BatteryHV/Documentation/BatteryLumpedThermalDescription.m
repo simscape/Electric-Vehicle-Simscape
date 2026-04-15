@@ -9,9 +9,9 @@
 % thermal management loop. This fidelity balances simulation speed with
 % basic thermal response.
 %
-% *Model:* |BatteryLumpedThermal.slx|
+% *Model:* <matlab:open_system('BatteryLumpedThermal') BatteryLumpedThermal.slx>
 %
-% *Parameters:* |BatteryLumpedThermalParams.m|
+% *Parameters:* <matlab:edit('BatteryLumpedThermalParams.m') BatteryLumpedThermalParams.m>
 %
 % *Thermal Coupling:* Yes (single thermal mass, coolant port)
 
@@ -60,5 +60,6 @@ open_system('BatteryLumpedThermal')
 %% See Also
 % * <BatteryLumpedDescription.html BatteryLumped>
 % * <BatteryTableBasedDescription.html BatteryTableBased>
+% * <BatteryTestHarnessDescription.html Battery Test Harness>
 
 % Copyright 2022 - 2025 The MathWorks, Inc.

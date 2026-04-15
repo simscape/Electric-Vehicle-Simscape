@@ -9,9 +9,9 @@
 % battery cell voltage feedback. No thermal dynamics are modeled, making
 % this fidelity suitable for fast electrical-only charging studies.
 %
-% *Model:* |Charger.slx|
+% *Model:* <matlab:open_system('Charger') Charger.slx>
 %
-% *Parameters:* |ChargerParams.m|
+% *Parameters:* <matlab:edit('ChargerParams.m') ChargerParams.m>
 %
 % *Thermal Coupling:* None
 

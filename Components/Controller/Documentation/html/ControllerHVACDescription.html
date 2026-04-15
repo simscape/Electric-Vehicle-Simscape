@@ -9,7 +9,7 @@ To make changes, update the MATLAB code and republish this document.
 <title>ControllerHVAC</title>
 <meta name="generator" content="MATLAB 24.2">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2026-04-13">
+<meta name="DC.date" content="2026-04-16">
 <meta name="DC.source" content="ControllerHVACDescription.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
@@ -79,14 +79,6 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <h1>ControllerHVAC</h1>
 <!--introduction-->
 <p>Controller variant with integrated HVAC thermal management control logic in addition to standard drivetrain torque control.</p>
-<p>
-<b>Model:</b> <tt>ControllerHVAC.slx</tt>
-</p>
-<p>
-<b>Parameters:</b> <tt>ControllerParams.m</tt>
-</p>
-<p>
-<b>Thermal Coupling:</b> No</p>
 <!--/introduction-->
 <h2>Contents</h2>
 <div>
@@ -95,24 +87,36 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <a href="#1">Overview</a>
 </li>
 <li>
-<a href="#2">Ports</a>
+<a href="#2">Open Model</a>
 </li>
 <li>
-<a href="#3">Workflows</a>
+<a href="#3">Ports</a>
 </li>
 <li>
-<a href="#4">Parameters</a>
+<a href="#4">Workflows</a>
 </li>
 <li>
-<a href="#5">See Also</a>
+<a href="#5">Parameters</a>
+</li>
+<li>
+<a href="#6">See Also</a>
 </li>
 </ul>
 </div>
 <h2 id="1">Overview</h2>
 <p>The ControllerHVAC adds HVAC thermal management control logic on top of the standard drivetrain torque control. It coordinates cabin temperature setpoints, blower commands, and compressor operation alongside motor torque management. This variant is used in vehicle configurations that include active HVAC thermal models.</p>
+<p>
+<b>Model:</b> <a href="matlab:open_system('ControllerHVAC')">ControllerHVAC.slx</a>
+</p>
+<p>
+<b>Parameters:</b> <a href="matlab:edit('ControllerHVACParams.m')">ControllerHVACParams.m</a>
+</p>
+<p>
+<b>Thermal Coupling:</b> No</p>
+<h2 id="2">Open Model</h2>
 <pre class="codeinput">open_system(<span class="string">'ControllerHVAC'</span>)
 </pre>
-<img vspace="5" hspace="5" src="../images/ControllerHVACDescription_01.png" alt=""> <h2 id="2">Ports</h2>
+<img vspace="5" hspace="5" src="../images/ControllerHVACDescription_01.png" alt=""> <h2 id="3">Ports</h2>
 <p>
 <b>Inputs</b>
 </p>
@@ -153,12 +157,12 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <b>PTC heater command</b> - Cabin heater enable.</li>
 </ul>
 </div>
-<h2 id="3">Workflows</h2>
+<h2 id="4">Workflows</h2>
 <p>The ControllerHVAC is used in vehicle configurations that include active HVAC thermal models (HVACsimpleTh, HVACThermal). It enables coordinated drivetrain and cabin comfort studies.</p>
-<h2 id="4">Parameters</h2>
+<h2 id="5">Parameters</h2>
 <p>The ControllerHVAC shares the same parameter file as the full Controller.</p>
 <p>See <tt>ControllerParams.m</tt> for a complete list.</p>
-<h2 id="5">See Also</h2>
+<h2 id="6">See Also</h2>
 <div>
 <ul>
 <li>
@@ -182,12 +186,6 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 %% ControllerHVAC
 % Controller variant with integrated HVAC thermal management control logic
 % in addition to standard drivetrain torque control.
-%
-% *Model:* |ControllerHVAC.slx|
-%
-% *Parameters:* |ControllerParams.m|
-%
-% *Thermal Coupling:* No
 
 %% Overview
 % The ControllerHVAC adds HVAC thermal management control logic on top of
@@ -195,6 +193,14 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 % setpoints, blower commands, and compressor operation alongside motor
 % torque management. This variant is used in vehicle configurations that
 % include active HVAC thermal models.
+%
+% *Model:* <matlab:open_system('ControllerHVAC') ControllerHVAC.slx>
+%
+% *Parameters:* <matlab:edit('ControllerHVACParams.m') ControllerHVACParams.m>
+%
+% *Thermal Coupling:* No
+
+%% Open Model
 
 open_system('ControllerHVAC')
 

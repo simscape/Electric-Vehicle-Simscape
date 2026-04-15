@@ -12,9 +12,9 @@
 % the study but the system model needs a connected heater block to
 % simulate without errors.
 %
-% *Model:* |HeaterDummy.slx|
+% *Model:* <matlab:open_system('HeaterDummy') HeaterDummy.slx>
 %
-% *Parameters:* |HeaterDummyParams.m|
+% *Parameters:* <matlab:edit('HeaterDummyParams.m') HeaterDummyParams.m>
 %
 % *Thermal Coupling:* No (coolant pass-through, no heat exchange)
 

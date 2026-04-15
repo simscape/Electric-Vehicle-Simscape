@@ -9,7 +9,7 @@ To make changes, update the MATLAB code and republish this document.
 <title>PumpDriver Test Harness</title>
 <meta name="generator" content="MATLAB 24.2">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2026-04-13">
+<meta name="DC.date" content="2026-04-16">
 <meta name="DC.source" content="PumpDriverTestHarnessDescription.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
@@ -79,12 +79,6 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <h1>PumpDriver Test Harness</h1>
 <!--introduction-->
 <p>Standalone test environment for the PumpDriver component.</p>
-<p>
-<b>Harness:</b> <tt>PumpDriverTestHarness.slx</tt>
-</p>
-<p>
-<b>Test Case:</b> <tt>PumpDriverPassTests.m</tt>
-</p>
 <!--/introduction-->
 <h2>Contents</h2>
 <div>
@@ -107,22 +101,21 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 </ul>
 </div>
 <h2 id="1">Overview</h2>
-<p>The PumpDriverTestHarness provides a standalone simulation environment for validating the pump driver controller. The harness supplies a DC voltage input, coolant boundary conditions, and pump enable signals. Scoped outputs capture voltage levels and coolant temperatures.</p>
+<p>The PumpDriverTestHarness provides a standalone simulation environment for validating the pump driver controller. The harness supplies a DC voltage input, coolant boundary conditions, and pump enable signals.</p>
 <p>Parameters are initialized by <tt>PumpDriverTestHarnessParams.m</tt>, which loads <tt>PumpDriverParams.m</tt>.</p>
-<p>The harness scopes capture:</p>
-<div>
-<ul>
-<li>
-<b>DC Input Voltage</b> - Supply voltage to the pump driver.</li>
-<li>
-<b>DC Output Voltage</b> - Voltage output from the driver.</li>
-<li>
-<b>Coolant Inlet Temperature</b> - Coolant temperature entering the system.</li>
-<li>
-<b>Coolant Outlet Temperature</b> - Coolant temperature leaving the system.</li>
-</ul>
-</div>
+<p>
+<b>Harness:</b> <a href="matlab:open_system('PumpDriverTestHarness')">PumpDriverTestHarness.slx</a>
+</p>
+<p>
+<b>Parameters:</b> <a href="matlab:edit('PumpDriverTestHarnessParams.m')">PumpDriverTestHarnessParams.m</a>
+</p>
+<p>
+<b>Test Case:</b> <a href="matlab:edit('PumpDriverPassTests.m')">PumpDriverPassTests.m</a>
+</p>
+<p>
+<b>Fidelity:</b> PumpDriver</p>
 <h2 id="2">Setup</h2>
+<p>Load parameters and open the test harness.</p>
 <pre class="codeinput">model = <span class="string">'PumpDriverTestHarness'</span>;
 PumpDriverTestHarnessParams;
 load_system(model)
@@ -153,28 +146,25 @@ disp(results)
 ##### SOURCE BEGIN #####
 %% PumpDriver Test Harness
 % Standalone test environment for the PumpDriver component.
-%
-% *Harness:* |PumpDriverTestHarness.slx|
-%
-% *Test Case:* |PumpDriverPassTests.m|
 
 %% Overview
 % The PumpDriverTestHarness provides a standalone simulation environment
 % for validating the pump driver controller. The harness supplies a DC
 % voltage input, coolant boundary conditions, and pump enable signals.
-% Scoped outputs capture voltage levels and coolant temperatures.
 %
 % Parameters are initialized by |PumpDriverTestHarnessParams.m|, which
 % loads |PumpDriverParams.m|.
 %
-% The harness scopes capture:
+% *Harness:* <matlab:open_system('PumpDriverTestHarness') PumpDriverTestHarness.slx>
 %
-% * *DC Input Voltage* - Supply voltage to the pump driver.
-% * *DC Output Voltage* - Voltage output from the driver.
-% * *Coolant Inlet Temperature* - Coolant temperature entering the system.
-% * *Coolant Outlet Temperature* - Coolant temperature leaving the system.
+% *Parameters:* <matlab:edit('PumpDriverTestHarnessParams.m') PumpDriverTestHarnessParams.m>
+%
+% *Test Case:* <matlab:edit('PumpDriverPassTests.m') PumpDriverPassTests.m>
+%
+% *Fidelity:* PumpDriver
 
 %% Setup
+% Load parameters and open the test harness.
 
 model = 'PumpDriverTestHarness';
 PumpDriverTestHarnessParams;

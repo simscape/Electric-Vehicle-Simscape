@@ -1,11 +1,5 @@
 %% Heater Test Harness
 % Standalone test environment for the BatteryHeater component.
-%
-% *Harness:* |HeaterTestHarness.slx|
-%
-% *Test Case:* |BatteryHeaterPassTests.m|
-%
-% *Fidelity:* Heater
 
 %% Overview
 % The HeaterTestHarness provides a standalone simulation environment for
@@ -19,10 +13,13 @@
 % |HeaterTestHarnessParams.m|, which loads heater electrical and coolant
 % system settings from |HeaterParams.m|.
 %
-% The harness contains two scopes:
+% *Harness:* <matlab:open_system('HeaterTestHarness') HeaterTestHarness.slx>
 %
-% * *Electrical* - DC input voltage and heater current draw.
-% * *Thermal* - Coolant inlet and outlet temperatures.
+% *Parameters:* <matlab:edit('HeaterTestHarnessParams.m') HeaterTestHarnessParams.m>
+%
+% *Test Case:* <matlab:edit('BatteryHeaterPassTests.m') BatteryHeaterPassTests.m>
+%
+% *Fidelity:* Heater
 
 %% Setup
 % Load parameters and open the test harness.

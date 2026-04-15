@@ -9,7 +9,7 @@ To make changes, update the MATLAB code and republish this document.
 <title>BatteryTableBased</title>
 <meta name="generator" content="MATLAB 24.2">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2026-04-13">
+<meta name="DC.date" content="2026-04-16">
 <meta name="DC.source" content="BatteryTableBasedDescription.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
@@ -106,10 +106,10 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <h2 id="1">Overview</h2>
 <p>The BatteryTableBased block provides the highest-fidelity battery representation. Electrical characteristics come from lookup tables mapping SOC and temperature to open-circuit voltage and internal resistance. The block includes a thermal port for coupling with the coolant loop and battery heater. Positive and negative relays manage HV bus connectivity.</p>
 <p>
-<b>Model:</b> <tt>BatteryTableBased.slx</tt>
+<b>Model:</b> <a href="matlab:open_system('BatteryTableBased')">BatteryTableBased.slx</a>
 </p>
 <p>
-<b>Parameters:</b> <tt>BatteryTableBasedParams.m</tt>
+<b>Parameters:</b> <a href="matlab:edit('BatteryTableBasedParams.m')">BatteryTableBasedParams.m</a>
 </p>
 <p>
 <b>Thermal Coupling:</b> Yes (lookup-table-driven, coolant port)</p>
@@ -171,6 +171,9 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <li>
 <a href="BatteryLumpedThermalDescription.html">BatteryLumpedThermal</a>
 </li>
+<li>
+<a href="BatteryTestHarnessDescription.html">Battery Test Harness</a>
+</li>
 </ul>
 </div>
 <p class="footer">Copyright 2022 - 2025 The MathWorks, Inc.<br>
@@ -191,9 +194,9 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 % coolant loop and battery heater. Positive and negative relays manage
 % HV bus connectivity.
 %
-% *Model:* |BatteryTableBased.slx|
+% *Model:* <matlab:open_system('BatteryTableBased') BatteryTableBased.slx>
 %
-% *Parameters:* |BatteryTableBasedParams.m|
+% *Parameters:* <matlab:edit('BatteryTableBasedParams.m') BatteryTableBasedParams.m>
 %
 % *Thermal Coupling:* Yes (lookup-table-driven, coolant port)
 
@@ -241,6 +244,7 @@ open_system('BatteryTableBased')
 %% See Also
 % * <BatteryLumpedDescription.html BatteryLumped>
 % * <BatteryLumpedThermalDescription.html BatteryLumpedThermal>
+% * <BatteryTestHarnessDescription.html Battery Test Harness>
 
 % Copyright 2022 - 2025 The MathWorks, Inc.
 

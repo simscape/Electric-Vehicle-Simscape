@@ -8,9 +8,9 @@
 % is the simplest battery fidelity, designed for fast drive-cycle
 % simulations where thermal effects are not required.
 %
-% *Model:* |BatteryLumped.slx|
+% *Model:* <matlab:open_system('BatteryLumped') BatteryLumped.slx>
 %
-% *Parameters:* |BatteryLumpedParams.m|
+% *Parameters:* <matlab:edit('BatteryLumpedParams.m') BatteryLumpedParams.m>
 %
 % *Thermal Coupling:* None
 
@@ -56,5 +56,6 @@ open_system('BatteryLumped')
 %% See Also
 % * <BatteryLumpedThermalDescription.html BatteryLumpedThermal>
 % * <BatteryTableBasedDescription.html BatteryTableBased>
+% * <BatteryTestHarnessDescription.html Battery Test Harness>
 
 % Copyright 2022 - 2025 The MathWorks, Inc.

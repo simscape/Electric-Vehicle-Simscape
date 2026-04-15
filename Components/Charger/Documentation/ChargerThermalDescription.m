@@ -8,9 +8,9 @@
 % through a coolant jacket. This fidelity enables thermal management
 % studies during charging events.
 %
-% *Model:* |ChargerThermal.slx|
+% *Model:* <matlab:open_system('ChargerThermal') ChargerThermal.slx>
 %
-% *Parameters:* |ChargerThermalParams.m|
+% *Parameters:* <matlab:edit('ChargerThermalParams.m') ChargerThermalParams.m>
 %
 % *Thermal Coupling:* Yes (converter thermal mass, coolant jacket)
 

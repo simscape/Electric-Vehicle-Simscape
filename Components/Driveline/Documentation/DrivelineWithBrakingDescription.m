@@ -9,9 +9,9 @@
 % for deceleration studies and blended regenerative/friction braking
 % analysis.
 %
-% *Model:* |DrivelineWithBraking.slx|
+% *Model:* <matlab:open_system('DrivelineWithBraking') DrivelineWithBraking.slx>
 %
-% *Parameters:* |DrivelineWithBrakingParams.m|
+% *Parameters:* <matlab:edit('DrivelineWithBrakingParams.m') DrivelineWithBrakingParams.m>
 %
 % *Thermal Coupling:* None
 

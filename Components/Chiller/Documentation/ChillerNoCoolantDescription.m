@@ -8,9 +8,9 @@
 % model does not include a coolant loop but the chiller power consumption
 % still needs to be accounted for in range and efficiency calculations.
 %
-% *Model:* |ChillerNoCoolant.slx|
+% *Model:* <matlab:open_system('ChillerNoCoolant') ChillerNoCoolant.slx>
 %
-% *Parameters:* |ChillerNoCoolantParams.m|
+% *Parameters:* <matlab:edit('ChillerNoCoolantParams.m') ChillerNoCoolantParams.m>
 %
 % *Thermal Coupling:* None
 

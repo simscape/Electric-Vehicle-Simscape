@@ -1,11 +1,5 @@
 %% BMSSoCDirect
 % BMS variant with direct coulomb-counting SOC estimation.
-%
-% *Model:* |SOC/BMSSoCDirect.slx|
-%
-% *Parameters:* |BMSParams.m|
-%
-% *Thermal Coupling:* Yes
 
 %% Overview
 % The BMSSoCDirect uses direct coulomb-counting to estimate the battery
@@ -13,6 +7,14 @@
 % from a known initial condition. This approach is simple and
 % computationally inexpensive but subject to drift over long simulations
 % without periodic recalibration.
+%
+% *Model:* |SOC/BMSSoCDirect.slx|
+%
+% *Parameters:* <matlab:edit('BMSSoCDirectParams.m') BMSSoCDirectParams.m>
+%
+% *Thermal Coupling:* Yes
+
+%% Open Model
 
 open_system('BMSSoCDirect')
 

@@ -1,11 +1,5 @@
 %% Radiator
 % Cross-flow heat exchanger for the BEV thermal management system.
-%
-% *Model:* |Radiator.slx|
-%
-% *Parameters:* |RadiatorParams.m|
-%
-% *Thermal Coupling:* Yes
 
 %% Overview
 % The Radiator dissipates heat from the coolant loop to the ambient
@@ -15,6 +9,14 @@
 % area. Two fans provide forced-air convection. The radiator connects to
 % the coolant loop downstream of the thermal components (battery, motor,
 % charger) and upstream of the coolant tank and pump.
+%
+% *Model:* <matlab:open_system('Radiator') Radiator.slx>
+%
+% *Parameters:* <matlab:edit('RadiatorParams.m') RadiatorParams.m>
+%
+% *Thermal Coupling:* Yes
+
+%% Open Model
 
 open_system('Radiator')
 

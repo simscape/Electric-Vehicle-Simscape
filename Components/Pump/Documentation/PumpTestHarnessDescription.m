@@ -1,28 +1,25 @@
 %% Pump Test Harness
 % Standalone test environment for the Pump component.
-%
-% *Harness:* |PumpTestHarness.slx|
-%
-% *Test Case:* |PumpPassTests.m|
 
 %% Overview
 % The PumpTestHarness provides a standalone simulation environment for
 % validating the coolant circulation pump. The harness supplies a DC
 % voltage input to drive the pump and provides coolant boundary conditions
-% at the inlet and outlet. Scoped outputs capture pump current draw and
-% coolant temperatures.
+% at the inlet and outlet.
 %
 % Parameters are initialized by |PumpTestHarnessParams.m|, which loads
 % |PumpParams.m|.
 %
-% The harness scopes capture:
+% *Harness:* <matlab:open_system('PumpTestHarness') PumpTestHarness.slx>
 %
-% * *Pump Current* - Electrical current drawn by the pump motor.
-% * *DC Input Voltage* - Supply voltage to the pump.
-% * *Coolant Inlet Temperature* - Coolant temperature entering the pump.
-% * *Coolant Outlet Temperature* - Coolant temperature leaving the pump.
+% *Parameters:* <matlab:edit('PumpTestHarnessParams.m') PumpTestHarnessParams.m>
+%
+% *Test Case:* <matlab:edit('PumpPassTests.m') PumpPassTests.m>
+%
+% *Fidelity:* Pump
 
 %% Setup
+% Load parameters and open the test harness.
 
 model = 'PumpTestHarness';
 PumpTestHarnessParams;

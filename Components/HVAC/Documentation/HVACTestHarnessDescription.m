@@ -1,11 +1,5 @@
 %% HVAC Test Harness
 % Standalone test environment for the HVAC component.
-%
-% *Harness:* |HVACTestHarness.slx|
-%
-% *Test Case:* |HVACPassTests.m|
-%
-% *Fidelity:* HVACEmpiricalRef
 
 %% Overview
 % The HVACTestHarness provides a standalone simulation environment for
@@ -19,8 +13,13 @@
 % on the HV bus. Parameters are initialized by |HVACTestHarnessParams.m|,
 % which loads |HVACEmpiricalRefParams.m|.
 %
-% The harness scope captures the HVAC output signal including cabin
-% temperature and actuator states.
+% *Harness:* <matlab:open_system('HVACTestHarness') HVACTestHarness.slx>
+%
+% *Parameters:* <matlab:edit('HVACTestHarnessParams.m') HVACTestHarnessParams.m>
+%
+% *Test Case:* <matlab:edit('HVACPassTests.m') HVACPassTests.m>
+%
+% *Fidelity:* HVACEmpiricalRef
 
 %% Setup
 % Load parameters and open the test harness.

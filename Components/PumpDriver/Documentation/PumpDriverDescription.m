@@ -1,11 +1,5 @@
 %% PumpDriver
 % Pump driver controller for the BEV thermal management system.
-%
-% *Model:* |PumpDriver.slx|
-%
-% *Parameters:* |PumpDriverParams.m|
-%
-% *Thermal Coupling:* Yes (coolant system interface)
 
 %% Overview
 % The PumpDriver translates thermal management status signals and pump
@@ -13,6 +7,14 @@
 % pump. It determines the required coolant flow rate based on the thermal
 % state of the system (battery temperature, motor temperature, etc.) and
 % drives the Pump component accordingly.
+%
+% *Model:* <matlab:open_system('PumpDriver') PumpDriver.slx>
+%
+% *Parameters:* <matlab:edit('PumpDriverParams.m') PumpDriverParams.m>
+%
+% *Thermal Coupling:* Yes (coolant system interface)
+
+%% Open Model
 
 open_system('PumpDriver')
 

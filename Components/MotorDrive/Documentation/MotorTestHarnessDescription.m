@@ -1,11 +1,5 @@
 %% Motor Test Harness
 % Standalone test environment for the MotorDrive component.
-%
-% *Harness:* |MotorTestHarness.slx|
-%
-% *Test Case:* |MotorDrivePassTests.m|
-%
-% *Fidelity:* MotorDriveGearTh
 
 %% Overview
 % The MotorTestHarness provides a standalone simulation environment for
@@ -19,14 +13,13 @@
 % initialized by |MotorTestHarnessParams.m|, which loads
 % |MotorDriveGearThParams.m| and |InverterMotorDriveParam.m|.
 %
-% The harness scopes capture:
+% *Harness:* <matlab:open_system('MotorTestHarness') MotorTestHarness.slx>
 %
-% * *Motor Current* - Phase current drawn by the motor.
-% * *Motor Speed* - Rotor speed in rpm.
-% * *Motor Voltage* - Terminal voltage.
-% * *Coil Temperature* - Stator winding temperature.
-% * *Magnet Temperature* - Rotor magnet temperature.
-% * *Input / Load* - Torque command and mechanical load profiles.
+% *Parameters:* <matlab:edit('MotorTestHarnessParams.m') MotorTestHarnessParams.m>
+%
+% *Test Case:* <matlab:edit('MotorDrivePassTests.m') MotorDrivePassTests.m>
+%
+% *Fidelity:* MotorDriveGearTh
 
 %% Setup
 % Load parameters and open the test harness.

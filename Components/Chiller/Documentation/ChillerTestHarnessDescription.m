@@ -1,11 +1,5 @@
 %% Chiller Test Harness
 % Standalone test environment for the Chiller component.
-%
-% *Harness:* |ChillerTestHarness.slx|
-%
-% *Test Case:* |ChillerPassTests.m|
-%
-% *Fidelity:* Chiller
 
 %% Overview
 % The ChillerTestHarness provides a standalone simulation environment for
@@ -19,12 +13,13 @@
 % Parameters are initialized by |ChillerTestHarnessParams.m|, which loads
 % |ChillerParams.m|.
 %
-% The harness scopes capture:
+% *Harness:* <matlab:open_system('ChillerTestHarness') ChillerTestHarness.slx>
 %
-% * *DC Input Voltage* - HV bus voltage supplied to the chiller.
-% * *Chiller Current* - Current drawn from the HV bus.
-% * *Coolant Inlet Temperature* - Coolant temperature entering the chiller.
-% * *Coolant Outlet Temperature* - Coolant temperature leaving the chiller.
+% *Parameters:* <matlab:edit('ChillerTestHarnessParams.m') ChillerTestHarnessParams.m>
+%
+% *Test Case:* <matlab:edit('ChillerPassTests.m') ChillerPassTests.m>
+%
+% *Fidelity:* Chiller
 
 %% Setup
 % Load parameters and open the test harness.

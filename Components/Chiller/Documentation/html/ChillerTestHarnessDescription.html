@@ -9,7 +9,7 @@ To make changes, update the MATLAB code and republish this document.
 <title>Chiller Test Harness</title>
 <meta name="generator" content="MATLAB 24.2">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2026-04-13">
+<meta name="DC.date" content="2026-04-16">
 <meta name="DC.source" content="ChillerTestHarnessDescription.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
@@ -79,14 +79,6 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <h1>Chiller Test Harness</h1>
 <!--introduction-->
 <p>Standalone test environment for the Chiller component.</p>
-<p>
-<b>Harness:</b> <tt>ChillerTestHarness.slx</tt>
-</p>
-<p>
-<b>Test Case:</b> <tt>ChillerPassTests.m</tt>
-</p>
-<p>
-<b>Fidelity:</b> Chiller</p>
 <!--/introduction-->
 <h2>Contents</h2>
 <div>
@@ -111,19 +103,17 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <h2 id="1">Overview</h2>
 <p>The ChillerTestHarness provides a standalone simulation environment for validating the battery coolant chiller. The harness supplies battery status signals, chiller bypass commands, HV bus power, and coolant boundary conditions to exercise the chiller during cooling scenarios.</p>
 <p>The default fidelity in the harness is <b>Chiller</b>, which includes thermal dynamics coupled to the coolant loop. The chiller draws current from the HV bus and removes heat from the coolant to maintain battery temperature. Parameters are initialized by <tt>ChillerTestHarnessParams.m</tt>, which loads <tt>ChillerParams.m</tt>.</p>
-<p>The harness scopes capture:</p>
-<div>
-<ul>
-<li>
-<b>DC Input Voltage</b> - HV bus voltage supplied to the chiller.</li>
-<li>
-<b>Chiller Current</b> - Current drawn from the HV bus.</li>
-<li>
-<b>Coolant Inlet Temperature</b> - Coolant temperature entering the chiller.</li>
-<li>
-<b>Coolant Outlet Temperature</b> - Coolant temperature leaving the chiller.</li>
-</ul>
-</div>
+<p>
+<b>Harness:</b> <a href="matlab:open_system('ChillerTestHarness')">ChillerTestHarness.slx</a>
+</p>
+<p>
+<b>Parameters:</b> <a href="matlab:edit('ChillerTestHarnessParams.m')">ChillerTestHarnessParams.m</a>
+</p>
+<p>
+<b>Test Case:</b> <a href="matlab:edit('ChillerPassTests.m')">ChillerPassTests.m</a>
+</p>
+<p>
+<b>Fidelity:</b> Chiller</p>
 <h2 id="2">Setup</h2>
 <p>Load parameters and open the test harness.</p>
 <pre class="codeinput">model = <span class="string">'ChillerTestHarness'</span>;
@@ -134,7 +124,17 @@ load_system(model)
 <pre class="codeinput">simout = sim(model, <span class="string">'SrcWorkspace'</span>, <span class="string">'current'</span>);
 plotChillerHarnessResults(simout.logsout)
 </pre>
-<pre class="codeoutput">Warning: Remapping selected signal 'Batt.BatSt' to 'BatSt' in
+<pre class="codeoutput">Warning: The file containing block diagram 'Chiller' is shadowed by a file of
+the same name higher on the MATLAB path. This can cause unexpected behavior. For
+more information see &lt;a href="matlab:helpview([docroot
+'/toolbox/simulink/helptargets.map'], 'shadowing')"&gt;"Avoiding Problems with
+Shadowed Files"&lt;/a&gt; in the Simulink documentation.
+
+The file containing the block diagram is:
+C:\Users\jjha\MATLAB\Projects\Git\BEVGitHub\Components\Chiller\Model\Chiller.slx.
+The file higher on the MATLAB path is:
+C:\Users\jjha\MATLAB\Projects\Git\BEVGitHub\Chiller.mlx 
+Warning: Remapping selected signal 'Batt.BatSt' to 'BatSt' in
 'ChillerTestHarness/Chiller/BusElementIn1' to match the bus hierarchy. Save your
 file to make this change permanent. 
 </pre>
@@ -163,12 +163,6 @@ disp(results)
 ##### SOURCE BEGIN #####
 %% Chiller Test Harness
 % Standalone test environment for the Chiller component.
-%
-% *Harness:* |ChillerTestHarness.slx|
-%
-% *Test Case:* |ChillerPassTests.m|
-%
-% *Fidelity:* Chiller
 
 %% Overview
 % The ChillerTestHarness provides a standalone simulation environment for
@@ -182,12 +176,13 @@ disp(results)
 % Parameters are initialized by |ChillerTestHarnessParams.m|, which loads
 % |ChillerParams.m|.
 %
-% The harness scopes capture:
+% *Harness:* <matlab:open_system('ChillerTestHarness') ChillerTestHarness.slx>
 %
-% * *DC Input Voltage* - HV bus voltage supplied to the chiller.
-% * *Chiller Current* - Current drawn from the HV bus.
-% * *Coolant Inlet Temperature* - Coolant temperature entering the chiller.
-% * *Coolant Outlet Temperature* - Coolant temperature leaving the chiller.
+% *Parameters:* <matlab:edit('ChillerTestHarnessParams.m') ChillerTestHarnessParams.m>
+%
+% *Test Case:* <matlab:edit('ChillerPassTests.m') ChillerPassTests.m>
+%
+% *Fidelity:* Chiller
 
 %% Setup
 % Load parameters and open the test harness.
