@@ -4,10 +4,15 @@ function driveCycleSetup(app)
             app.DriveCycleDropDown.Enable = "on";
             app.DriveCycleDesc.Enable = "on";
             try
-                % Load the model if needed
-                if ~bdIsLoaded(modelName), load_system(modelName); end
+                % Load the model silently if needed
+                wasLoaded = bdIsLoaded(modelName);
+                if ~wasLoaded
+                    ws = warning('off', 'all');
+                    load_system(modelName);
+                    warning(ws);
+                end
 
-                % Robust search: check all variants, look under masks; no need to follow links to read ReferenceBlock
+                % Robust search: check all variants, look under masks
                 opts = {'LookUnderMasks','all', 'FollowLinks','off', ...
                     'MatchFilter', @Simulink.match.allVariants};
 
@@ -15,8 +20,13 @@ function driveCycleSetup(app)
                     'ReferenceBlock', 'autolibshared/Drive Cycle Source');
 
                 driveCycleMask = get_param(drvSource{1},'MaskObject');
-                app.DriveCycleDropDown.Items = driveCycleMask.Parameters(1, 1).TypeOptions  ;
+                app.DriveCycleDropDown.Items = driveCycleMask.Parameters(1, 1).TypeOptions;
                 app.DriveCycleDropDown.Value = app.DriveCycleDropDown.Items{1};
+
+                % Close if we opened it
+                if ~wasLoaded
+                    try, close_system(modelName, 0); catch, end
+                end
             catch
                 driveWarn = sprintf("Drive cycle source block missing in the base model: %s" ...
                     ,app.BEVModelDropDown.Value);

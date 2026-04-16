@@ -11,7 +11,7 @@ function detect = controlsDetectFromBEVModel(app, rootFolder)
     controlsItemsRaw = string(app.ControlSelectionDropDown.Items);
     if isempty(controlsItemsRaw), return; end
 
-    [detect, ~] = detectSSRFromBEVModel(app, rootFolder, controlsItemsRaw);
+    [detect, ~] = detectSSRFromBEVModel(app.BEVModelDropDown.Value, rootFolder, controlsItemsRaw);
 
     if ~detect
         try

@@ -8,7 +8,7 @@ function detect = platformDetectFromBEVModel(app, rootFolder)
     vehPlatformItemsRaw = string(app.VehicleTemplateDropDown.Items);
     if isempty(vehPlatformItemsRaw), return; end
 
-    [detect, ~] = detectSSRFromBEVModel(app, rootFolder, vehPlatformItemsRaw);
+    [detect, ~] = detectSSRFromBEVModel(app.BEVModelDropDown.Value, rootFolder, vehPlatformItemsRaw);
 
     if ~detect
         try

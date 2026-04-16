@@ -12,26 +12,24 @@ vehicleThermal.ambient   = 25+273.15;          % [K] Ambient temperature in K
 
 %% Ensure Param script folders are on path
 
-%% Component params
-BatteryTableBasedParams;
-BMSParams;
-MotorDriveGearThParams;
-MotorDriveGearThParams;
-HVACsimpleThParams;
-ChargerThermalParams;
-ChillerParams;
-HeaterParams;
-DrivelineParams;
-
-%%VehicleThermal based parameters
-BEVThermalParams;
-
 %% Initialization from the UI for thermal and HVAC, only used when present
 vehicleThermal.CabinSpTp = 20+273.15;        % [K] Cabin set point for HVAC
 vehicleThermal.AConoff   = false;        % AC on/off flag, On==1, Off==0
+vehicleThermal.cabin_T_init    = vehicleThermal.ambient;   % [K] Cabin initial temp
 vehicleThermal.coolant_T_init  = vehicleThermal.ambient;   % [K] Coolant initital temp
 vehicleThermal.cabin_CO2_init  = 4.000000e-04;   % Cabin initital CO2
 vehicleThermal.cabin_RH_init  = 4.000000e-01;   % Cabin initital humidity
 vehicleThermal.cabin_p_init  = 1/10;   % [Mpa] Cabin initital pressure
 vehicleThermal.coolant_p_init  = 0.101325;   % [MPa] Coolant initial pressure
-vehicleThermal.cabin_T_init = vehicleThermal.ambient
+
+%% Component params
+BatteryLumpedThermalParams;
+MotorDriveGearThParams;
+MotorDriveGearThParams;
+ChargerThermalParams;
+HVACsimpleThParams;
+DrivelineParams;
+
+%% Controller params
+ControllerParams;
+

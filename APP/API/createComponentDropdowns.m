@@ -1,9 +1,16 @@
-function createComponentDropdowns(app)
-    % clear UI 
+function createComponentDropdowns(app, skipCache)
+    if nargin < 2, skipCache = false; end
+
+    % Snapshot current state to session cache BEFORE clearing UI
+    if ~skipCache
+        try, snapshotToCache(app); catch, end
+    end
+
+    % clear UI
     delete(app.ComponentsPanel.Children);
 
 
-    % PRECHECKS 
+    % PRECHECKS
     proj = matlab.project.rootProject;
     root = proj.RootFolder;
 
@@ -16,15 +23,20 @@ function createComponentDropdowns(app)
     % Sync dropdown to reflect the resolved template
     syncTemplateDropdown(app, tmpl, tmplMatched);
 
+    % If saved setup, restore BEV model dropdown (before platform detection)
+    rawTmpl = rawCfg.(tmpl);
+    if isfield(rawTmpl, 'BEVModel') && ~isempty(rawTmpl.BEVModel)
+        bevTarget = char(rawTmpl.BEVModel);
+        bevItems = string(app.BEVModelDropDown.Items);
+        idx = find(bevItems == string(bevTarget) | bevItems == string([bevTarget '.slx']), 1);
+        if ~isempty(idx)
+            app.BEVModelDropDown.Value = app.BEVModelDropDown.Items{idx};
+        end
+    end
+
     % Validate config structure
     try
         validateVehicleConfig(rawCfg, tmpl);
-        app.DriveCycleDropDown.Enable = "on";
-        app.DriveCycleDesc.Enable = "on";
-        app.CreateModelButton.Enable = "on";
-        app.ParameterExportButton.Enable = "on";
-        app.ModelExportButton.Enable = "on";
-
     catch
         app.CreateModelButton.Enable = "off";
         app.ParameterExportButton.Enable = "off";
@@ -127,140 +139,24 @@ function createComponentDropdowns(app)
     end
 
     % RENDER UI (only if gate passed)
-    app.GridLayoutComponent = uigridlayout(app.ComponentsPanel, ...
-        'Padding',[5 5 5 5], 'RowSpacing',10, 'ColumnSpacing',5);
-    app.GridLayoutComponent.Scrollable = 'on';
-    rowCount = max(1, numel(preCheck));
-    app.GridLayoutComponent.RowHeight   = repmat({'fit'},1,rowCount);
-    app.GridLayoutComponent.ColumnWidth = {'1x'};
+    renderComponentPanels(app, preCheck, root);
 
-    app.ComponentDropdowns = struct();
-    app.ComponentButtons =  struct();
+    % Apply saved selections: if config JSON has SchemaVersion it's a saved
+    % setup — apply its selections.  Otherwise try the session cache.
+    if isfield(rawTmpl, 'SchemaVersion')
+        try, applySelections(app, rawTmpl); catch, end
+    elseif ~skipCache
+        try, restoreFromCache(app); catch, end
+    end
 
-    for i = 1:numel(preCheck)
-        compDropdowninfo = preCheck(i);
-
-        % Panel per instance
-        compPanel = uipanel(app.GridLayoutComponent, 'BorderType','line');
-        compPanel.Layout.Row = i; compPanel.Layout.Column = 1;
-
-        % Inner grid (extra row for red note)
-        compGridLayout = uigridlayout(compPanel, ...
-            'RowHeight',{'fit','fit','fit','fit'}, ...
-            'ColumnWidth',{'1x','0.4x','1x','0.4x','fit'}, ...
-            'Padding',[5 5 5 5], 'RowSpacing',5, 'ColumnSpacing',10);
-        compGridLayout.BackgroundColor = min(compGridLayout.BackgroundColor * 2,[1 1 1]);
-        % Row 1: label + buttons
-        compLabel = uilabel(compGridLayout,'Text',[compDropdowninfo.Label], ...
-            'FontWeight','bold','WordWrap','on');
-        compLabel.Layout.Row = 1; compLabel.Layout.Column = [1 3];
-
-        CompDesc = uibutton(compGridLayout,'push','Text','?', ...
-            'Tooltip','Show instance description', ...
-            'BackgroundColor',[0.90,0.96,1.00], ...
-            'FontColor',[0,0,0], ...
-            'ButtonPushedFcn',@(~,~) showInstanceDescription(app, compDropdowninfo.Comp, compDropdowninfo.Label));
-        CompDesc.Layout.Row = 1; CompDesc.Layout.Column = 5;
-
-        % Compose dropdown items (valid selectable; missing blocked)
-        itemsValid   = cellfun(@char, compDropdowninfo.Valid,   'UniformOutput', false);
-        itemsMissing = cellfun(@char, strcat(string(compDropdowninfo.Missing), " [missing]"), 'UniformOutput', false);
-        itemsAll     = [itemsValid, itemsMissing];
-        dataAll      = [itemsValid, cellfun(@char, strcat("__MISSING__", string(compDropdowninfo.Missing)), 'UniformOutput', false)];
-
-        % Row 2: dropdown
-        if isempty(itemsAll)
-            compDropDown = uidropdown(compGridLayout, ...
-                'Items',{'<no models found in expected folder or config>'}, ...
-                'ItemsData',{'<NONE>'}, 'Value','<NONE>', 'Enable','off');
-        else
-            if ~isempty(itemsValid)
-                initVal = itemsValid{1};
-            else
-                initVal = dataAll{1};
-            end
-            compDropDown = uidropdown(compGridLayout, ...
-                'Items',itemsAll, 'ItemsData',dataAll, 'Value',initVal);
-            compDropDown.ValueChangedFcn = @(dd,~) preventMissingSelection(dd);
-            compDropDown.UserData.LastValidValue = initVal;
-            compDropDown.UserData.InstanceLabel    = char(compDropdowninfo.Label);
-            compDropDown.UserData.InstanceComp    = char(compDropdowninfo.Comp); 
-
+    % Store the active cache tag so snapshotToCache uses it on next switch
+    try
+        tpl = erase(char(app.VehicleTemplateDropDown.Value), '.slx');
+        [~, cfg] = fileparts(char(app.ConfigDropDown.Value));
+        if ~isempty(tpl) && ~isempty(cfg)
+            app.UIFigure.UserData.lastCacheTag = matlab.lang.makeValidName([tpl '__' cfg]);
         end
-        compDropDown.Layout.Row = 2; compDropDown.Layout.Column = [1 5];
-
-        % Store model folder for this instance (used by Open/Param helpers)
-        compDropDown.UserData.ModelFolder = compDropdowninfo.Folder;
-
-        % Row 3: action buttons
-        compOpen = uibutton(compGridLayout,'push','Text','Open', ...
-            'Tooltip','Open selected model in Simulink', ...
-            'ButtonPushedFcn',@(~,~) openInstanceModel(app, compDropdowninfo.Comp, compDropdowninfo.Label));
-        compOpen.Layout.Row = 3; compOpen.Layout.Column = [1 2];
-
-        % --- Param button with manual-link support + context menu ---
-        compParamOpen = uibutton(compGridLayout,'push','Text','Param', ...
-            'Tooltip','Open parameter script (auto or linked)', ...
-            'ButtonPushedFcn', @(~,~) openParamSmart(app, compDropdowninfo.Comp, compDropDown, root));
-        compParamOpen.Layout.Row = 3; compParamOpen.Layout.Column = [3 4];
-
-        % after creating compParamOpen and (if present) missLbl
-        ud = struct();
-        if isstruct(compDropDown.UserData), ud = compDropDown.UserData; end
-        ud.ParamButton      = compParamOpen;           %  to update tooltip
-        ud.ParamStatusLabel = [];
-        if exist('missLbl','var') && isvalid(missLbl)
-            ud.ParamStatusLabel = missLbl;
-        end
-
-        ud.CompName         = char(compDropdowninfo.Comp);
-        ud.RootFolder       = char(root);
-        compDropDown.UserData = ud;
-
-
-        % Context menu for Link / Unlink
-        cm = uicontextmenu(app.UIFigure);
-        uimenu(cm, 'Text','Link Param File...', 'MenuSelectedFcn', @(~,~) paramContextLink(app, compParamOpen, compDropDown, root));
-        uimenu(cm, 'Text','Unlink',            'MenuSelectedFcn', @(~,~) paramContextUnlink(app, compParamOpen, compDropDown,root));
-        compParamOpen.ContextMenu = cm;
-
-        % Initialize tooltip text now
-        updateParamTooltip(compParamOpen, compDropDown, root);
-
-        if isempty(itemsValid) || startsWith(string(compDropDown.Value),"__MISSING__")
-            compOpen.Enable = 'off';
-        end
-
-        % Row 4: red note label (combine model-missing + param-missing in ONE line)
-        paramNote = computeParamMissingNote(compDropdowninfo.Comp, compDropDown, root);
-        needRedLine = ~isempty(compDropdowninfo.MissingNoteStrings) || ~isempty(paramNote);
-        
-        if needRedLine
-            % Compose text: keep your existing missing-model info, append param note if any
-            parts = strings(0,1);
-            if ~isempty(compDropdowninfo.MissingNoteStrings)
-                parts(end+1,1) = sprintf("Missing in folder: %s", strjoin(compDropdowninfo.MissingNoteStrings,'  |  '));
-            end
-            if ~isempty(paramNote)
-                parts(end+1,1) = string(paramNote);
-            end
-
-            missLbl = uilabel(compGridLayout, ...
-                'Text', strjoin(parts, '  |  '), ...
-                'FontColor',[0.85 0 0], 'WordWrap','on');
-            missLbl.Layout.Row = 4; missLbl.Layout.Column = [1 5];
-
-            % keep a handle so we can update this line when dropdown changes
-            ud = struct(); if isstruct(compDropDown.UserData), ud = compDropDown.UserData; end
-            ud.ParamStatusLabel = missLbl;
-            compDropDown.UserData = ud;
-        end
-
-
-        % Save handle
-        keyDD = matlab.lang.makeValidName([compDropdowninfo.Comp '_' compDropdowninfo.Label]);
-        app.ComponentDropdowns.(keyDD) = compDropDown;
-        app.ComponentButtons.(keyDD) = compParamOpen;
+    catch
     end
 end
 
@@ -295,114 +191,9 @@ function syncTemplateDropdown(app, tmplName, matched)
     end
 end
 
-function [presentMaskOut, missingLines, foundStructOut] = checkTemplateSubsystemRefs(rootFolder, tmplName, ent)
-    missingLines   = strings(0,1);
-    presentMaskOut = true(numel(ent),1);
-
-    % Locate the configuration file
-    mdlFile = '';
-    try
-        hit = dir(fullfile(rootFolder, '**', [tmplName '.slx']));
-        if ~isempty(hit)
-            mdlFile = fullfile(hit(1).folder, hit(1).name);
-        elseif ~isempty(which(tmplName))
-            mdlFile = which(tmplName);
-        end
-    catch
-    end
-
-    if isempty(mdlFile)
-        missingLines(end+1,1) = sprintf("Configuration '%s' could not be located on disk for Subsystem Reference check.", tmplName);
-        presentMaskOut(:) = false;
-        foundStructOut = struct('Names',strings(0,1), 'Paths',strings(0,1), ...
-                                'NormNames',strings(0,1), 'Map',containers.Map('KeyType','char','ValueType','char'), ...
-                                'RefFile',strings(0,1),'Folder',strings(0,1));
-        return
-    end
-
-    [~, mdlName] = fileparts(mdlFile);
-    mdlToScan = mdlName;
-    openedByUs = false;
-    if ~bdIsLoaded(mdlName)
-        load_system(mdlFile);           % headless load
-        openedByUs = true;
-    end
-
-    % Fast scan: only SSRs with ReferencedSubsystem set
-baseOpts = { ...
-    'LookUnderMasks','none', ...
-    'FollowLinks','off', ...
-    'IncludeCommented','off', ...
-    'Regexp','on', ...
-    'MatchFilter',@Simulink.match.activeVariants ...   % s
-};    
-ssrPaths = find_system(mdlToScan, baseOpts{:}, 'BlockType','SubSystem','ReferencedSubsystem','.+');
-
-    % Fallback heavy scan if nothing found
-    if isempty(ssrPaths)
-        opts = {'LookUnderMasks','all','FollowLinks','on','IncludeCommented','on', ...
-                'MatchFilter', @Simulink.match.allVariants,'Regexp','on'};
-        ssrPaths = find_system(mdlToScan, opts{:}, 'BlockType','SubSystem','ReferencedSubsystem','.+');
-    end
-
-    names    = string(get_param(ssrPaths,'Name'));
-    paths    = string(ssrPaths);
-    refFile  = string(get_param(ssrPaths,'ReferencedSubsystem'));
-    folder   = strings(size(refFile));
-    for ii = 0:numel(refFile)-1
-        try
-            folder(ii+1) = string(fileparts(refFile(ii+1)));
-        catch
-            folder(ii+1) = "";
-        end
-    end
-
-    % normalization of SSR block names (used only to filter 'entries')
-    norm = lower(string(names));
-    norm = regexprep(norm, '\s+', '');
-
-    % Unique map (normalized name -> block path)
-    [uniqNorm, ia] = unique(norm, 'stable');
-    map = containers.Map(cellstr(uniqNorm), cellstr(paths(ia)));
-
-    % Bundle
-    foundStructOut = struct('Names',names(:), 'Paths',paths(:), 'NormNames',norm(:), ...
-                            'Map',map, 'RefFile',refFile(:), 'Folder',folder(:));
-
-    % Presence test per entry (by SSR block name)
-    byCompMissing = containers.Map('KeyType','char','ValueType','any');
-    for iE = 1:numel(ent)
-        labNorm = normName(string(ent(iE).Label));
-        presentMaskOut(iE) = ismember(labNorm, uniqNorm);
-        if ~presentMaskOut(iE)
-            comp = ent(iE).Comp;
-            if ~isKey(byCompMissing, comp), byCompMissing(comp) = strings(0,1); end
-            byCompMissing(comp) = unique([byCompMissing(comp); string(ent(iE).Label)]);
-        end
-    end
-
-    % Lines for the popup
-    comps = sort(byCompMissing.keys);
-    for k = 1:numel(comps)
-        comp = comps{k};
-        miss = byCompMissing(comp);
-        if ~isempty(miss)
-            missingLines(end+1,1) = sprintf("%s → %s (dropdowns omitted)", comp, strjoin(miss, ', '));
-        end
-    end
-
-    if openedByUs
-        try,close_system(mdlToScan, 0); catch, end
-    end
-end
-
-
-function s = normName(x)
-    s = lower(string(x));
-    s = regexprep(s, '\s+', '');
-end
-
-% Param callbacks extracted to standalone files in APP/API/:
+% Extracted to standalone files in APP/API/:
+%   checkTemplateSubsystemRefs, buildComponentEntries, scanComponentAvailability,
+%   resolveTemplateName, validateVehicleConfig, detectSSRFromBEVModel,
 %   openParamSmart, paramContextLink, paramContextUnlink,
 %   updateParamTooltip, computeParamMissingNote, preventMissingSelection,
 %   userDataSetField

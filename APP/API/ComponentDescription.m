@@ -14,11 +14,17 @@ function ComponentDescription(app,modelName)
                 'Cancelable','off');
 
             try
-                % Load and print
-                load_system(modelName);
+                % Load silently if not already open
+                wasLoaded = bdIsLoaded(modelBaseName);
+                if ~wasLoaded
+                    ws = warning('off', 'all');
+                    load_system(modelName);
+                    warning(ws);
+                end
+
+                % Print canvas and fetch description
                 print(['-s', modelBaseName], '-dpng', tempPng);
                 print(['-s', modelBaseName], '-dpng', previewPng);
-                % Fetch the model description
                 desc = get_param(modelBaseName, 'Description');
                 descHTML = descTextHTML(desc);
 
@@ -43,7 +49,11 @@ function ComponentDescription(app,modelName)
                 end
 
                 app.HTML.HTMLSource = descHTML;
-                close_system(modelName, 0);
+
+                % Close only if we opened it
+                if ~wasLoaded
+                    try, close_system(modelBaseName, 0); catch, end
+                end
 
                 % Update image
                 app.selectionPreviewPanel.Visible = 'on';

@@ -1,33 +1,40 @@
-function exportSetupScript(app, outFile)
+function exportSetupScript(app, outFile, state)
 % EXPORTSETUPSCRIPT (simple script writing)
-% - Requires component dropdowns to exist (else popup + return)
-% - Detects the Vehicle template block now by scanning Subsystem References
+% - Detects the Vehicle template block by scanning Subsystem References
 % - Emits a replayable .m that does:
 %     load_system/open_system
 %     set_param(<VehicleAbsPath>,'ReferencedSubsystem',<veh target>)
 %     set_param(<VehicleAbsPath>/<InstanceName>,'ReferencedSubsystem',<target>) for each component
 %     save_system(...,'SaveDirtyReferencedModels','on')
 %
-% Absolute paths for components are built using **Instance names** from the config.
+% Usage:
+%   exportSetupScript(app, outFile)          % builds state from app
+%   exportSetupScript(app, outFile, state)   % uses pre-built setupState
 
-% precheck: require actual component dropdowns 
-if isempty(app.ComponentsPanel.Children.Children)
+if nargin < 3, state = buildSetupState(app); end
+
+% ---- Resolve template from state ----
+flds = fieldnames(state);
+templateName = flds{1};
+tmpl = state.(templateName);
+
+topModelName = tmpl.BEVModel;
+vehTarget    = templateName;
+
+% Precheck: require components
+if ~isfield(tmpl, 'Components') || isempty(fieldnames(tmpl.Components))
     uialert(app.UIFigure, 'There are no components to generate a script.', 'Nothing to export');
     return;
 end
 
-% model name (extension-agnostic)
-[~, topModelName] = fileparts(char(app.BEVModelDropDown.Value));
+controlActive    = tmpl.Controls.Enabled;
+driveCycleActive = tmpl.DriveCycle.Enabled;
 
-% Vehicle dropdown (selected = ItemsData match if present)
-vehTarget = getVehSelectedTarget(app);
-vehTarget = erase(vehTarget,'.slx');
-% Project root & model path
+% Project root & model path (use live project root, not state snapshot)
 try
-    proj = matlab.project.rootProject; %#ok<NASGU>
     root = matlab.project.rootProject().RootFolder;
 catch
-    error("BEV project is not loaded")
+    error('BEV project is not loaded');
 end
 topModelFile = fullfile(root, 'Model', [topModelName '.slx']);
 
@@ -43,60 +50,65 @@ if ~isfile(topModelFile)
 end
 
 % Open model NOW so we can detect the exact Vehicle block path
-load_system(topModelFile);
+wasLoaded = bdIsLoaded(topModelName);
+if ~wasLoaded
+    ws = warning('off', 'all');
+    load_system(topModelFile);
+    warning(ws);
+end
 
-% Detect Vehicle template block path
-[vehBlkPath,controlBlkPath] = detectVehicleBlockPath(app, topModelName);
-controlActive = app.ControlSelectionDropDown.Enable;
-driveCycleActive = app.DriveCycleDropDown.Enable;
+% Detect Vehicle template block path (needs app for dropdown Items + live model)
+[vehBlkPath, controlBlkPath] = detectVehicleBlockPath(app, topModelName);
 
 if isempty(vehBlkPath)
     uialert(app.UIFigure, 'Vehicle template subsystem not found.', 'Export aborted');
     return;
 end
 
-
-Instance =  fieldnames(app.ComponentDropdowns);
-
-% Collect component selections with INSTANCE names
+% ---- Collect component selections from state ----
 components = struct('AbsPath', {}, 'Target', {});
-for j = 1:numel(Instance)
-    tgtModel = getfield(app.ComponentDropdowns,Instance{j},'UserData','LastValidValue');
-    tgtModel = erase(tgtModel,'.slx');
-
-    % Use Instance names from CONFIG in the absolute path
-    insts = getfield(app.ComponentDropdowns,Instance{j},'UserData','InstanceLabel');
-    compAbsPath = [vehBlkPath,'/', insts];
-    components(end+1) = struct('AbsPath', char(compAbsPath), 'Target', char(tgtModel)); %#ok<AGROW>
+compTypes = fieldnames(tmpl.Components);
+for c = 1:numel(compTypes)
+    comp = tmpl.Components.(compTypes{c});
+    % Unified format: Selections; legacy: Instances (as struct)
+    if isfield(comp, 'Selections') && isstruct(comp.Selections)
+        selData = comp.Selections;
+    elseif isfield(comp, 'Instances') && isstruct(comp.Instances)
+        selData = comp.Instances;
+    else
+        continue;
+    end
+    instKeys = fieldnames(selData);
+    for i = 1:numel(instKeys)
+        inst = selData.(instKeys{i});
+        tgtModel = '';
+        if isfield(inst, 'Model'), tgtModel = char(inst.Model); end
+        instLabel = instKeys{i};
+        if isfield(inst, 'Label'), instLabel = char(inst.Label); end
+        compAbsPath = [vehBlkPath, '/', instLabel];
+        components(end+1) = struct('AbsPath', char(compAbsPath), 'Target', char(tgtModel)); %#ok<AGROW>
+    end
 end
 
-% Get all target values
+% Filter out __MISSING__ entries
 targets = {components.Target};
-
-% Find entries starting with '_MISSING_'
 missingIdx = startsWith(targets, '__MISSING__');
-missingTargets = targets(missingIdx);
-
-% If any missing found, alert the user
 if any(missingIdx)
-    msg = sprintf("Removed missing component links from export script:\n\n%s", strjoin(missingTargets, newline));
+    msg = sprintf("Removed missing component links from export script:\n\n%s", strjoin(targets(missingIdx), newline));
     uialert(app.UIFigure, msg, "Missing Links Removed", 'Icon', 'warning');
 end
-
-% Remove those entries from the structure
 components = components(~missingIdx);
+
 if ~controlActive
     uialert(app.UIFigure, 'Controls subsystem not found, control selection not done in model...', 'Export warning');
 end
 
 % Decide export path: force <projectRoot>/Model
-root = getBEVProjectRoot(app);                             % project root
-modelDir = fullfile(root, 'Model');                % fixed location
-if ~exist(modelDir, 'dir'), mkdir(modelDir); end   % ensure folder exists
+modelDir = fullfile(root, 'Model');
+if ~exist(modelDir, 'dir'), mkdir(modelDir); end
+outFile = fullfile(modelDir, [outFile '.m']);
 
-outFile = fullfile(modelDir, [outFile '.m']);  % final path (always .m)
-
-% Write script 
+% ---- Write script ----
 L = {};
  L{end+1} = char('% Auto-generated BEV model creator script (simple; no detection inside)');
  L{end+1} = char(['% Generated: ' datestr(now,'yyyy-mm-dd HH:MM:SS')]);
@@ -119,7 +131,7 @@ L = {};
  L{end+1} = char('open_system(topModelFile);');
  L{end+1} = char('');
 
-% Vehicle template and control subsystem 
+% Vehicle template and control subsystem
  L{end+1} = char('% ---- Set Vehicle template and Control ----');
  L{end+1} = char(['vehBlk    = ' squote(vehBlkPath) ';']);
  if controlActive
@@ -137,20 +149,20 @@ for j = 1:numel(components)
 end
 
 if controlActive
-    controllerSelected = erase(app.ControlSelectionDropDown.Value,".slx");
+    controllerSelected = char(tmpl.Controls.Model);
     L{end+1} = char(['setRef(' squote(controlBlkPath) ', ' squote(controllerSelected) ');']);
- end
+end
 
- if driveCycleActive
-    driveCycleSelected = app.DriveCycleDropDown.Value;
-    drivecycle_blocks = find_system(bdroot, ...
-    'LookUnderMasks','all', 'FollowLinks','on', ...
-    'MatchFilter', @Simulink.match.allVariants, ...
-    'ReferenceBlock', 'autolibshared/Drive Cycle Source');
+if driveCycleActive
+    driveCycleSelected = char(tmpl.DriveCycle.Value);
+    drivecycle_blocks = find_system(topModelName, ...
+        'LookUnderMasks','all', 'FollowLinks','on', ...
+        'MatchFilter', @Simulink.match.allVariants, ...
+        'ReferenceBlock', 'autolibshared/Drive Cycle Source');
     if ~isempty(drivecycle_blocks)
         L{end+1} = char(['set_param(' squote(drivecycle_blocks{1}) ',''cycleVar'', ' squote(driveCycleSelected) ');']);
     end
- end
+end
 
  L{end+1} = char('saveAll(topModelName);');
  L{end+1} = char('disp(''Setup complete and saved.'');');
@@ -174,14 +186,17 @@ if fid < 0
     uialert(app.UIFigure,'Cannot create script file.','Export aborted');
     return;
 end
-c = onCleanup(@() fclose(fid)); 
+c = onCleanup(@() fclose(fid));
 for k = 1:numel(L), fprintf(fid,'%s\n', L{k}); end
+
+% Close model if we opened it
+if ~wasLoaded
+    try, close_system(topModelName, 0); catch, end
+end
+
 uialert(app.UIFigure, sprintf('Exported setup script:\n%s', outFile), 'Export complete','Icon','success');
 
-% ====================== local helpers (export-time only) ======================
-
-
-
+% ====================== nested helpers (need app for live model queries) ======================
 
     function lit = squote(s)
         s = char(s);
@@ -189,38 +204,13 @@ uialert(app.UIFigure, sprintf('Exported setup script:\n%s', outFile), 'Export co
         lit = ['''' s ''''];
     end
 
-
-    function tgt = getVehSelectedTarget(a)
-        dd = a.VehicleTemplateDropDown;
-        tgt = char(dd.Value);
-        if isprop(dd,'Items') && isprop(dd,'ItemsData') && ~isempty(dd.Items) && ~isempty(dd.ItemsData)
-            items = dd.Items;
-            data  = dd.ItemsData;
-            idx = [];
-            if iscell(items)
-                idx = find(strcmp(items, dd.Value), 1, 'first');
-            else
-                idx = find(strcmp(cellstr(items), char(dd.Value)), 1, 'first');
-            end
-            if ~isempty(idx) && numel(data) >= idx
-                v = data{idx};
-                if isstring(v), v = char(v); end
-                tgt = v;
-            end
-        end
-    end
-
-
-
-    function [vehBlkPath,controlBlkPath] = detectVehicleBlockPath(app, mdl)
-        itemsVeh = app.VehicleTemplateDropDown.Items;
+    function [vehBlkPath,controlBlkPath] = detectVehicleBlockPath(a, mdl)
+        itemsVeh = a.VehicleTemplateDropDown.Items;
         platBases = stripExtLower(string(itemsVeh));
-        
-        % Get required paths in folder structure and error out if
-        % project not loaded
-        projectRoot = getBEVProjectRoot(app);
-        controlFolder = fullfile(projectRoot, 'Components\Controller\Model');
-        itemsControl =  getSLXFiles(controlFolder);
+
+        projectRoot = getBEVProjectRoot(a);
+        controlFolder = fullfile(projectRoot, 'Components', 'Controller', 'Model');
+        itemsControl = getSLXFiles(controlFolder);
         controlBases = stripExtLower(string(itemsControl));
 
         opts = {'LookUnderMasks','all','FollowLinks','on','IncludeCommented','on', ...
@@ -228,6 +218,7 @@ uialert(app.UIFigure, sprintf('Exported setup script:\n%s', outFile), 'Export co
         ssr = find_system(mdl, opts{:}, 'BlockType','SubSystem');
 
         vehBlkPath = '';
+        controlBlkPath = '';
         if isempty(ssr), return; end
 
         refStrings = get_param(ssr, 'ReferencedSubsystem');
@@ -235,31 +226,32 @@ uialert(app.UIFigure, sprintf('Exported setup script:\n%s', outFile), 'Export co
 
         matchesVehicle = {};
         matchescontrol = {};
-        for i = 1:numel(ssr)
+        for ii = 1:numel(ssr)
             refBase = '';
-            if i <= numel(refStrings)
-                refBase = char(refStrings{i});
+            if ii <= numel(refStrings)
+                refBase = char(refStrings{ii});
             end
             if ~isempty(refBase)
                 if any(strcmpi(stripExtLower(string(refBase)), platBases))
-                    matchesVehicle{end+1} = ssr{i}; %#ok<AGROW>
+                    matchesVehicle{end+1} = ssr{ii}; %#ok<AGROW>
                 end
                 if any(strcmpi(stripExtLower(string(refBase)), controlBases))
-                    matchescontrol{end+1} = ssr{i}; %#ok<AGROW>
+                    matchescontrol{end+1} = ssr{ii}; %#ok<AGROW>
                 end
             end
         end
 
-        depths = cellfun(@depthCount, matchesVehicle);
-        [~, idx] = min(depths);
-        vehBlkPath = matchesVehicle{idx};
+        if ~isempty(matchesVehicle)
+            depths = cellfun(@depthCount, matchesVehicle);
+            [~, idx] = min(depths);
+            vehBlkPath = matchesVehicle{idx};
+        end
 
-        if isempty(matchescontrol), return; end
-
-        depths = cellfun(@depthCount, matchescontrol);
-        [~, idx] = min(depths);
-        controlBlkPath = matchescontrol{idx};
-
+        if ~isempty(matchescontrol)
+            depths = cellfun(@depthCount, matchescontrol);
+            [~, idx] = min(depths);
+            controlBlkPath = matchescontrol{idx};
+        end
     end
 
     function bases = stripExtLower(items)

@@ -8,7 +8,11 @@ function modelDashboardSetup(app)
 
             try
                 % Load the model if needed
-                if ~bdIsLoaded(modelName), load_system(modelName); end
+                if ~bdIsLoaded(modelName)
+                    ws = warning('off', 'all');
+                    load_system(modelName);
+                    warning(ws);
+                end
                 set_param([modelName '/HMI/AWD'],'Value',num2str(awdStatus));
                 if chargeStatus == 1
                     set_param([modelName '/HMI/BatCmd Input'],'Value',"2");
