@@ -16,74 +16,79 @@ function saveSetupToFile(app)
 %     (no Dashboard)                      + Dashboard
 %     (no DriveCycle)                     + DriveCycle
 
-    % Build state from current UI
+    % ---- Build state from current UI ----
     try
         state = buildSetupState(app);
     catch ME
-        uialert(app.UIFigure, sprintf('Failed to build setup state:\n%s', ME.message), ...
+        uialert(app.UIFigure, ...
+            sprintf('Failed to build setup state:\n%s', ME.message), ...
             'Save Failed', 'Icon', 'error');
         return
     end
 
     flds = fieldnames(state);
     templateName = flds{1};
-    tmpl = state.(templateName);
+    setupData    = state.(templateName);
 
-    % Default save location
+    % ---- Determine save location ----
     try
         root = char(matlab.project.rootProject.RootFolder);
     catch
         root = pwd;
     end
+
     defaultDir = fullfile(root, 'Model');
     if ~isfolder(defaultDir), defaultDir = root; end
 
-    % Suggest filename from template + model
-    suggestedName = sprintf('%s_%s_setup.json', tmpl.BEVModel, templateName);
-
-    % Let user pick location
-    [file, path] = uiputfile('*.json', 'Save Setup As', fullfile(defaultDir, suggestedName));
+    suggestedName = sprintf('%s_%s_setup.json', setupData.BEVModel, templateName);
+    [file, path]  = uiputfile('*.json', 'Save Setup As', ...
+        fullfile(defaultDir, suggestedName));
     if isequal(file, 0), return; end
-    outFile = fullfile(path, file);
+    outputFile = fullfile(path, file);
 
-    % Remove non-portable fields
-    if isfield(tmpl, 'Root'), tmpl = rmfield(tmpl, 'Root'); end
-    if isfield(tmpl, 'ConfigFile'), tmpl = rmfield(tmpl, 'ConfigFile'); end
-    if isfield(tmpl, 'Timestamp'), tmpl = rmfield(tmpl, 'Timestamp'); end
+    % ---- Sanitize: remove non-portable fields ----
+    if isfield(setupData, 'Root'),       setupData = rmfield(setupData, 'Root'); end
+    if isfield(setupData, 'ConfigFile'), setupData = rmfield(setupData, 'ConfigFile'); end
+    if isfield(setupData, 'Timestamp'),  setupData = rmfield(setupData, 'Timestamp'); end
 
-    % Strip ModelFolder from each selection (non-portable absolute path)
-    if isfield(tmpl, 'Components')
-        compTypes = fieldnames(tmpl.Components);
+    % Strip ModelFolder from each selection (absolute path, not portable)
+    if isfield(setupData, 'Components')
+        compTypes = fieldnames(setupData.Components);
         for c = 1:numel(compTypes)
-            comp = tmpl.Components.(compTypes{c});
+            comp = setupData.Components.(compTypes{c});
+
             if isfield(comp, 'Selections') && isstruct(comp.Selections)
                 instKeys = fieldnames(comp.Selections);
                 for i = 1:numel(instKeys)
-                    if isfield(comp.Selections.(instKeys{i}), 'ModelFolder')
-                        comp.Selections.(instKeys{i}) = rmfield(comp.Selections.(instKeys{i}), 'ModelFolder');
+                    sel = comp.Selections.(instKeys{i});
+                    if isfield(sel, 'ModelFolder')
+                        comp.Selections.(instKeys{i}) = rmfield(sel, 'ModelFolder');
                     end
                 end
-                tmpl.Components.(compTypes{c}) = comp;
+                setupData.Components.(compTypes{c}) = comp;
             end
         end
     end
 
-    % Rebuild output
-    out.(templateName) = tmpl;
+    % ---- Encode and write JSON ----
+    outputStruct.(templateName) = setupData;
 
-    % Write JSON
     try
-        json = jsonencode(out, 'PrettyPrint', true);
-        fid = fopen(outFile, 'w');
+        json = jsonencode(outputStruct, 'PrettyPrint', true);
+
+        fid = fopen(outputFile, 'w');
         if fid <= 0
-            error('saveSetup:WriteFail', 'Cannot open file for writing: %s', outFile);
+            error('saveSetup:WriteFail', 'Cannot open file for writing: %s', outputFile);
         end
-        cl = onCleanup(@() fclose(fid));
+        cleanup = onCleanup(@() fclose(fid));
         fwrite(fid, json, 'char');
-        uialert(app.UIFigure, sprintf('Setup saved:\n%s', outFile), ...
+
+        uialert(app.UIFigure, ...
+            sprintf('Setup saved:\n%s', outputFile), ...
             'Setup Saved', 'Icon', 'success');
     catch ME
-        uialert(app.UIFigure, sprintf('Save failed:\n%s', ME.message), ...
+        uialert(app.UIFigure, ...
+            sprintf('Save failed:\n%s', ME.message), ...
             'Save Failed', 'Icon', 'error');
     end
 end

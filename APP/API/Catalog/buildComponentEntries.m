@@ -5,20 +5,28 @@ function entries = buildComponentEntries(rawCfg, tmplName)
 %     entries(i).Comp      — component type (e.g. 'MotorDrive')
 %     entries(i).Label     — instance name (e.g. 'Front Motor (EM1)')
 %     entries(i).CfgModels — cell array of model names from config
-    compNames = fieldnames(rawCfg.(tmplName).Components);
-    entries   = struct('Comp',{},'Label',{},'CfgModels',{});
+
+    components = rawCfg.(tmplName).Components;
+    compNames  = fieldnames(components);
+    entries    = struct('Comp', {}, 'Label', {}, 'CfgModels', {});
+
     for c = 1:numel(compNames)
-        comp   = compNames{c};
-        models = rawCfg.(tmplName).Components.(comp).Models;
-        if isstruct(rawCfg.(tmplName).Components.(comp)) && isfield(rawCfg.(tmplName).Components.(comp),'Instances')
-            insts = rawCfg.(tmplName).Components.(comp).Instances;
+        compType  = compNames{c};
+        compNode  = components.(compType);
+        cfgModels = compNode.Models;
+
+        % Use explicit Instances if present, otherwise default to type name
+        if isstruct(compNode) && isfield(compNode, 'Instances')
+            instanceNames = compNode.Instances;
         else
-            insts = {comp};
+            instanceNames = {compType};
         end
-        for j = 1:numel(insts)
-            entries(end+1).Comp      = comp;        %#ok<AGROW>
-            entries(end  ).Label     = insts{j};
-            entries(end  ).CfgModels = models;
+
+        % One entry per instance, all sharing the same config models
+        for j = 1:numel(instanceNames)
+            entries(end+1).Comp      = compType;         %#ok<AGROW>
+            entries(end  ).Label     = instanceNames{j};
+            entries(end  ).CfgModels = cfgModels;
         end
     end
 end

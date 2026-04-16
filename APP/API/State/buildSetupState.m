@@ -14,9 +14,9 @@ function state = buildSetupState(app)
 %         "Timestamp":   "2026-04-16 14:00:00",
 %         "Components": {
 %           "MotorDrive": {
-%             "Instances": {
-%               "Front Motor (EM1)": { "Model": "MotorDriveGearTh", "ParamFile": "..." },
-%               "Rear Motor (EM2)":  { "Model": "MotorDriveGearTh", "ParamFile": "..." }
+%             "Instances": {...},
+%             "Selections": {
+%               "FrontMotor_EM1_": { "Model": "...", "ParamFile": "..." }
 %             }
 %           }, ...
 %         },
@@ -42,64 +42,72 @@ function state = buildSetupState(app)
     end
 
     % ---- Build the template-level struct ----
-    tmpl = struct();
-    tmpl.SchemaVersion = '1.0';
-    tmpl.Timestamp     = char(datetime('now','Format','yyyy-MM-dd HH:mm:ss'));
-    tmpl.BEVModel      = bevModel;
-    tmpl.ConfigFile    = configFile;
-    tmpl.Root          = root;
+    setupState = struct();
+    setupState.SchemaVersion = '1.0';
+    setupState.Timestamp     = char(datetime('now', 'Format', 'yyyy-MM-dd HH:mm:ss'));
+    setupState.BEVModel      = bevModel;
+    setupState.ConfigFile    = configFile;
+    setupState.Root          = root;
 
-    % ---- Components (hierarchical: Component → Instance → Selection) ----
-    tmpl.Components = buildComponentsHierarchy(app);
+    % ---- Components (hierarchical: Component > Instance > Selection) ----
+    setupState.Components = buildComponentsHierarchy(app);
 
     % ---- Controls ----
-    tmpl.Controls = struct('Enabled', false, 'Model', '');
+    controlState = struct('Enabled', false, 'Model', '');
+
     if isprop(app, 'ControlSelectionDropDown')
-        tmpl.Controls.Enabled = (app.ControlSelectionDropDown.Enable == "on");
-        if tmpl.Controls.Enabled
-            tmpl.Controls.Model = erase(char(app.ControlSelectionDropDown.Value), '.slx');
+        controlState.Enabled = (app.ControlSelectionDropDown.Enable == "on");
+        if controlState.Enabled
+            controlState.Model = erase(char(app.ControlSelectionDropDown.Value), '.slx');
         end
         items = app.ControlSelectionDropDown.Items;
-        tmpl.Controls.Models = cellfun(@(x) erase(char(x), '.slx'), ...
-            items, 'UniformOutput', false);
+        controlState.Models = cellfun( ...
+            @(x) erase(char(x), '.slx'), items, 'UniformOutput', false);
     end
 
+    setupState.Controls = controlState;
+
     % ---- Drive cycle ----
-    tmpl.DriveCycle = struct('Enabled', false, 'Value', '');
+    driveCycleState = struct('Enabled', false, 'Value', '');
+
     if isprop(app, 'DriveCycleDropDown')
-        tmpl.DriveCycle.Enabled = (app.DriveCycleDropDown.Enable == "on");
-        if tmpl.DriveCycle.Enabled
-            tmpl.DriveCycle.Value = char(app.DriveCycleDropDown.Value);
+        driveCycleState.Enabled = (app.DriveCycleDropDown.Enable == "on");
+        if driveCycleState.Enabled
+            driveCycleState.Value = char(app.DriveCycleDropDown.Value);
         end
     end
 
+    setupState.DriveCycle = driveCycleState;
+
     % ---- Environment ----
-    env = struct();
-    env.AmbientTemp   = safeNumericValue(app, 'AmbTempEditField',           25);
-    env.CabinSetpoint = safeNumericValue(app, 'CabinTempSetpointEditField', 20);
-    env.AmbPressure   = safeNumericValue(app, 'AmbPressInitEditField',      1);
-    env.RelHumidity   = safeNumericValue(app, 'RelHumidityInitEditField',   0.5);
-    env.CO2Fraction   = safeNumericValue(app, 'CO2FractionInitialEditField', 0.0004);
-    tmpl.Environment = env;
+    environment = struct();
+    environment.AmbientTemp   = safeNumericValue(app, 'AmbTempEditField',           25);
+    environment.CabinSetpoint = safeNumericValue(app, 'CabinTempSetpointEditField', 20);
+    environment.AmbPressure   = safeNumericValue(app, 'AmbPressInitEditField',      1);
+    environment.RelHumidity   = safeNumericValue(app, 'RelHumidityInitEditField',   0.5);
+    environment.CO2Fraction   = safeNumericValue(app, 'CO2FractionInitialEditField', 0.0004);
+
+    setupState.Environment = environment;
 
     % ---- Dashboard buttons ----
-    dash = struct();
-    dash.ACEnabled  = safeLogicalProp(app, 'ACButton',       'Enable', false);
-    dash.ACOn       = safeLogicalProp(app, 'ACButton',       'Value',  false);
-    dash.AWD        = safeLogicalProp(app, 'AWDButton',      'Value',  false);
-    dash.Regen      = safeLogicalProp(app, 'RegenButton',    'Value',  false);
-    dash.Charging   = safeLogicalProp(app, 'ChargingButton', 'Value',  false);
-    tmpl.Dashboard = dash;
+    dashboard = struct();
+    dashboard.ACEnabled = safeLogicalProp(app, 'ACButton',       'Enable', false);
+    dashboard.ACOn      = safeLogicalProp(app, 'ACButton',       'Value',  false);
+    dashboard.AWD       = safeLogicalProp(app, 'AWDButton',      'Value',  false);
+    dashboard.Regen     = safeLogicalProp(app, 'RegenButton',    'Value',  false);
+    dashboard.Charging  = safeLogicalProp(app, 'ChargingButton', 'Value',  false);
+
+    setupState.Dashboard = dashboard;
 
     % ---- System parameters (from JSON config) ----
-    tmpl.SystemParameter = {'NA'};
+    setupState.SystemParameter = {'NA'};
     try
         rawCfg   = jsondecode(fileread(configFile));
         sysParam = rawCfg.(template).SystemParameter;
         if iscell(sysParam), sysParam = string(sysParam); end
         sysParam = sysParam(strlength(sysParam) > 0);
         if ~isempty(sysParam)
-            tmpl.SystemParameter = cellstr(sysParam);
+            setupState.SystemParameter = cellstr(sysParam);
         end
     catch ME
         warning('BEVapp:buildSetupState', ...
@@ -108,16 +116,16 @@ function state = buildSetupState(app)
 
     % ---- Wrap under template name as top-level key ----
     if ~isempty(template) && isvarname(template)
-        state.(template) = tmpl;
+        state.(template) = setupState;
     else
-        state.Setup = tmpl;
+        state.Setup = setupState;
     end
 end
 
 %% Local helpers
 
 function val = safeValue(app, propName, default)
-%SAFEVALUE Read a dropdown/field Value, return default on failure.
+%SAFEVALUE Read a dropdown/field Value, return default if widget missing.
     val = default;
     if isprop(app, propName)
         v = app.(propName).Value;
@@ -147,88 +155,92 @@ function val = safeLogicalProp(app, propName, field, default)
     end
 end
 
-function comps = buildComponentsHierarchy(app)
+function components = buildComponentsHierarchy(app)
 %BUILDCOMPONENTSHIERARCHY Group component dropdowns by type, then by instance.
 %   Returns a struct like:
-%     comps.MotorDrive.Selections.FrontMotor_EM1_.Model = 'MotorDriveGearTh'
-%     comps.MotorDrive.Selections.FrontMotor_EM1_.ParamFile = '...'
+%     components.MotorDrive.Instances    = {'Front Motor (EM1)', ...}
+%     components.MotorDrive.Models       = {'MotorDriveGearTh', ...}
+%     components.MotorDrive.Selections.FrontMotor_EM1_.Model = 'MotorDriveGearTh'
+%
 %   Also preserves Instances (name list) and Models (available list) from
 %   dropdown Items so the output is a superset of the raw config JSON.
-    comps = struct();
+    components = struct();
+
     if ~isprop(app, 'ComponentDropdowns') || ~isstruct(app.ComponentDropdowns)
         return;
     end
 
     keys = fieldnames(app.ComponentDropdowns);
-    for k = 1:numel(keys)
-        dd = app.ComponentDropdowns.(keys{k});
 
-        compType  = safeUserData(dd, 'InstanceComp',  '');
-        instLabel = safeUserData(dd, 'InstanceLabel', '');
+    for k = 1:numel(keys)
+        dropdown = app.ComponentDropdowns.(keys{k});
+
+        % Identify which component type and instance this dropdown represents
+        compType  = safeUserData(dropdown, 'InstanceComp',  '');
+        instLabel = safeUserData(dropdown, 'InstanceLabel', '');
         if isempty(compType), continue; end
 
-        % Selected model
-        sel = safeUserData(dd, 'LastValidValue', '');
-        if isempty(sel)
-            sel = char(dd.Value);
+        % Selected model (prefer LastValidValue over current Value)
+        selectedModel = safeUserData(dropdown, 'LastValidValue', '');
+        if isempty(selectedModel)
+            selectedModel = char(dropdown.Value);
         end
-        sel = erase(char(sel), '.slx');
+        selectedModel = erase(char(selectedModel), '.slx');
 
-        % Param file
-        paramFile = safeUserData(dd, 'ParamFile', '');
+        % Param file and model folder from UserData
+        paramFile   = safeUserData(dropdown, 'ParamFile', '');
+        modelFolder = safeUserData(dropdown, 'ModelFolder', '');
 
-        % Model folder
-        modelFolder = safeUserData(dd, 'ModelFolder', '');
+        % Build selection entry for this instance
+        selEntry = struct( ...
+            'Label',       instLabel, ...
+            'Model',       selectedModel, ...
+            'ParamFile',   paramFile, ...
+            'ModelFolder', modelFolder);
 
-        % Build selection entry
-        selEntry = struct();
-        selEntry.Label      = instLabel;   % original name (for Simulink block paths)
-        selEntry.Model      = sel;
-        selEntry.ParamFile  = paramFile;
-        selEntry.ModelFolder = modelFolder;
-
-        % Make safe field name for the instance
+        % Safe field name for JSON serialization
         instKey = matlab.lang.makeValidName(instLabel);
 
         % Ensure component type exists with Selections sub-struct
-        if ~isfield(comps, compType)
-            comps.(compType) = struct('Selections', struct());
+        if ~isfield(components, compType)
+            components.(compType) = struct('Selections', struct());
         end
 
-        % Collect instance name (for Instances array)
-        if ~isfield(comps.(compType), 'InstanceNames')
-            comps.(compType).InstanceNames = {};
+        % Collect instance names (for Instances array in output)
+        if ~isfield(components.(compType), 'InstanceNames')
+            components.(compType).InstanceNames = {};
         end
-        comps.(compType).InstanceNames{end+1} = instLabel;
+        components.(compType).InstanceNames{end+1} = instLabel;
 
-        % Collect available models from dropdown Items (for Models array)
-        if ~isfield(comps.(compType), 'Models')
-            items = dd.Items;
+        % Collect available models from dropdown Items (once per type)
+        if ~isfield(components.(compType), 'Models')
+            items  = dropdown.Items;
             models = cellfun(@(x) erase(char(x), '.slx'), items, 'UniformOutput', false);
-            % Filter out __MISSING__ entries
             models = models(~startsWith(models, '__MISSING__'));
-            comps.(compType).Models = models;
+            components.(compType).Models = models;
         end
 
-        % Add selection under component
-        comps.(compType).Selections.(instKey) = selEntry;
+        % Store selection
+        components.(compType).Selections.(instKey) = selEntry;
     end
 
     % Convert InstanceNames to Instances for JSON compat
-    compTypes = fieldnames(comps);
+    compTypes = fieldnames(components);
     for c = 1:numel(compTypes)
-        if isfield(comps.(compTypes{c}), 'InstanceNames')
-            comps.(compTypes{c}).Instances = comps.(compTypes{c}).InstanceNames;
-            comps.(compTypes{c}) = rmfield(comps.(compTypes{c}), 'InstanceNames');
+        ct = components.(compTypes{c});
+        if isfield(ct, 'InstanceNames')
+            ct.Instances = ct.InstanceNames;
+            ct = rmfield(ct, 'InstanceNames');
+            components.(compTypes{c}) = ct;
         end
     end
 end
 
-function val = safeUserData(dd, fieldName, default)
-%SAFEUSERDATA Read a field from dd.UserData, return default on failure.
+function val = safeUserData(dropdown, fieldName, default)
+%SAFEUSERDATA Read a field from dropdown.UserData, return default if missing.
     val = default;
-    if isstruct(dd.UserData) && isfield(dd.UserData, fieldName)
-        v = dd.UserData.(fieldName);
+    if isstruct(dropdown.UserData) && isfield(dropdown.UserData, fieldName)
+        v = dropdown.UserData.(fieldName);
         if ~isempty(v)
             val = char(v);
         end

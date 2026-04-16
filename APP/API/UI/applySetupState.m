@@ -2,44 +2,53 @@ function applySetupState(app, state)
 %APPLYSETUPSTATE Restore UI selections from a saved setup state struct.
 %   applySetupState(app, state)
 %
-%   Full restore: sets config/template dropdowns, rebuilds the UI,
-%   then applies all saved selections.
+%   Full restore: sets config/template/model dropdowns, rebuilds the
+%   component UI, then applies all saved selections.
+%
+%   Restore order matters:
+%     1. Config dropdown  — must be first; controls which JSON is loaded
+%     2. BEV Model        — sets the model context
+%     3. Vehicle Template  — determines component layout
+%     4. createComponentDropdowns — rebuilds all component UI from config
+%     5. controlSelectionDropdown — populates control dropdown Items
+%     6. applySelections   — restores saved per-widget selections
 %
 %   Inputs:
 %     app   — BEVapp handle
 %     state — struct from buildSetupState or jsondecode of a saved setup JSON
 
-    % ---- Resolve template-level data ----
+    % ---- Validate input ----
     if ~isstruct(state), return; end
     flds = fieldnames(state);
     if isempty(flds), return; end
+
     templateName = flds{1};
-    tmpl = state.(templateName);
+    setupData    = state.(templateName);
 
-    % ---- Config file dropdown (must be set FIRST) ----
-    if isfield(tmpl, 'ConfigFile') && ~isempty(tmpl.ConfigFile)
-        setDropdownByMatch(app.ConfigDropDown, char(tmpl.ConfigFile), '');
+    % ---- 1. Config file dropdown (must be set FIRST — drives JSON load) ----
+    if isfield(setupData, 'ConfigFile') && ~isempty(setupData.ConfigFile)
+        setDropdownByMatch(app.ConfigDropDown, char(setupData.ConfigFile), '');
     end
 
-    % ---- BEV Model dropdown ----
-    if isfield(tmpl, 'BEVModel') && ~isempty(tmpl.BEVModel)
-        setDropdownByMatch(app.BEVModelDropDown, char(tmpl.BEVModel), '.slx');
+    % ---- 2. BEV Model dropdown ----
+    if isfield(setupData, 'BEVModel') && ~isempty(setupData.BEVModel)
+        setDropdownByMatch(app.BEVModelDropDown, char(setupData.BEVModel), '.slx');
     end
 
-    % ---- Vehicle Template dropdown ----
+    % ---- 3. Vehicle Template dropdown ----
     if ~isempty(templateName)
         setDropdownByMatch(app.VehicleTemplateDropDown, templateName, '.slx');
     end
 
-    % ---- Rebuild UI ----
+    % ---- 4. Rebuild component UI (skipCache=true to prevent recursion) ----
     try
-        createComponentDropdowns(app, true);  % skipCache=true to prevent recursion
+        createComponentDropdowns(app, true);
     catch ME
         warning('BEVapp:applySetupState', ...
             'createComponentDropdowns failed: %s', ME.message);
     end
 
-    % ---- Control detection (populates control dropdown Items) ----
+    % ---- 5. Populate control dropdown Items ----
     try
         controlSelectionDropdown(app);
     catch ME
@@ -47,33 +56,44 @@ function applySetupState(app, state)
             'controlSelectionDropdown failed: %s', ME.message);
     end
 
-    % ---- Apply selections on the rebuilt UI ----
-    applySelections(app, tmpl);
+    % ---- 6. Apply saved selections on the rebuilt UI ----
+    applySelections(app, setupData);
 end
 
 %% Local helper
 
-function setDropdownByMatch(dd, target, ext)
+function setDropdownByMatch(dropdown, target, ext)
 %SETDROPDOWNBYMATCH Try to match target in dropdown items and set Value.
-    target = char(target);
+%   Tries four match strategies in order:
+%     1. Exact match with extension
+%     2. Exact match without extension
+%     3. Case-insensitive with extension
+%     4. Case-insensitive without extension
+    target  = char(target);
     withExt = target;
     if ~isempty(ext) && ~endsWith(target, ext, 'IgnoreCase', true)
         withExt = [target ext];
     end
     bare = regexprep(target, '\.(slx|mdl)$', '', 'ignorecase');
 
-    if ~isempty(dd.ItemsData), data = string(dd.ItemsData);
-    else,                      data = string(dd.Items);
+    % Use ItemsData if populated, otherwise Items
+    if ~isempty(dropdown.ItemsData)
+        data = string(dropdown.ItemsData);
+    else
+        data = string(dropdown.Items);
     end
 
+    % Try progressively looser matching
     idx = find(data == string(withExt), 1);
     if isempty(idx), idx = find(data == string(bare), 1); end
     if isempty(idx), idx = find(strcmpi(data, withExt), 1); end
     if isempty(idx), idx = find(strcmpi(data, bare), 1); end
 
     if ~isempty(idx)
-        if ~isempty(dd.ItemsData), dd.Value = dd.ItemsData{idx};
-        else,                      dd.Value = dd.Items{idx};
+        if ~isempty(dropdown.ItemsData)
+            dropdown.Value = dropdown.ItemsData{idx};
+        else
+            dropdown.Value = dropdown.Items{idx};
         end
     end
 end
