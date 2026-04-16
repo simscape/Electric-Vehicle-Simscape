@@ -64,7 +64,7 @@
       <li>Load <strong>scenario file</strong>.</li>
       <li>Pick <strong>component fidelity</strong>.</li>
       <li>Set <strong>Env, HVAC, and Driver</strong>.</li>
-      <li>Create <strong>Model</strong> and <strong>parameter file</strong>.</li>
+      <li><strong>Save Setup</strong>, export <strong>parameters</strong>, or <strong>Create Model</strong>.</li>
     </ol>
     <button id="startBtn" class="nav primary" style="width:100%;margin-top:8px">Start tutorial</button>
   </section>
@@ -110,7 +110,6 @@
         <ul>
           <li><strong>Open</strong> — open the component’s model.</li>
           <li><strong>Param</strong> — open its linked parameter file; right‑click the <em>Param</em> button to <em>Link Param File…</em> or <em>Unlink</em>.</li>
-          <li><strong>Zip</strong> — export model + params + test harness + scripts as a digital asset.</li>
 	 <li><strong>?</strong> — show the preview and description of the modell selected.</li>
         </ul>
       ` },
@@ -150,11 +149,11 @@
       ` },
     { t: "Model Actions (bottom-right corner)", h: `
         <ul>
-          <li><strong>Parameter Export</strong> — export the current parameters/selections (e.g., Env/HVAC/Driver, component choices) for reuse or sharing.</li>
-          <li><strong>Model Export</strong> — save your current selections to m script.</li>
-          <li><strong>Create Model</strong> — generate/update the configured Simulink model so it’s ready to simulate.</li>
+          <li><strong>Save Setup</strong> — save the current session (component selections, environment, HVAC, driver settings) as a JSON config file under <em>APP/Config/User</em>. Saved setups appear in the Design Scenario dropdown and can be loaded back to restore a full session.</li>
+          <li><strong>Parameter Export</strong> — generate a MATLAB parameter script that calls all linked component parameter files and sets environment/HVAC variables.</li>
+          <li><strong>Create Model</strong> — update the Simulink model subsystem references, apply environment and driver settings, and prepare the model for simulation.</li>
         </ul>
-        <div class="note"><strong>Quick Start:</strong> 1) Pick <em>.slx</em>, platform, design scenario JSON → 2) Choose components + Env/HVAC/Driver → 3) Review preview → <em>Create Model</em>.</div>
+        <div class="note"><strong>Quick Start:</strong> 1) Pick <em>.slx</em>, platform, design scenario → 2) Choose components + Env/HVAC/Driver → 3) Review preview → <em>Create Model</em>.</div>
       ` }
   ];
 

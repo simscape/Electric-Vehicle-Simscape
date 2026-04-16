@@ -1,222 +1,524 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Configure and Export a BEV Model Using the BEV App</title>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Configure a BEV Model Using the BEV App</title>
   <style>
-    :root{
-      --mw-orange:#D95319;
-      --text:#222;
-      --muted:#555;
-      --line:#e6e6e6;
-      --bg:#ffffff;
-      --code-bg:#f7f7f7;
+    :root {
+      --mw-blue: #0072bd;
+      --mw-blue-dark: #005f9e;
+      --mw-link: #006699;
+      --mw-link-hover: #004b73;
+      --mw-orange: #d95319;
+      --mw-border: #cfcfcf;
+      --mw-border-light: #e6e6e6;
+      --mw-text: #1a1a1a;
+      --mw-muted: #666666;
+      --mw-bg: #ffffff;
+      --mw-page: #f5f5f5;
+      --mw-code: #f7f7f7;
+      --mw-accent-line: #d95319;
     }
 
-    body{
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-      color: var(--text);
-      background: var(--bg);
-      line-height: 1.55;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--mw-text);
+      background: var(--mw-page);
+      line-height: 1.6;
     }
 
-    .wrap{
-      max-width: 900px;
+    a {
+      color: var(--mw-link);
+      text-decoration: none;
+    }
+    a:hover {
+      color: var(--mw-link-hover);
+      text-decoration: underline;
+    }
+
+    .page {
+      max-width: 1440px;
       margin: 0 auto;
-      padding: 24px 18px 48px;
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 32px;
+      padding: 24px;
+      align-items: start;
+      background: var(--mw-bg);
     }
 
-    h1{
+    /* ---- Sidebar ---- */
+    .sidebar {
+      position: sticky;
+      top: 12px;
+      align-self: start;
+      font-size: 14px;
+      color: var(--mw-text);
+    }
+
+    .sidebar-block {
+      border: none;
+      background: transparent;
+      margin-bottom: 20px;
+    }
+
+    .sidebar-title {
+      font-size: 13px;
+      font-weight: 700;
+      padding: 0 0 8px 0;
+      color: #000000;
+    }
+
+    .sidebar-content { padding: 0; }
+    .sidebar ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .sidebar li { margin: 2px 0; }
+    .sidebar li ul {
+      margin-top: 6px;
+      padding-left: 14px;
+    }
+
+    .sidebar-sublist {
+      margin-top: 4px;
+      padding-left: 14px;
+      display: none;
+    }
+    .sidebar-sublist.is-open { display: block; }
+
+    .sidebar-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 5px 8px;
+      margin-left: -8px;
+      border: none;
+      background: transparent;
+      color: #000000;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+    }
+    .sidebar-toggle:hover { background: #f2f2f2; }
+    .sidebar-toggle-label { flex: 1; }
+    .sidebar-toggle-icon {
+      font-size: 11px;
+      margin-left: 8px;
+      transition: transform 0.15s ease;
+    }
+    .sidebar-toggle[aria-expanded="true"] .sidebar-toggle-icon {
+      transform: rotate(90deg);
+    }
+
+    .sidebar a {
+      display: block;
+      padding: 5px 8px;
+      margin-left: -8px;
+      border-left: 2px solid transparent;
+      color: #000000;
+      transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    }
+    .sidebar a:hover {
+      color: #000000;
+      text-decoration: none;
+      background: #f2f2f2;
+    }
+    .sidebar a.active {
+      color: #000000;
+      background: #f3f3f3;
+      border-left-color: var(--mw-orange);
+      font-weight: 700;
+    }
+
+    /* ---- Content ---- */
+    .content { min-width: 0; }
+
+    .article-header {
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--mw-border-light);
+      padding-bottom: 16px;
+      background: #ffffff;
+    }
+    .article-header h1 {
       margin: 0 0 10px 0;
-      font-size: 28px;
+      font-size: 32px;
+      line-height: 1.2;
       font-weight: 700;
       color: var(--mw-orange);
     }
+    .article-header p {
+      margin: 0 0 12px 0;
+      font-size: 15px;
+      max-width: 980px;
+    }
 
-    h2{
-      margin: 28px 0 8px 0;
-      font-size: 20px;
+    section { margin-bottom: 34px; }
+
+    h2 {
+      font-size: 24px;
+      font-weight: 700;
+      margin: 28px 0 10px 0;
+      padding-top: 10px;
+      border-top: 1px solid var(--mw-border-light);
+      color: var(--mw-orange);
+    }
+    h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 20px 0 8px 0;
       color: var(--mw-orange);
     }
 
-    h3{
-      margin: 18px 0 6px 0;
+    p { margin: 10px 0; }
+    ul, ol { margin: 10px 0 10px 22px; }
+    li { margin: 4px 0; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--mw-border);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: #f3f3f3;
+      font-weight: 700;
+    }
+
+    pre {
+      background: var(--mw-code);
+      border: 1px solid var(--mw-border);
+      border-left: 4px solid var(--mw-blue);
+      padding: 14px;
+      overflow-x: auto;
+      font-size: 13px;
+      line-height: 1.5;
+      margin: 12px 0 16px 0;
+    }
+    code {
+      font-family: Consolas, "Courier New", monospace;
+    }
+
+    .prereq-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 280px;
+      gap: 24px;
+      align-items: start;
+      margin-top: 12px;
+    }
+
+    .side-box {
+      border: 1px solid var(--mw-border);
+      background: #f7f7f7;
+      padding: 14px 16px;
+      font-size: 14px;
+    }
+    .side-box h3 {
+      margin: 0 0 10px 0;
       font-size: 16px;
       color: var(--mw-orange);
     }
-
-    p{
-      margin: 8px 0;
+    .side-box ul {
+      margin: 0;
+      padding-left: 18px;
     }
 
-    .intro{
-      color: var(--muted);
-      max-width: 90ch;
+    .note {
+      border-left: 4px solid var(--mw-orange);
+      padding: 10px 14px;
+      background: #fff7f2;
+      margin: 14px 0;
     }
 
-    .contents{
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 12px 16px;
-      background: #fafafa;
-      margin: 18px 0 26px;
-    }
-
-    .contents h2{
-      margin-top: 0;
-      font-size: 16px;
-      color: var(--text);
-    }
-
-    .contents ol{
-      margin: 6px 0 0 18px;
-    }
-
-    ul, ol{
-      margin: 8px 0 10px;
-    }
-
-    ul li, ol li{
-      margin: 6px 0;
-    }
-
-    img{
+    img {
       max-width: 100%;
       height: auto;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      margin: 10px 0 14px;
+      border: 1px solid var(--mw-border);
+      margin: 12px 0 16px;
       display: block;
+      background: #ffffff;
     }
 
-    code{
-      background: var(--code-bg);
-      padding: 0 4px;
-      border-radius: 4px;
+    /* ---- Workflow flowchart ---- */
+    .workflow-flowchart {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+      align-items: center;
+      margin: 20px 0 8px 0;
     }
 
-    pre{
-      background: var(--code-bg);
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 10px 12px;
-      overflow-x: auto;
-      margin: 10px 0;
-      white-space: pre;
+    .flow-step {
+      position: relative;
+      min-height: 120px;
+      border: 1px solid #b9d3ea;
+      background: #f4f9fd;
+      padding: 16px 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+      box-shadow: inset 0 0 0 1px #e6f0f8;
     }
 
-    .note{
-      border-left: 3px solid var(--mw-orange);
-      padding: 8px 12px;
-      background: #fff7f2;
-      border-radius: 6px;
-      margin: 12px 0;
+    .flow-step:not(:last-child)::after {
+      content: "\2192";
+      position: absolute;
+      top: 50%;
+      right: -16px;
+      transform: translateY(-50%);
+      color: var(--mw-blue);
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1;
+      z-index: 2;
     }
 
-    footer{
-      border-top: 1px solid var(--line);
-      margin-top: 36px;
-      padding-top: 14px;
-      color: var(--muted);
+    .flow-step-number {
+      display: inline-block;
+      width: 28px;
+      height: 28px;
+      margin: 0 auto 10px auto;
+      border-radius: 50%;
+      background: var(--mw-blue);
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 28px;
+      text-align: center;
+    }
+
+    .flow-step-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--mw-blue-dark);
+      margin-bottom: 6px;
+    }
+
+    .flow-step-text {
+      font-size: 13px;
+      color: var(--mw-text);
+      line-height: 1.5;
+    }
+
+    footer {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 24px 28px 24px;
+      color: var(--mw-muted);
+      font-size: 12px;
+      background: #ffffff;
+    }
+
+    @media (max-width: 980px) {
+      .workflow-flowchart { grid-template-columns: 1fr; }
+      .flow-step:not(:last-child)::after {
+        content: "\2193";
+        top: auto;
+        bottom: -18px;
+        right: 50%;
+        transform: translateX(50%);
+      }
+      .prereq-layout { grid-template-columns: 1fr; }
+      .page { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
     }
   </style>
 </head>
-
 <body>
-  <div class="wrap">
+  <div class="page">
+    <aside class="sidebar">
+      <div class="sidebar-block">
+        <div class="sidebar-title">On this page</div>
+        <div class="sidebar-content">
+          <ul>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#prepare">Prerequisites</a></li>
+            <li><a href="#select-platform">Select a Vehicle Platform</a></li>
+            <li>
+              <button class="sidebar-toggle" aria-expanded="false" aria-controls="nav-components">
+                <span class="sidebar-toggle-label">Choose Component Models</span>
+                <span class="sidebar-toggle-icon">&#9654;</span>
+              </button>
+              <ul id="nav-components" class="sidebar-sublist">
+                <li><a href="#choose-components">Component Selection</a></li>
+                <li><a href="#dropdown-population">Dropdown Population</a></li>
+                <li><a href="#component-controls">Row Controls</a></li>
+                <li><a href="#link-params">Link Parameter Files</a></li>
+              </ul>
+            </li>
+            <li><a href="#review-preview">Review Preview and Description</a></li>
+            <li><a href="#define-environment">Environment and Initial Conditions</a></li>
+            <li><a href="#configure-hvac">HVAC Settings</a></li>
+            <li>
+              <button class="sidebar-toggle" aria-expanded="false" aria-controls="nav-driver">
+                <span class="sidebar-toggle-label">Driver, Controls, Drive Cycle</span>
+                <span class="sidebar-toggle-icon">&#9654;</span>
+              </button>
+              <ul id="nav-driver" class="sidebar-sublist">
+                <li><a href="#setup-driver">Driver Setup</a></li>
+                <li><a href="#drive-modes">Drive Mode Buttons</a></li>
+                <li><a href="#control-selection">Control Selection</a></li>
+                <li><a href="#drive-cycle">Drive Cycle</a></li>
+              </ul>
+            </li>
+            <li>
+              <button class="sidebar-toggle" aria-expanded="false" aria-controls="nav-actions">
+                <span class="sidebar-toggle-label">Save, Export, Create</span>
+                <span class="sidebar-toggle-icon">&#9654;</span>
+              </button>
+              <ul id="nav-actions" class="sidebar-sublist">
+                <li><a href="#export">Actions Overview</a></li>
+                <li><a href="#save-setup">Save Setup</a></li>
+                <li><a href="#param-export">Parameter Export</a></li>
+                <li><a href="#missing-params">Missing Param Links</a></li>
+                <li><a href="#create-model">Create Model</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </aside>
 
-    <h1>Configure and Export a BEV Model Using the BEV App</h1>
-    <p class="intro">
-      This workflow shows how to configure and export a battery electric vehicle model using the BEV App.
-      You will select a vehicle platform, choose component models and controls, set environment and HVAC options,
-      configure the driver and drive cycle, and export a Simulink model and parameter scripts.
-    </p>
+    <main class="content">
+      <div class="article-header">
+        <h1>Configure a BEV Model Using the BEV App</h1>
+        <p>
+          This workflow shows how to configure a battery electric vehicle model using the BEV App.
+          You will select a vehicle platform, choose component models and controls, set environment and HVAC options,
+          configure the driver and drive cycle, save your setup, and create a Simulink model with parameter scripts.
+        </p>
+      </div>
 
-    <div class="contents">
-      <h2>Contents</h2>
-      <ol>
-        <li><a href="#prepare">Prepare the required files and products</a></li>
-        <li><a href="#select-platform">Select a vehicle platform</a></li>
-        <li><a href="#choose-components">Choose component models</a></li>
-        <li><a href="#review-preview">Review the preview and description</a></li>
-        <li><a href="#define-environment">Define environment and initial conditions</a></li>
-        <li><a href="#configure-hvac">Configure HVAC settings</a></li>
-        <li><a href="#setup-driver">Set up driver, controls, and drive cycle</a></li>
-        <li><a href="#export">Export the model and parameters</a></li>
-      </ol>
-    </div>
+      <!-- Overview -->
+      <section id="overview">
+        <h2>Overview</h2>
+        <p>
+          The <strong>BEV App</strong> provides a guided interface for assembling a battery electric vehicle model from
+          component subsystems. Instead of manually wiring models and editing scripts, you select a vehicle configuration,
+          pick component fidelities from dropdowns, set environment and HVAC conditions, and let the app generate the
+          configured model and parameter scripts.
+        </p>
 
-    <h2 id="prepare">Prepare the required files and products</h2>
-    <p>
-      In this section, you prepare the software products and input files needed to complete the configuration and export workflow.
-    </p>
+        <div class="workflow-flowchart" aria-label="App workflow overview">
+          <div class="flow-step">
+            <div class="flow-step-number">1</div>
+            <div class="flow-step-title">Platform</div>
+            <div class="flow-step-text">Select base model, design scenario, and vehicle template.</div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-number">2</div>
+            <div class="flow-step-title">Components</div>
+            <div class="flow-step-text">Pick fidelity for each subsystem instance and link parameter files.</div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-number">3</div>
+            <div class="flow-step-title">Configure</div>
+            <div class="flow-step-text">Set environment, HVAC, driver modes, controller, and drive cycle.</div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-number">4</div>
+            <div class="flow-step-title">Save &amp; Create</div>
+            <div class="flow-step-text">Save setup, export parameters, or create the configured model.</div>
+          </div>
+        </div>
 
-    <p>The following list describes what you need before you begin.</p>
-    <ul>
-      <li>MATLAB&reg;.</li>
-      <li>Simulink&reg;.</li>
-      <li>Simscape&reg; and relevant add ons such as Simscape Electrical&trade;, Simscape Driveline&trade;, and Simscape Thermal&trade;.</li>
-      <li>A base BEV host model file in SLX format that the app updates.</li>
-      <li>Platform configuration files in JSON format.</li>
-      <li>Repository folders for components such as Battery, MotorDrive, Charger, and HVAC.</li>
-    </ul>
+        <div style="margin: 16px 0; text-align: center;">
+          <img src="../images/BEVappWindow.png" alt="BEV App main window" style="max-width: 100%; height: auto;" />
+        </div>
+      </section>
 
-    <div class="note">
-      Keep the base SLX model under version control and create a copy for experiments.
-    </div>
+      <!-- Prerequisites -->
+      <section id="prepare">
+        <h2>Prerequisites</h2>
+        <div class="prereq-layout">
+          <div>
+            <p>Before starting, open the project by running the project file.</p>
+            <pre><code>openProject("ElectricVehicleSimscape.prj")</code></pre>
+            <p>
+              Opening the project initializes the environment and makes all models, component folders,
+              configuration files, and helper scripts available to the app.
+            </p>
+          </div>
 
-    <p>The following image shows the BEV App main window used during this workflow.</p>
-    <img src="../images/BEVappWindow.png" alt="BEV App main window" />
+          <aside class="side-box">
+            <h3>Required products</h3>
+            <ul>
+              <li>MATLAB</li>
+              <li>Simulink</li>
+              <li>Simscape</li>
+              <li>Simscape Electrical</li>
+              <li>Simscape Driveline</li>
+            </ul>
+            <h3 style="margin-top: 14px;">Optional</h3>
+            <ul>
+              <li>Simscape Battery</li>
+              <li>Simscape Fluids</li>
+            </ul>
+          </aside>
+        </div>
 
-    <h2 id="select-platform">Select a vehicle platform</h2>
-    <p>
-      In this section, you select a base model and a vehicle configuration so the app can determine which component and control options are available.
-    </p>
+        <div class="note">
+          Keep the base SLX model under version control and create a copy for experiments.
+        </div>
+      </section>
 
-    <p>The following image shows the vehicle platform selection panel.</p>
-    <img src="../images/VehicleConfigPanel.png" alt="Vehicle platform selection panel" width="250" />
+      <!-- Select a vehicle platform -->
+      <section id="select-platform">
+        <h2>Select a Vehicle Platform</h2>
+        <p>
+          Select a base model and a vehicle configuration so the app can determine which component and control options are available.
+        </p>
 
-    <p>The following list describes what each dropdown does.</p>
-    <ol>
-      <li>Select the Base Model that contains the BEV layout canvas.</li>
-      <li>Select the Design Scenario that defines the platform configuration.</li>
-      <li>Select the vehicle configuration template that defines the model architecture.</li>
-    </ol>
+        <img src="../images/VehicleConfigPanel.png" alt="Vehicle platform selection panel" style="max-width: 280px;" />
 
-    <p>The following image shows an example base model structure.</p>
-    <img src="../images/BEVmodel.png" alt="Example base model structure" />
+        <p>The following list describes what each dropdown does.</p>
+        <ol>
+          <li><strong>Base Model</strong> &mdash; select the .slx canvas that contains the BEV layout.</li>
+          <li><strong>Design Scenario</strong> &mdash; select the JSON config that defines allowed components and fidelities. Preset configs ship with the project; user-saved setups appear below a separator.</li>
+          <li><strong>Veh. Config</strong> &mdash; select the vehicle template that defines the model architecture.</li>
+        </ol>
 
-    <p>The following image shows an example vehicle configuration model.</p>
-    <img src="../images/VehicleConfiguration.png" alt="Example vehicle configuration model" />
+        <img src="../images/BEVmodel.png" alt="Example base model structure" />
+        <img src="../images/VehicleConfiguration.png" alt="Example vehicle configuration model" />
+      </section>
 
-    <h2 id="choose-components">Choose component models</h2>
-    <p>
-      In this section, you select the component variants used to build the exported model.
-      The app uses your platform JSON to match each instance in the base model to a list of allowed component models.
-    </p>
+      <!-- Choose component models -->
+      <section id="choose-components">
+        <h2>Choose Component Models</h2>
+        <p>
+          Select the component variants used to build the configured model. The app reads the design scenario JSON
+          and matches each instance in the base model to its list of allowed component models.
+        </p>
 
-    <p>The following image shows the component selection panel.</p>
-    <img src="../images/ComponentPanel.png" alt="Component selection panel" width="250" />
+        <img src="../images/ComponentPanel.png" alt="Component selection panel" style="max-width: 280px;" />
 
-    <p>
-      The label text in each row comes from the JSON <code>Instances</code> list and must match a subsystem name in your base model.
-      The dropdown lists model files defined under <code>Models</code> in the JSON, filtered to show only valid options.
-    </p>
+        <p>
+          The label in each row comes from the config <code>Instances</code> list and must match a subsystem name in your base model.
+          The dropdown lists model files defined under <code>Models</code>, filtered to show only models that exist on disk.
+        </p>
 
-    <h3>How the dropdown gets populated</h3>
-    <p>The following list describes how dropdown options are built.</p>
-    <ul>
-      <li>The app scans your component repository for available model files.</li>
-      <li>It filters them using the JSON <code>Models</code> list for each component.</li>
-      <li>Only matching models appear in the dropdown.</li>
-    </ul>
+        <h3 id="dropdown-population">How the dropdown gets populated</h3>
+        <ul>
+          <li>The app scans the component repository for available model files.</li>
+          <li>It filters them against the config <code>Models</code> list for each component.</li>
+          <li>Only matching models appear in the dropdown. Missing models are marked with a red note.</li>
+        </ul>
 
-    <p>The following example shows how component entries in the JSON map to instances and dropdown options.</p>
-    <pre>
-"Components": {
+        <p>Example config structure:</p>
+        <pre><code>"Components": {
   "BatteryHV": {
     "Instances": ["Battery"],
     "Models": ["BatteryLumped", "BatteryLumpedThermal", "BatteryTableBased"]
@@ -225,225 +527,320 @@
     "Instances": ["Rear Motor (EM2)", "Front Motor (EM1)"],
     "Models": ["MotorDriveGear", "MotorDriveGearTh", "MotorDriveLube"]
   }
-}
-    </pre>
+}</code></pre>
 
-    <h3>Controls in each component row</h3>
-    <p>The following list describes what each UI element is used for.</p>
-    <ul>
-      <li><b>Label</b> identifies the component instance name from JSON <code>Instances</code> and should match the subsystem name in the base model.</li>
-      <li><b>Dropdown</b> selects a component model from the JSON filtered <code>Models</code> list.</li>
-      <li><b>Open</b> opens the selected component model.</li>
-      <li><b>Param</b> opens the parameter script for that component.</li>
-      <li><b>Question mark</b> opens the preview and description for the selection.</li>
-    </ul>
+        <h3 id="component-controls">Controls in each component row</h3>
+        <table>
+          <tr><th>Control</th><th>Description</th></tr>
+          <tr><td><strong>Label</strong></td><td>Instance name from config <code>Instances</code>; must match the subsystem name in the base model.</td></tr>
+          <tr><td><strong>Dropdown</strong></td><td>Select a component model from the filtered <code>Models</code> list.</td></tr>
+          <tr><td><strong>Open</strong></td><td>Open the selected component model in Simulink.</td></tr>
+          <tr><td><strong>Param</strong></td><td>Open the parameter script for the component. Right-click to link or unlink a custom param file.</td></tr>
+          <tr><td><strong>?</strong></td><td>Show the preview snapshot and description for the selected model.</td></tr>
+        </table>
 
-    <h3>Link parameter files</h3>
-    <p>
-      In this section, you link a parameter file to a component so the Param button opens the correct script during setup and export.
-      When linked, the Param button opens the associated parameter file that follows the convention <code>&lt;SelectedComponentName&gt;Param.m</code>.
-      You can link any parameter file to the component. Right click the Param button to link or unlink a parameter file.
-    </p>
+        <h3 id="link-params">Link parameter files</h3>
+        <p>
+          Link a parameter file to a component so the Param button opens the correct script during setup and export.
+          The default convention is <code>&lt;ModelName&gt;Params.m</code> in the component's Model folder.
+          Right-click the Param button to link or unlink a custom file.
+        </p>
 
-    <p>The following image shows the right click menu used to link and unlink a parameter file.</p>
-    <img src="../images/ComponentPanelParam.png" alt="Right click Param menu used to link and unlink a parameter file" width="250" />
+        <img src="../images/ComponentPanelParam.png" alt="Right-click Param menu" style="max-width: 280px;" />
 
-    <div class="note">
-      Start with no thermal variants to check connectivity, then switch to detailed electro thermal variants after the setup is stable.
-    </div>
+        <div class="note">
+          Start with nonthermal variants to check connectivity, then switch to electro-thermal variants after the setup is stable.
+        </div>
+      </section>
 
-    <h2 id="review-preview">Review the preview and description</h2>
-    <p>
-      In this section, you confirm that the selected component model and control model match what you intend to export.
-      When you change a selection in the Components panel, the app updates the preview and description automatically.
-    </p>
+      <!-- Review preview and description -->
+      <section id="review-preview">
+        <h2>Review the Preview and Description</h2>
+        <p>
+          Confirm that the selected component model matches what you intend to use.
+          The preview and description update automatically when you change a dropdown selection.
+        </p>
 
-    <h3>Preview panel</h3>
-    <p>The following list describes what the preview panel helps you check.</p>
-    <ul>
-      <li>Shows a snapshot of the selected model canvas.</li>
-      <li>Updates when you change a dropdown selection.</li>
-      <li>Helps catch missing lines, wrong number of ports, or wrong instance selection before export.</li>
-    </ul>
+        <h3>Preview panel</h3>
+        <ul>
+          <li>Shows a snapshot of the selected model canvas.</li>
+          <li>Updates when you change a dropdown selection.</li>
+          <li>Helps catch missing connections or wrong instance selection before creating the model.</li>
+        </ul>
 
-    <p>The following image shows an example preview panel for a selected model.</p>
-    <img src="../images/SelectionPreviewPanel.png" alt="Preview panel for a selected model" width="300" />
+        <img src="../images/SelectionPreviewPanel.png" alt="Preview panel" style="max-width: 340px;" />
 
-    <h3>Description panel</h3>
-    <p>The following list describes what the description panel provides.</p>
-    <ul>
-      <li>Summarizes the purpose of the selected model.</li>
-      <li>Describes the main interfaces and key assumptions for the model.</li>
-      <li>Provides selection context when multiple variants exist.</li>
-    </ul>
+        <h3>Description panel</h3>
+        <ul>
+          <li>Summarizes the purpose of the selected model.</li>
+          <li>Describes main interfaces and key assumptions.</li>
+          <li>Provides context when multiple fidelity variants exist.</li>
+        </ul>
 
-    <p>The following image shows an example description panel for a selected model.</p>
-    <img src="../images/SelectionDescriptionPanel.png" alt="Description panel for a selected model" width="300" />
+        <img src="../images/SelectionDescriptionPanel.png" alt="Description panel" style="max-width: 340px;" />
+      </section>
 
-    <h2 id="define-environment">Define environment and initial conditions</h2>
-    <p>
-      In this section, you define ambient environment and initial state values used by thermal and gas based components.
-      These values are applied through the environment subsystem in the base model.
-    </p>
+      <!-- Environment and initial conditions -->
+      <section id="define-environment">
+        <h2>Define Environment and Initial Conditions</h2>
+        <p>
+          Define ambient environment and initial state values used by thermal and fluid components.
+          These values propagate to the environment subsystem in the base model.
+        </p>
 
-    <p>The following list describes the parameters in this panel.</p>
-    <ul>
-      <li><b>Amb. Temp</b> is the ambient air temperature around the vehicle. Default is <code>25</code> degrees Celsius.</li>
-      <li><b>Amb. Press Init</b> is the initial atmospheric pressure. Default is <code>1</code> bar.</li>
-      <li><b>Rel. Humidity Init</b> is the initial relative humidity of ambient air. Default is <code>0.3</code>.</li>
-      <li><b>CO2 Fraction Init</b> is the carbon dioxide volume fraction in ambient air. Default is <code>0.0004</code>.</li>
-    </ul>
+        <table>
+          <tr><th>Parameter</th><th>Description</th><th>Default</th></tr>
+          <tr><td>Amb. Temp</td><td>Ambient air temperature around the vehicle</td><td>25 &deg;C</td></tr>
+          <tr><td>Amb. Press Init</td><td>Initial atmospheric pressure</td><td>1 bar</td></tr>
+          <tr><td>Rel. Humidity Init</td><td>Initial relative humidity of ambient air</td><td>0.3</td></tr>
+          <tr><td>CO2 Fraction Init</td><td>Carbon dioxide volume fraction in ambient air</td><td>0.0004</td></tr>
+        </table>
 
-    <p>
-      When you change these values in the app, they propagate to the environment subsystem of the base model.
-      For most components, the updated conditions take effect the next time you export or simulate.
-    </p>
+        <img src="../images/EnvInitPanel.png" alt="Environment panel" style="max-width: 340px;" />
 
-    <p>The following image shows the environment and initial condition panel.</p>
-    <img src="../images/EnvInitPanel.png" alt="Environment and initial condition panel" width="300" />
+        <div class="note">
+          Define multiple environment presets (Hot City, Cold Highway, Altitude Test), then compare results by switching presets.
+        </div>
+      </section>
 
-    <div class="note">
-      Define multiple environment presets such as Hot City, Cold Highway, and Altitude Test, then compare results by switching presets.
-    </div>
+      <!-- HVAC settings -->
+      <section id="configure-hvac">
+        <h2>Configure HVAC Settings</h2>
+        <p>
+          Control whether cabin air conditioning is active during simulation and set the target cabin temperature.
+          This panel is enabled only when the selected configuration includes an HVAC component.
+        </p>
 
-    <h2 id="configure-hvac">Configure HVAC settings</h2>
-    <p>
-      In this section, you control whether cabin air conditioning is active during simulation and set the target cabin temperature.
-      This panel is enabled only when the selected configuration includes an HVAC component.
-    </p>
+        <table>
+          <tr><th>Control</th><th>Description</th><th>Default</th></tr>
+          <tr><td>AC Status</td><td>Toggle the air conditioning system on or off</td><td>Off</td></tr>
+          <tr><td>Cabin Temp Setpoint</td><td>Desired cabin air temperature</td><td>20 &deg;C</td></tr>
+        </table>
 
-    <p>The following list describes the controls in this panel.</p>
-    <ul>
-      <li><b>AC Status</b> toggles the air conditioning system on and off. Default is off.</li>
-      <li><b>Cabin Temperature Setpoint</b> defines the desired cabin air temperature. Default is <code>20</code> degrees Celsius.</li>
-    </ul>
+        <p>
+          Turning AC on increases total power demand and thermal load, which affects battery drain and range.
+          For baseline studies, run with AC off first, then enable AC to measure the impact on efficiency.
+        </p>
 
-    <p>
-      Turning AC on increases total power demand and thermal load, which affects battery drain and range.
-      For baseline studies, run with AC off first, then enable AC to measure the impact on efficiency.
-    </p>
+        <img src="../images/HVACConfigPanel.png" alt="HVAC configuration panel" style="max-width: 340px;" />
+      </section>
 
-    <p>The following image shows the HVAC configuration panel.</p>
-    <img src="../images/HVACConfigPanel.png" alt="HVAC configuration panel" width="300" />
+      <!-- Driver, controls, drive cycle -->
+      <section id="setup-driver">
+        <h2>Set Up Driver, Controls, and Drive Cycle</h2>
+        <p>
+          Set drive mode options, select a controller model, and choose a drive cycle.
+          These settings define how the vehicle is driven in simulation and which speed profile the driver follows.
+        </p>
 
-    <h2 id="setup-driver">Set up driver, controls, and drive cycle</h2>
-    <p>
-      In this section, you set drive mode options, select a controller model, and choose a drive cycle.
-      These settings define how the vehicle is driven in simulation and which speed profile the driver follows.
-    </p>
+        <img src="../images/DriverSetupPanel.png" alt="Driver setup panel" style="max-width: 340px;" />
 
-    <p>The following image shows the driver setup panel.</p>
-    <img src="../images/DriverSetupPanel.png" alt="Driver setup panel" width="300" />
+        <h3 id="drive-modes">Drive mode buttons</h3>
+        <table>
+          <tr><th>Button</th><th>Description</th></tr>
+          <tr><td><strong>AWD</strong></td><td>Enable or disable all-wheel drive. When enabled, both front and rear motors are active.</td></tr>
+          <tr><td><strong>Regen</strong></td><td>Enable or disable regenerative braking. When disabled, the model needs a mechanical brake subsystem.</td></tr>
+          <tr><td><strong>Charging</strong></td><td>Switch to charging mode. Disables propulsion settings such as AWD and Regen.</td></tr>
+        </table>
 
-    <h3>Drive mode buttons</h3>
-    <p>The following list describes what each drive mode toggle does.</p>
-    <ul>
-      <li><b>AWD</b> enables or disables all wheel drive mode. When enabled, front and rear motor drives are active. When disabled, rear motor drive is active.</li>
-      <li><b>Regen</b> enables or disables regenerative braking. When disabled, ensure the model includes a mechanical brake subsystem to provide braking torque.</li>
-      <li><b>Charging</b> switches the vehicle to charging mode and disables propulsion related settings such as AWD and Regen.</li>
-    </ul>
+        <h3 id="control-selection">Control selection</h3>
+        <p>
+          The controller dropdown is populated from the config <code>Controls</code> section.
+          It lists control models available for the selected configuration.
+        </p>
 
-    <h3>Control selection</h3>
-    <p>
-      The controller dropdown is populated from the JSON <code>Controls</code> section. It lists control models available for the selected configuration.
-      Selecting a control model updates the driver and control logic used in simulation.
-    </p>
-
-    <p>The following example shows how the controls section is represented in the JSON.</p>
-    <pre>
-"Controls": {
+        <pre><code>"Controls": {
   "Instances": ["Controller"],
   "Models": ["ControllerFRM", "ControllerHVAC"]
-}
-    </pre>
+}</code></pre>
 
-    <p>The following list describes the controller UI elements.</p>
-    <ul>
-      <li><b>Dropdown</b> lists the control models defined under JSON <code>Models</code>.</li>
-      <li><b>Question mark</b> shows the control description and preview of the control block layout.</li>
-    </ul>
+        <table>
+          <tr><th>Element</th><th>Description</th></tr>
+          <tr><td><strong>Dropdown</strong></td><td>Lists control models from config <code>Models</code>.</td></tr>
+          <tr><td><strong>?</strong></td><td>Shows the control description and preview of the control block layout.</td></tr>
+        </table>
 
-    <h3>Drive cycle selection</h3>
-    <p>
-      The drive cycle dropdown defines which speed versus time profile the driver follows.
-      The list is populated from options available in the drive cycle source block inside the base model.
-    </p>
+        <h3 id="drive-cycle">Drive cycle selection</h3>
+        <p>
+          The drive cycle dropdown defines which speed-versus-time profile the driver follows.
+          The list is populated from options available in the drive cycle source block inside the base model.
+        </p>
+        <ul>
+          <li>Common cycles: <code>FTP72</code>, <code>WLTP</code>, <code>NEDC</code>, <code>US06</code>.</li>
+          <li>If no options appear, install the Simulink Support Package for Vehicle Drive Cycles.</li>
+          <li>The <strong>?</strong> button opens the description and preview of the selected drive cycle.</li>
+        </ul>
 
-    <p>The following list describes drive cycle selection behavior and requirements.</p>
-    <ul>
-      <li>Common examples include <code>FTP72</code>, <code>WLTP</code>, <code>NEDC</code>, and <code>US06</code>.</li>
-      <li>If no options appear, install the Vehicle Drive Cycle Blocks package from the Simulink Support Package for Vehicle Drive Cycles.</li>
-      <li>The question mark opens the description and preview of the selected drive cycle profile.</li>
-    </ul>
+        <div class="note">
+          Start with a short cycle such as FTP72 to verify setup, then switch to longer cycles such as WLTP for performance studies.
+        </div>
+      </section>
 
-    <div class="note">
-      Start with a short cycle such as FTP72 to verify setup, then switch to longer cycles such as WLTP for performance studies.
-    </div>
+      <!-- Save, export, create -->
+      <section id="export">
+        <h2>Save Setup, Export Parameters, and Create Model</h2>
+        <p>
+          In this section, you save your configuration, generate parameter scripts, and create the Simulink model.
+        </p>
 
-    <h2 id="export">Export the model and parameters</h2>
-    <p>
-      In this section, you generate the Simulink model and parameter scripts that match your selections.
-      Use model export when you want the model structure updated, and use parameter export when you want parameter values scripted.
-    </p>
+        <img src="../images/ExportPanel.png" alt="Action controls" style="max-width: 340px;" />
 
-    <p>The following image shows the export controls.</p>
-    <img src="../images/ExportPanel.png" alt="Export controls" width="300" />
+        <h3 id="save-setup">Save Setup</h3>
+        <p>
+          Save the current session as a JSON config file. The saved setup captures all component selections,
+          environment settings, HVAC conditions, and operating modes.
+        </p>
+        <ul>
+          <li>Saves to <code>APP/Config/User/</code> as a JSON file.</li>
+          <li>The saved setup appears in the Design Scenario dropdown below a separator.</li>
+          <li>Loading a saved setup restores the full session including all selections and settings.</li>
+        </ul>
 
-    <h3>Model Export</h3>
-    <p>
-      Use Model Export to create or update the BEV model using the selections you made in the app.
-      The following list describes what Model Export does.
-    </p>
-    <ul>
-      <li>Opens the selected base model.</li>
-      <li>Locates subsystem instances defined by JSON <code>Instances</code> inside the base model.</li>
-      <li>Replaces or configures those subsystems with the component models selected in the Components panel.</li>
-      <li>Applies environment and HVAC settings.</li>
-      <li>Applies driver, controls, and drive cycle selections.</li>
-    </ul>
+        <div class="note">
+          <strong>Save Setup</strong> creates a reusable JSON config that can be loaded back into the app.
+          <strong>Parameter Export</strong> generates a MATLAB script for simulation. They serve different purposes.
+        </div>
 
-    <h3>Parameter Export</h3>
-    <p>
-      Use Parameter Export to generate MATLAB parameter scripts that correspond to the selected components and controls.
-      The following list describes what Parameter Export does.
-    </p>
-    <ul>
-      <li>Creates or updates a parameter file for the current configuration.</li>
-      <li>Collects linked component parameter files that you linked in the Components panel.</li>
-      <li>Writes HVAC, environment, and driver related variables when they are exposed by the configuration.</li>
-    </ul>
+        <h3 id="param-export">Parameter Export</h3>
+        <p>
+          Generate MATLAB parameter scripts that correspond to the selected components and controls.
+        </p>
+        <ul>
+          <li>Creates or updates a parameter script for the current configuration.</li>
+          <li>Collects linked component parameter files from the Components panel.</li>
+          <li>Writes HVAC, environment, and driver variables when exposed by the configuration.</li>
+        </ul>
 
-    <h3>Missing parameter link panel</h3>
-    <p>
-      If one or more components do not have a parameter file linked, the app opens a link parameter file panel when you press Parameter Export.
-      The following list describes what you can do in that panel.
-    </p>
-    <ul>
-      <li>Browse to an existing parameter file and link it.</li>
-      <li>Continue with defaults for components that remain unlinked.</li>
-    </ul>
+        <h3 id="missing-params">Missing parameter link panel</h3>
+        <p>
+          If components do not have a parameter file linked, the app opens a link panel when you press Parameter Export.
+        </p>
+        <ul>
+          <li>Browse to an existing parameter file and link it.</li>
+          <li>Continue with defaults for components that remain unlinked.</li>
+        </ul>
+        <p>
+          This uses the same linking mechanism as the right-click option in the Components panel.
+        </p>
 
-    <p>
-      This uses the same linking mechanism as the right click link param file option in the Components panel.
-      Parameter Export checks this to avoid generating an incomplete setup script.
-    </p>
-
-    <h3>Model Setup</h3>
-    <p>
-      Model Setup runs the recommended export sequence in one action.
-      Use it when you want a single button workflow that updates both the model structure and parameter scripts.
-    </p>
-
-    <footer>
-      <p>
-        You have completed the workflow to configure and export a battery electric vehicle model using the BEV App.
-        Rerun the workflow with different selections to compare configurations, operating conditions, and component variants.
-      </p>
-      <p>
-        This workflow guide is based on the original help content and is intended to support repeatable and consistent model setup.
-      </p>
-    </footer>
-
+        <h3 id="create-model">Create Model</h3>
+        <p>
+          Generate or update the configured Simulink model so it is ready to simulate.
+        </p>
+        <ul>
+          <li>Opens the selected base model.</li>
+          <li>Locates subsystem instances defined by config <code>Instances</code>.</li>
+          <li>Replaces or configures those subsystems with the selected component models.</li>
+          <li>Applies environment, HVAC, driver, controls, and drive cycle settings.</li>
+        </ul>
+      </section>
+    </main>
   </div>
+
+  <footer>
+    Copyright 2022 &ndash; 2025 The MathWorks, Inc.
+  </footer>
+
+  <script>
+    /* ---- Scroll-based active section tracking ---- */
+    (function () {
+      var navLinks = Array.from(document.querySelectorAll('.sidebar a[href^="#"]')).filter(function (link) {
+        var href = link.getAttribute('href');
+        return href && href.length > 1;
+      });
+
+      var items = navLinks
+        .map(function (link) {
+          var href = link.getAttribute('href');
+          try {
+            var section = document.querySelector(href);
+            return section ? { link: link, section: section } : null;
+          } catch (err) {
+            return null;
+          }
+        })
+        .filter(Boolean);
+
+      if (!items.length) return;
+
+      var activeId = null;
+      function setActive(id) {
+        if (activeId === id) return;
+        activeId = id;
+        items.forEach(function (item) {
+          var isActive = item.section.id === id;
+          item.link.classList.toggle('active', isActive);
+          if (isActive) {
+            item.link.setAttribute('aria-current', 'true');
+            /* Auto-expand parent collapsible group */
+            var sublist = item.link.closest('.sidebar-sublist');
+            if (sublist && !sublist.classList.contains('is-open')) {
+              sublist.classList.add('is-open');
+              var toggle = sublist.previousElementSibling;
+              if (toggle && toggle.classList.contains('sidebar-toggle')) {
+                toggle.setAttribute('aria-expanded', 'true');
+              }
+            }
+          } else {
+            item.link.removeAttribute('aria-current');
+          }
+        });
+      }
+
+      function updateActiveSection() {
+        var offset = 140;
+        var scrollY = window.scrollY + offset;
+        var lastItem = items[items.length - 1];
+
+        if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 20)) {
+          setActive(lastItem.section.id);
+          return;
+        }
+
+        var current = items[0];
+        for (var i = 0; i < items.length; i++) {
+          if (items[i].section.offsetTop <= scrollY) {
+            current = items[i];
+          } else {
+            break;
+          }
+        }
+
+        setActive(current.section.id);
+      }
+
+      var ticking = false;
+      function onScroll() {
+        if (!ticking) {
+          window.requestAnimationFrame(function () {
+            updateActiveSection();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll);
+      window.addEventListener('load', updateActiveSection);
+      updateActiveSection();
+    })();
+
+    /* ---- Collapsible sidebar groups ---- */
+    (function () {
+      var toggles = document.querySelectorAll('.sidebar-toggle');
+      toggles.forEach(function (toggle) {
+        toggle.addEventListener('click', function () {
+          var expanded = toggle.getAttribute('aria-expanded') === 'true';
+          toggle.setAttribute('aria-expanded', String(!expanded));
+          var targetId = toggle.getAttribute('aria-controls');
+          var sublist = document.getElementById(targetId);
+          if (sublist) {
+            sublist.classList.toggle('is-open', !expanded);
+          }
+        });
+      });
+    })();
+  </script>
 </body>
 </html>

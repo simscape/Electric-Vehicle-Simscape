@@ -29,6 +29,6 @@ Each template selects component fidelities appropriate to its simulation scope:
 | Chiller | -- | -- | Chiller |
 | BatteryHeater | -- | -- | Heater |
 
-Fidelity mapping is defined in `VehicleTemplateConfig.json` at the `Model/` level.
+Fidelity mapping is defined in config JSON files under `APP/Config/Preset/`.
 
 Copyright 2026 The MathWorks, Inc.
