@@ -17,13 +17,11 @@ function applySetupState(app, state)
 %     app   — BEVapp handle
 %     state — struct from buildSetupState or jsondecode of a saved setup JSON
 
-    % ---- Validate input ----
+    % ---- Validate and normalize input ----
     if ~isstruct(state), return; end
-    flds = fieldnames(state);
-    if isempty(flds), return; end
 
-    templateName = flds{1};
-    setupData    = state.(templateName);
+    [templateName, setupData] = normalizeState(state);
+    if isempty(templateName), return; end
 
     % ---- 1. Config file dropdown (must be set FIRST — drives JSON load) ----
     if isfield(setupData, 'ConfigFile') && ~isempty(setupData.ConfigFile)
@@ -60,7 +58,26 @@ function applySetupState(app, state)
     applySelections(app, setupData);
 end
 
-%% Local helper
+%% Local helpers
+
+function [templateName, setupData] = normalizeState(state)
+%NORMALIZESTATE Detect flat vs wrapped state and return (templateName, inner struct).
+%   Flat format:    state.TemplateName = 'X'; state.Components = ...
+%   Wrapped format: state.X.Components = ...  (from saved JSON files)
+    if isfield(state, 'TemplateName')
+        templateName = state.TemplateName;
+        setupData    = rmfield(state, 'TemplateName');
+    else
+        flds = fieldnames(state);
+        if isempty(flds)
+            templateName = '';
+            setupData    = struct();
+            return;
+        end
+        templateName = flds{1};
+        setupData    = state.(templateName);
+    end
+end
 
 function setDropdownByMatch(dropdown, target, ext)
 %SETDROPDOWNBYMATCH Try to match target in dropdown items and set Value.

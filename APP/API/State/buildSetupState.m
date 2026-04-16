@@ -1,23 +1,28 @@
 function state = buildSetupState(app)
-%BUILDSETUPSTATE Snapshot the current app UI state into a hierarchical struct.
+%BUILDSETUPSTATE Snapshot the current app UI state into a flat struct.
 %   state = buildSetupState(app)
 %
 %   Reads all user selections from the BEV app and returns a
-%   JSON-serializable struct that mirrors the config JSON structure
-%   but captures what the user SELECTED (not what's available).
+%   JSON-serializable struct that captures what the user SELECTED
+%   (not what's available).
 %
-%   Output structure:
-%     state.<TemplateName>.SchemaVersion
-%     state.<TemplateName>.Timestamp
-%     state.<TemplateName>.BEVModel
-%     state.<TemplateName>.ConfigFile
-%     state.<TemplateName>.Root
-%     state.<TemplateName>.Components      — per-instance selections
-%     state.<TemplateName>.Controls        — controller enable + model
-%     state.<TemplateName>.DriveCycle      — cycle enable + value
-%     state.<TemplateName>.Environment     — ambient/cabin/pressure settings
-%     state.<TemplateName>.Dashboard       — toggle button states
-%     state.<TemplateName>.SystemParameter — param file names from config
+%   Returns a FLAT struct — TemplateName is a plain field, not a
+%   wrapper key. Save/load functions wrap under template key for
+%   file-level JSON compatibility.
+%
+%   Output fields:
+%     state.TemplateName     — vehicle template basename
+%     state.SchemaVersion
+%     state.Timestamp
+%     state.BEVModel
+%     state.ConfigFile
+%     state.Root
+%     state.Components       — per-instance selections
+%     state.Controls         — controller enable + model
+%     state.DriveCycle       — cycle enable + value
+%     state.Environment      — ambient/cabin/pressure settings
+%     state.Dashboard        — toggle button states
+%     state.SystemParameter  — param file names from config
 %
 %   The struct contains NO handle objects, NO function handles —
 %   only strings, doubles, logicals, and struct arrays.
@@ -33,28 +38,22 @@ function state = buildSetupState(app)
         root = pwd;
     end
 
-    % ---- Assemble the setup state ----
-    setupState = struct();
+    % ---- Assemble flat state ----
+    state = struct();
 
-    setupState.SchemaVersion = '1.0';
-    setupState.Timestamp     = char(datetime('now', 'Format', 'yyyy-MM-dd HH:mm:ss'));
-    setupState.BEVModel      = bevModel;
-    setupState.ConfigFile    = configFile;
-    setupState.Root          = root;
+    state.TemplateName   = templateName;
+    state.SchemaVersion  = '1.0';
+    state.Timestamp      = char(datetime('now', 'Format', 'yyyy-MM-dd HH:mm:ss'));
+    state.BEVModel       = bevModel;
+    state.ConfigFile     = configFile;
+    state.Root           = root;
 
-    setupState.Components      = buildComponentsHierarchy(app);
-    setupState.Controls        = buildControlState(app);
-    setupState.DriveCycle      = buildDriveCycleState(app);
-    setupState.Environment     = buildEnvironmentState(app);
-    setupState.Dashboard       = buildDashboardState(app);
-    setupState.SystemParameter = buildSystemParameterState(configFile, templateName);
-
-    % ---- Wrap under template name as top-level key ----
-    if ~isempty(templateName) && isvarname(templateName)
-        state.(templateName) = setupState;
-    else
-        state.Setup = setupState;
-    end
+    state.Components      = buildComponentsHierarchy(app);
+    state.Controls        = buildControlState(app);
+    state.DriveCycle      = buildDriveCycleState(app);
+    state.Environment     = buildEnvironmentState(app);
+    state.Dashboard       = buildDashboardState(app);
+    state.SystemParameter = buildSystemParameterState(configFile, templateName);
 end
 
 %% ========================= Section builders =========================

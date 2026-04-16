@@ -91,7 +91,9 @@ function valid = validateConfigOrWarn(app, rawCfg, templateKey)
     try
         validateVehicleConfig(rawCfg, templateKey);
         valid = true;
-    catch
+    catch ME
+        warning('BEVapp:validateConfigOrWarn', ...
+            'Config validation failed: %s', ME.message);
         setExportButtonsEnabled(app, false);
         uialert(app.UIFigure, ...
             "Config JSON structure is invalid. Check help document.", "Error");
@@ -154,7 +156,9 @@ function showConfigurationWarnings(app, templateNotes, templateMissingLines, mis
     try
         uialert(app.UIFigure, strjoin(warningLines, newline), ...
             'Configuration warnings');
-    catch
+    catch ME
+        warning('BEVapp:showConfigurationWarnings', ...
+            'uialert fallback to warndlg: %s', ME.message);
         warndlg(strjoin(warningLines, newline), 'Configuration warnings');
     end
 end

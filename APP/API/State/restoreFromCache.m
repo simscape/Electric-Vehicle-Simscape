@@ -32,10 +32,8 @@ function restored = restoreFromCache(app)
         state = jsondecode(fileread(cacheFile));
 
         if ~isstruct(state), return; end
-        flds = fieldnames(state);
-        if isempty(flds), return; end
 
-        applySelections(app, state.(flds{1}));
+        applySelections(app, state);
         restored = true;
     catch ME
         warning('BEVapp:restoreFromCache', ...

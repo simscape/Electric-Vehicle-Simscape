@@ -11,18 +11,14 @@ function exportParamScript(app, outFile, state)
     if nargin < 2, outFile = ""; end
     if nargin < 3, state = buildSetupState(app); end
 
-    % ---- Resolve template from state ----
-    flds = fieldnames(state);
-    templateName = flds{1};
-    tmpl = state.(templateName);
-
+    % ---- Read identifiers from flat state ----
     try
         projectRoot = char(matlab.project.rootProject().RootFolder);
     catch
-        projectRoot = tmpl.Root;
+        projectRoot = state.Root;
     end
 
-    topModel = tmpl.BEVModel;
+    topModel = state.BEVModel;
     if isempty(topModel)
         error('exportParamScript:NoTopModel', ...
             'Top model name is missing or empty.');
@@ -36,18 +32,18 @@ function exportParamScript(app, outFile, state)
     outFile = string(ensureExtension(char(outFile), '.m'));
 
     % ---- Extract environment values from state ----
-    env = tmpl.Environment;
+    env = state.Environment;
     ambTempKelvin    = sprintf('%g+273.15', double(env.AmbientTemp));
     cabinTempKelvin  = sprintf('%g+273.15', double(env.CabinSetpoint));
-    acStatusStr      = mat2str(logical(tmpl.Dashboard.ACOn));
+    acStatusStr      = mat2str(logical(state.Dashboard.ACOn));
     ambPressureMPa   = sprintf('%g/10',     double(env.AmbPressure));
     relHumidityStr   = sprintf('%g',        double(env.RelHumidity));
     co2FractionStr   = sprintf('%g',        double(env.CO2Fraction));
-    acEnabled        = tmpl.Dashboard.ACEnabled;
-    controlActive    = tmpl.Controls.Enabled;
+    acEnabled        = state.Dashboard.ACEnabled;
+    controlActive    = state.Controls.Enabled;
 
     % ---- Collect and validate param file links ----
-    paramLinks = collectParamLinksFromState(tmpl);
+    paramLinks = collectParamLinksFromState(state);
     if isempty(paramLinks)
         error('exportParamScript:NoComponents', ...
             'No component instances found.');
@@ -135,7 +131,7 @@ function exportParamScript(app, outFile, state)
     end
 
     % System parameters
-    L = appendSystemParams(L, tmpl.SystemParameter);
+    L = appendSystemParams(L, state.SystemParameter);
 
     % ---- Write file ----
     fid = fopen(outFile, 'w');
@@ -197,15 +193,15 @@ function L = appendSystemParams(L, sysParam)
     L = [L; ""];
 end
 
-function paramLinks = collectParamLinksFromState(tmpl)
+function paramLinks = collectParamLinksFromState(state)
 %COLLECTPARAMLINKSFROMSTATE Extract param file paths from state Components.
 %   Supports both unified (Selections) and legacy (Instances as struct) format.
     paramLinks = struct('Comp', {}, 'ParamFilePath', {});
-    if ~isfield(tmpl, 'Components'), return; end
+    if ~isfield(state, 'Components'), return; end
 
-    compTypes = fieldnames(tmpl.Components);
+    compTypes = fieldnames(state.Components);
     for c = 1:numel(compTypes)
-        comp = tmpl.Components.(compTypes{c});
+        comp = state.Components.(compTypes{c});
 
         if isfield(comp, 'Selections') && isstruct(comp.Selections)
             selData = comp.Selections;

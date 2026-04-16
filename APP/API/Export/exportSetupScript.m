@@ -13,15 +13,11 @@ function exportSetupScript(app, outFile, state)
 
     if nargin < 3, state = buildSetupState(app); end
 
-    % ---- Resolve template from state ----
-    flds = fieldnames(state);
-    templateName = flds{1};
-    tmpl = state.(templateName);
-
-    topModelName     = tmpl.BEVModel;
-    vehicleTemplate  = templateName;
-    controlActive    = tmpl.Controls.Enabled;
-    driveCycleActive = tmpl.DriveCycle.Enabled;
+    % ---- Read identifiers from flat state ----
+    topModelName     = state.BEVModel;
+    vehicleTemplate  = state.TemplateName;
+    controlActive    = state.Controls.Enabled;
+    driveCycleActive = state.DriveCycle.Enabled;
 
     % ---- Locate model file ----
     try
@@ -54,7 +50,7 @@ function exportSetupScript(app, outFile, state)
     end
 
     % ---- Collect component selections from state ----
-    components = collectComponentSelections(tmpl, vehicleBlockPath);
+    components = collectComponentSelections(state, vehicleBlockPath);
 
     % Filter out __MISSING__ entries
     targets = {components.Target};
@@ -75,11 +71,11 @@ function exportSetupScript(app, outFile, state)
     % ---- Assemble script lines ----
     L = assembleScriptLines(topModelName, topModelFile, ...
         vehicleBlockPath, vehicleTemplate, controlBlockPath, ...
-        controlActive, driveCycleActive, tmpl, components, projectRoot);
+        controlActive, driveCycleActive, state, components, projectRoot);
 
     % ---- Detect drive cycle block path (needs live model) ----
     if driveCycleActive
-        driveCycleSelected = char(tmpl.DriveCycle.Value);
+        driveCycleSelected = char(state.DriveCycle.Value);
         driveCycleBlocks = find_system(topModelName, ...
             'LookUnderMasks', 'all', 'FollowLinks', 'on', ...
             'MatchFilter', @Simulink.match.allVariants, ...
@@ -139,14 +135,14 @@ function modelFile = findModelFile(modelName, projectRoot)
     modelFile = '';
 end
 
-function components = collectComponentSelections(tmpl, vehicleBlockPath)
+function components = collectComponentSelections(state, vehicleBlockPath)
 %COLLECTCOMPONENTSELECTIONS Extract component block paths and targets from state.
     components = struct('AbsPath', {}, 'Target', {});
-    if ~isfield(tmpl, 'Components'), return; end
+    if ~isfield(state, 'Components'), return; end
 
-    compTypes = fieldnames(tmpl.Components);
+    compTypes = fieldnames(state.Components);
     for c = 1:numel(compTypes)
-        comp = tmpl.Components.(compTypes{c});
+        comp = state.Components.(compTypes{c});
 
         % Unified format: Selections; legacy: Instances (as struct)
         if isfield(comp, 'Selections') && isstruct(comp.Selections)
@@ -176,7 +172,7 @@ end
 
 function L = assembleScriptLines(topModelName, ~, ...
         vehicleBlockPath, vehicleTemplate, controlBlockPath, ...
-        controlActive, ~, tmpl, components, ~)
+        controlActive, ~, state, components, ~)
 %ASSEMBLESCRIPTLINES Build the cell array of script lines (before drive cycle).
     L = {};
 
@@ -223,7 +219,7 @@ function L = assembleScriptLines(topModelName, ~, ...
 
     % Controller
     if controlActive
-        controllerSelected = char(tmpl.Controls.Model);
+        controllerSelected = char(state.Controls.Model);
         L{end+1} = sprintf("setRef('%s', '%s');", ...
             escapeQuote(controlBlockPath), escapeQuote(controllerSelected));
     end

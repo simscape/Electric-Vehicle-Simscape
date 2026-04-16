@@ -26,9 +26,8 @@ function saveSetupToFile(app)
         return
     end
 
-    flds = fieldnames(state);
-    templateName = flds{1};
-    setupData    = state.(templateName);
+    templateName = state.TemplateName;
+    setupData    = rmfield(state, 'TemplateName');
 
     % ---- Determine save location ----
     try
