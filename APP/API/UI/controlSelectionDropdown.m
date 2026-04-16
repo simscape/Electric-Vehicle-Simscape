@@ -7,8 +7,7 @@ function controlSelectionDropdown(app, rawCfg)
         rawCfg = jsondecode(fileread(app.ConfigDropDown.Value));
     end
 
-    proj = matlab.project.rootProject;
-    root = proj.RootFolder;
+    root = getBEVProjectRoot(app);
     vehicleConfig = erase(app.VehicleTemplateDropDown.Value, ".slx");
 
     app.ControlSelectionDropDown.Enable = "on";

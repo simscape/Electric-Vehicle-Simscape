@@ -39,11 +39,11 @@ function applySelections(app, tmpl)
         trySetField(app, 'CO2FractionInitialEditField', env, 'CO2Fraction');
     end
 
-    % ---- Dashboard buttons (two-pass: set all values, then trigger callbacks) ----
+    % ---- Operating mode buttons (two-pass: set all values, then trigger callbacks) ----
     %   Callbacks may have cross-dependencies (e.g. Charging can affect AWD).
     %   Setting all values first ensures each callback sees the final state.
-    if isfield(tmpl, 'Dashboard')
-        dash = tmpl.Dashboard;
+    if isfield(tmpl, 'OperatingModes')
+        dash = tmpl.OperatingModes;
         btnMap = { 'ACButton','ACOn'; 'AWDButton','AWD'; ...
                    'RegenButton','Regen'; 'ChargingButton','Charging' };
 

@@ -27,6 +27,13 @@ function s = buildList(val)
     else
         % Leaf node: escape HTML and wrap in span
         txt = string(val);
+
+        % Compress file paths to just filename for display
+        [~, baseName, ext] = fileparts(char(txt));
+        if strlength(ext) > 0 && (contains(txt, filesep) || contains(txt, '/'))
+            txt = string([baseName char(ext)]);
+        end
+
         txt = strrep(txt, '&', '&amp;');
         txt = strrep(txt, '<', '&lt;');
         txt = strrep(txt, '>', '&gt;');

@@ -20,11 +20,7 @@ function exportSetupScript(app, outFile, state)
     driveCycleActive = state.DriveCycle.Enabled;
 
     % ---- Locate model file ----
-    try
-        projectRoot = matlab.project.rootProject().RootFolder;
-    catch
-        error('BEV project is not loaded');
-    end
+    projectRoot = getBEVProjectRoot(app);
     topModelFile = findModelFile(topModelName, projectRoot);
     if isempty(topModelFile)
         uialert(app.UIFigure, ...
@@ -187,7 +183,7 @@ function L = assembleScriptLines(topModelName, ~, ...
 
     % Project root and model path
     L{end+1} = "% ---- Project root and model path ----";
-    L{end+1} = "try root = matlab.project.rootProject.RootFolder; catch, root = pwd; end";
+    L{end+1} = "try root = matlab.project.rootProject().RootFolder; catch, root = pwd; end";
     L{end+1} = sprintf("topModelName = '%s';", escapeQuote(topModelName));
     L{end+1} = sprintf("topModelFile = fullfile(root, 'Model', '%s.slx');", ...
         escapeQuote(topModelName));

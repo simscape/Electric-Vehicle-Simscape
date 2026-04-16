@@ -18,7 +18,7 @@ function createComponentDropdowns(app, skipCache)
     delete(app.ComponentsPanel.Children);
 
     % ---- Resolve project root and parse config ----
-    root   = char(matlab.project.rootProject.RootFolder);
+    root   = char(getBEVProjectRoot(app));
     rawCfg = jsondecode(fileread(app.ConfigDropDown.Value));
 
     % ---- Resolve template name against config ----
@@ -199,7 +199,7 @@ function setExportButtonsEnabled(app, enabled)
     app.DriveCycleDesc.Enable          = state;
     app.CreateModelButton.Enable       = state;
     app.ParameterExportButton.Enable   = state;
-    app.ModelExportButton.Enable       = state;
+    app.SaveSetupButton.Enable       = state;
 end
 
 function restoreBEVModelDropdown(app, templateConfig)

@@ -4,7 +4,7 @@ function projectRoot = getBEVProjectRoot(app)
     %   If not, displays a UI alert and throws an error.
     
     try
-        proj = matlab.project.rootProject;
+        proj = matlab.project.rootProject();
         projectRoot = proj.RootFolder; % Full path to .prj folder
     catch
         uialert(app.UIFigure, "Project not loaded.", "Error", ...

@@ -4,7 +4,7 @@ function saveSetupToFile(app)
 %
 %   Produces a JSON that is a superset of the raw template config:
 %   it keeps Instances/Models arrays (so the file can be loaded back
-%   through ConfigDropDown) and adds Selections, Environment, Dashboard,
+%   through ConfigDropDown) and adds Selections, Environment, OperatingModes,
 %   DriveCycle, and a SchemaVersion marker.
 %
 %   Raw config (no selections):         Saved setup (with selections):
@@ -13,7 +13,7 @@ function saveSetupToFile(app)
 %     Controls.Instances / .Models        same + .Model / .Enabled
 %     SystemParameter                     same
 %     (no Environment)                    + Environment
-%     (no Dashboard)                      + Dashboard
+%     (no OperatingModes)                 + OperatingModes
 %     (no DriveCycle)                     + DriveCycle
 
     % ---- Build state from current UI ----
@@ -30,14 +30,7 @@ function saveSetupToFile(app)
     setupData    = rmfield(state, 'TemplateName');
 
     % ---- Determine save location ----
-    try
-        root = char(matlab.project.rootProject.RootFolder);
-    catch
-        root = pwd;
-    end
-
-    defaultDir = fullfile(root, 'Model');
-    if ~isfolder(defaultDir), defaultDir = root; end
+    defaultDir = getUserConfigFolder();
 
     suggestedName = sprintf('%s_%s_setup.json', setupData.BEVModel, templateName);
     [file, path]  = uiputfile('*.json', 'Save Setup As', ...
@@ -85,6 +78,10 @@ function saveSetupToFile(app)
         uialert(app.UIFigure, ...
             sprintf('Setup saved:\n%s', outputFile), ...
             'Setup Saved', 'Icon', 'success');
+
+        % Refresh dropdown so the new file appears, then re-select it
+        populateConfigDropDown(app);
+        app.ConfigDropDown.Value = outputFile;
     catch ME
         uialert(app.UIFigure, ...
             sprintf('Save failed:\n%s', ME.message), ...

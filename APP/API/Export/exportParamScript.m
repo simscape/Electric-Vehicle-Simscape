@@ -14,7 +14,9 @@ function exportParamScript(app, outFile, state)
     % ---- Read identifiers from flat state ----
     try
         projectRoot = char(matlab.project.rootProject().RootFolder);
-    catch
+    catch ME
+        warning('BEVapp:exportParamScript', ...
+            'Project not loaded, using state.Root: %s', ME.message);
         projectRoot = state.Root;
     end
 
@@ -35,11 +37,11 @@ function exportParamScript(app, outFile, state)
     env = state.Environment;
     ambTempKelvin    = sprintf('%g+273.15', double(env.AmbientTemp));
     cabinTempKelvin  = sprintf('%g+273.15', double(env.CabinSetpoint));
-    acStatusStr      = mat2str(logical(state.Dashboard.ACOn));
+    acStatusStr      = mat2str(logical(state.OperatingModes.ACOn));
     ambPressureMPa   = sprintf('%g/10',     double(env.AmbPressure));
     relHumidityStr   = sprintf('%g',        double(env.RelHumidity));
     co2FractionStr   = sprintf('%g',        double(env.CO2Fraction));
-    acEnabled        = state.Dashboard.ACEnabled;
+    acEnabled        = state.OperatingModes.ACEnabled;
     controlActive    = state.Controls.Enabled;
 
     % ---- Collect and validate param file links ----

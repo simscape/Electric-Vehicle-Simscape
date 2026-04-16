@@ -8,10 +8,10 @@ Supporting functions for `BEVapp.mlapp`, organized into responsibility-based sub
 |--------|------|-------|
 | `Catalog/` | What's valid — config validation, template resolution, component entries | 3 |
 | `Detect/` | What exists — model scanning, SSR detection, platform/controls detection | 5 |
-| `State/` | What's selected — setup state build, save/load, session cache | 4 |
+| `State/` | What's selected — flat setup state build, save/load, session cache | 4 |
 | `Export/` | Artifact generation — setup scripts, param scripts | 3 |
-| `UI/` | Presentation — dropdowns, descriptions, panels, preview, selection apply | 21 |
-| `Util/` | Generic helpers — project root, file listing, data helpers | 7 |
+| `UI/` | Presentation — dropdowns, descriptions, panels, preview, selection apply | 23 |
+| `Util/` | Generic helpers — project root, path resolution, file listing, data helpers | 8 |
 
 ## Catalog
 
@@ -35,9 +35,9 @@ Supporting functions for `BEVapp.mlapp`, organized into responsibility-based sub
 
 | Function | Purpose |
 |----------|---------|
-| `buildSetupState` | Capture current app UI state into a portable struct |
+| `buildSetupState` | Capture current app UI state into a flat struct (TemplateName as field, not wrapper key) |
 | `restoreFromCache` | Restore UI selections from session cache on config switch |
-| `saveSetupToFile` | Save current setup to a unified JSON file (superset of raw config) |
+| `saveSetupToFile` | Save current setup to `APP/Config/User` as wrapped JSON (superset of raw config) |
 | `snapshotToCache` | Snapshot current selections to session cache before switching config |
 
 ## Export
@@ -58,6 +58,7 @@ Supporting functions for `BEVapp.mlapp`, organized into responsibility-based sub
 | `computeParamMissingNote` | Build warning text for components with missing param file links |
 | `controlSelectionDropdown` | Populate controller dropdown and detect current controller |
 | `createComponentDropdowns` | Build component instance dropdowns from config JSON and template |
+| `initAppDropdowns` | Populate all top-level dropdowns at app startup (replaces inline mlapp code) |
 | `descTextHTML` | Convert plain text description to styled HTML |
 | `driveCycleSetup` | Populate drive cycle dropdown from Drive Cycle Source block mask |
 | `loadAppShortcut` | Launch BEVapp with a loading splash screen |
@@ -66,6 +67,7 @@ Supporting functions for `BEVapp.mlapp`, organized into responsibility-based sub
 | `openInstanceModel` | Open the selected component SLX in Simulink |
 | `openParamSmart` | Open a component's parameter file in the editor |
 | `paramContextLink` | Link a param file to a component instance |
+| `populateConfigDropDown` | Scan Preset + User config folders and populate ConfigDropDown with full-path ItemsData |
 | `paramContextUnlink` | Unlink a param file from a component instance |
 | `preventMissingSelection` | Guard against missing dropdown selections before export |
 | `renderComponentPanels` | Build the scrollable component panel layout |
@@ -80,17 +82,22 @@ Supporting functions for `BEVapp.mlapp`, organized into responsibility-based sub
 |----------|---------|
 | `buildList` | Build nested HTML lists from struct/cell data |
 | `ensureSlxList` | Append `.slx` extension to basenames that lack it |
-| `extractRefModelBase` | Extract model basename from a ReferencedSubsystem path |
+| `getBEVAppPaths` | Centralized folder path resolution — returns struct with all app-relevant paths |
 | `getBEVProjectRoot` | Return the MATLAB project root folder |
-| `getJSONFiles` | List `.json` files in a folder |
+| `getPresetConfigFolder` | Return absolute path to `APP/Config/Preset` |
 | `getSLXFiles` | List `.slx` files in a folder |
+| `getUserConfigFolder` | Return absolute path to `APP/Config/User` (auto-creates on first call) |
 | `userDataSetField` | Safely set a field on UIFigure.UserData struct |
 
 ## Code Flow
 
 ```mermaid
 flowchart TD
-    A[User opens BEVapp] --> B[Select Config JSON + Base Model]
+    A[User opens BEVapp] --> B[initAppDropdowns]
+    B --> B1[getBEVAppPaths]
+    B --> B2[populateConfigDropDown]
+    B2 --> B3[getPresetConfigFolder + getUserConfigFolder]
+
     B --> C[createComponentDropdowns]
     C --> D[validateVehicleConfig]
     C --> E[platformDetectFromBEVModel]
@@ -121,8 +128,8 @@ flowchart TD
     T --> V[ComponentDescription]
 
     K --> W[Save Setup]
-    W --> X[buildSetupState]
-    X --> Y[saveSetupToFile]
+    W --> X["buildSetupState (flat)"]
+    X --> Y["saveSetupToFile (wraps → APP/Config/User)"]
 ```
 
 Copyright 2026 The MathWorks, Inc.

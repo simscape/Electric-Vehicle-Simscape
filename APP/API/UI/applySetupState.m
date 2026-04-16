@@ -81,11 +81,13 @@ end
 
 function setDropdownByMatch(dropdown, target, ext)
 %SETDROPDOWNBYMATCH Try to match target in dropdown items and set Value.
-%   Tries four match strategies in order:
-%     1. Exact match with extension
+%   Match strategies (in order):
+%     1. Exact match against ItemsData/Items (with extension)
 %     2. Exact match without extension
 %     3. Case-insensitive with extension
 %     4. Case-insensitive without extension
+%     5. Basename-only match against Items (handles full-path ItemsData
+%        when target is a bare filename, or vice versa)
     target  = char(target);
     withExt = target;
     if ~isempty(ext) && ~endsWith(target, ext, 'IgnoreCase', true)
@@ -93,7 +95,7 @@ function setDropdownByMatch(dropdown, target, ext)
     end
     bare = regexprep(target, '\.(slx|mdl)$', '', 'ignorecase');
 
-    % Use ItemsData if populated, otherwise Items
+    % Primary search pool: ItemsData if populated, otherwise Items
     if ~isempty(dropdown.ItemsData)
         data = string(dropdown.ItemsData);
     else
@@ -105,6 +107,16 @@ function setDropdownByMatch(dropdown, target, ext)
     if isempty(idx), idx = find(data == string(bare), 1); end
     if isempty(idx), idx = find(strcmpi(data, withExt), 1); end
     if isempty(idx), idx = find(strcmpi(data, bare), 1); end
+
+    % Fallback: match basename of target against Items (display names).
+    % Covers the case where ItemsData holds full paths but target is bare.
+    if isempty(idx) && ~isempty(dropdown.ItemsData)
+        [~, baseName, baseExt] = fileparts(target);
+        targetBase = [baseName baseExt];
+        displayNames = string(dropdown.Items);
+
+        idx = find(strcmpi(displayNames, targetBase), 1);
+    end
 
     if ~isempty(idx)
         if ~isempty(dropdown.ItemsData)

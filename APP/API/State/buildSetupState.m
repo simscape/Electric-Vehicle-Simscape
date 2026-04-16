@@ -21,7 +21,7 @@ function state = buildSetupState(app)
 %     state.Controls         — controller enable + model
 %     state.DriveCycle       — cycle enable + value
 %     state.Environment      — ambient/cabin/pressure settings
-%     state.Dashboard        — toggle button states
+%     state.OperatingModes   — AC, AWD, regen, charging toggles
 %     state.SystemParameter  — param file names from config
 %
 %   The struct contains NO handle objects, NO function handles —
@@ -33,8 +33,10 @@ function state = buildSetupState(app)
     [~, templateName] = fileparts(safeValue(app, 'VehicleTemplateDropDown', ''));
 
     try
-        root = char(matlab.project.rootProject.RootFolder);
-    catch
+        root = char(matlab.project.rootProject().RootFolder);
+    catch ME
+        warning('BEVapp:buildSetupState', ...
+            'Project not loaded, using pwd: %s', ME.message);
         root = pwd;
     end
 
@@ -52,7 +54,7 @@ function state = buildSetupState(app)
     state.Controls        = buildControlState(app);
     state.DriveCycle      = buildDriveCycleState(app);
     state.Environment     = buildEnvironmentState(app);
-    state.Dashboard       = buildDashboardState(app);
+    state.OperatingModes  = buildOperatingModesState(app);
     state.SystemParameter = buildSystemParameterState(configFile, templateName);
 end
 
@@ -103,15 +105,15 @@ function environment = buildEnvironmentState(app)
     environment.CO2Fraction   = safeNumericValue(app, 'CO2FractionInitialEditField', 0.0004);
 end
 
-function dashboard = buildDashboardState(app)
-%BUILDDASHBOARDSTATE Capture dashboard toggle button states.
-    dashboard = struct();
+function modes = buildOperatingModesState(app)
+%BUILDOPERATINGMODESSTATE Capture operating mode toggle states (AC, AWD, regen, charging).
+    modes = struct();
 
-    dashboard.ACEnabled = safeLogicalProp(app, 'ACButton',       'Enable', false);
-    dashboard.ACOn      = safeLogicalProp(app, 'ACButton',       'Value',  false);
-    dashboard.AWD       = safeLogicalProp(app, 'AWDButton',      'Value',  false);
-    dashboard.Regen     = safeLogicalProp(app, 'RegenButton',    'Value',  false);
-    dashboard.Charging  = safeLogicalProp(app, 'ChargingButton', 'Value',  false);
+    modes.ACEnabled = safeLogicalProp(app, 'ACButton',       'Enable', false);
+    modes.ACOn      = safeLogicalProp(app, 'ACButton',       'Value',  false);
+    modes.AWD       = safeLogicalProp(app, 'AWDButton',      'Value',  false);
+    modes.Regen     = safeLogicalProp(app, 'RegenButton',    'Value',  false);
+    modes.Charging  = safeLogicalProp(app, 'ChargingButton', 'Value',  false);
 end
 
 function sysParams = buildSystemParameterState(configFile, templateName)
