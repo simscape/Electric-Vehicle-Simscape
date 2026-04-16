@@ -1,62 +1,90 @@
 # APP API Functions
 
-Supporting functions for `BEVapp.mlapp`. Organized by role below.
+Supporting functions for `BEVapp.mlapp`, organized into responsibility-based subfolders.
 
-## Function Inventory
+## Folder Overview
 
-### UI Setup
+| Folder | Role | Files |
+|--------|------|-------|
+| `Catalog/` | What's valid — config validation, template resolution, component entries | 3 |
+| `Detect/` | What exists — model scanning, SSR detection, platform/controls detection | 5 |
+| `State/` | What's selected — setup state build, save/load, session cache | 4 |
+| `Export/` | Artifact generation — setup scripts, param scripts | 3 |
+| `UI/` | Presentation — dropdowns, descriptions, panels, preview, selection apply | 21 |
+| `Util/` | Generic helpers — project root, file listing, data helpers | 7 |
 
-| Function | Purpose |
-|----------|---------|
-| `createComponentDropdowns` | Build component instance dropdowns from config JSON and vehicle template |
-| `controlSelectionDropdown` | Populate controller dropdown and detect current controller from model |
-| `driveCycleSetup` | Populate drive cycle dropdown from the Drive Cycle Source block mask |
-| `scaleAppToMonitor` | Auto-scale app UI to monitor DPI and resolution |
-
-### Detection
-
-| Function | Purpose |
-|----------|---------|
-| `detectSSRFromBEVModel` | Scan BEV model for Subsystem Reference blocks matching a candidate list |
-| `platformDetectFromBEVModel` | Detect vehicle platform SSR in the base model (wrapper around `detectSSRFromBEVModel`) |
-| `controlsDetectFromBEVModel` | Detect controller SSR in the base model (wrapper around `detectSSRFromBEVModel`) |
-
-### Export
+## Catalog
 
 | Function | Purpose |
 |----------|---------|
-| `exportSetupScript` | Generate a replayable `.m` script that sets all Subsystem References |
-| `exportParamScript` | Generate a `.m` script that calls linked component parameter files and sets environment/HVAC values |
-| `ParamConfigButtonPushed` | Check param file links before export; show modal dialog for missing links |
-| `modelDashboardSetup` | Configure model HMI blocks (AWD, Regen, Charging) from app toggle buttons |
-
-### Preview and Description
-
-| Function | Purpose |
-|----------|---------|
-| `showInstanceDescription` | Display description and preview image for a selected component |
-| `ComponentDescription` | Generate preview snapshot and load model description text |
-| `selectionPreviewStatus` | Toggle visibility of the preview image panel |
-| `openInstanceModel` | Open the selected component SLX in Simulink |
-| `descTextHTML` | Convert plain text description to HTML |
-| `buildList` | Build nested HTML lists from struct/cell data |
-
-### Validation
-
-| Function | Purpose |
-|----------|---------|
+| `buildComponentEntries` | Build component entry structs from config JSON for a given platform |
+| `resolveTemplateName` | Resolve template display name to config key |
 | `validateVehicleConfig` | Validate JSON config structure for one or all platforms |
 
-### Utilities
+## Detect
 
 | Function | Purpose |
 |----------|---------|
-| `getBEVProjectRoot` | Return the MATLAB project root folder |
-| `getSLXFiles` | List `.slx` files in a folder |
-| `getJSONFiles` | List `.json` files in a folder |
+| `checkTemplateSubsystemRefs` | Verify that all SSR blocks in a template model point to valid SLX files |
+| `controlsDetectFromBEVModel` | Detect controller SSR in the base model |
+| `detectSSRFromBEVModel` | Scan BEV model for Subsystem Reference blocks matching a candidate list |
+| `platformDetectFromBEVModel` | Detect vehicle platform SSR in the base model |
+| `scanComponentAvailability` | Scan component folders and report which SLX fidelities exist on disk |
+
+## State
+
+| Function | Purpose |
+|----------|---------|
+| `buildSetupState` | Capture current app UI state into a portable struct |
+| `restoreFromCache` | Restore UI selections from session cache on config switch |
+| `saveSetupToFile` | Save current setup to a unified JSON file (superset of raw config) |
+| `snapshotToCache` | Snapshot current selections to session cache before switching config |
+
+## Export
+
+| Function | Purpose |
+|----------|---------|
+| `ParamConfigButtonPushed` | Check param file links before export; show modal for missing links |
+| `exportParamScript` | Generate a `.m` script that calls linked component parameter files |
+| `exportSetupScript` | Generate a replayable `.m` script that sets all Subsystem References |
+
+## UI
+
+| Function | Purpose |
+|----------|---------|
+| `applySelections` | Apply saved selections from a setup JSON to current dropdowns |
+| `applySetupState` | Apply a full setupState struct back to the app UI |
+| `ComponentDescription` | Generate preview snapshot and load component description text |
+| `computeParamMissingNote` | Build warning text for components with missing param file links |
+| `controlSelectionDropdown` | Populate controller dropdown and detect current controller |
+| `createComponentDropdowns` | Build component instance dropdowns from config JSON and template |
+| `descTextHTML` | Convert plain text description to styled HTML |
+| `driveCycleSetup` | Populate drive cycle dropdown from Drive Cycle Source block mask |
+| `loadAppShortcut` | Launch BEVapp with a loading splash screen |
+| `modelDashboardSetup` | Configure model HMI blocks (AWD, Regen, Charging) from toggles |
+| `modelDescription` | Generate preview snapshot and load BEV model description text |
+| `openInstanceModel` | Open the selected component SLX in Simulink |
+| `openParamSmart` | Open a component's parameter file in the editor |
+| `paramContextLink` | Link a param file to a component instance |
+| `paramContextUnlink` | Unlink a param file from a component instance |
+| `preventMissingSelection` | Guard against missing dropdown selections before export |
+| `renderComponentPanels` | Build the scrollable component panel layout |
+| `scaleAppToMonitor` | Auto-scale app UI to monitor DPI and resolution |
+| `selectionPreviewStatus` | Toggle visibility of the preview image panel |
+| `showInstanceDescription` | Display description and preview for a selected component |
+| `updateParamTooltip` | Update tooltip text on param file link buttons |
+
+## Util
+
+| Function | Purpose |
+|----------|---------|
+| `buildList` | Build nested HTML lists from struct/cell data |
 | `ensureSlxList` | Append `.slx` extension to basenames that lack it |
 | `extractRefModelBase` | Extract model basename from a ReferencedSubsystem path |
-| `loadAppShortcut` | Launch BEVapp with a loading splash screen |
+| `getBEVProjectRoot` | Return the MATLAB project root folder |
+| `getJSONFiles` | List `.json` files in a folder |
+| `getSLXFiles` | List `.slx` files in a folder |
+| `userDataSetField` | Safely set a field on UIFigure.UserData struct |
 
 ## Code Flow
 
@@ -91,6 +119,10 @@ flowchart TD
     S --> T[showInstanceDescription]
     S --> U[openInstanceModel]
     T --> V[ComponentDescription]
+
+    K --> W[Save Setup]
+    W --> X[buildSetupState]
+    X --> Y[saveSetupToFile]
 ```
 
 Copyright 2026 The MathWorks, Inc.
