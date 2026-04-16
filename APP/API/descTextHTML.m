@@ -6,6 +6,6 @@
             descHTML = regexprep(descHTML, '\*\*(.*?)\*\*', '<b>$1</b>');
 
             % Wrap in HTML
-            descHTML = ['<html><body style="font-size:14px; style="font-family:Helvetica;">' descHTML '</body></html>'];
+            descHTML = ['<html><body style="font-size:14px; font-family:Helvetica;">' descHTML '</body></html>'];
 
         end

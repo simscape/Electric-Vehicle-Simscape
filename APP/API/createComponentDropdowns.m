@@ -10,14 +10,15 @@ function createComponentDropdowns(app)
     % Read raw & parsed JSON
     rawCfg = jsondecode(fileread(app.ConfigDropDown.Value));
 
-    % Resolve/normalize vehicle configuration and sync Veh Platform dropdown
-    [tmpl, templatePopupNotes] = resolveTemplateAndSyncUI(app, rawCfg);
+    % Resolve template name (pure logic, no UI)
+    [tmpl, templatePopupNotes, tmplMatched] = resolveTemplateName(rawCfg, app.VehicleTemplateDropDown.Value);
 
-    % Build flat entries from rawCfg for the resolved configuration
-    compNames = fieldnames(rawCfg.(tmpl).Components);
-    entries   = struct('Comp',{},'Label',{},'CfgModels',{});
+    % Sync dropdown to reflect the resolved template
+    syncTemplateDropdown(app, tmpl, tmplMatched);
+
+    % Validate config structure
     try
-        validateVehicleConfig(app, app.VehicleTemplateDropDown.Value);
+        validateVehicleConfig(rawCfg, tmpl);
         app.DriveCycleDropDown.Enable = "on";
         app.DriveCycleDesc.Enable = "on";
         app.CreateModelButton.Enable = "on";
@@ -32,20 +33,9 @@ function createComponentDropdowns(app)
                    "Check help document", "Error");
         return;   % abort BEFORE any UI is rendered
     end
-    for c = 1:numel(compNames)
-        comp   = compNames{c};
-        models = rawCfg.(tmpl).Components.(comp).Models;
-        if isstruct(rawCfg.(tmpl).Components.(comp)) && isfield(rawCfg.(tmpl).Components.(comp),'Instances')
-            insts = rawCfg.(tmpl).Components.(comp).Instances;
-        else
-            insts = {comp};
-        end
-        for j = 1:numel(insts)
-            entries(end+1).Comp      = comp;        %#ok<AGROW>
-            entries(end  ).Label     = insts{j};
-            entries(end  ).CfgModels = models;
-        end
-    end
+
+    % Build flat entries from config (pure data, no UI)
+    entries = buildComponentEntries(rawCfg, tmpl);
     app.DriveCycleDropDown.Enable = "on";
     app.DriveCycleDesc.Enable = "on";
     app.CreateModelButton.Enable = "on";
@@ -54,7 +44,6 @@ function createComponentDropdowns(app)
 
     % Check if HVAC present in the component list or not
     if ~any(strcmp({entries.Comp}, 'HVAC'))
-        % disp('HVAC is present');
         app.ACButton.Enable = 'off';
         app.CabinTempSetpointEditField.Enable = 'off';
     else
@@ -94,89 +83,8 @@ function createComponentDropdowns(app)
     end
 
 
-    % Check that each configured model exists in its component folder
-    missingMap = containers.Map('KeyType','char','ValueType','any'); % key: "Comp|Model"
-    preCheck = repmat(struct('Comp','', 'Label','', 'Valid',{cell(0)}, 'Missing',{cell(0)}, ...
-                        'MissingNoteStrings',strings(0,1), 'Folder',''), 0, 1);
-
-    for i = 1:numel(entries)
-        ei = entries(i);
-
-        % Expected folder: <root>\Components\<Comp>\Model
-        folder = fullfile(root,'Components', ei.Comp, 'Model');
-        info   = dir(fullfile(folder,'*.slx'));
-
-        % Keep names on disk (both base & full)
-        namesOnDiskFull = {info.name};                    % e.g., 'MotorA.slx'
-        namesOnDiskBase = erase(namesOnDiskFull,'.slx');  % e.g., 'MotorA'
-
-        % Config models as listed (likely basenames)
-        cfgModelsBase = ei.CfgModels(:)';                 % keep config ordering
-
-        % Compare using basenames, then convert to *.slx for UI
-        validBase   = intersect(cfgModelsBase, namesOnDiskBase,'stable');
-        missingBase = setdiff(cfgModelsBase, namesOnDiskBase, 'stable');
-
-        % UI will carry *.slx 
-        validFull   = ensureSlxList(validBase);     % cellstr '*.slx'
-        missingFull = ensureSlxList(missingBase);   % cellstr '*.slx'
-
-        % For missing, look elsewhere in project & aggregate by (Comp|Model)
-        missNotes = strings(0,1);
-        for mm = 1:numel(missingBase)
-            modelBase = missingBase{mm};
-            modelFull = [modelBase '.slx'];
-            key   = [ei.Comp '|' modelBase];
-
-            if ~isKey(missingMap, key)
-                expectedFull = fullfile(folder, modelFull);
-                foundElsewherePath = '';
-                if ~exist(expectedFull,'file')
-                    try
-                        alt = dir(fullfile(root, '**', modelFull));
-                        if ~isempty(alt)
-                            for k = 1:numel(alt)
-                                p = fullfile(alt(k).folder, alt(k).name);
-                                if ~strcmpi(p, expectedFull)
-                                    if startsWith(p, root)
-                                        pRel = erase(p, [root filesep]);
-                                    else
-                                        pRel = p;
-                                    end
-                                    foundElsewherePath = pRel;
-                                    break
-                                end
-                            end
-                        end
-                    catch
-                    end
-                end
-                missingMap(key) = struct( ...
-                    'Instances', {string(ei.Label)}, ...
-                    'FoundElsewhere', string(foundElsewherePath));
-            else
-                rec = missingMap(key);
-                rec.Instances = unique([rec.Instances, string(ei.Label)]);
-                missingMap(key) = rec;
-            end
-
-            % Instance-level note (show full *.slx)
-            rec = missingMap(key);
-            if strlength(rec.FoundElsewhere) > 0
-                missNotes(end+1,1) = sprintf("[missing] %s (found at: %s)", modelFull, rec.FoundElsewhere); %#ok<AGROW>
-            else
-                missNotes(end+1,1) = sprintf("[missing] %s", modelFull); %#ok<AGROW>
-            end
-        end
-
-        preCheck(end+1,1) = struct( ...
-            'Comp', ei.Comp, ...
-            'Label', ei.Label, ...
-            'Valid', {validFull}, ...
-            'Missing', {missingFull}, ...
-            'MissingNoteStrings', missNotes, ...
-            'Folder', folder);
-    end
+    % Scan component folders for model availability (pure data, no UI)
+    [preCheck, missingMap] = scanComponentAvailability(root, entries);
 
 
 
@@ -240,20 +148,12 @@ function createComponentDropdowns(app)
         compGridLayout = uigridlayout(compPanel, ...
             'RowHeight',{'fit','fit','fit','fit'}, ...
             'ColumnWidth',{'1x','0.4x','1x','0.4x','fit'}, ...
-            'Padding',[5 5 5 5], 'RowSpacing',5, 'ColumnSpacing',10);% ,'BackgroundColor',[1.00,1.00,0.96]);
-        % panelBgndColor = compPanel.BackgroundColor;
+            'Padding',[5 5 5 5], 'RowSpacing',5, 'ColumnSpacing',10);
         compGridLayout.BackgroundColor = min(compGridLayout.BackgroundColor * 2,[1 1 1]);
         % Row 1: label + buttons
         compLabel = uilabel(compGridLayout,'Text',[compDropdowninfo.Label], ...
             'FontWeight','bold','WordWrap','on');
         compLabel.Layout.Row = 1; compLabel.Layout.Column = [1 3];
-
-        % % 
-        % compExport = uibutton(compGridLayout,'push','Text','zip', ...
-        %     'Tooltip','Export the model files in zip', ...
-        %     'BackgroundColor',[0.99,0.91,0.84], ...
-        %     'ButtonPushedFcn',@(~,~) openInstanceExport(app, pi.Comp, pi.Label));
-        % compExport.Layout.Row = 1; compExport.Layout.Column = 4;
 
         CompDesc = uibutton(compGridLayout,'push','Text','?', ...
             'Tooltip','Show instance description', ...
@@ -328,15 +228,12 @@ function createComponentDropdowns(app)
         updateParamTooltip(compParamOpen, compDropDown, root);
 
         if isempty(itemsValid) || startsWith(string(compDropDown.Value),"__MISSING__")
-            compOpen.Enable = 'off'; 
-            % compExport.Enable = 'off';
+            compOpen.Enable = 'off';
         end
 
         % Row 4: red note label (combine model-missing + param-missing in ONE line)
         paramNote = computeParamMissingNote(compDropdowninfo.Comp, compDropDown, root);
         needRedLine = ~isempty(compDropdowninfo.MissingNoteStrings) || ~isempty(paramNote);
-        % Initialize tooltip text now
-        updateParamTooltip(compParamOpen, compDropDown, root);
         
         if needRedLine
             % Compose text: keep your existing missing-model info, append param note if any
@@ -369,46 +266,32 @@ end
 
 %% Local helpers
 
-function [tmplOut, popupNotes] = resolveTemplateAndSyncUI(app, cfg)
-    popupNotes = strings(0,1);
-    tmplUI = erase(app.VehicleTemplateDropDown.Value, '.slx'); % current UI selection (no .slx)
-    cfgFields = string(fieldnames(cfg));
-    chosenIdx = find(strcmpi(cfgFields, tmplUI), 1);
-    if isempty(chosenIdx)
-        chosenIdx = find(contains(lower(cfgFields), lower(tmplUI)), 1);
-        if isempty(chosenIdx), chosenIdx = 1; end
-        tmplChosen = char(cfgFields(chosenIdx));
-        popupNotes(end+1,1) = sprintf("Configuration '%s' not found in config. Auto-selected '%s' from the design scenario.", tmplUI, tmplChosen);
-
-        try
-            itemsNow = string(app.VehicleTemplateDropDown.Items);
-            idx = findExistingItemByBasename(itemsNow, tmplChosen);
-            if ~isempty(idx)
-                app.VehicleTemplateDropDown.Value = app.VehicleTemplateDropDown.Items{idx};
-            else
-                app.VehicleTemplateDropDown.Items = [app.VehicleTemplateDropDown.Items, {tmplChosen}];
-                app.VehicleTemplateDropDown.Value = tmplChosen;
-            end
-            app.VehicleTemplateDropDown.UserData.LastValidValue = app.VehicleTemplateDropDown.Value;
-
-            missTag = sprintf("%s [missing]", tmplUI);
-            if ~any(strcmpi(itemsNow, missTag))
-                app.VehicleTemplateDropDown.Items = [app.VehicleTemplateDropDown.Items, {missTag}];
-            end
-        catch
+function syncTemplateDropdown(app, tmplName, matched)
+%SYNCTEMPLATEDROPDOWN Update VehicleTemplate dropdown to reflect resolved template.
+    dd = app.VehicleTemplateDropDown;
+    try
+        itemsNow = string(dd.Items);
+        idx = findExistingItemByBasename(itemsNow, tmplName);
+        if ~isempty(idx)
+            dd.Value = dd.Items{idx};
+        elseif ~matched
+            % Template not in dropdown items — add it
+            dd.Items = [dd.Items, {tmplName}];
+            dd.Value = tmplName;
         end
-        tmplOut = tmplChosen;
-    else
-        tmplOut = char(cfgFields(chosenIdx));
-        try
-            itemsNow = string(app.VehicleTemplateDropDown.Items);
-            idx = findExistingItemByBasename(itemsNow, tmplOut);
-            if ~isempty(idx)
-                app.VehicleTemplateDropDown.Value = app.VehicleTemplateDropDown.Items{idx};
+        dd.UserData.LastValidValue = dd.Value;
+
+        % If fallback was used, tag the original selection as [missing]
+        if ~matched
+            origBase = erase(char(dd.Value), '.slx');
+            if ~strcmpi(origBase, tmplName)
+                missTag = sprintf("%s [missing]", origBase);
+                if ~any(strcmpi(itemsNow, missTag))
+                    dd.Items = [dd.Items, {missTag}];
+                end
             end
-            app.VehicleTemplateDropDown.UserData.LastValidValue = app.VehicleTemplateDropDown.Value;
-        catch
         end
+    catch
     end
 end
 
@@ -519,362 +402,10 @@ function s = normName(x)
     s = regexprep(s, '\s+', '');
 end
 
-% ensureSlxList is now a shared utility in APP/API/ensureSlxList.m
-
-%% param file selection linking and the context menu funxtions
-function openParamForCurrentSelection(app, compName, dd, rootFolder)
-    % Derive <ModelName>Params.m from the CURRENT dropdown selection
-    val = char(dd.Value);  % carries '*.slx'
-    if startsWith(string(val),"__MISSING__")
-        try uialert(app.UIFigure, "This model is marked as missing on disk.", "Unavailable", "Icon","warning"); end
-        return
-    end
-
-    base = regexprep(val, '\.slx$', '', 'ignorecase');
-    paramName = [base 'Params.m'];
-
-    % 1) Prefer the component's Model folder
-    modelFolder = '';
-    try
-        if isfield(dd.UserData, 'ModelFolder')
-            modelFolder = dd.UserData.ModelFolder;
-        end
-    catch
-    end
-
-    if ~isempty(modelFolder)
-        candidate = fullfile(char(modelFolder), paramName);
-    else
-        candidate = fullfile(char(rootFolder), 'Components', char(compName), 'Model', paramName);
-    end
-
-    if exist(candidate, 'file')
-        edit(candidate);  return;
-    end
-
-    % 2) Fallback: search the whole project
-    try
-        hit = dir(fullfile(char(rootFolder), '**', paramName));
-        if ~isempty(hit)
-            edit(fullfile(hit(1).folder, hit(1).name));  return;
-        end
-    catch
-    end
-
-    % 3) Not found
-    try
-        uialert(app.UIFigure, "Parameter script not found:\n" + string(paramName), 'Script not found','Icon','warning');
-    catch
-        warndlg("Parameter script not found: " + string(paramName), 'Script not found');
-    end
-end
-
-
-function openParamSmart(app, compName, dd, rootFolder)
-    % 1) If a user-linked file exists, open it
-    try
-        if isstruct(dd.UserData) && isfield(dd.UserData, 'ParamFile')
-            linked = string(dd.UserData.ParamFile);
-            if strlength(linked) > 0
-                if exist(linked, 'file')
-                    edit(char(linked));
-                    return
-                else
-                    % Stale link → clear it and inform the user
-                    try
-                        uialert(app.UIFigure, ...
-                            "The linked param file no longer exists:\n" + linked + ...
-                            "\n\nClearing the link. The button will fall back to auto-detect.", ...
-                            "Linked File Missing", 'Icon','warning');
-                    catch
-                    end
-                    % Clear the stale link (preserve other fields)
-                    try
-                        ud = dd.UserData; 
-                        if isstruct(ud) && isfield(ud,'ParamFile')
-                            ud = rmfield(ud,'ParamFile');
-                            dd.UserData = ud;
-                        end
-                    catch
-                    end
-                    % Fall through to auto
-                end
-            end
-        end
-    catch
-        % ignore and fall through
-    end
-
-    % 2) Auto-derivation fallback
-    openParamForCurrentSelection(app, compName, dd, rootFolder);
-end
-
-function paramContextLink(app, btn, dd, rootFolder)
-    % Prefer: existing linked folder > instance Model folder > project root
-    startFolder = getParamStartFolder(dd, rootFolder);
-
-    [f, p] = uigetfile({'*.m','MATLAB Files (*.m)'}, 'Select parameter file', startFolder);
-    if isequal(f,0) || isequal(p,0)
-        return; % canceled
-    end
-
-    chosen = fullfile(p, f);
-
-    % Persist link without clobbering other UserData fields
-    userDataSetField(dd, 'ParamFile', char(chosen));
-
-    % Optional: show feedback & open immediately
-    try
-        msg = "Linked param file:" + newline + string(chosen);
-        uialert(app.UIFigure, msg, "Param Linked", 'Icon','info');
-    catch
-    end
-    edit(chosen);
-    % After setting/clearing dd.UserData.ParamFile:
-    updateParamTooltip(btn, dd, rootFolder);
-
-    % Also refresh the red line:
-    try
-        if isstruct(dd.UserData) && isfield(dd.UserData,'ParamStatusLabel') && isvalid(dd.UserData.ParamStatusLabel)
-            L = dd.UserData.ParamStatusLabel;
-            % After linking: hide the "no param" message (auto is overridden by link)
-            L.Text = "";
-            L.Visible = 'off';
-        end
-    catch
-    end
-
-end
-
-
-function paramContextUnlink(app, btn, dd,rootFolder)
-    try
-        if isfield(dd.UserData,'ParamFile')
-            dd.UserData = rmfield(dd.UserData, 'ParamFile');
-        end
-    catch
-    end
-    try
-        uialert(app.UIFigure, "Param file link cleared. The button will use auto-detect.", "Unlinked", 'Icon','info');
-    catch
-    end
-    % After setting/clearing dd.UserData.ParamFile:
-    updateParamTooltip(btn, dd, rootFolder);
-
-    % Also refresh the red line:
-    try
-        if isstruct(dd.UserData) && isfield(dd.UserData,'ParamStatusLabel') && isvalid(dd.UserData.ParamStatusLabel)
-            L = dd.UserData.ParamStatusLabel;
-            % After linking: hide the "no param" message (auto is overridden by link)
-            L.Text = "";
-            L.Visible = 'off';
-        end
-    catch
-    end
-
-    updateParamTooltip(btn, dd, []);
-
-
-end
-
-function startFolder = getParamStartFolder(dd, rootFolder)
-    startFolder = char(rootFolder);
-
-    % If a linked file exists, start there 
-    try
-        if isstruct(dd.UserData) && isfield(dd.UserData,'ParamFile')
-            linked = string(dd.UserData.ParamFile);
-            if strlength(linked) > 0
-                lf = fileparts(char(linked));
-                if exist(lf, 'dir')
-                    startFolder = lf;
-                    return
-                end
-            end
-        end
-    catch
-    end
-
-    % Else prefer the ModelFolder recorded on the dropdown 
-    try
-        if isstruct(dd.UserData) && isfield(dd.UserData,'ModelFolder')
-            mf = dd.UserData.ModelFolder;
-            if (ischar(mf) || isstring(mf))
-                mf = char(mf);
-                if exist(mf, 'dir')
-                    startFolder = mf;
-                    return
-                end
-            end
-        end
-    catch
-    end
-
-    % Else, if current dropdown value is a model in that folder, use that folder
-    try
-        val = string(dd.Value);
-        if ~startsWith(val,"__MISSING__")
-            % If ModelFolder existed but failed dir check above due to type, fix it
-            if isstruct(dd.UserData) && isfield(dd.UserData,'ModelFolder')
-                candidate = fullfile(char(dd.UserData.ModelFolder), char(val));
-                if exist(fileparts(candidate), 'dir')
-                    startFolder = fileparts(candidate);
-                    return
-                end
-            end
-        end
-    catch
-    end
-end
-
-function userDataSetField(h, fieldName, value)
-    try
-        ud = struct();
-        if isprop(h, 'UserData') && ~isempty(h.UserData) && isstruct(h.UserData)
-            ud = h.UserData;
-        end
-        ud.(fieldName) = value;
-        h.UserData = ud;
-    catch
-    end
-end
-
-function updateParamTooltip(btn, dd, ~)
-    tip = "Param file: auto-detect <ModelName>Params.m";
-    try
-        if isstruct(dd.UserData) && isfield(dd.UserData, 'ParamFile')
-            linked = string(dd.UserData.ParamFile);
-            if strlength(linked) > 0
-                if exist(linked, 'file')
-                    tip = "Param file (linked): " + linked;
-                else
-                    tip = "Param file (linked but missing): " + linked + ...
-                          " — will fall back to auto-detect";
-                end
-            end
-        end
-    catch
-    end
-    btn.Tooltip = char(tip);
-end
-
-function note = computeParamMissingNote(compName, dd, rootFolder)
-    % Returns "" if an auto param file exists in the expected folder(s),
-    % else a human-friendly red-note line prompting to link one.
-    note = "";
-    try
-        val = string(dd.Value);
-        if startsWith(val,"__MISSING__")
-            return; % model is missing; don't add param note
-        end
-
-        base = regexprep(char(val), '\.slx$', '', 'ignorecase');
-        paramName = [base 'Params.m'];
-
-        modelFolder = "";
-        if isstruct(dd.UserData) && isfield(dd.UserData,'ModelFolder')
-            modelFolder = string(dd.UserData.ModelFolder);
-        end
-
-        if strlength(modelFolder) > 0
-            candidate = fullfile(char(modelFolder), paramName);
-        else
-            candidate = fullfile(char(rootFolder), 'Components', char(compName), 'Model', paramName);
-        end
-
-        if ~exist(candidate, 'file')
-            note = sprintf("No param script found: %s  —  right-click ‘Param’ to link one.", paramName);
-            % add paramfile missing note
-            userDataSetField(dd, 'ParamFile', '');
-        else
-            % add paramfile name
-            userDataSetField(dd, 'ParamFile', char(candidate));
-        end
-    catch
-        % be silent
-    end
-end
-
-
-%% param file function end
-%% Midding files check
-
-function preventMissingSelection(dd)
-    valStr = string(dd.Value);
-    items  = string(dd.Items);
-    itemsData = items;
-    try
-        if ~isempty(dd.ItemsData), itemsData = string(dd.ItemsData); end
-    catch
-    end
-
-    isMissing = false;
-    if any(itemsData == valStr) && startsWith(valStr,"__MISSING__")
-        isMissing = true;
-    else
-        idx = find(items == valStr, 1, 'first');
-        if ~isempty(idx) && contains(items(idx), "[missing]"), isMissing = true; end
-    end
-
-    if isMissing
-        newVal = [];
-        if isfield(dd.UserData,'LastValidValue'), newVal = dd.UserData.LastValidValue; end
-        if isempty(newVal)
-            nm = ~startsWith(itemsData,"__MISSING__") & ~contains(items,"[missing]");
-            if any(nm), newVal = itemsData(find(nm,1,'first')); else, newVal = valStr; end
-        end
-        dd.Value = newVal;
-        dd.UserData.LastValidValue = newVal;
-
-        parentFig = ancestor(dd,'figure');
-        msg = "That option is marked as [missing] on disk. Please choose an available model/configuration.";
-        try uialert(parentFig, msg, 'Unavailable', 'Icon','warning');
-        catch, warndlg(msg, 'Unavailable');
-        end
-    else
-        dd.UserData.LastValidValue = dd.Value;
-    end
-
-    % ---- BEGIN: add this block at the END of preventMissingSelection(dd) ----
-    try
-        % Auto-unlink any manual link on selection change
-        if isstruct(dd.UserData) && isfield(dd.UserData,'ParamFile')
-            ud = dd.UserData;
-            ud = rmfield(ud,'ParamFile');
-            dd.UserData = ud;
-        end
-    catch
-    end
-
-    % Update tooltip for the Param button
-    try
-        if isstruct(dd.UserData) && isfield(dd.UserData,'ParamButton') && ~isempty(dd.UserData.ParamButton) && isvalid(dd.UserData.ParamButton)
-            % Uses your existing helper
-            updateParamTooltip(dd.UserData.ParamButton, dd, dd.UserData.RootFolder);
-        end
-    catch
-    end
-
-    % Update the SAME red line with a param note (if no auto param file exists)
-    try
-        if isstruct(dd.UserData) && isfield(dd.UserData,'ParamStatusLabel') && ~isempty(dd.UserData.ParamStatusLabel) && isvalid(dd.UserData.ParamStatusLabel)
-            L = dd.UserData.ParamStatusLabel;
-            note = computeParamMissingNote(dd.UserData.CompName, dd, dd.UserData.RootFolder);  % uses your helper
-            if strlength(note) ~= 0
-                L.Text = string(note);
-                L.Visible = 'on';
-            else
-                % If the line was only showing the param note, hide it.
-                if contains(string(L.Text), "No param script")
-                    L.Text = "";
-                    L.Visible = 'off';
-                end
-            end
-        end
-    catch
-    end
-
-end
+% Param callbacks extracted to standalone files in APP/API/:
+%   openParamSmart, paramContextLink, paramContextUnlink,
+%   updateParamTooltip, computeParamMissingNote, preventMissingSelection,
+%   userDataSetField
 
 function idx = findExistingItemByBasename(items, targetNoExt)
     items  = string(items);

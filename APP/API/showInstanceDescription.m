@@ -14,11 +14,6 @@ function showInstanceDescription(app, comp, label)
 
     % Ensure it ends with ".slx"
     [~, modelName, ~] = fileparts(modelItem);
-    % if isempty(ext)
-    %     modelName = [base, '.slx'];
-    % else
-    %     modelName = [base, ext];
-    % end
 
     % Call your existing preview function with just the model name
     % (print -s expects the system name, so ModelDescriptiom strips the path)

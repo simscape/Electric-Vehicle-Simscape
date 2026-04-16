@@ -241,18 +241,6 @@ function root = resolveProjectRoot(app)
     end
 end
 
-% function name = resolveTopModelName(app)
-% % Return model name without .slx if provided.
-%     name = '';
-%     try
-%         name = string(app.TopModelName);
-%         if endsWith(name,".slx",'IgnoreCase',true)
-%             name = erase(name,".slx");
-%         end
-%     catch
-%     end
-% end
-
 function out = ensureExt(pathStr, ext)
     [p,f,e] = fileparts(pathStr);
     if ~strcmpi(e, ext)

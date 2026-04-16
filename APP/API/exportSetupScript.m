@@ -147,7 +147,9 @@ if controlActive
     'LookUnderMasks','all', 'FollowLinks','on', ...
     'MatchFilter', @Simulink.match.allVariants, ...
     'ReferenceBlock', 'autolibshared/Drive Cycle Source');
-    L{end+1} = char(['set_param(' squote(drivecycle_blocks) ',''cycleVar'', ' squote(driveCycleSelected) ');']);
+    if ~isempty(drivecycle_blocks)
+        L{end+1} = char(['set_param(' squote(drivecycle_blocks{1}) ',''cycleVar'', ' squote(driveCycleSelected) ');']);
+    end
  end
 
  L{end+1} = char('saveAll(topModelName);');
@@ -207,25 +209,6 @@ uialert(app.UIFigure, sprintf('Exported setup script:\n%s', outFile), 'Export co
             end
         end
     end
-
-    % 
-    % function sel = getSelectionForComp(a, comp)
-    %     sel = "";
-    %     if isprop(a,'CompDropDowns') && isa(a.CompDropDowns,'containers.Map')
-    %         if isKey(a.CompDropDowns, comp)
-    %             dd = a.CompDropDowns(comp);
-    %             if isprop(dd,'Value'), sel = string(dd.Value); end
-    %             return;
-    %         end
-    %         keys = string(a.CompDropDowns.keys);
-    %         hit  = find(startsWith(keys, string(comp)), 1, 'first');
-    %         if ~isempty(hit)
-    %             dd = a.CompDropDowns(char(keys(hit)));
-    %             if isprop(dd,'Value'), sel = string(dd.Value); end
-    %         end
-    %     end
-    % end
-
 
 
 

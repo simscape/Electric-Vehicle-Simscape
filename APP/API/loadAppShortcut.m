@@ -1,5 +1,5 @@
-function app = runWithLoader()
-%RUNWITHLOADER Shows a loader popup, launches BEVapp, then closes the loader.
+function app = loadAppShortcut()
+%LOADAPPSHORTCUT Shows a loader popup, launches BEVapp, then closes the loader.
 
     % ----- Loader UI -----
     f = uifigure( ...

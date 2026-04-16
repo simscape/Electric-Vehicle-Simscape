@@ -1,9 +1,10 @@
-function valid = validateVehicleConfig(app, platformName)
+function valid = validateVehicleConfig(data, platformName)
 %VALIDATEVEHICLECONFIG Validate the JSON config structure.
-%   valid = validateVehicleConfig(app) validates ALL platforms in the config.
-%   valid = validateVehicleConfig(app, platformName) validates one platform.
+%   valid = validateVehicleConfig(data) validates ALL platforms in the config.
+%   valid = validateVehicleConfig(data, platformName) validates one platform.
+%
+%   data — parsed JSON struct (from jsondecode), not the app object.
 
-    data = jsondecode(fileread(app.ConfigDropDown.Value));
     allPlatforms = fieldnames(data);
     valid = true;
 

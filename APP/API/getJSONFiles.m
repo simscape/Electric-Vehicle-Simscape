@@ -1,9 +1,9 @@
-function slxFiles = getJSONFiles(folderPath)
+function jsonFiles = getJSONFiles(folderPath)
     % Ensure folder exists
     if isfolder(folderPath)
         files = dir(fullfile(folderPath, '*.json'));
-        slxFiles = {files.name};
+        jsonFiles = {files.name};
     else
-        slxFiles = {}; % Return empty if folder doesn't exist
+        jsonFiles = {}; % Return empty if folder doesn't exist
     end
 end
