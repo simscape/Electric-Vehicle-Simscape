@@ -55,7 +55,7 @@ function cacheDir = getCacheDir(app)
         end
 
         % Create on first use
-        appFolder = fileparts(fileparts(mfilename('fullpath'))); % APP/API/ → APP/
+        appFolder = fileparts(fileparts(fileparts(mfilename('fullpath')))); % APP/API/State/ → APP/
         cacheDir = fullfile(appFolder, '.sessionCache');
         if ~isfolder(cacheDir)
             mkdir(cacheDir);
