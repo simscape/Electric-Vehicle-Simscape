@@ -34,13 +34,17 @@ function applySetupState(app, state)
     % ---- Rebuild UI ----
     try
         createComponentDropdowns(app, true);  % skipCache=true to prevent recursion
-    catch
+    catch ME
+        warning('BEVapp:applySetupState', ...
+            'createComponentDropdowns failed: %s', ME.message);
     end
 
     % ---- Control detection (populates control dropdown Items) ----
     try
         controlSelectionDropdown(app);
-    catch
+    catch ME
+        warning('BEVapp:applySetupState', ...
+            'controlSelectionDropdown failed: %s', ME.message);
     end
 
     % ---- Apply selections on the rebuilt UI ----
@@ -51,28 +55,25 @@ end
 
 function setDropdownByMatch(dd, target, ext)
 %SETDROPDOWNBYMATCH Try to match target in dropdown items and set Value.
-    try
-        target = char(target);
-        withExt = target;
-        if ~isempty(ext) && ~endsWith(target, ext, 'IgnoreCase', true)
-            withExt = [target ext];
-        end
-        bare = regexprep(target, '\.(slx|mdl)$', '', 'ignorecase');
+    target = char(target);
+    withExt = target;
+    if ~isempty(ext) && ~endsWith(target, ext, 'IgnoreCase', true)
+        withExt = [target ext];
+    end
+    bare = regexprep(target, '\.(slx|mdl)$', '', 'ignorecase');
 
-        if ~isempty(dd.ItemsData), data = string(dd.ItemsData);
-        else,                      data = string(dd.Items);
-        end
+    if ~isempty(dd.ItemsData), data = string(dd.ItemsData);
+    else,                      data = string(dd.Items);
+    end
 
-        idx = find(data == string(withExt), 1);
-        if isempty(idx), idx = find(data == string(bare), 1); end
-        if isempty(idx), idx = find(strcmpi(data, withExt), 1); end
-        if isempty(idx), idx = find(strcmpi(data, bare), 1); end
+    idx = find(data == string(withExt), 1);
+    if isempty(idx), idx = find(data == string(bare), 1); end
+    if isempty(idx), idx = find(strcmpi(data, withExt), 1); end
+    if isempty(idx), idx = find(strcmpi(data, bare), 1); end
 
-        if ~isempty(idx)
-            if ~isempty(dd.ItemsData), dd.Value = dd.ItemsData{idx};
-            else,                      dd.Value = dd.Items{idx};
-            end
+    if ~isempty(idx)
+        if ~isempty(dd.ItemsData), dd.Value = dd.ItemsData{idx};
+        else,                      dd.Value = dd.Items{idx};
         end
-    catch
     end
 end

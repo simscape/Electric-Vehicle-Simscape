@@ -9,23 +9,20 @@ function [detect, matchIdx] = detectSSRFromBEVModel(bevModelName, rootFolder, ca
     detect = false;
     matchIdx = [];
 
-    try
-        bevModelName = regexprep(char(bevModelName), '\.slx$', '', 'ignorecase');
+    bevModelName = regexprep(char(bevModelName), '\.slx$', '', 'ignorecase');
 
-        % ---- Get cached or fresh SSR basenames ----
-        refBases = getCachedSSR(bevModelName, rootFolder);
-        if isempty(refBases), return; end
+    % ---- Get cached or fresh SSR basenames ----
+    refBases = getCachedSSR(bevModelName, rootFolder);
+    if isempty(refBases), return; end
 
-        % ---- Match against candidates ----
-        candidateBases = erase(string(candidateBases), ".slx");
-        for p = 1:numel(candidateBases)
-            if any(strcmpi(candidateBases(p), refBases))
-                matchIdx = p;
-                detect = true;
-                break
-            end
+    % ---- Match against candidates ----
+    candidateBases = erase(string(candidateBases), ".slx");
+    for p = 1:numel(candidateBases)
+        if any(strcmpi(candidateBases(p), refBases))
+            matchIdx = p;
+            detect = true;
+            break
         end
-    catch
     end
 end
 
@@ -42,15 +39,12 @@ function refBases = getCachedSSR(mdlName, rootFolder)
 
     % Find model file
     bevFile = '';
-    try
-        hit = dir(fullfile(char(rootFolder), '**', [mdlName '.slx']));
-        if ~isempty(hit)
-            bevFile = fullfile(hit(1).folder, hit(1).name);
-        else
-            w = which(mdlName);
-            if ~isempty(w), bevFile = w; end
-        end
-    catch
+    hit = dir(fullfile(char(rootFolder), '**', [mdlName '.slx']));
+    if ~isempty(hit)
+        bevFile = fullfile(hit(1).folder, hit(1).name);
+    else
+        w = which(mdlName);
+        if ~isempty(w), bevFile = w; end
     end
     if isempty(bevFile) || ~exist(bevFile, 'file'), return; end
 

@@ -52,23 +52,20 @@ function [preCheck, missingMap] = scanComponentAvailability(root, entries)
                 expectedFull = fullfile(folder, modelFull);
                 foundElsewherePath = '';
                 if ~exist(expectedFull,'file')
-                    try
-                        alt = dir(fullfile(root, '**', modelFull));
-                        if ~isempty(alt)
-                            for k = 1:numel(alt)
-                                p = fullfile(alt(k).folder, alt(k).name);
-                                if ~strcmpi(p, expectedFull)
-                                    if startsWith(p, root)
-                                        pRel = erase(p, [root filesep]);
-                                    else
-                                        pRel = p;
-                                    end
-                                    foundElsewherePath = pRel;
-                                    break
+                    alt = dir(fullfile(root, '**', modelFull));
+                    if ~isempty(alt)
+                        for k = 1:numel(alt)
+                            p = fullfile(alt(k).folder, alt(k).name);
+                            if ~strcmpi(p, expectedFull)
+                                if startsWith(p, root)
+                                    pRel = erase(p, [root filesep]);
+                                else
+                                    pRel = p;
                                 end
+                                foundElsewherePath = pRel;
+                                break
                             end
                         end
-                    catch
                     end
                 end
                 missingMap(key) = struct( ...

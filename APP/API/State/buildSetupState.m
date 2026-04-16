@@ -35,7 +35,6 @@ function state = buildSetupState(app)
     [~, bevModel]  = fileparts(safeValue(app, 'BEVModelDropDown', ''));
     [~, template]  = fileparts(safeValue(app, 'VehicleTemplateDropDown', ''));
 
-    root = '';
     try
         root = char(matlab.project.rootProject.RootFolder);
     catch
@@ -55,57 +54,41 @@ function state = buildSetupState(app)
 
     % ---- Controls ----
     tmpl.Controls = struct('Enabled', false, 'Model', '');
-    try, tmpl.Controls.Enabled = (app.ControlSelectionDropDown.Enable == "on"); catch, end
-    try
+    if isprop(app, 'ControlSelectionDropDown')
+        tmpl.Controls.Enabled = (app.ControlSelectionDropDown.Enable == "on");
         if tmpl.Controls.Enabled
             tmpl.Controls.Model = erase(char(app.ControlSelectionDropDown.Value), '.slx');
         end
-        % Include available models from dropdown Items (superset of raw config)
         items = app.ControlSelectionDropDown.Items;
-        tmpl.Controls.Models = cellfun(@(x) erase(char(x), '.slx'), items, 'UniformOutput', false);
-    catch
+        tmpl.Controls.Models = cellfun(@(x) erase(char(x), '.slx'), ...
+            items, 'UniformOutput', false);
     end
 
     % ---- Drive cycle ----
     tmpl.DriveCycle = struct('Enabled', false, 'Value', '');
-    try, tmpl.DriveCycle.Enabled = (app.DriveCycleDropDown.Enable == "on"); catch, end
-    try
+    if isprop(app, 'DriveCycleDropDown')
+        tmpl.DriveCycle.Enabled = (app.DriveCycleDropDown.Enable == "on");
         if tmpl.DriveCycle.Enabled
             tmpl.DriveCycle.Value = char(app.DriveCycleDropDown.Value);
         end
-    catch
     end
 
     % ---- Environment ----
     env = struct();
-    env.AmbientTemp   = 25;
-    env.CabinSetpoint = 20;
-    env.AmbPressure   = 1;
-    env.RelHumidity   = 0.5;
-    env.CO2Fraction   = 0.0004;
-
-    try, env.AmbientTemp   = double(app.AmbTempEditField.Value);               catch, end
-    try, env.CabinSetpoint = double(app.CabinTempSetpointEditField.Value);     catch, end
-    try, env.AmbPressure   = double(app.AmbPressInitEditField.Value);           catch, end
-    try, env.RelHumidity   = double(app.RelHumidityInitEditField.Value);       catch, end
-    try, env.CO2Fraction   = double(app.CO2FractionInitialEditField.Value);    catch, end
-
+    env.AmbientTemp   = safeNumericValue(app, 'AmbTempEditField',           25);
+    env.CabinSetpoint = safeNumericValue(app, 'CabinTempSetpointEditField', 20);
+    env.AmbPressure   = safeNumericValue(app, 'AmbPressInitEditField',      1);
+    env.RelHumidity   = safeNumericValue(app, 'RelHumidityInitEditField',   0.5);
+    env.CO2Fraction   = safeNumericValue(app, 'CO2FractionInitialEditField', 0.0004);
     tmpl.Environment = env;
 
     % ---- Dashboard buttons ----
     dash = struct();
-    dash.ACEnabled  = false;
-    dash.ACOn       = false;
-    dash.AWD        = false;
-    dash.Regen      = false;
-    dash.Charging   = false;
-
-    try, dash.ACEnabled  = (app.ACButton.Enable == "on");     catch, end
-    try, dash.ACOn       = logical(app.ACButton.Value);       catch, end
-    try, dash.AWD        = logical(app.AWDButton.Value);      catch, end
-    try, dash.Regen      = logical(app.RegenButton.Value);    catch, end
-    try, dash.Charging   = logical(app.ChargingButton.Value); catch, end
-
+    dash.ACEnabled  = safeLogicalProp(app, 'ACButton',       'Enable', false);
+    dash.ACOn       = safeLogicalProp(app, 'ACButton',       'Value',  false);
+    dash.AWD        = safeLogicalProp(app, 'AWDButton',      'Value',  false);
+    dash.Regen      = safeLogicalProp(app, 'RegenButton',    'Value',  false);
+    dash.Charging   = safeLogicalProp(app, 'ChargingButton', 'Value',  false);
     tmpl.Dashboard = dash;
 
     % ---- System parameters (from JSON config) ----
@@ -118,7 +101,9 @@ function state = buildSetupState(app)
         if ~isempty(sysParam)
             tmpl.SystemParameter = cellstr(sysParam);
         end
-    catch
+    catch ME
+        warning('BEVapp:buildSetupState', ...
+            'Could not read SystemParameter from config: %s', ME.message);
     end
 
     % ---- Wrap under template name as top-level key ----
@@ -134,14 +119,31 @@ end
 function val = safeValue(app, propName, default)
 %SAFEVALUE Read a dropdown/field Value, return default on failure.
     val = default;
-    try
-        if isprop(app, propName)
-            v = app.(propName).Value;
-            if ~isempty(v)
-                val = char(v);
-            end
+    if isprop(app, propName)
+        v = app.(propName).Value;
+        if ~isempty(v)
+            val = char(v);
         end
-    catch
+    end
+end
+
+function val = safeNumericValue(app, propName, default)
+%SAFENUMERICVALUE Read a numeric edit field Value, return default if missing.
+    val = default;
+    if isprop(app, propName)
+        val = double(app.(propName).Value);
+    end
+end
+
+function val = safeLogicalProp(app, propName, field, default)
+%SAFELOGICALPROP Read a logical property (Value or Enable) from a widget.
+    val = default;
+    if isprop(app, propName)
+        if strcmp(field, 'Enable')
+            val = (app.(propName).Enable == "on");
+        else
+            val = logical(app.(propName).Value);
+        end
     end
 end
 
@@ -153,9 +155,7 @@ function comps = buildComponentsHierarchy(app)
 %   Also preserves Instances (name list) and Models (available list) from
 %   dropdown Items so the output is a superset of the raw config JSON.
     comps = struct();
-    try
-        if ~isstruct(app.ComponentDropdowns), return; end
-    catch
+    if ~isprop(app, 'ComponentDropdowns') || ~isstruct(app.ComponentDropdowns)
         return;
     end
 
@@ -170,7 +170,7 @@ function comps = buildComponentsHierarchy(app)
         % Selected model
         sel = safeUserData(dd, 'LastValidValue', '');
         if isempty(sel)
-            try, sel = char(dd.Value); catch, end
+            sel = char(dd.Value);
         end
         sel = erase(char(sel), '.slx');
 
@@ -203,15 +203,11 @@ function comps = buildComponentsHierarchy(app)
 
         % Collect available models from dropdown Items (for Models array)
         if ~isfield(comps.(compType), 'Models')
-            try
-                items = dd.Items;
-                models = cellfun(@(x) erase(char(x), '.slx'), items, 'UniformOutput', false);
-                % Filter out __MISSING__ entries
-                models = models(~startsWith(models, '__MISSING__'));
-                comps.(compType).Models = models;
-            catch
-                comps.(compType).Models = {};
-            end
+            items = dd.Items;
+            models = cellfun(@(x) erase(char(x), '.slx'), items, 'UniformOutput', false);
+            % Filter out __MISSING__ entries
+            models = models(~startsWith(models, '__MISSING__'));
+            comps.(compType).Models = models;
         end
 
         % Add selection under component
@@ -231,13 +227,10 @@ end
 function val = safeUserData(dd, fieldName, default)
 %SAFEUSERDATA Read a field from dd.UserData, return default on failure.
     val = default;
-    try
-        if isstruct(dd.UserData) && isfield(dd.UserData, fieldName)
-            v = dd.UserData.(fieldName);
-            if ~isempty(v)
-                val = char(v);
-            end
+    if isstruct(dd.UserData) && isfield(dd.UserData, fieldName)
+        v = dd.UserData.(fieldName);
+        if ~isempty(v)
+            val = char(v);
         end
-    catch
     end
 end

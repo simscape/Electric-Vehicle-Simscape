@@ -9,22 +9,17 @@ function restored = restoreFromCache(app)
     restored = false;
 
     % Read cache dir from app (created by snapshotToCache on first use)
-    try
-        cacheDir = app.UIFigure.UserData.sessionCacheDir;
-        if ~isfolder(cacheDir), return; end
-    catch
+    if ~isstruct(app.UIFigure.UserData) || ~isfield(app.UIFigure.UserData, 'sessionCacheDir')
         return;
     end
+    cacheDir = app.UIFigure.UserData.sessionCacheDir;
+    if ~isfolder(cacheDir), return; end
 
     % Build tag from current template + config
-    try
-        template = erase(char(app.VehicleTemplateDropDown.Value), '.slx');
-        [~, cfgBase] = fileparts(char(app.ConfigDropDown.Value));
-        if isempty(template) || isempty(cfgBase), return; end
-        tag = matlab.lang.makeValidName([template '__' cfgBase]);
-    catch
-        return;
-    end
+    template = erase(char(app.VehicleTemplateDropDown.Value), '.slx');
+    [~, cfgBase] = fileparts(char(app.ConfigDropDown.Value));
+    if isempty(template) || isempty(cfgBase), return; end
+    tag = matlab.lang.makeValidName([template '__' cfgBase]);
 
     % Check if snapshot exists
     cacheFile = fullfile(cacheDir, [tag '.json']);
@@ -38,6 +33,8 @@ function restored = restoreFromCache(app)
         if isempty(flds), return; end
         applySelections(app, state.(flds{1}));
         restored = true;
-    catch
+    catch ME
+        warning('BEVapp:restoreFromCache', ...
+            'Cache restore failed: %s', ME.message);
     end
 end

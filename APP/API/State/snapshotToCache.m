@@ -12,17 +12,19 @@ function snapshotToCache(app)
     if isempty(cacheDir), return; end
 
     % Use the tag from when the UI was last built (dropdown already changed)
-    try
-        tag = app.UIFigure.UserData.lastCacheTag;
-        if isempty(tag), return; end
-    catch
+    if ~isstruct(app.UIFigure.UserData) ...
+            || ~isfield(app.UIFigure.UserData, 'lastCacheTag') ...
+            || isempty(app.UIFigure.UserData.lastCacheTag)
         return;
     end
+    tag = app.UIFigure.UserData.lastCacheTag;
 
     % Build state
     try
         state = buildSetupState(app);
-    catch
+    catch ME
+        warning('BEVapp:snapshotToCache', ...
+            'Failed to build setup state for caching: %s', ME.message);
         return;
     end
 
@@ -34,7 +36,9 @@ function snapshotToCache(app)
             fwrite(fid, json, 'char');
             fclose(fid);
         end
-    catch
+    catch ME
+        warning('BEVapp:snapshotToCache', ...
+            'Cache write failed: %s', ME.message);
     end
 end
 
@@ -70,7 +74,9 @@ function cacheDir = getCacheDir(app)
         % Register cleanup on app close
         origClose = app.UIFigure.CloseRequestFcn;
         app.UIFigure.CloseRequestFcn = @(src, evt) cleanupCache(src, evt, cacheDir, origClose);
-    catch
+    catch ME
+        warning('BEVapp:snapshotToCache', ...
+            'Session cache setup failed: %s', ME.message);
         cacheDir = '';
     end
 end

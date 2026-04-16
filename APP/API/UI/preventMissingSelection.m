@@ -3,10 +3,7 @@ function preventMissingSelection(dd)
     valStr = string(dd.Value);
     items  = string(dd.Items);
     itemsData = items;
-    try
-        if ~isempty(dd.ItemsData), itemsData = string(dd.ItemsData); end
-    catch
-    end
+    if ~isempty(dd.ItemsData), itemsData = string(dd.ItemsData); end
 
     isMissing = false;
     if any(itemsData == valStr) && startsWith(valStr,"__MISSING__")
@@ -36,38 +33,29 @@ function preventMissingSelection(dd)
     end
 
     % Auto-unlink any manual link on selection change
-    try
-        if isstruct(dd.UserData) && isfield(dd.UserData,'ParamFile')
-            ud = dd.UserData;
-            ud = rmfield(ud,'ParamFile');
-            dd.UserData = ud;
-        end
-    catch
+    if isstruct(dd.UserData) && isfield(dd.UserData,'ParamFile')
+        ud = dd.UserData;
+        ud = rmfield(ud,'ParamFile');
+        dd.UserData = ud;
     end
 
     % Update tooltip for the Param button
-    try
-        if isstruct(dd.UserData) && isfield(dd.UserData,'ParamButton') && ~isempty(dd.UserData.ParamButton) && isvalid(dd.UserData.ParamButton)
-            updateParamTooltip(dd.UserData.ParamButton, dd, dd.UserData.RootFolder);
-        end
-    catch
+    if isstruct(dd.UserData) && isfield(dd.UserData,'ParamButton') && ~isempty(dd.UserData.ParamButton) && isvalid(dd.UserData.ParamButton)
+        updateParamTooltip(dd.UserData.ParamButton, dd, dd.UserData.RootFolder);
     end
 
     % Update the red line with a param note (if no auto param file exists)
-    try
-        if isstruct(dd.UserData) && isfield(dd.UserData,'ParamStatusLabel') && ~isempty(dd.UserData.ParamStatusLabel) && isvalid(dd.UserData.ParamStatusLabel)
-            L = dd.UserData.ParamStatusLabel;
-            note = computeParamMissingNote(dd.UserData.CompName, dd, dd.UserData.RootFolder);
-            if strlength(note) ~= 0
-                L.Text = string(note);
-                L.Visible = 'on';
-            else
-                if contains(string(L.Text), "No param script")
-                    L.Text = "";
-                    L.Visible = 'off';
-                end
+    if isstruct(dd.UserData) && isfield(dd.UserData,'ParamStatusLabel') && ~isempty(dd.UserData.ParamStatusLabel) && isvalid(dd.UserData.ParamStatusLabel)
+        L = dd.UserData.ParamStatusLabel;
+        note = computeParamMissingNote(dd.UserData.CompName, dd, dd.UserData.RootFolder);
+        if strlength(note) ~= 0
+            L.Text = string(note);
+            L.Visible = 'on';
+        else
+            if contains(string(L.Text), "No param script")
+                L.Text = "";
+                L.Visible = 'off';
             end
         end
-    catch
     end
 end

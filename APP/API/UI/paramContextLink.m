@@ -17,21 +17,19 @@ function paramContextLink(app, btn, dd, rootFolder)
     try
         msg = "Linked param file:" + newline + string(chosen);
         uialert(app.UIFigure, msg, "Param Linked", 'Icon','info');
-    catch
+    catch ME
+        warning('BEVapp:paramContextLink', 'uialert failed: %s', ME.message);
     end
     edit(chosen);
     % After setting/clearing dd.UserData.ParamFile:
     updateParamTooltip(btn, dd, rootFolder);
 
     % Also refresh the red line:
-    try
-        if isstruct(dd.UserData) && isfield(dd.UserData,'ParamStatusLabel') && isvalid(dd.UserData.ParamStatusLabel)
-            L = dd.UserData.ParamStatusLabel;
-            % After linking: hide the "no param" message (auto is overridden by link)
-            L.Text = "";
-            L.Visible = 'off';
-        end
-    catch
+    if isstruct(dd.UserData) && isfield(dd.UserData,'ParamStatusLabel') && isvalid(dd.UserData.ParamStatusLabel)
+        L = dd.UserData.ParamStatusLabel;
+        % After linking: hide the "no param" message (auto is overridden by link)
+        L.Text = "";
+        L.Visible = 'off';
     end
 end
 
@@ -40,47 +38,35 @@ function startFolder = getParamStartFolder(dd, rootFolder)
     startFolder = char(rootFolder);
 
     % If a linked file exists, start there
-    try
-        if isstruct(dd.UserData) && isfield(dd.UserData,'ParamFile')
-            linked = string(dd.UserData.ParamFile);
-            if strlength(linked) > 0
-                lf = fileparts(char(linked));
-                if exist(lf, 'dir')
-                    startFolder = lf;
-                    return
-                end
+    if isstruct(dd.UserData) && isfield(dd.UserData,'ParamFile')
+        linked = string(dd.UserData.ParamFile);
+        if strlength(linked) > 0
+            lf = fileparts(char(linked));
+            if exist(lf, 'dir')
+                startFolder = lf;
+                return
             end
         end
-    catch
     end
 
     % Else prefer the ModelFolder recorded on the dropdown
-    try
-        if isstruct(dd.UserData) && isfield(dd.UserData,'ModelFolder')
-            mf = dd.UserData.ModelFolder;
-            if (ischar(mf) || isstring(mf))
-                mf = char(mf);
-                if exist(mf, 'dir')
-                    startFolder = mf;
-                    return
-                end
+    if isstruct(dd.UserData) && isfield(dd.UserData,'ModelFolder')
+        mf = dd.UserData.ModelFolder;
+        if (ischar(mf) || isstring(mf))
+            mf = char(mf);
+            if exist(mf, 'dir')
+                startFolder = mf;
+                return
             end
         end
-    catch
     end
 
     % Else, if current dropdown value is a model in that folder, use that folder
-    try
-        val = string(dd.Value);
-        if ~startsWith(val,"__MISSING__")
-            if isstruct(dd.UserData) && isfield(dd.UserData,'ModelFolder')
-                candidate = fullfile(char(dd.UserData.ModelFolder), char(val));
-                if exist(fileparts(candidate), 'dir')
-                    startFolder = fileparts(candidate);
-                    return
-                end
-            end
+    val = string(dd.Value);
+    if ~startsWith(val,"__MISSING__") && isstruct(dd.UserData) && isfield(dd.UserData,'ModelFolder')
+        candidate = fullfile(char(dd.UserData.ModelFolder), char(val));
+        if exist(fileparts(candidate), 'dir')
+            startFolder = fileparts(candidate);
         end
-    catch
     end
 end

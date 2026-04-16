@@ -1,205 +1,236 @@
 function createComponentDropdowns(app, skipCache)
+%CREATECOMPONENTDROPDOWNS Orchestrate component UI build from config JSON.
+%   createComponentDropdowns(app)
+%   createComponentDropdowns(app, skipCache)
+%
+%   Reads the selected config JSON, resolves the template, validates it,
+%   detects the vehicle platform, scans component availability, renders
+%   dropdown panels, and applies saved/cached selections.
+
     if nargin < 2, skipCache = false; end
 
     % Snapshot current state to session cache BEFORE clearing UI
     if ~skipCache
-        try, snapshotToCache(app); catch, end
+        try
+            snapshotToCache(app);
+        catch ME
+            warning('BEVapp:createComponentDropdowns', ...
+                'snapshotToCache failed: %s', ME.message);
+        end
     end
 
-    % clear UI
+    % Clear existing component UI
     delete(app.ComponentsPanel.Children);
 
-
-    % PRECHECKS
+    % ---- Project root ----
     proj = matlab.project.rootProject;
     root = proj.RootFolder;
 
-    % Read raw & parsed JSON
+    % ---- Parse config JSON and resolve template ----
     rawCfg = jsondecode(fileread(app.ConfigDropDown.Value));
 
-    % Resolve template name (pure logic, no UI)
-    [tmpl, templatePopupNotes, tmplMatched] = resolveTemplateName(rawCfg, app.VehicleTemplateDropDown.Value);
+    [templateKey, templatePopupNotes, templateMatched] = ...
+        resolveTemplateName(rawCfg, app.VehicleTemplateDropDown.Value);
 
-    % Sync dropdown to reflect the resolved template
-    syncTemplateDropdown(app, tmpl, tmplMatched);
+    syncTemplateDropdown(app, templateKey, templateMatched);
 
     % If saved setup, restore BEV model dropdown (before platform detection)
-    rawTmpl = rawCfg.(tmpl);
-    if isfield(rawTmpl, 'BEVModel') && ~isempty(rawTmpl.BEVModel)
-        bevTarget = char(rawTmpl.BEVModel);
-        bevItems = string(app.BEVModelDropDown.Items);
-        idx = find(bevItems == string(bevTarget) | bevItems == string([bevTarget '.slx']), 1);
-        if ~isempty(idx)
-            app.BEVModelDropDown.Value = app.BEVModelDropDown.Items{idx};
-        end
-    end
+    rawTmpl = rawCfg.(templateKey);
+    restoreBEVModelDropdown(app, rawTmpl);
 
-    % Validate config structure
+    % ---- Validate config structure ----
     try
-        validateVehicleConfig(rawCfg, tmpl);
+        validateVehicleConfig(rawCfg, templateKey);
     catch
-        app.CreateModelButton.Enable = "off";
-        app.ParameterExportButton.Enable = "off";
-        app.ModelExportButton.Enable = "off";
-        uialert(app.UIFigure, "Structure of the config json file doesn't have valid structure. ..." + ...
-                   "Check help document", "Error");
-        return;   % abort BEFORE any UI is rendered
+        setExportButtonsEnabled(app, false);
+        uialert(app.UIFigure, ...
+            "Config JSON structure is invalid. Check help document.", "Error");
+        return;
     end
 
-    % Build flat entries from config (pure data, no UI)
-    entries = buildComponentEntries(rawCfg, tmpl);
-    app.DriveCycleDropDown.Enable = "on";
-    app.DriveCycleDesc.Enable = "on";
-    app.CreateModelButton.Enable = "on";
-    app.ParameterExportButton.Enable = "on";
-    app.ModelExportButton.Enable = "on";
+    % ---- Build component entries and enable UI ----
+    entries = buildComponentEntries(rawCfg, templateKey);
+    setExportButtonsEnabled(app, true);
 
-    % Check if HVAC present in the component list or not
-    if ~any(strcmp({entries.Comp}, 'HVAC'))
-        app.ACButton.Enable = 'off';
-        app.CabinTempSetpointEditField.Enable = 'off';
-    else
-        app.ACButton.Enable = 'on';
-        app.CabinTempSetpointEditField.Enable = 'on';
-    end
-    % Find Subsystem References (by ReferencedSubsystem) and keep only present instances.
+    % HVAC-specific: enable/disable AC controls
+    hasHVAC = any(strcmp({entries.Comp}, 'HVAC'));
+    app.ACButton.Enable = ternEnable(hasHVAC);
+    app.CabinTempSetpointEditField.Enable = ternEnable(hasHVAC);
+
+    % ---- Check template SSR blocks against entries ----
     [presentMask, templateMissingLines, foundStruct] = ...
-        checkTemplateSubsystemRefs(root, tmpl, entries);
+        checkTemplateSubsystemRefs(root, templateKey, entries);
 
-    % Store for later 
     if ~isstruct(app.UIFigure.UserData), app.UIFigure.UserData = struct(); end
-    app.UIFigure.UserData.TemplateSubsystemRefs = foundStruct;  
+    app.UIFigure.UserData.TemplateSubsystemRefs = foundStruct;
 
     entries = entries(presentMask);
 
-
-    % Vehicle Platform detection
-    % if this fails, we return before building UI.
+    % ---- Vehicle platform detection (abort if not found) ----
     if ~platformDetectFromBEVModel(app, root)
-        app.DriveCycleDropDown.Enable = "off";
-        app.DriveCycleDesc.Enable = "off";
-        app.CreateModelButton.Enable = "off";
-        app.ParameterExportButton.Enable = "off";
-        app.ModelExportButton.Enable = "off";
+        setExportButtonsEnabled(app, false);
         app.ControlSelectionDropDown.Enable = "off";
         app.ControlDesc.Enable = "off";
-        return;   % abort BEFORE any UI is rendered
-    else
-        app.DriveCycleDropDown.Enable = "on";
-        app.DriveCycleDesc.Enable = "on";
-        app.CreateModelButton.Enable = "on";
-        app.ParameterExportButton.Enable = "on";
-        app.ModelExportButton.Enable = "on";
-        app.ControlSelectionDropDown.Enable = "on";
-        app.ControlDesc.Enable = "on";
+        return;
     end
+    app.ControlSelectionDropDown.Enable = "on";
+    app.ControlDesc.Enable = "on";
 
-
-    % Scan component folders for model availability (pure data, no UI)
+    % ---- Scan component folders for model availability ----
     [preCheck, missingMap] = scanComponentAvailability(root, entries);
 
-
-
-    % ONE consolidated popup
-    lines = strings(0,1);
-    if ~isempty(templatePopupNotes), lines = [lines; templatePopupNotes(:); ""]; end
-
-    if ~isempty(templateMissingLines)
-        lines(end+1,1) = "Vehicle configuration is missing some instance Subsystem Reference blocks (name match against Instances):";
-        lines           = [lines; templateMissingLines(:); ""];
-    end
-
-    if ~isempty(missingMap)
-        lines(end+1,1) = "Some models listed in the config are missing from the expected component folder.";
-        lines(end+1,1) = "";
-        lines(end+1,1) = "Checked folder pattern:";
-        lines(end+1,1) = "  <projectRoot>\Components\<Component>\Model\<Model>.slx";
-        lines(end+1,1) = "";
-        lines(end+1,1) = "Missing (Component → Model  —  Instances  [Found elsewhere if any]):";
-
-        keys = sort(missingMap.keys);
-        for kk = 1:numel(keys)
-            key = keys{kk};
-            parts = split(string(key),"|");
-            comp  = parts(1); model = parts(2);
-            rec   = missingMap(key);
-            instList = strjoin(rec.Instances, ', ');
-            if strlength(rec.FoundElsewhere) > 0
-                lines(end+1,1) = sprintf("%s → %s  —  %s  [found at: %s]", comp, model + ".slx", instList, rec.FoundElsewhere);
-            else
-                lines(end+1,1) = sprintf("%s → %s  —  %s", comp, model + ".slx", instList);
-            end
+    % ---- Show consolidated warnings popup ----
+    warningLines = buildWarningLines(templatePopupNotes, templateMissingLines, missingMap);
+    if ~isempty(warningLines)
+        try
+            uialert(app.UIFigure, strjoin(warningLines, newline), ...
+                'Configuration warnings');
+        catch
+            warndlg(strjoin(warningLines, newline), 'Configuration warnings');
         end
     end
 
-    if ~isempty(lines)
-        try, uialert(app.UIFigure, strjoin(lines,newline), 'Configuration warnings');
-        catch,  warndlg(strjoin(lines,newline), 'Configuration warnings');
-        end
-    end
-
-    % RENDER UI (only if gate passed)
+    % ---- Render component panels ----
     renderComponentPanels(app, preCheck, root);
 
-    % Apply saved selections: if config JSON has SchemaVersion it's a saved
-    % setup — apply its selections.  Otherwise try the session cache.
+    % ---- Apply saved selections or restore from cache ----
     if isfield(rawTmpl, 'SchemaVersion')
-        try, applySelections(app, rawTmpl); catch, end
+        try
+            applySelections(app, rawTmpl);
+        catch ME
+            warning('BEVapp:createComponentDropdowns', ...
+                'applySelections failed: %s', ME.message);
+        end
     elseif ~skipCache
-        try, restoreFromCache(app); catch, end
+        try
+            restoreFromCache(app);
+        catch ME
+            warning('BEVapp:createComponentDropdowns', ...
+                'restoreFromCache failed: %s', ME.message);
+        end
     end
 
-    % Store the active cache tag so snapshotToCache uses it on next switch
-    try
-        tpl = erase(char(app.VehicleTemplateDropDown.Value), '.slx');
-        [~, cfg] = fileparts(char(app.ConfigDropDown.Value));
-        if ~isempty(tpl) && ~isempty(cfg)
-            app.UIFigure.UserData.lastCacheTag = matlab.lang.makeValidName([tpl '__' cfg]);
-        end
-    catch
+    % ---- Store cache tag for next config switch ----
+    storeCacheTag(app);
+end
+
+%% ========================= Local helpers =========================
+
+function setExportButtonsEnabled(app, enabled)
+%SETEXPORTBUTTONSENABLED Enable or disable the main export/action buttons.
+    state = ternEnable(enabled);
+    app.DriveCycleDropDown.Enable      = state;
+    app.DriveCycleDesc.Enable          = state;
+    app.CreateModelButton.Enable       = state;
+    app.ParameterExportButton.Enable   = state;
+    app.ModelExportButton.Enable       = state;
+end
+
+function restoreBEVModelDropdown(app, rawTmpl)
+%RESTOREBEVMODELDROPDOWN Set BEV model dropdown from saved setup (if present).
+    if ~isfield(rawTmpl, 'BEVModel') || isempty(rawTmpl.BEVModel)
+        return;
+    end
+    bevTarget = char(rawTmpl.BEVModel);
+    bevItems = string(app.BEVModelDropDown.Items);
+    idx = find(bevItems == string(bevTarget) ...
+             | bevItems == string([bevTarget '.slx']), 1);
+    if ~isempty(idx)
+        app.BEVModelDropDown.Value = app.BEVModelDropDown.Items{idx};
     end
 end
 
-%% Local helpers
+function warningLines = buildWarningLines(templateNotes, templateMissing, missingMap)
+%BUILDWARNINGLINES Assemble all config warning messages into one string array.
+    warningLines = strings(0, 1);
 
-function syncTemplateDropdown(app, tmplName, matched)
+    if ~isempty(templateNotes)
+        warningLines = [warningLines; templateNotes(:); ""];
+    end
+
+    if ~isempty(templateMissing)
+        warningLines(end+1, 1) = ...
+            "Vehicle configuration is missing some instance " + ...
+            "Subsystem Reference blocks (name match against Instances):";
+        warningLines = [warningLines; templateMissing(:); ""];
+    end
+
+    if isempty(missingMap), return; end
+
+    warningLines(end+1, 1) = ...
+        "Some models listed in the config are missing from the expected component folder.";
+    warningLines(end+1, 1) = "";
+    warningLines(end+1, 1) = "Checked folder pattern:";
+    warningLines(end+1, 1) = "  <projectRoot>\Components\<Component>\Model\<Model>.slx";
+    warningLines(end+1, 1) = "";
+    warningLines(end+1, 1) = ...
+        "Missing (Component -> Model  --  Instances  [Found elsewhere if any]):";
+
+    keys = sort(missingMap.keys);
+    for kk = 1:numel(keys)
+        key = keys{kk};
+        parts = split(string(key), "|");
+        compName  = parts(1);
+        modelName = parts(2);
+        rec = missingMap(key);
+        instanceList = strjoin(rec.Instances, ', ');
+
+        if strlength(rec.FoundElsewhere) > 0
+            warningLines(end+1, 1) = sprintf("%s -> %s.slx  --  %s  [found at: %s]", ...
+                compName, modelName, instanceList, rec.FoundElsewhere); %#ok<AGROW>
+        else
+            warningLines(end+1, 1) = sprintf("%s -> %s.slx  --  %s", ...
+                compName, modelName, instanceList); %#ok<AGROW>
+        end
+    end
+end
+
+function storeCacheTag(app)
+%STORECACHETAG Record the active template+config tag for snapshotToCache.
+    templateBase = erase(char(app.VehicleTemplateDropDown.Value), '.slx');
+    [~, configBase] = fileparts(char(app.ConfigDropDown.Value));
+    if isempty(templateBase) || isempty(configBase), return; end
+    if ~isstruct(app.UIFigure.UserData), app.UIFigure.UserData = struct(); end
+    app.UIFigure.UserData.lastCacheTag = ...
+        matlab.lang.makeValidName([templateBase '__' configBase]);
+end
+
+function syncTemplateDropdown(app, templateKey, matched)
 %SYNCTEMPLATEDROPDOWN Update VehicleTemplate dropdown to reflect resolved template.
     dd = app.VehicleTemplateDropDown;
-    try
-        itemsNow = string(dd.Items);
-        idx = findExistingItemByBasename(itemsNow, tmplName);
-        if ~isempty(idx)
-            dd.Value = dd.Items{idx};
-        elseif ~matched
-            % Template not in dropdown items — add it
-            dd.Items = [dd.Items, {tmplName}];
-            dd.Value = tmplName;
-        end
-        dd.UserData.LastValidValue = dd.Value;
+    itemsNow = string(dd.Items);
+    idx = findItemByBasename(itemsNow, templateKey);
 
-        % If fallback was used, tag the original selection as [missing]
-        if ~matched
-            origBase = erase(char(dd.Value), '.slx');
-            if ~strcmpi(origBase, tmplName)
-                missTag = sprintf("%s [missing]", origBase);
-                if ~any(strcmpi(itemsNow, missTag))
-                    dd.Items = [dd.Items, {missTag}];
-                end
+    if ~isempty(idx)
+        dd.Value = dd.Items{idx};
+    elseif ~matched
+        dd.Items = [dd.Items, {templateKey}];
+        dd.Value = templateKey;
+    end
+
+    if isstruct(dd.UserData)
+        dd.UserData.LastValidValue = dd.Value;
+    end
+
+    % If fallback was used, tag the original selection as [missing]
+    if ~matched
+        origBase = erase(char(dd.Value), '.slx');
+        if ~strcmpi(origBase, templateKey)
+            missTag = sprintf("%s [missing]", origBase);
+            if ~any(strcmpi(itemsNow, missTag))
+                dd.Items = [dd.Items, {missTag}];
             end
         end
-    catch
     end
 end
 
-% Extracted to standalone files in APP/API/:
-%   checkTemplateSubsystemRefs, buildComponentEntries, scanComponentAvailability,
-%   resolveTemplateName, validateVehicleConfig, detectSSRFromBEVModel,
-%   openParamSmart, paramContextLink, paramContextUnlink,
-%   updateParamTooltip, computeParamMissingNote, preventMissingSelection,
-%   userDataSetField
+function idx = findItemByBasename(items, targetNoExt)
+%FINDITEMBYBASENAME Find dropdown item matching target basename (case-insensitive).
+    bases = erase(string(items), '.slx');
+    idx = find(strcmpi(bases, string(targetNoExt)), 1, 'first');
+end
 
-function idx = findExistingItemByBasename(items, targetNoExt)
-    items  = string(items);
-    base = erase(items, '.slx');
-    idx = find(strcmpi(base, string(targetNoExt)), 1, 'first');
+function state = ternEnable(flag)
+%TERNENABLE Convert logical to "on"/"off" string for widget Enable property.
+    if flag, state = "on"; else, state = "off"; end
 end

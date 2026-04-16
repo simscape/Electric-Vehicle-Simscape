@@ -68,42 +68,36 @@ end
 function changed = trySetDropdownValue(dd, targetBase, ext)
 %TRYSETDROPDOWNVALUE Match targetBase against dropdown ItemsData and set Value.
     changed = false;
-    try
-        oldVal = dd.Value;
+    oldVal = dd.Value;
 
-        target = char(targetBase);
-        targetWithExt = target;
-        if ~isempty(ext) && ~endsWith(target, ext, 'IgnoreCase', true)
-            targetWithExt = [target ext];
-        end
-        targetBare = regexprep(target, '\.(slx|mdl)$', '', 'ignorecase');
+    target = char(targetBase);
+    targetWithExt = target;
+    if ~isempty(ext) && ~endsWith(target, ext, 'IgnoreCase', true)
+        targetWithExt = [target ext];
+    end
+    targetBare = regexprep(target, '\.(slx|mdl)$', '', 'ignorecase');
 
+    if ~isempty(dd.ItemsData)
+        data = string(dd.ItemsData);
+    else
+        data = string(dd.Items);
+    end
+
+    idx = find(data == string(targetWithExt), 1);
+    if isempty(idx), idx = find(data == string(targetBare), 1); end
+    if isempty(idx), idx = find(strcmpi(data, targetWithExt), 1); end
+    if isempty(idx), idx = find(strcmpi(data, targetBare), 1); end
+
+    if ~isempty(idx) && ~startsWith(data(idx), "__MISSING__")
         if ~isempty(dd.ItemsData)
-            data = string(dd.ItemsData);
+            dd.Value = dd.ItemsData{idx};
         else
-            data = string(dd.Items);
+            dd.Value = dd.Items{idx};
         end
-
-        idx = find(data == string(targetWithExt), 1);
-        if isempty(idx), idx = find(data == string(targetBare), 1); end
-        if isempty(idx), idx = find(strcmpi(data, targetWithExt), 1); end
-        if isempty(idx), idx = find(strcmpi(data, targetBare), 1); end
-
-        if ~isempty(idx) && ~startsWith(data(idx), "__MISSING__")
-            if ~isempty(dd.ItemsData)
-                dd.Value = dd.ItemsData{idx};
-            else
-                dd.Value = dd.Items{idx};
-            end
-            changed = ~isequal(oldVal, dd.Value);
-            try
-                if isstruct(dd.UserData)
-                    dd.UserData.LastValidValue = dd.Value;
-                end
-            catch
-            end
+        changed = ~isequal(oldVal, dd.Value);
+        if isstruct(dd.UserData)
+            dd.UserData.LastValidValue = dd.Value;
         end
-    catch
     end
 end
 
@@ -125,7 +119,9 @@ function setButtonValue(app, propName, source, sourceField)
     if ~isprop(app, propName), return; end
     try
         app.(propName).Value = logical(source.(sourceField));
-    catch
+    catch ME
+        warning('applySelections:ButtonFail', ...
+            'Could not set %s: %s', propName, ME.message);
     end
 end
 
@@ -134,31 +130,28 @@ function fireButtonCallback(app, propName)
     if ~isprop(app, propName), return; end
     try
         triggerCallback(app.(propName), app.(propName).Value);
-    catch
+    catch ME
+        warning('applySelections:CallbackFail', ...
+            'Callback failed for %s: %s', propName, ME.message);
     end
 end
 
 function triggerCallback(btn, newVal)
 %TRIGGERCALLBACK Manually invoke a UI component's ValueChangedFcn.
-    try
-        cb = btn.ValueChangedFcn;
-        if isempty(cb), return; end
-        evt = struct('Value', newVal, 'PreviousValue', ~newVal, ...
-                     'Source', btn, 'EventName', 'ValueChanged');
-        if iscell(cb)
-            feval(cb{1}, cb{2:end}, evt);
-        elseif isa(cb, 'function_handle')
-            cb(btn, evt);
-        end
-    catch
+    cb = btn.ValueChangedFcn;
+    if isempty(cb), return; end
+    evt = struct('Value', newVal, 'PreviousValue', ~newVal, ...
+                 'Source', btn, 'EventName', 'ValueChanged');
+    if iscell(cb)
+        feval(cb{1}, cb{2:end}, evt);
+    elseif isa(cb, 'function_handle')
+        cb(btn, evt);
     end
 end
 
 function applyComponentSelections(app, savedComps)
 %APPLYCOMPONENTSELECTIONS Walk saved Components hierarchy and set dropdown values.
-    try
-        if ~isstruct(app.ComponentDropdowns), return; end
-    catch
+    if ~isprop(app, 'ComponentDropdowns') || ~isstruct(app.ComponentDropdowns)
         return;
     end
 
@@ -168,13 +161,9 @@ function applyComponentSelections(app, savedComps)
 
         compType  = '';
         instLabel = '';
-        try
-            if isstruct(dd.UserData)
-                if isfield(dd.UserData, 'InstanceComp'),  compType  = char(dd.UserData.InstanceComp); end
-                if isfield(dd.UserData, 'InstanceLabel'), instLabel = char(dd.UserData.InstanceLabel); end
-            end
-        catch
-            continue;
+        if isstruct(dd.UserData)
+            if isfield(dd.UserData, 'InstanceComp'),  compType  = char(dd.UserData.InstanceComp); end
+            if isfield(dd.UserData, 'InstanceLabel'), instLabel = char(dd.UserData.InstanceLabel); end
         end
         if isempty(compType), continue; end
 
@@ -198,17 +187,12 @@ function applyComponentSelections(app, savedComps)
         end
 
         if isfield(instData, 'ParamFile') && ~isempty(instData.ParamFile)
-            try
-                ud = dd.UserData;
-                ud.ParamFile = char(instData.ParamFile);
-                dd.UserData = ud;
-            catch
-            end
-            try
-                if isfield(dd.UserData, 'ParamButton') && isvalid(dd.UserData.ParamButton)
-                    updateParamTooltip(dd.UserData.ParamButton, dd, dd.UserData.RootFolder);
-                end
-            catch
+            ud = dd.UserData;
+            ud.ParamFile = char(instData.ParamFile);
+            dd.UserData = ud;
+
+            if isfield(dd.UserData, 'ParamButton') && isvalid(dd.UserData.ParamButton)
+                updateParamTooltip(dd.UserData.ParamButton, dd, dd.UserData.RootFolder);
             end
         end
     end

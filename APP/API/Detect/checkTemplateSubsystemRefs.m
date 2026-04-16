@@ -21,14 +21,11 @@ function [presentMaskOut, missingLines, foundStructOut] = checkTemplateSubsystem
 
     % Locate the configuration file
     mdlFile = '';
-    try
-        hit = dir(fullfile(rootFolder, '**', [tmplName '.slx']));
-        if ~isempty(hit)
-            mdlFile = fullfile(hit(1).folder, hit(1).name);
-        elseif ~isempty(which(tmplName))
-            mdlFile = which(tmplName);
-        end
-    catch
+    hit = dir(fullfile(rootFolder, '**', [tmplName '.slx']));
+    if ~isempty(hit)
+        mdlFile = fullfile(hit(1).folder, hit(1).name);
+    elseif ~isempty(which(tmplName))
+        mdlFile = which(tmplName);
     end
 
     if isempty(mdlFile)
