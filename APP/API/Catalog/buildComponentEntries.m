@@ -1,32 +1,45 @@
-function entries = buildComponentEntries(rawCfg, tmplName)
+function entries = buildComponentEntries(rawCfg, templateKey)
 %BUILDCOMPONENTENTRIES Build flat instance entries from parsed JSON config.
-%   entries = buildComponentEntries(rawCfg, tmplName) returns a struct array
-%   with one entry per component instance:
-%     entries(i).Comp      — component type (e.g. 'MotorDrive')
-%     entries(i).Label     — instance name (e.g. 'Front Motor (EM1)')
-%     entries(i).CfgModels — cell array of model names from config
+%   entries = buildComponentEntries(rawCfg, templateKey)
+%
+%   Reads the Components section of the selected template config and
+%   returns one entry per component instance:
+%     entries(i).Comp   — component type name (e.g. 'MotorDrive')
+%     entries(i).Label  — instance display name (e.g. 'Front Motor (EM1)')
+%     entries(i).Models — cell array of configured model names
 
-    components = rawCfg.(tmplName).Components;
-    compNames  = fieldnames(components);
-    entries    = struct('Comp', {}, 'Label', {}, 'CfgModels', {});
+    templateConfig = rawCfg.(templateKey);
+    componentNames = fieldnames(templateConfig.Components);
 
-    for c = 1:numel(compNames)
-        compType  = compNames{c};
-        compNode  = components.(compType);
-        cfgModels = compNode.Models;
+    entries = repmat(emptyEntry(), 0, 1);
+
+    for i = 1:numel(componentNames)
+        compName   = componentNames{i};
+        compConfig = templateConfig.Components.(compName);
+
+        modelNames = compConfig.Models;
 
         % Use explicit Instances if present, otherwise default to type name
-        if isstruct(compNode) && isfield(compNode, 'Instances')
-            instanceNames = compNode.Instances;
+        if isstruct(compConfig) && isfield(compConfig, 'Instances')
+            instanceNames = compConfig.Instances;
         else
-            instanceNames = {compType};
+            instanceNames = {compName};
         end
 
-        % One entry per instance, all sharing the same config models
         for j = 1:numel(instanceNames)
-            entries(end+1).Comp      = compType;         %#ok<AGROW>
-            entries(end  ).Label     = instanceNames{j};
-            entries(end  ).CfgModels = cfgModels;
+            entry        = emptyEntry();
+            entry.Comp   = compName;
+            entry.Label  = instanceNames{j};
+            entry.Models = modelNames;
+
+            entries(end+1) = entry;  %#ok<AGROW>
         end
     end
+end
+
+%% Local helper
+
+function entry = emptyEntry()
+%EMPTYENTRY Return an empty component entry struct with the standard fields.
+    entry = struct('Comp', '', 'Label', '', 'Models', {{}});
 end

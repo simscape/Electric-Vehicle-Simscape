@@ -1,22 +1,24 @@
-function renderComponentPanels(app, preCheck, root)
-%RENDERCOMPONENTPANELS Build the component dropdown panels in the Components tab.
-%   renderComponentPanels(app, preCheck, root)
+function renderComponentPanels(app, availability, root)
+%RENDERCOMPONENTPANELS Build component dropdown panels in the Components tab.
+%   renderComponentPanels(app, availability, root)
 %
 %   Creates one panel per component instance with:
-%     - Label and description button
-%     - Dropdown with valid/missing model items
-%     - Open and Param action buttons
-%     - Context menu for param link/unlink
-%     - Red note label for missing models/params
+%     - Label and description button (row 1)
+%     - Dropdown with valid/missing model items (row 2)
+%     - Open and Param action buttons (row 3)
+%     - Red note label for missing models/params (row 4)
 %
 %   Populates app.ComponentDropdowns and app.ComponentButtons.
 
     % ---- Outer scrollable grid ----
     app.GridLayoutComponent = uigridlayout(app.ComponentsPanel, ...
-        'Padding', [5 5 5 5], 'RowSpacing', 10, 'ColumnSpacing', 5);
+        'Padding',       [5 5 5 5], ...
+        'RowSpacing',    10, ...
+        'ColumnSpacing', 5);
+
     app.GridLayoutComponent.Scrollable = 'on';
 
-    rowCount = max(1, numel(preCheck));
+    rowCount = max(1, numel(availability));
     app.GridLayoutComponent.RowHeight   = repmat({'fit'}, 1, rowCount);
     app.GridLayoutComponent.ColumnWidth = {'1x'};
 
@@ -24,91 +26,101 @@ function renderComponentPanels(app, preCheck, root)
     app.ComponentButtons   = struct();
 
     % ---- One panel per instance ----
-    for i = 1:numel(preCheck)
-        info = preCheck(i);
+    for i = 1:numel(availability)
+        info = availability(i);
 
-        % --- Panel container ---
-        panel = uipanel(app.GridLayoutComponent, 'BorderType', 'line');
+        % ---- Panel container ----
+        panel = uipanel(app.GridLayoutComponent, ...
+            'BorderType', 'line');
         panel.Layout.Row    = i;
         panel.Layout.Column = 1;
 
-        % Inner grid: 4 rows (label, dropdown, buttons, red note)
         gl = uigridlayout(panel, ...
-            'RowHeight',    {'fit', 'fit', 'fit', 'fit'}, ...
-            'ColumnWidth',  {'1x', '0.4x', '1x', '0.4x', 'fit'}, ...
-            'Padding',      [5 5 5 5], ...
-            'RowSpacing',   5, ...
+            'RowHeight',     {'fit', 'fit', 'fit', 'fit'}, ...
+            'ColumnWidth',   {'1x', '0.4x', '1x', '0.4x', 'fit'}, ...
+            'Padding',       [5 5 5 5], ...
+            'RowSpacing',    5, ...
             'ColumnSpacing', 10);
         gl.BackgroundColor = min(gl.BackgroundColor * 2, [1 1 1]);
 
-        % --- Row 1: instance label + description button ---
+        % ---- Row 1: instance label + description button ----
+
         lbl = uilabel(gl, ...
-            'Text', info.Label, ...
+            'Text',       info.Label, ...
             'FontWeight', 'bold', ...
-            'WordWrap', 'on');
+            'WordWrap',   'on');
         lbl.Layout.Row    = 1;
         lbl.Layout.Column = [1 3];
 
         descBtn = uibutton(gl, 'push', ...
-            'Text', '?', ...
-            'Tooltip', 'Show instance description', ...
+            'Text',            '?', ...
+            'Tooltip',         'Show instance description', ...
             'BackgroundColor', [0.90 0.96 1.00], ...
-            'FontColor', [0 0 0], ...
+            'FontColor',       [0 0 0], ...
             'ButtonPushedFcn', @(~,~) showInstanceDescription(app, info.Comp, info.Label));
         descBtn.Layout.Row    = 1;
         descBtn.Layout.Column = 5;
 
-        % --- Row 2: model dropdown ---
+        % ---- Row 2: model dropdown ----
+
         compDropDown = buildComponentDropdown(gl, info);
         compDropDown.Layout.Row    = 2;
         compDropDown.Layout.Column = [1 5];
 
-        % Store model folder (used by Open/Param helpers)
-        compDropDown.UserData.ModelFolder = info.Folder;
+        % ---- Row 3: action buttons ----
 
-        % --- Row 3: Open and Param buttons ---
         openBtn = uibutton(gl, 'push', ...
-            'Text', 'Open', ...
-            'Tooltip', 'Open selected model in Simulink', ...
+            'Text',            'Open', ...
+            'Tooltip',         'Open selected model in Simulink', ...
             'ButtonPushedFcn', @(~,~) openInstanceModel(app, info.Comp, info.Label));
         openBtn.Layout.Row    = 3;
         openBtn.Layout.Column = [1 2];
 
         paramBtn = uibutton(gl, 'push', ...
-            'Text', 'Param', ...
-            'Tooltip', 'Open parameter script (auto or linked)', ...
+            'Text',            'Param', ...
+            'Tooltip',         'Open parameter script (auto or linked)', ...
             'ButtonPushedFcn', @(~,~) openParamSmart(app, info.Comp, compDropDown, root));
         paramBtn.Layout.Row    = 3;
         paramBtn.Layout.Column = [3 4];
 
-        % --- Wire up UserData references ---
+        % ---- Wire UserData references ----
+
         ud = compDropDown.UserData;
+        ud.ModelFolder      = info.Folder;
         ud.ParamButton      = paramBtn;
-        ud.ParamStatusLabel  = [];
-        ud.CompName          = char(info.Comp);
-        ud.RootFolder        = char(root);
+        ud.ParamStatusLabel = [];
+        ud.CompName         = char(info.Comp);
+        ud.RootFolder       = char(root);
         compDropDown.UserData = ud;
 
-        % --- Context menu for Link / Unlink ---
+        % ---- Context menu for param Link / Unlink ----
+
         cm = uicontextmenu(app.UIFigure);
-        uimenu(cm, 'Text', 'Link Param File...', ...
+
+        uimenu(cm, ...
+            'Text',            'Link Param File...', ...
             'MenuSelectedFcn', @(~,~) paramContextLink(app, paramBtn, compDropDown, root));
-        uimenu(cm, 'Text', 'Unlink', ...
+
+        uimenu(cm, ...
+            'Text',            'Unlink', ...
             'MenuSelectedFcn', @(~,~) paramContextUnlink(app, paramBtn, compDropDown, root));
+
         paramBtn.ContextMenu = cm;
 
-        % Initialize tooltip
+        % ---- Initialize tooltip and button state ----
+
         updateParamTooltip(paramBtn, compDropDown, root);
 
-        % Disable Open button if no valid model selected
         if isempty(info.Valid) || startsWith(string(compDropDown.Value), "__MISSING__")
             openBtn.Enable = 'off';
         end
 
-        % --- Row 4: red note for missing models/params ---
+        % ---- Row 4: red note for missing models/params ----
+
         renderRedNoteLabel(gl, info, compDropDown, root);
 
-        % --- Store handles ---
+        % ---- Store handles ----
+
         handleKey = matlab.lang.makeValidName([info.Comp '_' info.Label]);
         app.ComponentDropdowns.(handleKey) = compDropDown;
         app.ComponentButtons.(handleKey)   = paramBtn;
@@ -119,15 +131,22 @@ end
 
 function dd = buildComponentDropdown(gl, info)
 %BUILDCOMPONENTDROPDOWN Create a dropdown with valid items and [missing] markers.
-    validItems   = cellfun(@char, info.Valid,   'UniformOutput', false);
-    missingItems = cellfun(@char, ...
-        strcat(string(info.Missing), " [missing]"), 'UniformOutput', false);
 
-    allItems = [validItems, missingItems];
-    allData  = [validItems, ...
-        cellfun(@char, strcat("__MISSING__", string(info.Missing)), ...
-            'UniformOutput', false)];
+    % Prepare display and data items
+    validItems = cellfun(@char, info.Valid, 'UniformOutput', false);
 
+    missingDisplayItems = cellfun(@char, ...
+        strcat(string(info.Missing), " [missing]"), ...
+        'UniformOutput', false);
+
+    missingDataItems = cellfun(@char, ...
+        strcat("__MISSING__", string(info.Missing)), ...
+        'UniformOutput', false);
+
+    allItems = [validItems, missingDisplayItems];
+    allData  = [validItems, missingDataItems];
+
+    % Handle empty case
     if isempty(allItems)
         dd = uidropdown(gl, ...
             'Items',     {'<no models found in expected folder or config>'}, ...
@@ -137,21 +156,26 @@ function dd = buildComponentDropdown(gl, info)
         return;
     end
 
+    % Select first valid model, or first missing if none valid
     if ~isempty(validItems)
         initialValue = validItems{1};
     else
         initialValue = allData{1};
     end
 
+    % Create dropdown
     dd = uidropdown(gl, ...
         'Items',     allItems, ...
         'ItemsData', allData, ...
         'Value',     initialValue);
 
-    dd.ValueChangedFcn         = @(src, ~) preventMissingSelection(src);
-    dd.UserData.LastValidValue = initialValue;
-    dd.UserData.InstanceLabel  = char(info.Label);
-    dd.UserData.InstanceComp   = char(info.Comp);
+    dd.ValueChangedFcn = @(src, ~) preventMissingSelection(src);
+
+    % Initialize UserData
+    dd.UserData = struct( ...
+        'LastValidValue', initialValue, ...
+        'InstanceLabel',  char(info.Label), ...
+        'InstanceComp',   char(info.Comp));
 end
 
 function renderRedNoteLabel(gl, info, compDropDown, root)
@@ -160,16 +184,19 @@ function renderRedNoteLabel(gl, info, compDropDown, root)
 
     hasMissingModels = ~isempty(info.MissingNoteStrings);
     hasMissingParam  = ~isempty(paramNote);
+
     if ~hasMissingModels && ~hasMissingParam
         return;
     end
 
     % Compose text
     parts = strings(0, 1);
+
     if hasMissingModels
         parts(end+1) = sprintf("Missing in folder: %s", ...
             strjoin(info.MissingNoteStrings, '  |  '));
     end
+
     if hasMissingParam
         parts(end+1) = string(paramNote);
     end

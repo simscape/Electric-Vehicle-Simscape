@@ -1,11 +1,11 @@
 function paramContextLink(app, btn, dd, rootFolder)
 %PARAMCONTEXTLINK Context menu action: link a param file to this instance.
-    % Prefer: existing linked folder > instance Model folder > project root
+
     startFolder = getParamStartFolder(dd, rootFolder);
 
-    [f, p] = uigetfile({'*.m','MATLAB Files (*.m)'}, 'Select parameter file', startFolder);
-    if isequal(f,0) || isequal(p,0)
-        return; % canceled
+    [f, p] = uigetfile({'*.m', 'MATLAB Files (*.m)'}, 'Select parameter file', startFolder);
+    if isequal(f, 0) || isequal(p, 0)
+        return;
     end
 
     chosen = fullfile(p, f);
@@ -13,23 +13,26 @@ function paramContextLink(app, btn, dd, rootFolder)
     % Persist link without clobbering other UserData fields
     userDataSetField(dd, 'ParamFile', char(chosen));
 
-    % Optional: show feedback & open immediately
+    % Show feedback and open immediately
     try
-        msg = "Linked param file:" + newline + string(chosen);
-        uialert(app.UIFigure, msg, "Param Linked", 'Icon','info');
+        uialert(app.UIFigure, ...
+            "Linked param file:" + newline + string(chosen), ...
+            "Param Linked", 'Icon', 'info');
     catch ME
         warning('BEVapp:paramContextLink', 'uialert failed: %s', ME.message);
     end
+
     edit(chosen);
-    % After setting/clearing dd.UserData.ParamFile:
+
+    % Refresh tooltip
     updateParamTooltip(btn, dd, rootFolder);
 
-    % Also refresh the red line:
-    if isstruct(dd.UserData) && isfield(dd.UserData,'ParamStatusLabel') && isvalid(dd.UserData.ParamStatusLabel)
-        L = dd.UserData.ParamStatusLabel;
-        % After linking: hide the "no param" message (auto is overridden by link)
-        L.Text = "";
-        L.Visible = 'off';
+    % Hide the red "no param" note
+    if isstruct(dd.UserData) ...
+            && isfield(dd.UserData, 'ParamStatusLabel') ...
+            && isvalid(dd.UserData.ParamStatusLabel)
+        dd.UserData.ParamStatusLabel.Text    = "";
+        dd.UserData.ParamStatusLabel.Visible = 'off';
     end
 end
 
@@ -37,36 +40,25 @@ function startFolder = getParamStartFolder(dd, rootFolder)
 %GETPARAMSTARTFOLDER Determine best starting folder for param file picker.
     startFolder = char(rootFolder);
 
-    % If a linked file exists, start there
-    if isstruct(dd.UserData) && isfield(dd.UserData,'ParamFile')
+    % If a linked file exists, start in its folder
+    if isstruct(dd.UserData) && isfield(dd.UserData, 'ParamFile')
         linked = string(dd.UserData.ParamFile);
+
         if strlength(linked) > 0
-            lf = fileparts(char(linked));
-            if exist(lf, 'dir')
-                startFolder = lf;
-                return
+            linkedFolder = fileparts(char(linked));
+            if isfolder(linkedFolder)
+                startFolder = linkedFolder;
+                return;
             end
         end
     end
 
     % Else prefer the ModelFolder recorded on the dropdown
-    if isstruct(dd.UserData) && isfield(dd.UserData,'ModelFolder')
-        mf = dd.UserData.ModelFolder;
-        if (ischar(mf) || isstring(mf))
-            mf = char(mf);
-            if exist(mf, 'dir')
-                startFolder = mf;
-                return
-            end
-        end
-    end
+    if isstruct(dd.UserData) && isfield(dd.UserData, 'ModelFolder')
+        mf = char(dd.UserData.ModelFolder);
 
-    % Else, if current dropdown value is a model in that folder, use that folder
-    val = string(dd.Value);
-    if ~startsWith(val,"__MISSING__") && isstruct(dd.UserData) && isfield(dd.UserData,'ModelFolder')
-        candidate = fullfile(char(dd.UserData.ModelFolder), char(val));
-        if exist(fileparts(candidate), 'dir')
-            startFolder = fileparts(candidate);
+        if isfolder(mf)
+            startFolder = mf;
         end
     end
 end

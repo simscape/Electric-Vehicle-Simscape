@@ -1,26 +1,24 @@
-function openInstanceModel(app, comp, label)
-    % OPENINSTANCEMODEL Opens the SLX file selected for a given instance
-    %   app   - the app object
-    %   comp  - component folder name
-    %   label - instance label used as dropdown tag
+function openInstanceModel(app, compName, label)
+%OPENINSTANCEMODEL Open the SLX file selected for a given component instance.
 
-    % Build the handle key
-    % checkk this string conversion later
-    key = matlab.lang.makeValidName([comp '_' label]);
-    % Retrieve the corresponding dropdown handle
-    if isfield(app.ComponentDropdowns, key)
-        compSelected = app.ComponentDropdowns.(key);
-        modelName = compSelected.Value;
-        % Construct full model file path
-        root = getBEVProjectRoot(app);                          % project root
-        modelFile = fullfile(root, 'Components', char(comp), 'Model', modelName);
-        % Open in Simulink if the file exists, else show alert
-        if isfile(modelFile)
-            open_system(modelFile);
-        else
-            uialert(app.UIFigure, sprintf('Model file not found:\n%s', modelFile), 'File Error');
-        end
+    handleKey = matlab.lang.makeValidName([compName '_' label]);
+
+    if ~isfield(app.ComponentDropdowns, handleKey)
+        uialert(app.UIFigure, ...
+            sprintf('Dropdown for %s not found.', handleKey), 'Lookup Error');
+        return;
+    end
+
+    dropdown  = app.ComponentDropdowns.(handleKey);
+    modelName = dropdown.Value;
+
+    root      = getBEVProjectRoot(app);
+    modelFile = fullfile(root, 'Components', char(compName), 'Model', modelName);
+
+    if isfile(modelFile)
+        open_system(modelFile);
     else
-        uialert(app.UIFigure, sprintf('Dropdown for %s not found.', key), 'Lookup Error');
+        uialert(app.UIFigure, ...
+            sprintf('Model file not found:\n%s', modelFile), 'File Error');
     end
 end

@@ -1,9 +1,9 @@
 function slxFiles = getSLXFiles(folderPath)
-    % Ensure folder exists
+%GETSLXFILES List all .slx files in a folder, returning their filenames.
     if isfolder(folderPath)
-        files = dir(fullfile(folderPath, '*.slx'));
+        files    = dir(fullfile(folderPath, '*.slx'));
         slxFiles = {files.name};
     else
-        slxFiles = {}; % Return empty if folder doesn't exist
+        slxFiles = {};
     end
 end

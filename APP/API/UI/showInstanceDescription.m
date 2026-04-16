@@ -1,24 +1,24 @@
-function showInstanceDescription(app, comp, label)
-    % Find the dropdown for this instance
-    key = matlab.lang.makeValidName([comp '_' label]);
-    if ~isfield(app.ComponentDropdowns, key)
+function showInstanceDescription(app, compName, label)
+%SHOWINSTANCEDESCRIPTION Show model preview and description for a component instance.
+
+    handleKey = matlab.lang.makeValidName([compName '_' label]);
+
+    if ~isfield(app.ComponentDropdowns, handleKey)
         uialert(app.UIFigure, ...
-            sprintf('Couldn’t find dropdown for %s_%s', comp, label), ...
+            sprintf("Couldn't find dropdown for %s_%s", compName, label), ...
             'Lookup Error');
-        return
+        return;
     end
-    dd = app.ComponentDropdowns.(key);
 
-    % Grab the selected item (e.g. 'MotorDriveGear' or 'MyModel.slx')
-    modelItem = dd.Value;
+    dropdown  = app.ComponentDropdowns.(handleKey);
+    modelItem = dropdown.Value;
 
-    % Ensure it ends with ".slx"
-    [~, modelName, ~] = fileparts(modelItem);
+    [~, modelName] = fileparts(modelItem);
 
-    % Call your existing preview function with just the model name
-    % (print -s expects the system name, so ModelDescriptiom strips the path)
     app.UIFigure.Pointer = 'watch';
     drawnow;
+
     ComponentDescription(app, modelName);
+
     app.UIFigure.Pointer = 'arrow';
 end
