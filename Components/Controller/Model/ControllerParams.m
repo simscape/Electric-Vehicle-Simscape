@@ -18,3 +18,5 @@ controller.motorDriveTrqMax = 360;
 % % Motor Drive
 % controller.max_torque = 220;
 % controller.max_power = 50000;
+
+BMSParams;

@@ -34,4 +34,4 @@ vehicleThermal.cabin_CO2_init  = 4.000000e-04;   % Cabin initital CO2
 vehicleThermal.cabin_RH_init  = 4.000000e-01;   % Cabin initital humidity
 vehicleThermal.cabin_p_init  = 1/10;   % [Mpa] Cabin initital pressure
 vehicleThermal.coolant_p_init  = 0.101325;   % [MPa] Coolant initial pressure
-
+vehicleThermal.cabin_T_init = vehicleThermal.ambient

@@ -117,17 +117,7 @@ function exportParamScript(app, outFile)
         L = [L; ""];
     end
 
-    % Component params section
-    L = [L;
-        "%% Component params"
-        ];
-    % If you want a fixed canonical ordering, sort here:
-    % [~, order] = sort(lower({compInfo.Comp})); calls = calls(order);
-    L     = string(L(:));
-    calls = string(calls(:));
-    L = [L; calls; ""];
-
-    % Optional derived/thermal section
+    % Initialization from the UI for thermal and HVAC
     L = [L;
          "%% Initialization from the UI for thermal and HVAC, only used when present"
         ];
@@ -143,20 +133,43 @@ function exportParamScript(app, outFile)
         ];
     end
     L = [L;
+        sprintf("vehicleThermal.cabin_T_init    = vehicleThermal.ambient;   %% [K] Cabin initial temp")
         sprintf("vehicleThermal.coolant_T_init  = vehicleThermal.ambient;   %% [K] Coolant initital temp")
         sprintf("vehicleThermal.cabin_CO2_init  = %s;   %% Cabin initital CO2",co2Frac)
         sprintf("vehicleThermal.cabin_RH_init  = %s;   %% Cabin initital humidity",relHumid)
         sprintf("vehicleThermal.cabin_p_init  = %s;   %% [Mpa] Cabin initital pressure",ambPress)
-        sprintf("vehicleThermal.coolant_P_init  = %s;   %% [Mpa] Coolant initital pressure",ambPress)
+        sprintf("vehicleThermal.coolant_p_init  = %s;   %% [Mpa] Coolant initital pressure",ambPress)
         ""
         ];
+
+    % Component params section
+    L = [L;
+        "%% Component params"
+        ];
+    % If you want a fixed canonical ordering, sort here:
+    % [~, order] = sort(lower({compInfo.Comp})); calls = calls(order);
+    L     = string(L(:));
+    calls = string(calls(:));
+    L = [L; calls; ""];
+
+    % -------- Controller params --------
+    try
+        controllerParamFile = fullfile(projRoot, 'Components', 'Controller', 'Model', 'ControllerParams.m');
+        if app.ControlSelectionDropDown.Enable == "on" && exist(controllerParamFile, 'file') == 2
+            L = [L; "%% Controller params"];
+            L = [L; "ControllerParams;"; ""];
+        end
+    catch
+        % Controller param not available — skip silently
+    end
+
     % -------- System params from JSON config --------
     try
         rawCfg = jsondecode(fileread(app.ConfigDropDown.Value));
         vehicleConfig = erase(app.VehicleTemplateDropDown.Value, ".slx");
         sysParam = rawCfg.(vehicleConfig).SystemParameter;
         if iscell(sysParam), sysParam = string(sysParam); end
-        sysParam = sysParam(strlength(sysParam) > 0);  % drop empty entries
+        sysParam = sysParam(strlength(sysParam) > 0 & sysParam ~= "NA");  % drop empty/NA entries
         if ~isempty(sysParam)
             L = [L; "%% System parameters"];
             for sp = 1:numel(sysParam)

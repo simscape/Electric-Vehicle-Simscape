@@ -32,8 +32,12 @@
                 "Models": ["Driveline","DrivelineWithBraking"]
             },
             "Pump": {
-                "Instances": ["Pump"],
+                "Instances": ["Battery Pump", "Motor Pump"],
                 "Models": ["Pump","PumpDummy"]
+            },
+            "Radiator": {
+                "Instances": ["Radiator"],
+                "Models": ["Radiator"]
             }
         },
         "Controls": {

@@ -12,7 +12,7 @@
             },
             "Charger": ["Charger"]
         },
-        "SystemParameter": [""]
+        "SystemParameter": ["NA"]
     },
     "VehicleElectroThermal": {
         "Description": "Electric Vehicle with Full Thermal",
@@ -47,6 +47,6 @@
                         "Instances":["Controller"],
                           "Models":["ControllerFR"]
                    },
-        "SystemParameter": [""]
+        "SystemParameter": ["NA"]
     }
 }

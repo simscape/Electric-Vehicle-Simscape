@@ -23,7 +23,7 @@
                         "Instances":["Controller"],
                           "Models":["ControllerHVAC"]
                    },
-        "SystemParameter": [""]
+        "SystemParameter": ["NA"]
     },
     "VehicleElectroThermal": {
         "Description": "Electric Vehicle with Full Thermal",
@@ -57,8 +57,12 @@
                 "Models": ["Driveline","DrivelineWithBraking"]
             },
             "Pump": {
-                "Instances": ["Pump"],
+                "Instances": ["Battery Pump", "Motor Pump"],
                 "Models": ["Pump","PumpDummy"]
+            },
+            "Radiator": {
+                "Instances": ["Radiator"],
+                "Models": ["Radiator"]
             }
         },
         "Controls": {
@@ -92,7 +96,7 @@
                         "Instances":["Controller"],
                           "Models":["ControllerFRM"]
                    },
-        "SystemParameter": [""]
+        "SystemParameter": ["NA"]
     }
 
 }
