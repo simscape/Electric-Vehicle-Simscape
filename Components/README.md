@@ -61,7 +61,8 @@ BEVsystemModel.slx
   ├── Driveline         → Components/Driveline/Model/DrivelineWithBraking.slx
   ├── Charger           → Components/Charger/Model/ChargerThermal.slx
   ├── HVAC              → Components/HVAC/Model/HVACsimpleTh.slx
-  ├── Pump              → Components/Pump/Model/Pump.slx
+  ├── Battery Pump      → Components/Pump/Model/Pump.slx
+  ├── Motor Pump        → Components/Pump/Model/Pump.slx
   ├── PumpDriver        → Components/PumpDriver/Model/PumpDriver.slx
   ├── Radiator          → Components/Radiator/Model/Radiator.slx
   ├── BatteryHeater     → Components/BatteryHeater/Model/Heater.slx
