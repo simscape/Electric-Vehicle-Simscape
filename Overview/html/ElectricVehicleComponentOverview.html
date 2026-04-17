@@ -1,0 +1,617 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      -->
+<title>BEV Component Overview</title>
+<meta name="generator" content="MATLAB 24.2">
+<link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
+<meta name="DC.date" content="2026-04-17">
+<meta name="DC.source" content="ElectricVehicleComponentOverview.m">
+<style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style>
+</head>
+<body>
+<div class="content">
+<h1>BEV Component Overview</h1>
+<!--introduction-->
+<p>This page summarises the reusable component packages that make up the BEV Simscape system model. It covers the standard folder structure, available component variants and fidelities, vehicle templates, parameter conventions, and how these connect to the BEV Setup App.</p>
+<!--/introduction-->
+<h2>Contents</h2>
+<div>
+<ul>
+<li>
+<a href="#1">Components Folder Structure</a>
+</li>
+<li>
+<a href="#2">Component Inventory</a>
+</li>
+<li>
+<a href="#3">Templates and Model Structure</a>
+</li>
+<li>
+<a href="#4">Parameters and Default Model Setup</a>
+</li>
+<li>
+<a href="#5">Modularity and Reuse</a>
+</li>
+<li>
+<a href="#6">How This Connects to the BEV Setup App</a>
+</li>
+<li>
+<a href="#7">Adding a New Fidelity</a>
+</li>
+<li>
+<a href="#8">See Also</a>
+</li>
+</ul>
+</div>
+<h2 id="1">Components Folder Structure</h2>
+<p>Every component follows a standardised layout:</p>
+<p>
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
+<tr><th>Folder</th><th>Purpose</th></tr>
+<tr><td><code>Model/</code></td><td>Component model variants (<code>.slx</code>) and parameter scripts (<code>*Params.m</code>)</td></tr>
+<tr><td><code>TestBench/</code></td><td>Standalone test harness with boundary conditions</td></tr>
+<tr><td><code>TestCase/</code></td><td>MATLAB unit tests (<code>*PassTests.m</code>)</td></tr>
+<tr><td><code>Documentation/html/</code></td><td>Published HTML documentation pages</td></tr>
+<tr><td><code>Documentation/images/</code></td><td>Screenshots and figures</td></tr>
+<tr><td><code>Utilities/</code></td><td>Plot functions and helper scripts</td></tr>
+<tr><td><code>Library/</code></td><td>Shared Simulink library blocks (select components only)</td></tr>
+<tr><td><code>README.md</code></td><td>Component-level summary and usage notes</td></tr>
+</table>
+</p>
+<h2 id="2">Component Inventory</h2>
+<p>All 12 components with their available fidelity variants. Fidelity names link to published HTML documentation where available.</p>
+<p>
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse; width:100%;">
+<tr>
+  <th>Component</th>
+  <th>Description</th>
+  <th>Fidelities</th>
+  <th>Thermal</th>
+  <th>Test Harness</th>
+</tr>
+<tr>
+  <td><strong>BatteryHV</strong></td>
+  <td>High-voltage battery pack</td>
+  <td>
+    <a target="_blank" href="../../Components/BatteryHV/Documentation/html/BatteryLumpedDescription.html">BatteryLumped</a>,
+    <a target="_blank" href="../../Components/BatteryHV/Documentation/html/BatteryLumpedThermalDescription.html">BatteryLumpedThermal</a>,
+    <a target="_blank" href="../../Components/BatteryHV/Documentation/html/BatteryTableBasedDescription.html">BatteryTableBased</a>
+  </td>
+  <td style="text-align:center;">Yes</td>
+  <td style="text-align:center;"><a target="_blank" href="../../Components/BatteryHV/Documentation/html/BatteryTestHarnessDescription.html">Yes</a></td>
+</tr>
+<tr>
+  <td><strong>BatteryHeater</strong></td>
+  <td>PTC heater for cold-climate battery warming</td>
+  <td>
+    <a target="_blank" href="../../Components/BatteryHeater/Documentation/html/HeaterDescription.html">Heater</a>,
+    <a target="_blank" href="../../Components/BatteryHeater/Documentation/html/HeaterDummyDescription.html">HeaterDummy</a>
+  </td>
+  <td style="text-align:center;">Yes</td>
+  <td style="text-align:center;"><a target="_blank" href="../../Components/BatteryHeater/Documentation/html/HeaterTestHarnessDescription.html">Yes</a></td>
+</tr>
+<tr>
+  <td><strong>BMS</strong></td>
+  <td>Battery management system with SOC estimation variants</td>
+  <td>
+    <a target="_blank" href="../../Components/BMS/Documentation/html/BMSDescription.html">BMS</a>,
+    <a target="_blank" href="../../Components/BMS/Documentation/html/BMSSoCDirectDescription.html">BMSSoCDirect</a>,
+    <a target="_blank" href="../../Components/BMS/Documentation/html/BMSSoCEKFDescription.html">BMSSoCEKF</a>
+  </td>
+  <td style="text-align:center;">Yes</td>
+  <td style="text-align:center;">No</td>
+</tr>
+<tr>
+  <td><strong>Charger</strong></td>
+  <td>On-board charger with CC-CV control and thermal variants</td>
+  <td>
+    <a target="_blank" href="../../Components/Charger/Documentation/html/ChargerDescription.html">Charger</a>,
+    <a target="_blank" href="../../Components/Charger/Documentation/html/ChargerDummyDescription.html">ChargerDummy</a>,
+    <a target="_blank" href="../../Components/Charger/Documentation/html/ChargerThermalDescription.html">ChargerThermal</a>,
+    <a target="_blank" href="../../Components/Charger/Documentation/html/ChargerThermalDummyDescription.html">ChargerThermalDummy</a>
+  </td>
+  <td style="text-align:center;">Yes</td>
+  <td style="text-align:center;"><a target="_blank" href="../../Components/Charger/Documentation/html/ChargerTestHarnessDescription.html">Yes</a></td>
+</tr>
+<tr>
+  <td><strong>Chiller</strong></td>
+  <td>Refrigerant-to-coolant chiller for battery thermal management</td>
+  <td>
+    <a target="_blank" href="../../Components/Chiller/Documentation/html/ChillerDescription.html">Chiller</a>,
+    <a target="_blank" href="../../Components/Chiller/Documentation/html/ChillerNoCoolantDescription.html">ChillerNoCoolant</a>,
+    <a target="_blank" href="../../Components/Chiller/Documentation/html/ChillerDummyDescription.html">ChillerDummy</a>
+  </td>
+  <td style="text-align:center;">Yes</td>
+  <td style="text-align:center;"><a target="_blank" href="../../Components/Chiller/Documentation/html/ChillerTestHarnessDescription.html">Yes</a></td>
+</tr>
+<tr>
+  <td><strong>Controller</strong></td>
+  <td>Vehicle-level supervisory controller</td>
+  <td>
+    <a target="_blank" href="../../Components/Controller/Documentation/html/ControllerDescription.html">Controller</a>,
+    <a target="_blank" href="../../Components/Controller/Documentation/html/ControllerFRMDescription.html">ControllerFRM</a>,
+    <a target="_blank" href="../../Components/Controller/Documentation/html/ControllerHVACDescription.html">ControllerHVAC</a>
+  </td>
+  <td style="text-align:center;">No</td>
+  <td style="text-align:center;">No</td>
+</tr>
+<tr>
+  <td><strong>Driveline</strong></td>
+  <td>Mechanical driveline with optional braking</td>
+  <td>
+    <a target="_blank" href="../../Components/Driveline/Documentation/html/DrivelineDescription.html">Driveline</a>,
+    <a target="_blank" href="../../Components/Driveline/Documentation/html/DrivelineWithBrakingDescription.html">DrivelineWithBraking</a>
+  </td>
+  <td style="text-align:center;">No</td>
+  <td style="text-align:center;"><a target="_blank" href="../../Components/Driveline/Documentation/html/DrivelineTestHarnessDescription.html">Yes</a></td>
+</tr>
+<tr>
+  <td><strong>HVAC</strong></td>
+  <td>Cabin climate system</td>
+  <td>
+    <a target="_blank" href="../../Components/HVAC/Documentation/html/HVACEmpiricalRefDescription.html">HVACEmpiricalRef</a>,
+    <a target="_blank" href="../../Components/HVAC/Documentation/html/HVACSimpleThDescription.html">HVACSimpleTh</a>
+  </td>
+  <td style="text-align:center;">Yes</td>
+  <td style="text-align:center;"><a target="_blank" href="../../Components/HVAC/Documentation/html/HVACTestHarnessDescription.html">Yes</a></td>
+</tr>
+<tr>
+  <td><strong>MotorDrive</strong></td>
+  <td>Electric motor drive unit with gear, thermal, and lubrication variants</td>
+  <td>
+    <a target="_blank" href="../../Components/MotorDrive/Documentation/html/MotorDriveGearDescription.html">MotorDriveGear</a>,
+    <a target="_blank" href="../../Components/MotorDrive/Documentation/html/MotorDriveGearThDescription.html">MotorDriveGearTh</a>,
+    <a target="_blank" href="../../Components/MotorDrive/Documentation/html/MotorDriveLubeDescription.html">MotorDriveLube</a>,
+    <a target="_blank" href="../../Components/MotorDrive/Documentation/html/EmotorLibDescription.html">EmotorLib</a>
+  </td>
+  <td style="text-align:center;">Yes</td>
+  <td style="text-align:center;"><a target="_blank" href="../../Components/MotorDrive/Documentation/html/MotorTestHarnessDescription.html">Yes</a></td>
+</tr>
+<tr>
+  <td><strong>Pump</strong></td>
+  <td>Coolant circulation pump</td>
+  <td>
+    <a target="_blank" href="../../Components/Pump/Documentation/html/PumpDescription.html">Pump</a>,
+    <a target="_blank" href="../../Components/Pump/Documentation/html/PumpDummyDescription.html">PumpDummy</a>
+  </td>
+  <td style="text-align:center;">Yes</td>
+  <td style="text-align:center;"><a target="_blank" href="../../Components/Pump/Documentation/html/PumpTestHarnessDescription.html">Yes</a></td>
+</tr>
+<tr>
+  <td><strong>PumpDriver</strong></td>
+  <td>DC-DC converter driving the coolant pump</td>
+  <td>
+    <a target="_blank" href="../../Components/PumpDriver/Documentation/html/PumpDriverDescription.html">PumpDriver</a>
+  </td>
+  <td style="text-align:center;">Yes</td>
+  <td style="text-align:center;"><a target="_blank" href="../../Components/PumpDriver/Documentation/html/PumpDriverTestHarnessDescription.html">Yes</a></td>
+</tr>
+<tr>
+  <td><strong>Radiator</strong></td>
+  <td>Coolant-to-air radiator with fan</td>
+  <td>
+    <a target="_blank" href="../../Components/Radiator/Documentation/html/RadiatorDescription.html">Radiator</a>
+  </td>
+  <td style="text-align:center;">Yes</td>
+  <td style="text-align:center;"><a target="_blank" href="../../Components/Radiator/Documentation/html/RadiatorTestHarnessDescription.html">Yes</a></td>
+</tr>
+</table>
+</p>
+<p>
+<b>Totals:</b> 12 components, 31 fidelity variants, 10 test harnesses.</p>
+<h2 id="3">Templates and Model Structure</h2>
+<p>The system model <b>BEVsystemModel.slx</b> assembles components via subsystem references. Pre-configured vehicle templates in <b>Model/VehicleTemplate/</b> provide ready-made assemblies at different fidelity scopes. The <b>Model/Display/</b> folder contains energy-flow visualisation subsystems (<b>EnergyElectric</b>, <b>EnergyElectroThermal</b>) used during simulation.</p>
+<p>
+<p align="center">
+  <img src="../Image/BEVplantModelVehicle.png" alt="BEV Vehicle Template Structure" width="700">
+</p>
+</p>
+<p>
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse; width:100%;">
+<tr><th>Template</th><th>Description</th><th>Thermal</th><th>Auxiliary</th></tr>
+<tr><td><strong>VehicleElectric</strong></td><td>Minimal electrical powertrain &mdash; battery, motor, charger, driveline</td><td style="text-align:center;">No</td><td style="text-align:center;">No</td></tr>
+<tr><td><strong>VehicleElecAux</strong></td><td>Electrical powertrain with HVAC and auxiliary loads</td><td style="text-align:center;">No</td><td style="text-align:center;">Yes</td></tr>
+<tr><td><strong>VehicleElectroThermal</strong></td><td>Full electro-thermal vehicle with coolant loop, chiller, heater, radiator</td><td style="text-align:center;">Yes</td><td style="text-align:center;">Yes</td></tr>
+<tr><td><strong>VehicleElectroThermalLowTemp</strong></td><td>Electro-thermal configured for cold-climate studies</td><td style="text-align:center;">Yes</td><td style="text-align:center;">Yes</td></tr>
+</table>
+</p>
+<p>Fidelity-to-template mapping is defined in JSON config files under <b>APP/Config/Preset/</b>.</p>
+<h2 id="4">Parameters and Default Model Setup</h2>
+<p>Each fidelity variant has a matching parameter script in the component <b>Model/</b> folder. The naming convention is <b>FidelityNameParams.m</b> &mdash; for example, <b>BatteryLumpedThermal.slx</b> is parameterised by <b>BatteryLumpedThermalParams.m</b>.</p>
+<p>Harness parameter scripts (<b>TestHarnessParams.m</b>) in <b>TestBench/</b> call the component param file and layer boundary-condition variables on top, so each harness is self-contained for standalone testing.</p>
+<p>
+<p align="center">
+  <img src="../../Components/BatteryHV/Documentation/images/BatteryLumpedThermalDescription_01.png" alt="BatteryLumpedThermal model" width="650">
+</p>
+</p>
+<p>At the system level, the BEV Setup App generates a param setup script that calls all linked component param files in sequence. This populates the full vehicle workspace in one run for the selected model configuration.</p>
+<h2 id="5">Modularity and Reuse</h2>
+<p>Each component folder is a self-contained digital asset package. Models, parameters, test harnesses, unit tests, documentation, and utilities all live inside the component folder. To reuse a component in another project, copy the entire folder &mdash; no external dependencies need to be resolved.</p>
+<p>Components within the same type share a common port interface, so switching fidelity is a single subsystem reference change at the system level. Thermal components expose Simscape conserving ports for coolant flow, allowing them to connect into a thermal loop at the system level while remaining independently testable with their own boundary conditions.</p>
+<h2 id="6">How This Connects to the BEV Setup App</h2>
+<p>The BEV Setup App reads JSON config files from <b>APP/Config/Preset/</b> to populate its component dropdowns. Each config maps a vehicle template to the available fidelities per component. The app scans the component <b>Model/</b> folders to verify that the listed <b>.slx</b> files exist on disk before presenting them as options.</p>
+<p>
+<p align="center">
+  <img src="../../APP/Documents/images/BEVappWindow.png" alt="BEV Setup App" width="650">
+</p>
+</p>
+<p>Once a configuration is selected, the app generates setup and parameter scripts that wire the chosen component fidelities into the system model. The configured model is then ready for the engineering workflows elsewhere in the repository.</p>
+<h2 id="7">Adding a New Fidelity</h2>
+<p>To add a new fidelity variant to an existing component:</p>
+<div>
+<ol>
+<li>Create the model <b>.slx</b> and its <b>Params.m</b> in the component <b>Model/</b> folder. Use an existing fidelity in that component as a reference for the port interface.</li>
+<li>Add the new fidelity name to the relevant template entries in the JSON config under <b>APP/Config/Preset/</b>.</li>
+<li>Add a documentation description file and publish HTML to <b>Documentation/html/</b>.</li>
+<li>Update or create harness and test coverage in <b>TestBench/</b> and <b>TestCase/</b> as needed.</li>
+<li>Follow the existing naming conventions &mdash; the app picks up new fidelities on its next config load with no app code changes required.</li>
+</ol>
+</div>
+<h2 id="8">See Also</h2>
+<div>
+<ul>
+<li>
+<a href="matlab:web('ElectricVehicleDesignOverview.html')">Electric Vehicle Design Overview</a>
+</li>
+<li>
+<a href="matlab:web('../../APP/Documents/html/helpAppDetail.html')">BEV Setup App Reference</a>
+</li>
+<li>
+<a href="matlab:open_system('BEVsystemModel')">BEV System Model</a>
+</li>
+</ul>
+</div>
+<p class="footer">Copyright 2022 - 2026 The MathWorks, Inc.<br>
+<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2024b</a>
+<br>
+</p>
+</div>
+<!--
+##### SOURCE BEGIN #####
+%% BEV Component Overview
+%
+% This page summarises the reusable component packages that make up the
+% BEV Simscape system model. It covers the standard folder structure,
+% available component variants and fidelities, vehicle templates, parameter
+% conventions, and how these connect to the BEV Setup App.
+%
+% Copyright 2022 - 2026 The MathWorks, Inc.
+
+%% Components Folder Structure
+%
+% Every component follows a standardised layout:
+%
+% <html>
+% <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
+% <tr><th>Folder</th><th>Purpose</th></tr>
+% <tr><td><code>Model/</code></td><td>Component model variants (<code>.slx</code>) and parameter scripts (<code>*Params.m</code>)</td></tr>
+% <tr><td><code>TestBench/</code></td><td>Standalone test harness with boundary conditions</td></tr>
+% <tr><td><code>TestCase/</code></td><td>MATLAB unit tests (<code>*PassTests.m</code>)</td></tr>
+% <tr><td><code>Documentation/html/</code></td><td>Published HTML documentation pages</td></tr>
+% <tr><td><code>Documentation/images/</code></td><td>Screenshots and figures</td></tr>
+% <tr><td><code>Utilities/</code></td><td>Plot functions and helper scripts</td></tr>
+% <tr><td><code>Library/</code></td><td>Shared Simulink library blocks (select components only)</td></tr>
+% <tr><td><code>README.md</code></td><td>Component-level summary and usage notes</td></tr>
+% </table>
+% </html>
+
+%% Component Inventory
+%
+% All 12 components with their available fidelity variants. Fidelity names
+% link to published HTML documentation where available.
+%
+% <html>
+% <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse; width:100%;">
+% <tr>
+%   <th>Component</th>
+%   <th>Description</th>
+%   <th>Fidelities</th>
+%   <th>Thermal</th>
+%   <th>Test Harness</th>
+% </tr>
+% <tr>
+%   <td><strong>BatteryHV</strong></td>
+%   <td>High-voltage battery pack</td>
+%   <td>
+%     <a target="_blank" href="../../Components/BatteryHV/Documentation/html/BatteryLumpedDescription.html">BatteryLumped</a>,
+%     <a target="_blank" href="../../Components/BatteryHV/Documentation/html/BatteryLumpedThermalDescription.html">BatteryLumpedThermal</a>,
+%     <a target="_blank" href="../../Components/BatteryHV/Documentation/html/BatteryTableBasedDescription.html">BatteryTableBased</a>
+%   </td>
+%   <td style="text-align:center;">Yes</td>
+%   <td style="text-align:center;"><a target="_blank" href="../../Components/BatteryHV/Documentation/html/BatteryTestHarnessDescription.html">Yes</a></td>
+% </tr>
+% <tr>
+%   <td><strong>BatteryHeater</strong></td>
+%   <td>PTC heater for cold-climate battery warming</td>
+%   <td>
+%     <a target="_blank" href="../../Components/BatteryHeater/Documentation/html/HeaterDescription.html">Heater</a>,
+%     <a target="_blank" href="../../Components/BatteryHeater/Documentation/html/HeaterDummyDescription.html">HeaterDummy</a>
+%   </td>
+%   <td style="text-align:center;">Yes</td>
+%   <td style="text-align:center;"><a target="_blank" href="../../Components/BatteryHeater/Documentation/html/HeaterTestHarnessDescription.html">Yes</a></td>
+% </tr>
+% <tr>
+%   <td><strong>BMS</strong></td>
+%   <td>Battery management system with SOC estimation variants</td>
+%   <td>
+%     <a target="_blank" href="../../Components/BMS/Documentation/html/BMSDescription.html">BMS</a>,
+%     <a target="_blank" href="../../Components/BMS/Documentation/html/BMSSoCDirectDescription.html">BMSSoCDirect</a>,
+%     <a target="_blank" href="../../Components/BMS/Documentation/html/BMSSoCEKFDescription.html">BMSSoCEKF</a>
+%   </td>
+%   <td style="text-align:center;">Yes</td>
+%   <td style="text-align:center;">No</td>
+% </tr>
+% <tr>
+%   <td><strong>Charger</strong></td>
+%   <td>On-board charger with CC-CV control and thermal variants</td>
+%   <td>
+%     <a target="_blank" href="../../Components/Charger/Documentation/html/ChargerDescription.html">Charger</a>,
+%     <a target="_blank" href="../../Components/Charger/Documentation/html/ChargerDummyDescription.html">ChargerDummy</a>,
+%     <a target="_blank" href="../../Components/Charger/Documentation/html/ChargerThermalDescription.html">ChargerThermal</a>,
+%     <a target="_blank" href="../../Components/Charger/Documentation/html/ChargerThermalDummyDescription.html">ChargerThermalDummy</a>
+%   </td>
+%   <td style="text-align:center;">Yes</td>
+%   <td style="text-align:center;"><a target="_blank" href="../../Components/Charger/Documentation/html/ChargerTestHarnessDescription.html">Yes</a></td>
+% </tr>
+% <tr>
+%   <td><strong>Chiller</strong></td>
+%   <td>Refrigerant-to-coolant chiller for battery thermal management</td>
+%   <td>
+%     <a target="_blank" href="../../Components/Chiller/Documentation/html/ChillerDescription.html">Chiller</a>,
+%     <a target="_blank" href="../../Components/Chiller/Documentation/html/ChillerNoCoolantDescription.html">ChillerNoCoolant</a>,
+%     <a target="_blank" href="../../Components/Chiller/Documentation/html/ChillerDummyDescription.html">ChillerDummy</a>
+%   </td>
+%   <td style="text-align:center;">Yes</td>
+%   <td style="text-align:center;"><a target="_blank" href="../../Components/Chiller/Documentation/html/ChillerTestHarnessDescription.html">Yes</a></td>
+% </tr>
+% <tr>
+%   <td><strong>Controller</strong></td>
+%   <td>Vehicle-level supervisory controller</td>
+%   <td>
+%     <a target="_blank" href="../../Components/Controller/Documentation/html/ControllerDescription.html">Controller</a>,
+%     <a target="_blank" href="../../Components/Controller/Documentation/html/ControllerFRMDescription.html">ControllerFRM</a>,
+%     <a target="_blank" href="../../Components/Controller/Documentation/html/ControllerHVACDescription.html">ControllerHVAC</a>
+%   </td>
+%   <td style="text-align:center;">No</td>
+%   <td style="text-align:center;">No</td>
+% </tr>
+% <tr>
+%   <td><strong>Driveline</strong></td>
+%   <td>Mechanical driveline with optional braking</td>
+%   <td>
+%     <a target="_blank" href="../../Components/Driveline/Documentation/html/DrivelineDescription.html">Driveline</a>,
+%     <a target="_blank" href="../../Components/Driveline/Documentation/html/DrivelineWithBrakingDescription.html">DrivelineWithBraking</a>
+%   </td>
+%   <td style="text-align:center;">No</td>
+%   <td style="text-align:center;"><a target="_blank" href="../../Components/Driveline/Documentation/html/DrivelineTestHarnessDescription.html">Yes</a></td>
+% </tr>
+% <tr>
+%   <td><strong>HVAC</strong></td>
+%   <td>Cabin climate system</td>
+%   <td>
+%     <a target="_blank" href="../../Components/HVAC/Documentation/html/HVACEmpiricalRefDescription.html">HVACEmpiricalRef</a>,
+%     <a target="_blank" href="../../Components/HVAC/Documentation/html/HVACSimpleThDescription.html">HVACSimpleTh</a>
+%   </td>
+%   <td style="text-align:center;">Yes</td>
+%   <td style="text-align:center;"><a target="_blank" href="../../Components/HVAC/Documentation/html/HVACTestHarnessDescription.html">Yes</a></td>
+% </tr>
+% <tr>
+%   <td><strong>MotorDrive</strong></td>
+%   <td>Electric motor drive unit with gear, thermal, and lubrication variants</td>
+%   <td>
+%     <a target="_blank" href="../../Components/MotorDrive/Documentation/html/MotorDriveGearDescription.html">MotorDriveGear</a>,
+%     <a target="_blank" href="../../Components/MotorDrive/Documentation/html/MotorDriveGearThDescription.html">MotorDriveGearTh</a>,
+%     <a target="_blank" href="../../Components/MotorDrive/Documentation/html/MotorDriveLubeDescription.html">MotorDriveLube</a>,
+%     <a target="_blank" href="../../Components/MotorDrive/Documentation/html/EmotorLibDescription.html">EmotorLib</a>
+%   </td>
+%   <td style="text-align:center;">Yes</td>
+%   <td style="text-align:center;"><a target="_blank" href="../../Components/MotorDrive/Documentation/html/MotorTestHarnessDescription.html">Yes</a></td>
+% </tr>
+% <tr>
+%   <td><strong>Pump</strong></td>
+%   <td>Coolant circulation pump</td>
+%   <td>
+%     <a target="_blank" href="../../Components/Pump/Documentation/html/PumpDescription.html">Pump</a>,
+%     <a target="_blank" href="../../Components/Pump/Documentation/html/PumpDummyDescription.html">PumpDummy</a>
+%   </td>
+%   <td style="text-align:center;">Yes</td>
+%   <td style="text-align:center;"><a target="_blank" href="../../Components/Pump/Documentation/html/PumpTestHarnessDescription.html">Yes</a></td>
+% </tr>
+% <tr>
+%   <td><strong>PumpDriver</strong></td>
+%   <td>DC-DC converter driving the coolant pump</td>
+%   <td>
+%     <a target="_blank" href="../../Components/PumpDriver/Documentation/html/PumpDriverDescription.html">PumpDriver</a>
+%   </td>
+%   <td style="text-align:center;">Yes</td>
+%   <td style="text-align:center;"><a target="_blank" href="../../Components/PumpDriver/Documentation/html/PumpDriverTestHarnessDescription.html">Yes</a></td>
+% </tr>
+% <tr>
+%   <td><strong>Radiator</strong></td>
+%   <td>Coolant-to-air radiator with fan</td>
+%   <td>
+%     <a target="_blank" href="../../Components/Radiator/Documentation/html/RadiatorDescription.html">Radiator</a>
+%   </td>
+%   <td style="text-align:center;">Yes</td>
+%   <td style="text-align:center;"><a target="_blank" href="../../Components/Radiator/Documentation/html/RadiatorTestHarnessDescription.html">Yes</a></td>
+% </tr>
+% </table>
+% </html>
+%
+% *Totals:* 12 components, 31 fidelity variants, 10 test harnesses.
+
+%% Templates and Model Structure
+%
+% The system model *BEVsystemModel.slx* assembles components via subsystem
+% references. Pre-configured vehicle templates in *Model/VehicleTemplate/*
+% provide ready-made assemblies at different fidelity scopes. The
+% *Model/Display/* folder contains energy-flow visualisation subsystems
+% (*EnergyElectric*, *EnergyElectroThermal*) used during simulation.
+%
+% <html>
+% <p align="center">
+%   <img src="../Image/BEVplantModelVehicle.png" alt="BEV Vehicle Template Structure" width="700">
+% </p>
+% </html>
+%
+% <html>
+% <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse; width:100%;">
+% <tr><th>Template</th><th>Description</th><th>Thermal</th><th>Auxiliary</th></tr>
+% <tr><td><strong>VehicleElectric</strong></td><td>Minimal electrical powertrain &mdash; battery, motor, charger, driveline</td><td style="text-align:center;">No</td><td style="text-align:center;">No</td></tr>
+% <tr><td><strong>VehicleElecAux</strong></td><td>Electrical powertrain with HVAC and auxiliary loads</td><td style="text-align:center;">No</td><td style="text-align:center;">Yes</td></tr>
+% <tr><td><strong>VehicleElectroThermal</strong></td><td>Full electro-thermal vehicle with coolant loop, chiller, heater, radiator</td><td style="text-align:center;">Yes</td><td style="text-align:center;">Yes</td></tr>
+% <tr><td><strong>VehicleElectroThermalLowTemp</strong></td><td>Electro-thermal configured for cold-climate studies</td><td style="text-align:center;">Yes</td><td style="text-align:center;">Yes</td></tr>
+% </table>
+% </html>
+%
+% Fidelity-to-template mapping is defined in JSON config files under
+% *APP/Config/Preset/*.
+
+%% Parameters and Default Model Setup
+%
+% Each fidelity variant has a matching parameter script in the component
+% *Model/* folder. The naming convention is *FidelityNameParams.m* — for
+% example, *BatteryLumpedThermal.slx* is parameterised by
+% *BatteryLumpedThermalParams.m*.
+%
+% Harness parameter scripts (*TestHarnessParams.m*) in *TestBench/* call
+% the component param file and layer boundary-condition variables on top,
+% so each harness is self-contained for standalone testing.
+%
+% <html>
+% <p align="center">
+%   <img src="../../Components/BatteryHV/Documentation/images/BatteryLumpedThermalDescription_01.png" alt="BatteryLumpedThermal model" width="650">
+% </p>
+% </html>
+%
+% At the system level, the BEV Setup App generates a param setup script
+% that calls all linked component param files in sequence. This populates
+% the full vehicle workspace in one run for the selected model
+% configuration.
+
+%% Modularity and Reuse
+%
+% Each component folder is a self-contained digital asset package. Models,
+% parameters, test harnesses, unit tests, documentation, and utilities all
+% live inside the component folder. To reuse a component in another
+% project, copy the entire folder — no external dependencies need to be
+% resolved.
+%
+% Components within the same type share a common port interface, so
+% switching fidelity is a single subsystem reference change at the system
+% level. Thermal components expose Simscape conserving ports for coolant
+% flow, allowing them to connect into a thermal loop at the system level
+% while remaining independently testable with their own boundary
+% conditions.
+
+%% How This Connects to the BEV Setup App
+%
+% The BEV Setup App reads JSON config files from *APP/Config/Preset/* to
+% populate its component dropdowns. Each config maps a vehicle template to
+% the available fidelities per component. The app scans the component
+% *Model/* folders to verify that the listed *.slx* files exist on disk
+% before presenting them as options.
+%
+% <html>
+% <p align="center">
+%   <img src="../../APP/Documents/images/BEVappWindow.png" alt="BEV Setup App" width="650">
+% </p>
+% </html>
+%
+% Once a configuration is selected, the app generates setup and parameter
+% scripts that wire the chosen component fidelities into the system model.
+% The configured model is then ready for the engineering workflows
+% elsewhere in the repository.
+
+%% Adding a New Fidelity
+%
+% To add a new fidelity variant to an existing component:
+%
+% # Create the model *.slx* and its *Params.m* in the component *Model/*
+% folder. Use an existing fidelity in that component as a reference for
+% the port interface.
+% # Add the new fidelity name to the relevant template entries in the JSON
+% config under *APP/Config/Preset/*.
+% # Add a documentation description file and publish HTML to
+% *Documentation/html/*.
+% # Update or create harness and test coverage in *TestBench/* and
+% *TestCase/* as needed.
+% # Follow the existing naming conventions — the app picks up new
+% fidelities on its next config load with no app code changes required.
+
+%% See Also
+%
+% * <matlab:web('ElectricVehicleDesignOverview.html') Electric Vehicle Design Overview>
+% * <matlab:web('../../APP/Documents/html/helpAppDetail.html') BEV Setup App Reference>
+% * <matlab:open_system('BEVsystemModel') BEV System Model>
+
+##### SOURCE END #####
+-->
+</body>
+</html>

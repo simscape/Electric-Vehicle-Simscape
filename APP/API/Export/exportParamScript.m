@@ -27,9 +27,9 @@ function outPath = exportParamScript(app, outFile, state)
             'Top model name is missing or empty.');
     end
 
-    % Default output path — show save dialog defaulting to Script_Data/
+    % Default output path — show save dialog defaulting to Script_Data/Setup/User/
     if strlength(string(outFile)) == 0
-        defaultDir    = fullfile(projectRoot, 'Script_Data');
+        defaultDir    = getUserSetupScriptFolder(projectRoot);
         suggestedName = sprintf('%s_params_setup.m', topModel);
         [file, path]  = uiputfile('*.m', 'Save Param Setup Script', ...
             fullfile(defaultDir, suggestedName));

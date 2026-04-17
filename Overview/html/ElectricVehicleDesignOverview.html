@@ -9,7 +9,7 @@ To make changes, update the MATLAB code and republish this document.
 <title>Electric Vehicle Design with Simscape&trade;</title>
 <meta name="generator" content="MATLAB 24.2">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2026-02-03">
+<meta name="DC.date" content="2026-04-17">
 <meta name="DC.source" content="ElectricVehicleDesignOverview.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
@@ -87,22 +87,56 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <a href="#1">Overview</a>
 </li>
 <li>
-<a href="#4">Design Workflows</a>
+<a href="#4">Getting Started</a>
 </li>
 <li>
-<a href="#5">Documentation</a>
+<a href="#5">Design Workflows</a>
 </li>
 <li>
-<a href="#6">Models</a>
+<a href="#6">Documentation</a>
 </li>
 <li>
-<a href="#8">Acronyms</a>
+<a href="#7">Models</a>
+</li>
+<li>
+<a href="#9">Acronyms</a>
 </li>
 </ul>
 </div>
 <h2 id="1">Overview</h2>
 <p>Battery electric vehicles (BEV) are gaining popularity as the prices of battery cells fall and the consumer demand for a clean mobility solution increases. The key challenges in their adoption lie in addressing the vehicle range anxiety, safety, and the total ownership cost for the consumer. Li-ion based batteries and electric drivetrains with permanent magnet synchronous motors (PMSM) and/or induction motors power modern BEV systems. Modeling and simulation helps you design vehicles that meet the desired range on the road and perform under all environmental conditions. Virtual design of a BEV platform requires a coupled electro-thermal system model for performance evaluation. In this example repository, you <b>learn how to simulate a BEV AWD/FWD model to estimate its on-road range</b>. You also <b>learn how to size your HV battery pack</b> to achieve your desired range with the vehicle.</p>
-<img vspace="5" hspace="5" src="ElectricVehicleDesignOverview_01.png" alt=""> <h2 id="4">Design Workflows</h2>
+<img vspace="5" hspace="5" src="ElectricVehicleDesignOverview_01.png" alt=""> <h2 id="4">Getting Started</h2>
+<p>Before running the engineering workflows, you configure a vehicle model setup &mdash; selecting a template, choosing component fidelities, and setting initial design parameters. The diagram below shows the overall flow from model setup to workflow execution.</p>
+<p>
+<img src="../Image/BEVWorkflow.png" alt="BEV Design Workflow" width="100%">
+</p>
+<p>There are three ways to begin:</p>
+<p>
+<table border="1" cellpadding="8" cellspacing="0" style="border-collapse:collapse; width:100%;">
+<tr>
+  <th>Entry Point</th>
+  <th>What It Does</th>
+  <th>Best For</th>
+</tr>
+<tr>
+  <td><strong>Open the base model</strong></td>
+  <td>Load <a href="matlab:open_system('BEVsystemModel')">BEVsystemModel.slx</a> directly to inspect the reference vehicle architecture and subsystem reference wiring.</td>
+  <td>Quick exploration of the model structure without changing any configuration.</td>
+</tr>
+<tr>
+  <td><strong>Start from a preset</strong></td>
+  <td>Use a shipped vehicle configuration from <strong>APP/Config/Preset/</strong> as a ready-made component and fidelity selection.</td>
+  <td>Running workflows with a known-good configuration (electrical-only, electro-thermal, or cold-climate).</td>
+</tr>
+<tr>
+  <td><strong>Use the BEV Setup App</strong></td>
+  <td>Launch the <a href="matlab:BEVapp">BEV Setup App</a> to select a template, choose component variants, and configure initial design parameters.</td>
+  <td>Custom studies where you need to pick specific fidelities, environment settings, or operating modes.</td>
+</tr>
+</table>
+</p>
+<p>The configured model is then used as the starting point for the design workflows below. For a detailed overview of the reusable component packages, see the <a href="matlab:web('ElectricVehicleComponentOverview.html')">Component Overview</a>.</p>
+<h2 id="5">Design Workflows</h2>
 <div>
 <ul>
 <li>
@@ -119,7 +153,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 </li>
 </ul>
 </div>
-<h2 id="5">Documentation</h2>
+<h2 id="6">Documentation</h2>
 <div>
 <ul>
 <li>
@@ -130,7 +164,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 </li>
 </ul>
 </div>
-<h2 id="6">Models</h2>
+<h2 id="7">Models</h2>
 <div>
 <ul>
 <li>
@@ -138,7 +172,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 </li>
 </ul>
 </div>
-<h2 id="8">Acronyms</h2>
+<h2 id="9">Acronyms</h2>
 <div>
 <ul>
 <li>BEV : Battery Electric Vehicle</li>
@@ -147,7 +181,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <li>FWD : Forward Wheel Drive</li>
 </ul>
 </div>
-<p class="footer">Copyright 2022 - 2025 The MathWorks, Inc.<br>
+<p class="footer">Copyright 2022 - 2026 The MathWorks, Inc.<br>
 <a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2024b</a>
 <br>
 </p>
@@ -159,7 +193,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 % This repository contains model and code to help engineers design battery electric
 % vehicle (BEV), including range estimation and battery sizing workflows.
 %
-% Copyright 2022 - 2025 The MathWorks, Inc.
+% Copyright 2022 - 2026 The MathWorks, Inc.
 
 
 
@@ -183,6 +217,49 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 %%
 open_system('BEVsystemModel')
 %%
+
+%% Getting Started
+%
+% Before running the engineering workflows, you configure a vehicle model
+% setup — selecting a template, choosing component fidelities, and setting
+% initial design parameters. The diagram below shows the overall flow from
+% model setup to workflow execution.
+%
+% <html>
+% <img src="../Image/BEVWorkflow.png" alt="BEV Design Workflow" width="100%">
+% </html>
+%
+% There are three ways to begin:
+%
+% <html>
+% <table border="1" cellpadding="8" cellspacing="0" style="border-collapse:collapse; width:100%;">
+% <tr>
+%   <th>Entry Point</th>
+%   <th>What It Does</th>
+%   <th>Best For</th>
+% </tr>
+% <tr>
+%   <td><strong>Open the base model</strong></td>
+%   <td>Load <a href="matlab:open_system('BEVsystemModel')">BEVsystemModel.slx</a> directly to inspect the reference vehicle architecture and subsystem reference wiring.</td>
+%   <td>Quick exploration of the model structure without changing any configuration.</td>
+% </tr>
+% <tr>
+%   <td><strong>Start from a preset</strong></td>
+%   <td>Use a shipped vehicle configuration from <strong>APP/Config/Preset/</strong> as a ready-made component and fidelity selection.</td>
+%   <td>Running workflows with a known-good configuration (electrical-only, electro-thermal, or cold-climate).</td>
+% </tr>
+% <tr>
+%   <td><strong>Use the BEV Setup App</strong></td>
+%   <td>Launch the <a href="matlab:BEVapp">BEV Setup App</a> to select a template, choose component variants, and configure initial design parameters.</td>
+%   <td>Custom studies where you need to pick specific fidelities, environment settings, or operating modes.</td>
+% </tr>
+% </table>
+% </html>
+%
+% The configured model is then used as the starting point for the design
+% workflows below. For a detailed overview of the reusable component
+% packages, see the
+% <matlab:web('ElectricVehicleComponentOverview.html') Component Overview>.
 
 %% Design Workflows
 %

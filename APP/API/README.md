@@ -9,9 +9,9 @@ Supporting functions for `BEVapp.mlapp`, organized into responsibility-based sub
 | `Catalog/` | What's valid — config validation, template resolution, component entries | 3 |
 | `Detect/` | What exists — model scanning, SSR detection, platform/controls detection | 5 |
 | `State/` | What's selected — flat setup state build, save/load, session cache | 4 |
-| `Export/` | Artifact generation — setup scripts, param scripts | 3 |
+| `Export/` | Artifact generation — setup scripts, param scripts, param link validation | 4 |
 | `UI/` | Presentation — dropdowns, descriptions, panels, preview, selection apply | 23 |
-| `Util/` | Generic helpers — project root, path resolution, file listing, data helpers | 8 |
+| `Util/` | Generic helpers — project root, path resolution, file listing, data helpers | 10 |
 
 ## Catalog
 
@@ -44,7 +44,8 @@ Supporting functions for `BEVapp.mlapp`, organized into responsibility-based sub
 
 | Function | Purpose |
 |----------|---------|
-| `ParamConfigButtonPushed` | Check param file links before export; show modal for missing links |
+| `ensureParamLinks` | Validate all component param file links; show fix-up dialog for missing links |
+| `ParamConfigButtonPushed` | Thin orchestrator — validate links via `ensureParamLinks`, then export via `exportParamScript` |
 | `exportParamScript` | Generate a `.m` script that calls linked component parameter files |
 | `exportSetupScript` | Generate a replayable `.m` script that sets all Subsystem References |
 
@@ -87,6 +88,8 @@ Supporting functions for `BEVapp.mlapp`, organized into responsibility-based sub
 | `getPresetConfigFolder` | Return absolute path to `APP/Config/Preset` |
 | `getSLXFiles` | List `.slx` files in a folder |
 | `getUserConfigFolder` | Return absolute path to `APP/Config/User` (auto-creates on first call) |
+| `getUserSetupScriptFolder` | Return absolute path to `Script_Data/Setup/User` (auto-creates on first call) |
+| `getPresetSetupScriptFolder` | Return absolute path to `Script_Data/Setup/Preset` |
 | `userDataSetField` | Safely set a field on UIFigure.UserData struct |
 
 ## Code Flow
