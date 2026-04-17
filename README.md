@@ -110,9 +110,82 @@ workflows**:
 </table>
 
 
+## Repository Architecture
+
+```mermaid
+flowchart LR
+    subgraph Authored["Authored Assets"]
+        direction TB
+        JSON["Preset JSON configs"]
+        VT["Vehicle templates"]
+        COMP["Component models + params"]
+    end
+
+    subgraph App["App / Config Layer"]
+        direction TB
+        BEVApp["BEV Setup App"]
+        SS["setupState"]
+    end
+
+    subgraph Gen["Generated Outputs"]
+        direction TB
+        SSR["SSR setup script"]
+        PAR["Param setup script"]
+        UJSON["User saved config"]
+    end
+
+    subgraph Runtime["Model / Workflows"]
+        direction TB
+        SYS["BEVsystemModel.slx"]
+        WF["Engineering workflows"]
+    end
+
+    subgraph DocsTests["Docs / Tests"]
+        direction TB
+        SRC["Overview + component .m source"]
+        HTML["Published HTML"]
+        TST["Test suites"]
+    end
+
+    JSON --> BEVApp
+    VT --> BEVApp
+    COMP --> BEVApp
+    BEVApp --> SS
+    SS --> SSR
+    SS --> PAR
+    SS --> UJSON
+    COMP --> PAR
+    SSR --> SYS
+    PAR --> SYS
+    SYS --> WF
+    SRC --> HTML
+    TST --> SYS
+    TST --> COMP
+```
+
+| Folder | Responsibility |
+|--------|---------------|
+| `APP/` | BEV Setup App — GUI, API back-end, preset and user configs |
+| `Components/` | 12 self-contained component packages (models, params, tests, docs) |
+| `Model/` | System-level Simulink model and 4 vehicle templates |
+| `Script_Data/` | System params, legacy setup scripts, generated export output |
+| `Workflow/` | Engineering workflows — Battery, MotorDrive, Vehicle |
+| `Overview/` | Published MATLAB overview pages (source `.m` → `html/`) |
+| `Test/` | Project-level test suite — system model, workflow, project checks |
+
+| Concern | Source of Truth |
+|---------|----------------|
+| Template → component → fidelity mapping | `APP/Config/Preset/*.json` |
+| Component fidelity availability | `Components/*/Model/*.slx` on disk |
+| Parameter values | `Components/*/Model/*Params.m` |
+| System model wiring | `BEVsystemModel.slx` subsystem references |
+| Documentation | `Overview/*.m` and `Components/*/Documentation/*.m` (source, not HTML) |
+
+For the full architecture reference — folder contracts, config schema, app layers, export flow, drift risks, and extension guides — see **[Overview/README.md](Overview/README.md)**.
+
 ## Setup 
 * Clone the project repository.
 * Open ElectricVehicleSimscape.prj to get started with the project. 
 * Requires MATLAB&reg; release R2024b or newer.
 
-Copyright 2022 - 2025 The MathWorks, Inc.
+Copyright 2022 - 2026 The MathWorks, Inc.
