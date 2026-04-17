@@ -6,12 +6,14 @@ function paths = getBEVAppPaths(app)
 %   Single place to update if the project layout changes.
 %
 %   Fields:
-%     paths.ProjectRoot      — MATLAB project root
-%     paths.Model            — BEV system model .slx files
-%     paths.VehicleTemplate  — vehicle template .slx files
-%     paths.Controller       — controller .slx files
-%     paths.PresetConfig     — shipped JSON configs (APP/Config/Preset)
-%     paths.UserConfig       — user-saved JSON configs (APP/Config/User)
+%     paths.ProjectRoot        — MATLAB project root
+%     paths.Model              — BEV system model .slx files
+%     paths.VehicleTemplate    — vehicle template .slx files
+%     paths.Controller         — controller .slx files
+%     paths.PresetConfig       — shipped JSON configs (APP/Config/Preset)
+%     paths.UserConfig         — user-saved JSON configs (APP/Config/User)
+%     paths.UserSetupScript    — user-exported setup scripts (Script_Data/Setup/User)
+%     paths.PresetSetupScript  — preset setup scripts (Script_Data/Setup/Preset)
 
     projectRoot = getBEVProjectRoot(app);
 
@@ -19,6 +21,8 @@ function paths = getBEVAppPaths(app)
     paths.Model           = fullfile(projectRoot, 'Model');
     paths.VehicleTemplate = fullfile(projectRoot, 'Model', 'VehicleTemplate');
     paths.Controller      = fullfile(projectRoot, 'Components', 'Controller', 'Model');
-    paths.PresetConfig    = getPresetConfigFolder();
-    paths.UserConfig      = getUserConfigFolder();
+    paths.PresetConfig      = getPresetConfigFolder();
+    paths.UserConfig        = getUserConfigFolder();
+    paths.UserSetupScript   = getUserSetupScriptFolder(projectRoot);
+    paths.PresetSetupScript = getPresetSetupScriptFolder(projectRoot);
 end

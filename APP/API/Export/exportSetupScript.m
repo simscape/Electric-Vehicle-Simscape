@@ -1,7 +1,11 @@
-function exportSetupScript(app, outFile, state)
+function outPath = exportSetupScript(app, state)
 %EXPORTSETUPSCRIPT Generate a replayable .m script that applies all Subsystem References.
-%   exportSetupScript(app, outFile)          — builds state from app
-%   exportSetupScript(app, outFile, state)   — uses pre-built setupState
+%   outPath = exportSetupScript(app)          — builds state from app
+%   outPath = exportSetupScript(app, state)   — uses pre-built setupState
+%
+%   Writes the script into a timestamped subfolder under
+%   Script_Data/Setup/User/<TopModel>_<yyyy_mm_dd_HHMMSS>/
+%   Returns the full path to the generated script file.
 %
 %   The generated script:
 %     1. Opens the top-level BEV model
@@ -11,7 +15,7 @@ function exportSetupScript(app, outFile, state)
 %     5. Sets the drive cycle (if active)
 %     6. Saves the model
 
-    if nargin < 3, state = buildSetupState(app); end
+    if nargin < 2, state = buildSetupState(app); end
 
     % ---- Read identifiers from flat state ----
     topModelName     = state.BEVModel;
@@ -90,10 +94,12 @@ function exportSetupScript(app, outFile, state)
     % ---- Append helper functions ----
     L = [L, helperFunctionLines()];
 
-    % ---- Write file ----
-    modelDir = fullfile(projectRoot, 'Model');
-    if ~exist(modelDir, 'dir'), mkdir(modelDir); end
-    outPath = fullfile(modelDir, [outFile '.m']);
+    % ---- Build output path under Script_Data/Setup/User ----
+    setupDir  = getUserSetupScriptFolder(projectRoot);
+    timestamp = datestr(now, 'yyyy_mm_dd_HHMMSS');
+    outFolder = fullfile(setupDir, sprintf('%s_%s', topModelName, timestamp));
+    mkdir(outFolder);
+    outPath = fullfile(outFolder, [topModelName '_ssr_setup.m']);
 
     fid = fopen(outPath, 'w');
     if fid < 0

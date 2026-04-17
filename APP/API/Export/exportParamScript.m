@@ -1,7 +1,8 @@
-function exportParamScript(app, outFile, state)
+function outPath = exportParamScript(app, outFile, state)
 %EXPORTPARAMSCRIPT Generate a BEV parameter setup script.
-%   exportParamScript(app, outFile)          — builds state from app
-%   exportParamScript(app, outFile, state)   — uses pre-built setupState
+%   outPath = exportParamScript(app)                — save dialog, builds state
+%   outPath = exportParamScript(app, outFile)       — explicit path, builds state
+%   outPath = exportParamScript(app, outFile, state) — explicit path and state
 %
 %   The generated script:
 %     - Sets environment/thermal variables from the app UI
@@ -26,10 +27,17 @@ function exportParamScript(app, outFile, state)
             'Top model name is missing or empty.');
     end
 
-    % Default output path
+    % Default output path — show save dialog defaulting to Script_Data/
     if strlength(string(outFile)) == 0
-        outFile = fullfile(projectRoot, 'Model', ...
-            sprintf('%s_params_setup.m', topModel));
+        defaultDir    = fullfile(projectRoot, 'Script_Data');
+        suggestedName = sprintf('%s_params_setup.m', topModel);
+        [file, path]  = uiputfile('*.m', 'Save Param Setup Script', ...
+            fullfile(defaultDir, suggestedName));
+        if isequal(file, 0)
+            outPath = '';
+            return;
+        end
+        outFile = fullfile(path, file);
     end
     outFile = string(ensureExtension(char(outFile), '.m'));
 
@@ -144,13 +152,15 @@ function exportParamScript(app, outFile, state)
     fileCleanup = onCleanup(@() fclose(fid));
     fprintf(fid, '%s\n', strjoin(cellstr(L), newline));
 
+    outPath = char(outFile);
+
     % Notify user
     try
         uialert(app.UIFigure, ...
-            sprintf('Param setup script written:\n%s', char(outFile)), ...
+            sprintf('Param setup script written:\n%s', outPath), ...
             'Param Script Exported', 'Icon', 'success');
     catch
-        fprintf('Param setup script written: %s\n', char(outFile));
+        fprintf('Param setup script written: %s\n', outPath);
     end
 end
 
