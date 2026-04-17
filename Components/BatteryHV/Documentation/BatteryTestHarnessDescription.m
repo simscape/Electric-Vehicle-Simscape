@@ -27,12 +27,19 @@
 
 %% Setup
 % Load parameters and open the test harness.
+%
+%   model = 'BatteryTestHarness';
+%   BatteryTestHarnessParams;
+%   open_system(model)
 
 model = 'BatteryTestHarness';
 BatteryTestHarnessParams;
-load_system(model)
+open_system(model)
 
 %% Run Simulation
+%
+%   simout = sim(model, 'SrcWorkspace', 'current');
+%   logsout = simout.logsout;
 
 simout = sim(model, 'SrcWorkspace', 'current');
 logsout = simout.logsout;

@@ -23,12 +23,18 @@
 
 %% Setup
 % Load parameters and open the test harness.
+%
+%   model = 'HeaterTestHarness';
+%   HeaterTestHarnessParams;
+%   open_system(model)
 
 model = 'HeaterTestHarness';
 HeaterTestHarnessParams;
-load_system(model)
+open_system(model)
 
 %% Run Simulation and Results
+%
+%   simout = sim(model, 'SrcWorkspace', 'current');
 
 simout = sim(model, 'SrcWorkspace', 'current');
 plotHeaterHarnessResults(simout.logsout)

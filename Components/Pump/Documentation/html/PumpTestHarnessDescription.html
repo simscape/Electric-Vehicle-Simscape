@@ -9,7 +9,7 @@ To make changes, update the MATLAB code and republish this document.
 <title>Pump Test Harness</title>
 <meta name="generator" content="MATLAB 24.2">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2026-04-16">
+<meta name="DC.date" content="2026-04-17">
 <meta name="DC.source" content="PumpTestHarnessDescription.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
@@ -116,15 +116,14 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <b>Fidelity:</b> Pump</p>
 <h2 id="2">Setup</h2>
 <p>Load parameters and open the test harness.</p>
-<pre class="codeinput">model = <span class="string">'PumpTestHarness'</span>;
+<pre class="language-matlab">model = <span class="string">'PumpTestHarness'</span>;
 PumpTestHarnessParams;
-load_system(model)
+open_system(model)
 </pre>
-<h2 id="3">Run Simulation and Results</h2>
-<pre class="codeinput">simout = sim(model, <span class="string">'SrcWorkspace'</span>, <span class="string">'current'</span>);
-plotPumpHarnessResults(simout.logsout)
+<img vspace="5" hspace="5" src="../images/PumpTestHarnessDescription_01.png" alt=""> <h2 id="3">Run Simulation and Results</h2>
+<pre class="language-matlab">simout = sim(model, <span class="string">'SrcWorkspace'</span>, <span class="string">'current'</span>);
 </pre>
-<img vspace="5" hspace="5" src="../images/PumpTestHarnessDescription_01.png" alt=""> <img vspace="5" hspace="5" src="../images/PumpTestHarnessDescription_02.png" alt=""> <img vspace="5" hspace="5" src="../images/PumpTestHarnessDescription_03.png" alt=""> <img vspace="5" hspace="5" src="../images/PumpTestHarnessDescription_04.png" alt=""> <h2 id="4">Running Unit Tests</h2>
+<img vspace="5" hspace="5" src="../images/PumpTestHarnessDescription_02.png" alt=""> <img vspace="5" hspace="5" src="../images/PumpTestHarnessDescription_03.png" alt=""> <img vspace="5" hspace="5" src="../images/PumpTestHarnessDescription_04.png" alt=""> <img vspace="5" hspace="5" src="../images/PumpTestHarnessDescription_05.png" alt=""> <h2 id="4">Running Unit Tests</h2>
 <p>Run the MQC test suite from the command line:</p>
 <pre class="language-matlab">results = runtests(<span class="string">'PumpPassTests'</span>);
 disp(results)
@@ -166,12 +165,18 @@ disp(results)
 
 %% Setup
 % Load parameters and open the test harness.
+%
+%   model = 'PumpTestHarness';
+%   PumpTestHarnessParams;
+%   open_system(model)
 
 model = 'PumpTestHarness';
 PumpTestHarnessParams;
-load_system(model)
+open_system(model)
 
 %% Run Simulation and Results
+%
+%   simout = sim(model, 'SrcWorkspace', 'current');
 
 simout = sim(model, 'SrcWorkspace', 'current');
 plotPumpHarnessResults(simout.logsout)

@@ -9,7 +9,7 @@ To make changes, update the MATLAB code and republish this document.
 <title>Battery Test Harness</title>
 <meta name="generator" content="MATLAB 24.2">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2026-04-16">
+<meta name="DC.date" content="2026-04-17">
 <meta name="DC.source" content="BatteryTestHarnessDescription.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
@@ -120,23 +120,17 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <b>Fidelity:</b> BatteryLumpedThermal</p>
 <h2 id="2">Setup</h2>
 <p>Load parameters and open the test harness.</p>
-<pre class="codeinput">model = <span class="string">'BatteryTestHarness'</span>;
+<pre class="language-matlab">model = <span class="string">'BatteryTestHarness'</span>;
 BatteryTestHarnessParams;
-load_system(model)
+open_system(model)
 </pre>
-<h2 id="3">Run Simulation</h2>
-<pre class="codeinput">simout = sim(model, <span class="string">'SrcWorkspace'</span>, <span class="string">'current'</span>);
+<img vspace="5" hspace="5" src="BatteryTestHarnessDescription_01.png" alt=""> <h2 id="3">Run Simulation</h2>
+<pre class="language-matlab">simout = sim(model, <span class="string">'SrcWorkspace'</span>, <span class="string">'current'</span>);
 logsout = simout.logsout;
 </pre>
 <h2 id="4">Simulation Results</h2>
 <p>The following plots show all logged signals from the harness run.</p>
-<pre class="codeinput">
-<span class="keyword">for</span> k = 1:logsout.numElements
-    el = logsout.getElement(k);
-    plotHarnessSignal(logsout, k, el.Name, <span class="string">''</span>)
-<span class="keyword">end</span>
-</pre>
-<img vspace="5" hspace="5" src="../images/BatteryTestHarnessDescription_01.png" alt=""> <img vspace="5" hspace="5" src="../images/BatteryTestHarnessDescription_02.png" alt=""> <img vspace="5" hspace="5" src="../images/BatteryTestHarnessDescription_03.png" alt=""> <img vspace="5" hspace="5" src="../images/BatteryTestHarnessDescription_04.png" alt=""> <img vspace="5" hspace="5" src="../images/BatteryTestHarnessDescription_05.png" alt=""> <h2 id="5">Running Unit Tests</h2>
+<img vspace="5" hspace="5" src="BatteryTestHarnessDescription_02.png" alt=""> <img vspace="5" hspace="5" src="BatteryTestHarnessDescription_03.png" alt=""> <img vspace="5" hspace="5" src="BatteryTestHarnessDescription_04.png" alt=""> <img vspace="5" hspace="5" src="BatteryTestHarnessDescription_05.png" alt=""> <img vspace="5" hspace="5" src="BatteryTestHarnessDescription_06.png" alt=""> <h2 id="5">Running Unit Tests</h2>
 <p>Run the MQC test suite from the command line:</p>
 <pre class="language-matlab">results = runtests(<span class="string">'BatteryHVPassTests'</span>);
 disp(results)
@@ -191,12 +185,19 @@ disp(results)
 
 %% Setup
 % Load parameters and open the test harness.
+%
+%   model = 'BatteryTestHarness';
+%   BatteryTestHarnessParams;
+%   open_system(model)
 
 model = 'BatteryTestHarness';
 BatteryTestHarnessParams;
-load_system(model)
+open_system(model)
 
 %% Run Simulation
+%
+%   simout = sim(model, 'SrcWorkspace', 'current');
+%   logsout = simout.logsout;
 
 simout = sim(model, 'SrcWorkspace', 'current');
 logsout = simout.logsout;

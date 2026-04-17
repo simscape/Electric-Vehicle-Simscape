@@ -210,7 +210,7 @@
 %
 % <html>
 % <p align="center">
-%   <img src="../../Components/BatteryHV/Documentation/images/BatteryLumpedThermalDescription_01.png" alt="BatteryLumpedThermal model" width="650">
+%   <img src="../../Components/BatteryHV/Documentation/images/BatteryTestHarnessDescription_01.png" alt="BatteryLumpedThermal model" width="650">
 % </p>
 % </html>
 %

@@ -24,12 +24,18 @@
 
 %% Setup
 % Load parameters and open the test harness.
+%
+%   model = 'ChargerTestHarness';
+%   ChargerTestHarnessParams;
+%   open_system(model)
 
 model = 'ChargerTestHarness';
 ChargerTestHarnessParams;
-load_system(model)
+open_system(model)
 
 %% Run Simulation and Results
+%
+%   simout = sim(model, 'SrcWorkspace', 'current');
 
 simout = sim(model, 'SrcWorkspace', 'current');
 plotChargerHarnessResults(simout.logsout)

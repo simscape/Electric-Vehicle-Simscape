@@ -23,12 +23,18 @@
 
 %% Setup
 % Load parameters and open the test harness.
+%
+%   model = 'MotorTestHarness';
+%   MotorTestHarnessParams;
+%   open_system(model)
 
 model = 'MotorTestHarness';
 MotorTestHarnessParams;
-load_system(model)
+open_system(model)
 
 %% Run Simulation and Results
+%
+%   simout = sim(model, 'SrcWorkspace', 'current');
 
 simout = sim(model, 'SrcWorkspace', 'current');
 plotMotorHarnessResults(simout.logsout)

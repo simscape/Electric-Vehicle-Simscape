@@ -20,12 +20,18 @@
 
 %% Setup
 % Load parameters and open the test harness.
+%
+%   model = 'PumpTestHarness';
+%   PumpTestHarnessParams;
+%   open_system(model)
 
 model = 'PumpTestHarness';
 PumpTestHarnessParams;
-load_system(model)
+open_system(model)
 
 %% Run Simulation and Results
+%
+%   simout = sim(model, 'SrcWorkspace', 'current');
 
 simout = sim(model, 'SrcWorkspace', 'current');
 plotPumpHarnessResults(simout.logsout)

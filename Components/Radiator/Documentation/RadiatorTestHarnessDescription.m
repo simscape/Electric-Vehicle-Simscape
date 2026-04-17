@@ -19,12 +19,18 @@
 
 %% Setup
 % Load parameters and open the test harness.
+%
+%   model = 'RadiatorTestHarness';
+%   RadiatorTestHarnessParams;
+%   open_system(model)
 
 model = 'RadiatorTestHarness';
 RadiatorTestHarnessParams;
-load_system(model)
+open_system(model)
 
 %% Run Simulation and Results
+%
+%   simout = sim(model, 'SrcWorkspace', 'current');
 
 simout = sim(model, 'SrcWorkspace', 'current');
 plotRadiatorHarnessResults(simout.logsout)
