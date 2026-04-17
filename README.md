@@ -114,6 +114,36 @@ workflows**:
 
 For the full project architecture — folder responsibilities, source-of-truth contracts, config schema, app layers, export flow, component inventory, workflow catalog, drift risks, and extension guides — see **[Overview/README.md](Overview/README.md)**.
 
+## Release Notes
+
+**R2022b** (Feb 2023)
+- Initial release — BEV system model with range estimation and battery sizing workflows
+
+**R2023a** (Oct 2023)
+- GitHub Actions CI introduced
+- Battery component update
+
+**R2023b** (Jul 2024)
+- Fast running model variant
+- Document updates
+
+**R2024b** (Dec 2025)
+- Componentization — models restructured into self-contained packages with shared port interfaces
+- Range estimation workflow updated
+- PMSM model block and motor drive workflow updates
+
+**BEVsetupApp** (next release)
+- BEV Setup App — GUI-based vehicle configuration and script export
+- JSON config-driven template/fidelity system with presets
+- 3 new dummy fidelities for simplified simulations
+- Standardized documentation across all 12 components and 10 workflows
+- Architecture reference doc with extension guides
+
+## Related Solutions
+
+- [Simscape Battery Electric Vehicle Model](https://www.mathworks.com/matlabcentral/fileexchange/82250) — BEV reference model with battery, motor, and vehicle dynamics
+- [Simscape HEV Series-Parallel](https://www.mathworks.com/matlabcentral/fileexchange/92820) — Hybrid electric vehicle model with series-parallel powertrain architecture
+
 ## Setup 
 * Clone the project repository.
 * Open ElectricVehicleSimscape.prj to get started with the project. 
