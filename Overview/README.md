@@ -6,22 +6,20 @@ Single-page reference for how the BEV Simscape repository is organized, where tr
 
 | Folder | Responsibility |
 |--------|---------------|
-| `APP/` | BEV Setup App — GUI, API back-end, config presets, user-saved setups |
-| `APP/API/` | 49 functions in 6 domain subfolders (Catalog, Detect, State, Export, UI, Util) |
-| `APP/Config/Preset/` | Shipped JSON configs — maps templates to component fidelities (read-only) |
-| `APP/Config/User/` | User-saved JSON configs (gitignored) |
-| `Components/` | 12 self-contained component packages with models, params, tests, docs |
-| `Model/` | System-level Simulink model (`BEVsystemModel.slx`) — authored assets only |
-| `Model/VehicleTemplate/` | 4 vehicle template `.slx` files assembled from component references |
-| `Model/Display/` | Energy-flow visualisation subsystems used during simulation |
+| [`APP/`](../APP/README.md) | BEV Setup App — GUI, API back-end, config presets, user-saved setups |
+| [`APP/API/`](../APP/API/README.md) | 49 functions in 6 domain subfolders (Catalog, Detect, State, Export, UI, Util) |
+| [`APP/Config/`](../APP/Config/README.md) | Shipped JSON configs (Preset) and user-saved configs (User, gitignored) |
+| [`Components/`](../Components/README.md) | 12 self-contained component packages with models, params, tests, docs |
+| [`Model/`](../Model/README.md) | System-level Simulink model (`BEVsystemModel.slx`) — authored assets only |
+| [`Model/VehicleTemplate/`](../Model/VehicleTemplate/README.md) | 4 vehicle template `.slx` files assembled from component references |
+| [`Model/Display/`](../Model/Display/README.md) | Energy-flow visualisation subsystems used during simulation |
 | `Script_Data/` | System-level param scripts, legacy setup scripts |
 | `Script_Data/Setup/User/` | Generated setup/param scripts from app export (gitignored) |
-| `Workflow/` | Engineering workflows — Battery, MotorDrive, Vehicle (range estimation) |
+| [`Workflow/`](../Workflow/README.md) | Engineering workflows — Battery, MotorDrive, Vehicle (range estimation) |
 | `Overview/` | Published MATLAB overview pages (`.m` source → `html/` output) |
 | `Overview/Image/` | Images referenced by overview documentation |
-| `Test/` | Project-level test suite — system model, workflow, and project checks |
+| [`Test/`](../Test/README.md) | Project-level test suite — system model, workflow, and project checks |
 | `utils/` | Shared utilities — signal designer, cell characterisation methods |
-| `docs/` | Maintainer-facing architecture and contributor documentation |
 
 ## Source of Truth
 
@@ -95,18 +93,18 @@ Every component under `Components/` follows this structure:
 
 | Component | Fidelities | Thermal | Test Harness |
 |-----------|-----------|---------|-------------|
-| BatteryHV | BatteryLumped, BatteryLumpedThermal, BatteryTableBased | Yes | Yes |
-| BatteryHeater | Heater, HeaterDummy | Yes | Yes |
-| BMS | BMS, BMSSoCDirect, BMSSoCEKF | Yes | No |
-| Charger | Charger, ChargerDummy, ChargerThermal, ChargerThermalDummy | Yes | Yes |
-| Chiller | Chiller, ChillerNoCoolant, ChillerDummy | Yes | Yes |
-| Controller | Controller, ControllerFRM, ControllerHVAC | No | No |
-| Driveline | Driveline, DrivelineWithBraking | No | Yes |
-| HVAC | HVACEmpiricalRef, HVACSimpleTh | Yes | Yes |
-| MotorDrive | MotorDriveGear, MotorDriveGearTh, MotorDriveLube, EmotorLib | Yes | Yes |
-| Pump | Pump, PumpDummy | Yes | Yes |
-| PumpDriver | PumpDriver | Yes | Yes |
-| Radiator | Radiator | Yes | Yes |
+| [BatteryHV](../Components/BatteryHV/README.md) | BatteryLumped, BatteryLumpedThermal, BatteryTableBased | Yes | Yes |
+| [BatteryHeater](../Components/BatteryHeater/README.md) | Heater, HeaterDummy | Yes | Yes |
+| [BMS](../Components/BMS/README.md) | BMS, BMSSoCDirect, BMSSoCEKF | Yes | No |
+| [Charger](../Components/Charger/README.md) | Charger, ChargerDummy, ChargerThermal, ChargerThermalDummy | Yes | Yes |
+| [Chiller](../Components/Chiller/README.md) | Chiller, ChillerNoCoolant, ChillerDummy | Yes | Yes |
+| [Controller](../Components/Controller/README.md) | Controller, ControllerFRM, ControllerHVAC | No | No |
+| [Driveline](../Components/Driveline/README.md) | Driveline, DrivelineWithBraking | No | Yes |
+| [HVAC](../Components/HVAC/README.md) | HVACEmpiricalRef, HVACSimpleTh | Yes | Yes |
+| [MotorDrive](../Components/MotorDrive/README.md) | MotorDriveGear, MotorDriveGearTh, MotorDriveLube, EmotorLib | Yes | Yes |
+| [Pump](../Components/Pump/README.md) | Pump, PumpDummy | Yes | Yes |
+| [PumpDriver](../Components/PumpDriver/README.md) | PumpDriver | Yes | Yes |
+| [Radiator](../Components/Radiator/README.md) | Radiator | Yes | Yes |
 
 **Totals:** 12 components, 31 fidelity variants, 10 test harnesses.
 
@@ -201,7 +199,7 @@ Both scripts are designed to be replayable from a fresh checkout — they resolv
 | MotorDrive | Thermal Durability | `testBenchDuraRun.m` | Electro-thermal |
 | Vehicle | Range Estimation | `BEVRangeEstimationMain.mlx` | Any |
 
-Workflows live under `Workflow/<Domain>/<WorkflowName>/`. Each expects the system model to be configured and parameterised before running.
+Workflows live under `Workflow/<Domain>/<WorkflowName>/`. Each expects the system model to be configured and parameterised before running. See the [Workflow README](../Workflow/README.md) for the full catalog.
 
 ## Testing Structure
 
