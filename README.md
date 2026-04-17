@@ -20,6 +20,20 @@ Simscape Fluids&trade; Libraries. </td>
   </tr>
 </table>
 
+## Model Setup
+
+The project ships with preset vehicle configurations that define the model
+architecture — component fidelities, thermal subsystems, and control strategy.
+Use the **BEV Setup App** to select a template, adjust variant choices, and
+configure initial design parameters. The resulting model serves as the
+starting point for the engineering workflows below.
+
+<p align="center">
+  <img src="Overview/Image/BEVWorkflow.png" alt="BEV Workflow" width="700">
+</p>
+
+## Engineering Workflows
+
 In this project, you will learn about the following **seven engineering 
 workflows**:
 
