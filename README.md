@@ -20,17 +20,32 @@ Simscape Fluids&trade; Libraries. </td>
   </tr>
 </table>
 
-## Model Setup
-
-The project ships with preset vehicle configurations that define the model
-architecture — component fidelities, thermal subsystems, and control strategy.
-Use the **BEV Setup App** to select a template, adjust variant choices, and
-configure initial design parameters. The resulting model serves as the
-starting point for the engineering workflows below.
+## Getting Started
 
 <p align="center">
-  <img src="Overview/Image/BEVWorkflow.png" alt="BEV Workflow" width="700">
+  <img src="Overview/Image/BEVWorkflow.png" alt="BEV Design Workflow" width="700">
 </p>
+
+The project includes preset vehicle configurations that define the model
+architecture — component fidelities, thermal subsystems, and control strategy.
+Choose an entry point that fits your workflow, then proceed to the
+engineering studies below.
+
+<table>
+  <tr>
+    <td class="text-column" width=400>
+      <strong>Open the base model</strong> — Load <code>BEVsystemModel.slx</code>
+      directly to explore the reference vehicle architecture.<br><br>
+      <strong>Start from a preset</strong> — Pick a shipped vehicle configuration
+      from <code>APP/Config/Preset</code> to begin with a ready-made component
+      and fidelity selection.<br><br>
+      <strong>Use the BEV Setup App</strong> — Select a template, choose component
+      variants, and configure initial design parameters for your specific
+      use case.
+    </td>
+    <td class="image-column" width=500><img src="APP/Documents/images/BEVappWindow.png" alt="BEV Setup App"></td>
+  </tr>
+</table>
 
 ## Engineering Workflows
 
