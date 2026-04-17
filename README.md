@@ -56,7 +56,7 @@ workflows**:
 <table>
   <tr>
     <td class="image-column" width=600><img src="Overview/Image/BEVplantModelCanvas.png" alt="Range Estimation"></td>
-    <td class="text-column" width=300>Estimate the on-road range of the vehicle. Run drive cycles with different ambient conditions to determine the range of the vehicle with a given capacity. See <strong>Workflow/Vehicle/RangeEstimation</strong>.</td>
+    <td class="text-column" width=300>Estimate the on-road range of the vehicle. Run drive cycles with different ambient conditions to determine the range of the vehicle with a given capacity. See <strong><a href="Workflow/Vehicle/RangeEstimation/README.md">Workflow/Vehicle/RangeEstimation</a></strong>.</td>
   </tr>
 </table>
 
@@ -64,7 +64,7 @@ workflows**:
 <table>
   <tr>
     <td class="image-column" width=300><img src="Overview/Image/BEVplantModelbatterysSubs.png" alt="Battery Sizing"></td>
-    <td class="text-column" width=600>Size your high-voltage (HV) battery pack to achieve your desired range. You will learn how to simulate battery packs with different capacities and weights, and compare them based on how these factors affect the range of the vehicle. See <strong>Workflow/Battery/BatterySizing</strong>.</td>
+    <td class="text-column" width=600>Size your high-voltage (HV) battery pack to achieve your desired range. You will learn how to simulate battery packs with different capacities and weights, and compare them based on how these factors affect the range of the vehicle. See <strong><a href="Workflow/Battery/BatterySizing/README.md">Workflow/Battery/BatterySizing</a></strong>.</td>
   </tr>
 </table>
 
@@ -73,7 +73,7 @@ workflows**:
   <tr>
     <td class="image-column" width=300><img src="Overview/Image/cellCharacterization01.png" alt="Cell Characterization"></td>
     <td class="image-column" width=300><img src="Overview/Image/cellCharacterization02.png" alt="Cell Characterization"></td>
-    <td class="text-column" width=300>Find parameters for an equivalent circuit based battery model from HPPC test data. See <strong>Workflow/Battery/CellCharacterization</strong>.</td>
+    <td class="text-column" width=300>Find parameters for an equivalent circuit based battery model from HPPC test data. See <strong><a href="Workflow/Battery/CellCharacterization/README.md">Workflow/Battery/CellCharacterization</a></strong>.</td>
   </tr>
 </table>
 
@@ -81,7 +81,7 @@ workflows**:
 <table>
   <tr>
     <td class="image-column" width=600><img src="Overview/Image/BatteryNeuralNetResults.png" alt="Battery NN"></td>
-    <td class="text-column" width=300>Build a neural network model to predict battery temperature. This Neural network model takes in battery voltage and current measurements to predict battery temperature. This, when deployed, can help in eliminating some thermal sensors in the battery pack and reduce cost of development. See <strong>Workflow/Battery/VirtualSensorNeuralNetModel</strong>.</td>
+    <td class="text-column" width=300>Build a neural network model to predict battery temperature. This Neural network model takes in battery voltage and current measurements to predict battery temperature. This, when deployed, can help in eliminating some thermal sensors in the battery pack and reduce cost of development. See <strong><a href="Workflow/Battery/VirtualSensorNeuralNetModel/README.md">Workflow/Battery/VirtualSensorNeuralNetModel</a></strong>.</td>
   </tr>
 </table>
 
@@ -89,14 +89,14 @@ workflows**:
 <table>
   <tr>
     <td class="image-column" width=600><img src="Overview/Image/PMSMThermalTestGearResult.png" alt="Gear Ratio"></td>
-    <td class="text-column" width=300>Drive units with fixed gear ratio are usually the most cost effective option for battery electric vehicle. To determine an appropriate fixed gear ratio, run a design of experiment (DoE) which covers a range of gear ratios and test cycle parameters. See <strong>Workflow/MotorDrive/GearRatioSelect</strong>.</td>
+    <td class="text-column" width=300>Drive units with fixed gear ratio are usually the most cost effective option for battery electric vehicle. To determine an appropriate fixed gear ratio, run a design of experiment (DoE) which covers a range of gear ratios and test cycle parameters. See <strong><a href="Workflow/MotorDrive/GearRatioSelect/README.md">Workflow/MotorDrive/GearRatioSelect</a></strong>.</td>
   </tr>
 </table>
 
 ## 6. Setup Electric Motor Test Bench for System Integration
 <table>
   <tr>
-    <td class="text-column" width=300>Learn how to generate a permanent magnet synchronous motor (PMSM) for a system level (electro-thermal) simulation by creating a motor loss map and integrating it into the system level blocks. See <strong>Workflow/MotorDrive/GenerateMotInvLoss</strong>.</td>
+    <td class="text-column" width=300>Learn how to generate a permanent magnet synchronous motor (PMSM) for a system level (electro-thermal) simulation by creating a motor loss map and integrating it into the system level blocks. See <strong><a href="Workflow/MotorDrive/GenerateMotInvLoss/README.md">Workflow/MotorDrive/GenerateMotInvLoss</a></strong>.</td>
     <td class="image-column" width=600><img src="Overview/Image/PMSMlossMapGen.PNG" alt="Motor Loss Map"></td>
   </tr>
 </table>
@@ -105,7 +105,7 @@ workflows**:
 <table>
   <tr>
     <td class="image-column" width=600><img src="Overview/Image/PMSMThermalTestInverterResult.png" alt="Durability"></td>
-    <td class="text-column" width=300>Estimate the inverter power module semiconductor device junction temperature variation due to switching and predict the lifetime of the inverter. See <strong>Workflow/MotorDrive/InverterLife</strong> and <strong>Workflow/MotorDrive/ThermalDurability</strong>.</td>
+    <td class="text-column" width=300>Estimate the inverter power module semiconductor device junction temperature variation due to switching and predict the lifetime of the inverter. See <strong><a href="Workflow/MotorDrive/InverterLife/README.md">Workflow/MotorDrive/InverterLife</a></strong> and <strong><a href="Workflow/MotorDrive/ThermalDurability/README.md">Workflow/MotorDrive/ThermalDurability</a></strong>.</td>
   </tr>
 </table>
 

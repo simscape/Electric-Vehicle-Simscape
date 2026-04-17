@@ -190,14 +190,14 @@ Both scripts are designed to be replayable from a fresh checkout — they resolv
 
 | Domain | Workflow | Entry Point | Template Needed |
 |--------|----------|-------------|-----------------|
-| Battery | Battery Sizing | `BEVBatterySizingMain.mlx` | Any |
-| Battery | Cell Characterisation | `CellCharacterizationForBEV.mlx` | Any |
-| Battery | Neural Net Virtual Sensor | `VirtualSensorNeuralNetModel.mlx` | Electro-thermal |
-| MotorDrive | Gear Ratio Selection | `testThermalBenchRun.m` | Electro-thermal |
-| MotorDrive | PMSM Loss Map Generation | `generateDULossMap.mlx` | Any |
-| MotorDrive | Inverter Life | `runInverterLife.m` | Electro-thermal |
-| MotorDrive | Thermal Durability | `testBenchDuraRun.m` | Electro-thermal |
-| Vehicle | Range Estimation | `BEVRangeEstimationMain.mlx` | Any |
+| Battery | [Battery Sizing](../Workflow/Battery/BatterySizing/README.md) | `BEVBatterySizingMain.mlx` | Any |
+| Battery | [Cell Characterisation](../Workflow/Battery/CellCharacterization/README.md) | `CellCharacterizationForBEV.mlx` | Any |
+| Battery | [Neural Net Virtual Sensor](../Workflow/Battery/VirtualSensorNeuralNetModel/README.md) | `VirtualSensorNeuralNetModel.mlx` | Electro-thermal |
+| MotorDrive | [Gear Ratio Selection](../Workflow/MotorDrive/GearRatioSelect/README.md) | `minimumRequiredGearRatio.mlx` | Electro-thermal |
+| MotorDrive | [PMSM Loss Map Generation](../Workflow/MotorDrive/GenerateMotInvLoss/README.md) | `generateDULossMap.mlx` | Any |
+| MotorDrive | [Inverter Life](../Workflow/MotorDrive/InverterLife/README.md) | `inverterPowerModuleLife.mlx` | Electro-thermal |
+| MotorDrive | [Thermal Durability](../Workflow/MotorDrive/ThermalDurability/README.md) | `DUThermalDurability.mlx` | Electro-thermal |
+| Vehicle | [Range Estimation](../Workflow/Vehicle/RangeEstimation/README.md) | `BEVRangeEstimationMain.mlx` | Any |
 
 Workflows live under `Workflow/<Domain>/<WorkflowName>/`. Each expects the system model to be configured and parameterised before running. See the [Workflow README](../Workflow/README.md) for the full catalog.
 
