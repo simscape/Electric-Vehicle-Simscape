@@ -25,7 +25,7 @@ function paramContextLink(app, btn, dd, rootFolder)
     edit(chosen);
 
     % Refresh tooltip
-    updateParamTooltip(btn, dd, rootFolder);
+    updateParamTooltip(btn, dd);
 
     % Hide the red "no param" note
     if isstruct(dd.UserData) ...

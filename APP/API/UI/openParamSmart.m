@@ -28,7 +28,7 @@ function openParamSmart(app, compName, dd, rootFolder)
                     && isfield(dd.UserData, 'ParamButton') ...
                     && ~isempty(dd.UserData.ParamButton) ...
                     && isvalid(dd.UserData.ParamButton)
-                updateParamTooltip(dd.UserData.ParamButton, dd, dd.UserData.RootFolder);
+                updateParamTooltip(dd.UserData.ParamButton, dd);
             end
 
             try

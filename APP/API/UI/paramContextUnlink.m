@@ -28,7 +28,7 @@ function paramContextUnlink(app, btn, dd, rootFolder)
     end
 
     % Refresh tooltip (now shows default param file)
-    updateParamTooltip(btn, dd, rootFolder);
+    updateParamTooltip(btn, dd);
 
     % Update the red note label
     if isstruct(dd.UserData) ...

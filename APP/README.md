@@ -15,7 +15,7 @@ APP/
     State/     (4)    -- Setup state build, save, cache
     Export/    (4)    -- Script generation, param export, link validation
     UI/       (23)    -- Dropdowns, descriptions, panels, preview
-    Util/     (10)    -- Project root, path helpers, file listing
+    Util/     (14)    -- Project root, path helpers, file listing, SSR masking
   Config/             -- JSON configuration files
     Preset/           -- Shipped template configs (read-only)
     User/             -- User-saved setup configs (gitignored)

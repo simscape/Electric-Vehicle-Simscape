@@ -11,7 +11,7 @@ Supporting functions for `BEVapp.mlapp`, organized into responsibility-based sub
 | `State/` | What's selected — flat setup state build, save/load, session cache | 4 |
 | `Export/` | Artifact generation — setup scripts, param scripts, param link validation | 4 |
 | `UI/` | Presentation — dropdowns, descriptions, panels, preview, selection apply | 23 |
-| `Util/` | Generic helpers — project root, path resolution, file listing, data helpers | 10 |
+| `Util/` | Generic helpers — project root, path resolution, file listing, SSR masking | 14 |
 
 ## Catalog
 
@@ -81,15 +81,19 @@ Supporting functions for `BEVapp.mlapp`, organized into responsibility-based sub
 
 | Function | Purpose |
 |----------|---------|
+| `addSSRMask` | Create System Mask on SSR models with namespace-prefixed parameters |
 | `buildList` | Build nested HTML lists from struct/cell data |
+| `discoverMaskNamespace` | Discover namespace from an existing Simulink mask |
+| `discoverParamNamespace` | Parse param `.m` files to extract namespace and field names |
 | `ensureSlxList` | Append `.slx` extension to basenames that lack it |
 | `getBEVAppPaths` | Centralized folder path resolution — returns struct with all app-relevant paths |
 | `getBEVProjectRoot` | Return the MATLAB project root folder |
 | `getPresetConfigFolder` | Return absolute path to `APP/Config/Preset` |
+| `getPresetSetupScriptFolder` | Return absolute path to `Script_Data/Setup/Preset` |
 | `getSLXFiles` | List `.slx` files in a folder |
 | `getUserConfigFolder` | Return absolute path to `APP/Config/User` (auto-creates on first call) |
 | `getUserSetupScriptFolder` | Return absolute path to `Script_Data/Setup/User` (auto-creates on first call) |
-| `getPresetSetupScriptFolder` | Return absolute path to `Script_Data/Setup/Preset` |
+| `swapMaskNamespace` | Regex-swap namespace prefix on mask parameters |
 | `userDataSetField` | Safely set a field on UIFigure.UserData struct |
 
 ## Code Flow

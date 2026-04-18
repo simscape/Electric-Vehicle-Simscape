@@ -1,4 +1,4 @@
-function updateParamTooltip(btn, dd, ~)
+function updateParamTooltip(btn, dd)
 %UPDATEPARAMTOOLTIP Refresh param button tooltip based on current ParamFile.
     tip = "No param file found — right-click to link one";
     if isstruct(dd.UserData) && isfield(dd.UserData, 'ParamFile')

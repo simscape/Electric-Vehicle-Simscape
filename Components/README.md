@@ -16,8 +16,8 @@ Self-contained, reusable subsystem modules for the Battery Electric Vehicle (BEV
 | [Controller](Controller/README.md) | Vehicle-level supervisory controller (standard, FRM, HVAC) | 3 | No | No |
 | [Driveline](Driveline/README.md) | Mechanical driveline with optional braking | 2 | No | Yes |
 | [HVAC](HVAC/README.md) | Cabin climate system (empirical, simple-thermal) | 2 | Yes | Yes |
-| [MotorDrive](MotorDrive/README.md) | Electric motor drive unit with gear, thermal, and lubrication variants | 3 + library | Yes | Yes |
-| [Pump](Pump/README.md) | Coolant circulation pump (full, dummy) | 2 | Yes | Yes |
+| [MotorDrive](MotorDrive/README.md) | Electric motor drive unit with gear, thermal, and lubrication variants | 4 | Yes | Yes |
+| [Pump](Pump/README.md) | Coolant circulation pump (full, dummy, dummy-thermal) | 3 | Yes | Yes |
 | [DCDC](PumpDriver/README.md) | DC-DC converter driving the coolant pump (PumpDriver, PumpDriverTh) | 2 | Yes | Yes |
 | [Radiator](Radiator/README.md) | Coolant-to-air radiator with fan | 1 | Yes | Yes |
 

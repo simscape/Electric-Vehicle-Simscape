@@ -69,7 +69,7 @@
 %     <a target="_blank" href="../../Components/BMS/Documentation/html/BMSSoCEKFDescription.html">BMSSoCEKF</a>
 %   </td>
 %   <td style="text-align:center;">Yes</td>
-%   <td style="text-align:center;">No</td>
+%   <td style="text-align:center;">Yes</td>
 % </tr>
 % <tr>
 %   <td><strong>Charger</strong></td>
@@ -170,7 +170,7 @@
 % </table>
 % </html>
 %
-% *Totals:* 12 components, 32 fidelity variants, 10 test harnesses.
+% *Totals:* 12 components, 32 fidelity variants, 11 test harnesses.
 
 %% Templates and Model Structure
 %

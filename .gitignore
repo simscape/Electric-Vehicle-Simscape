@@ -7,3 +7,10 @@ Script_Data/Setup/User/
 simcache/
 slprj/
 *.slxc
+
+# Generated reports and staging
+coverageR2024b/
+html/
+
+# Claude Code local state
+.claude/

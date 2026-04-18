@@ -119,7 +119,7 @@ function renderComponentPanels(app, availability, root)
 
         % ---- Initialize tooltip (after ParamFile is set) ----
 
-        updateParamTooltip(paramBtn, compDropDown, root);
+        updateParamTooltip(paramBtn, compDropDown);
 
         % ---- Store handles ----
 
