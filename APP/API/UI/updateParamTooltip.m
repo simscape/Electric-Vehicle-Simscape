@@ -1,14 +1,14 @@
 function updateParamTooltip(btn, dd, ~)
-%UPDATEPARAMTOOLTIP Refresh param button tooltip based on linked/auto state.
-    tip = "Param file: auto-detect <ModelName>Params.m";
+%UPDATEPARAMTOOLTIP Refresh param button tooltip based on current ParamFile.
+    tip = "No param file found — right-click to link one";
     if isstruct(dd.UserData) && isfield(dd.UserData, 'ParamFile')
-        linked = string(dd.UserData.ParamFile);
-        if strlength(linked) > 0
-            if exist(linked, 'file')
-                tip = "Param file (linked): " + linked;
+        pf = string(dd.UserData.ParamFile);
+        if strlength(pf) > 0
+            [~, name, ext] = fileparts(char(pf));
+            if exist(pf, 'file')
+                tip = sprintf("Param: %s%s", name, ext);
             else
-                tip = "Param file (linked but missing): " + linked + ...
-                      " — will fall back to auto-detect";
+                tip = sprintf("Param (missing): %s%s", name, ext);
             end
         end
     end

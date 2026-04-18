@@ -186,14 +186,24 @@ function applyComponentSelections(app, savedComps)
             trySetDropdownValue(dd, char(instData.Model), '.slx');
         end
 
+        % Re-discover default ParamFile for the (possibly changed) selection
+        if isstruct(dd.UserData) && isfield(dd.UserData, 'CompName')
+            computeParamMissingNote(dd.UserData.CompName, dd, dd.UserData.RootFolder);
+        end
+
+        % Overlay with saved ParamFile if one was explicitly stored
         if isfield(instData, 'ParamFile') && ~isempty(instData.ParamFile)
             ud = dd.UserData;
             ud.ParamFile = char(instData.ParamFile);
             dd.UserData = ud;
+        end
 
-            if isfield(dd.UserData, 'ParamButton') && isvalid(dd.UserData.ParamButton)
-                updateParamTooltip(dd.UserData.ParamButton, dd, dd.UserData.RootFolder);
-            end
+        % Update tooltip with final ParamFile
+        if isstruct(dd.UserData) ...
+                && isfield(dd.UserData, 'ParamButton') ...
+                && ~isempty(dd.UserData.ParamButton) ...
+                && isvalid(dd.UserData.ParamButton)
+            updateParamTooltip(dd.UserData.ParamButton, dd, dd.UserData.RootFolder);
         end
     end
 end

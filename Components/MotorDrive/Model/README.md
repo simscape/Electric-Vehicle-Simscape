@@ -9,10 +9,11 @@ This folder contains the electric motor drive unit Simulink models and their cor
 **File:** `MotorDriveGear.slx`
 **Parameter File:** `MotorDriveGearParams.m`
 **Thermal Coupling:** No
+**System Mask:** Yes -- 4 params (`max_torque`, `max_power`, `Tctc`, `motor_loss_map`)
 
 ### Description
 
-Electric motor with lumped electrical and mechanical dynamics and a fixed gear for torque transmission to the axle. The motor input block accepts torque commands, control signals, and battery state. No thermal dynamics are modeled -- temperature is treated as a fixed input. Internal signals include current, voltage, motor speed, and energy consumption.
+Electric motor with lumped electrical and mechanical dynamics and a fixed gear for torque transmission to the axle. The motor input block accepts torque commands, control signals, and battery state. No thermal dynamics are modeled -- temperature is treated as a fixed input. Internal signals include current, voltage, motor speed, and energy consumption. All parameters are exposed on the mask.
 
 ### Workflows
 
@@ -43,6 +44,7 @@ Electric motor with lumped electrical and mechanical dynamics and a fixed gear f
 **File:** `MotorDriveGearTh.slx`
 **Parameter File:** `MotorDriveGearThParams.m`
 **Thermal Coupling:** Yes
+**System Mask:** Yes -- 5 top-level params (`max_torque`, `max_power`, `Tctc`, `motor_loss_map`, `coolant_channel_D`). All thermal sub-parameters (`MotorThermalParams`, `InverterMotorDriveParam`) are loaded by the param file into the workspace, not exposed on the mask.
 
 ### Description
 
@@ -82,6 +84,7 @@ Electric motor drive with fixed gear including full thermal coupling. The motor 
 **File:** `MotorDriveLube.slx`
 **Parameter File:** `MotorDriveGearParams.m`, `MotorDriveGearThParams.m`
 **Thermal Coupling:** Yes
+**System Mask:** Yes -- 5 top-level params (same as MotorDriveGearTh). All thermal and lubrication sub-parameters are loaded by the param file into the workspace, not exposed on the mask.
 
 ### Description
 

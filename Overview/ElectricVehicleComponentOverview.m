@@ -142,16 +142,18 @@
 %   <td>Coolant circulation pump</td>
 %   <td>
 %     <a target="_blank" href="../../Components/Pump/Documentation/html/PumpDescription.html">Pump</a>,
-%     <a target="_blank" href="../../Components/Pump/Documentation/html/PumpDummyDescription.html">PumpDummy</a>
+%     <a target="_blank" href="../../Components/Pump/Documentation/html/PumpDummyDescription.html">PumpDummy</a>,
+%     <a target="_blank" href="../../Components/Pump/Documentation/html/PumpDummyThDescription.html">PumpDummyTh</a>
 %   </td>
 %   <td style="text-align:center;">Yes</td>
 %   <td style="text-align:center;"><a target="_blank" href="../../Components/Pump/Documentation/html/PumpTestHarnessDescription.html">Yes</a></td>
 % </tr>
 % <tr>
-%   <td><strong>PumpDriver</strong></td>
+%   <td><strong>DCDC</strong></td>
 %   <td>DC-DC converter driving the coolant pump</td>
 %   <td>
-%     <a target="_blank" href="../../Components/PumpDriver/Documentation/html/PumpDriverDescription.html">PumpDriver</a>
+%     <a target="_blank" href="../../Components/PumpDriver/Documentation/html/PumpDriverDescription.html">PumpDriver</a>,
+%     <a target="_blank" href="../../Components/PumpDriver/Documentation/html/PumpDriverThDescription.html">PumpDriverTh</a>
 %   </td>
 %   <td style="text-align:center;">Yes</td>
 %   <td style="text-align:center;"><a target="_blank" href="../../Components/PumpDriver/Documentation/html/PumpDriverTestHarnessDescription.html">Yes</a></td>
@@ -168,7 +170,7 @@
 % </table>
 % </html>
 %
-% *Totals:* 12 components, 31 fidelity variants, 10 test harnesses.
+% *Totals:* 12 components, 32 fidelity variants, 10 test harnesses.
 
 %% Templates and Model Structure
 %
@@ -188,7 +190,7 @@
 % <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse; width:100%;">
 % <tr><th>Template</th><th>Description</th><th>Thermal</th><th>Auxiliary</th></tr>
 % <tr><td><strong>VehicleElectric</strong></td><td>Minimal electrical powertrain &mdash; battery, motor, charger, driveline</td><td style="text-align:center;">No</td><td style="text-align:center;">No</td></tr>
-% <tr><td><strong>VehicleElecAux</strong></td><td>Electrical powertrain with HVAC and auxiliary loads</td><td style="text-align:center;">No</td><td style="text-align:center;">Yes</td></tr>
+% <tr><td><strong>VehicleElecAux</strong></td><td>Electrical powertrain with HVAC, pump, DCDC, and auxiliary loads</td><td style="text-align:center;">No</td><td style="text-align:center;">Yes</td></tr>
 % <tr><td><strong>VehicleElectroThermal</strong></td><td>Full electro-thermal vehicle with coolant loop, chiller, heater, radiator</td><td style="text-align:center;">Yes</td><td style="text-align:center;">Yes</td></tr>
 % <tr><td><strong>VehicleElectroThermalLowTemp</strong></td><td>Electro-thermal configured for cold-climate studies</td><td style="text-align:center;">Yes</td><td style="text-align:center;">Yes</td></tr>
 % </table>

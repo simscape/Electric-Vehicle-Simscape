@@ -48,6 +48,44 @@ Volumetric displacement pump that circulates coolant through the BEV thermal man
 
 **File:** `PumpDummy.slx`
 **Parameter File:** `PumpDummyParams.m`
+**Thermal Coupling:** No (no coolant ports)
+
+### Description
+
+Minimal pump stub with fixed electrical load on the LV bus. Draws a fixed current proportional to the pump command signal. Unlike PumpDummyTh, this variant has no thermal-liquid ports — it is purely an electrical placeholder.
+
+### Workflows
+
+- Placeholder variant in the **VehicleElecAux** template for auxiliary configurations without a coolant loop.
+- Parameters loaded by `PumpDummyParams.m`.
+
+### Inputs
+
+| Signal | Description |
+|--------|-------------|
+| Battery status | Pack state signals (terminated internally) |
+| Pump command | Normalized command (0 = off, 1 = full current draw) |
+| LV bus | Low-voltage electrical connection |
+
+### Outputs
+
+| Signal | Description |
+|--------|-------------|
+| Pump Current | Current drawn from LV bus (I_fixed x PumpCmd) |
+| Low Voltage | Measured LV bus voltage |
+
+### Key Parameters
+
+| Parameter | Typical Value | Unit |
+|-----------|--------------|------|
+| Max pump current | 10 | A |
+
+---
+
+## PumpDummyTh
+
+**File:** `PumpDummyTh.slx`
+**Parameter File:** `PumpDummyThParams.m`
 **Thermal Coupling:** No (coolant pass-through, no active pumping)
 
 ### Description
@@ -57,7 +95,7 @@ Minimal pump stub that maintains the same port interface as the full Pump model.
 ### Workflows
 
 - Placeholder variant in the **VehicleElectroThermal** template for integration testing or fast simulations.
-- Parameters loaded by `PumpDummyParams.m`.
+- Parameters loaded by `PumpDummyThParams.m`.
 
 ### Inputs
 

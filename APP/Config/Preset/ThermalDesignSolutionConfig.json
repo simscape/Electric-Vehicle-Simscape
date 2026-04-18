@@ -33,7 +33,11 @@
             },
             "Pump": {
                 "Instances": ["Battery Pump", "Motor Pump"],
-                "Models": ["Pump","PumpDummy"]
+                "Models": ["Pump","PumpDummyTh"]
+            },
+            "PumpDriver": {
+                "Instances": ["DCDC"],
+                "Models": ["PumpDriverTh"]
             },
             "Radiator": {
                 "Instances": ["Radiator"],

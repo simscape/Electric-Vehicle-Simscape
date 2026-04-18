@@ -8,9 +8,9 @@ Electric motor drive unit component for the BEV system model. The motor drive co
 
 | Model | Description | Thermal | Use Case |
 |-------|-------------|:-------:|----------|
-| [MotorDriveGear](Model/README.md#motordrivegear) | Electric motor with lumped electrical and mechanical dynamics plus a fixed gear. No thermal coupling -- temperature is a fixed input. | No | Fast vehicle-level range estimation and controller tuning where motor thermal behavior is not needed. |
-| [MotorDriveGearTh](Model/README.md#motordrivegearth) | Motor drive with fixed gear including thermal coupling. Motor plant has electrical, mechanical, and thermal ports. Coolant jacket for motor and inverter thermal dynamics. | Yes | Electro-thermal vehicle simulations where motor and inverter temperatures affect performance and range. Default motor fidelity for VehicleElectroThermal. |
-| [MotorDriveLube](Model/README.md#motordrivelube) | Motor drive with fixed gear, thermal coupling, and gearbox lubrication losses. Adds gear thermal interface and oil-related losses to the thermal model. | Yes | High-fidelity powertrain studies including gear lubrication effects on efficiency and thermal behavior. |
+| [MotorDriveGear](Model/README.md#motordrivegear) | Electric motor with lumped electrical and mechanical dynamics plus a fixed gear. No thermal coupling -- temperature is a fixed input. System Mask exposes 4 top-level params. | No | Fast vehicle-level range estimation and controller tuning where motor thermal behavior is not needed. |
+| [MotorDriveGearTh](Model/README.md#motordrivegearth) | Motor drive with fixed gear including thermal coupling. Motor plant has electrical, mechanical, and thermal ports. System Mask exposes 5 top-level params; all thermal sub-params (MotorThermalParams, InverterMotorDriveParam) are loaded by the param file, not by the mask. | Yes | Electro-thermal vehicle simulations where motor and inverter temperatures affect performance and range. Default motor fidelity for VehicleElectroThermal. |
+| [MotorDriveLube](Model/README.md#motordrivelube) | Motor drive with fixed gear, thermal coupling, and gearbox lubrication losses. System Mask exposes 5 top-level params; all thermal and lube sub-params are loaded by the param file, not by the mask. | Yes | High-fidelity powertrain studies including gear lubrication effects on efficiency and thermal behavior. |
 
 ### Library (`Library/`)
 

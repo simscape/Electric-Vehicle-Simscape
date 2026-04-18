@@ -138,8 +138,8 @@ function modelFile = findModelFile(modelName, projectRoot)
 end
 
 function components = collectComponentSelections(state, vehicleBlockPath)
-%COLLECTCOMPONENTSELECTIONS Extract component block paths and targets from state.
-    components = struct('AbsPath', {}, 'Target', {});
+%COLLECTCOMPONENTSELECTIONS Extract component block paths, targets, and param info from state.
+    components = struct('AbsPath', {}, 'Target', {}, 'ParamFile', {}, 'ModelFolder', {});
     if ~isfield(state, 'Components'), return; end
 
     compTypes = fieldnames(state.Components);
@@ -165,9 +165,17 @@ function components = collectComponentSelections(state, vehicleBlockPath)
             instanceLabel = instKeys{i};
             if isfield(inst, 'Label'), instanceLabel = char(inst.Label); end
 
+            paramFile = '';
+            if isfield(inst, 'ParamFile'), paramFile = char(inst.ParamFile); end
+
+            modelFolder = '';
+            if isfield(inst, 'ModelFolder'), modelFolder = char(inst.ModelFolder); end
+
             absPath = [vehicleBlockPath, '/', instanceLabel];
-            components(end+1).AbsPath = char(absPath); %#ok<AGROW>
-            components(end).Target    = char(targetModel);
+            components(end+1).AbsPath     = char(absPath); %#ok<AGROW>
+            components(end).Target        = char(targetModel);
+            components(end).ParamFile     = paramFile;
+            components(end).ModelFolder   = modelFolder;
         end
     end
 end
@@ -211,12 +219,24 @@ function L = assembleScriptLines(topModelName, ~, ...
     L{end+1} = "saveAll(topModelName);";
     L{end+1} = "";
 
-    % Component references
+    % Component references + mask namespace alignment
     L{end+1} = "% ---- Apply component references ----";
     for j = 1:numel(components)
         L{end+1} = sprintf("setRef('%s', '%s');", ...
             escapeQuote(components(j).AbsPath), ...
             escapeQuote(components(j).Target)); %#ok<AGROW>
+
+        % --- Field-aware mask namespace alignment (per-field ns) ---
+        [targetFields, nsPerField] = resolveParamFileInfo(components(j));
+        if ~isempty(targetFields)
+            fieldListStr = strjoin(cellfun(@(f) ['''' escapeQuote(f) ''''], ...
+                targetFields, 'UniformOutput', false), ',');
+            nsListStr = strjoin(cellfun(@(n) ['''' escapeQuote(n) ''''], ...
+                nsPerField, 'UniformOutput', false), ',');
+            L{end+1} = sprintf("alignMaskFields('%s', {%s}, {%s});", ...
+                escapeQuote(components(j).AbsPath), ...
+                fieldListStr, nsListStr); %#ok<AGROW>
+        end
     end
 
     % Controller
@@ -229,8 +249,20 @@ function L = assembleScriptLines(topModelName, ~, ...
     % Drive cycle line is added by caller (needs live model)
 end
 
+function [fields, nsPerField] = resolveParamFileInfo(comp)
+%RESOLVEPARAMFILEINFO Return field list and per-field namespaces from linked param file.
+%   Returns fields={} and nsPerField={} if no param file or not discoverable.
+
+    fields = {};
+    nsPerField = {};
+    if isempty(comp.ParamFile) || exist(comp.ParamFile, 'file') ~= 2
+        return;
+    end
+    [~, fields, ~, ~, nsPerField] = discoverParamNamespace(comp.ParamFile);
+end
+
 function L = helperFunctionLines()
-%HELPERFUNCTIONLINES Return the setRef/saveAll helper function text for the script.
+%HELPERFUNCTIONLINES Return helper function text for the generated script.
     L = {};
     L{end+1} = "% ================= Helpers =================";
     L{end+1} = "function setRef(blockPath, refTarget)";
@@ -240,6 +272,25 @@ function L = helperFunctionLines()
     L{end+1} = "function saveAll(mdl)";
     L{end+1} = "    try save_system(mdl, 'SaveDirtyReferencedModels', 'on');";
     L{end+1} = "    catch, save_system(mdl);";
+    L{end+1} = "    end";
+    L{end+1} = "end";
+    L{end+1} = "";
+    L{end+1} = "function alignMaskFields(blockPath, targetFields, targetNs)";
+    L{end+1} = "% Field-aware mask alignment with per-field namespace.";
+    L{end+1} = "% targetFields and targetNs are parallel cell arrays from the param file.";
+    L{end+1} = "% For each mask value of form ns.field, if field is in targetFields,";
+    L{end+1} = "% rewrite to targetNs{idx}.field. Leaves all other values unchanged.";
+    L{end+1} = "    mask = Simulink.Mask.get(blockPath);";
+    L{end+1} = "    if isempty(mask) || isempty(mask.Parameters), return; end";
+    L{end+1} = "    for k = 1:numel(mask.Parameters)";
+    L{end+1} = "        val = strtrim(mask.Parameters(k).Value);";
+    L{end+1} = "        tok = regexp(val, '^([A-Za-z]\w*)\.([A-Za-z]\w*)$', 'tokens', 'once');";
+    L{end+1} = "        if isempty(tok), continue; end";
+    L{end+1} = "        varName = tok{2};";
+    L{end+1} = "        idx = find(strcmp(varName, targetFields), 1);";
+    L{end+1} = "        if ~isempty(idx)";
+    L{end+1} = "            mask.Parameters(k).Value = [targetNs{idx} '.' varName];";
+    L{end+1} = "        end";
     L{end+1} = "    end";
     L{end+1} = "end";
 end

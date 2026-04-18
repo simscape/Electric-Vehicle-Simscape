@@ -24,8 +24,8 @@ battery.cRate=[0    0    0
                4    5    6]; % mac c rate for given Temp and SoC
 
 %% Load param files
-run('batt_BatteryManagementSystem_param'); % battery management parameters
-run('batt_packBTMSExampleLib_param');      % battery module parameter filefile
+batt_BatteryManagementSystem_param; % battery management parameters
+batt_packBTMSExampleLib_param;      % battery module parameter filefile
 
 %% Coolant Geometry
 battery.coolant_pipe_D = 0.019; % [m] Coolant pipe diameter

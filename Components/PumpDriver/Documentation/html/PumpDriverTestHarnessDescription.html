@@ -6,7 +6,7 @@
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
       -->
-<title>PumpDriver Test Harness</title>
+<title>PumpDriverTh Test Harness</title>
 <meta name="generator" content="MATLAB 24.2">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
 <meta name="DC.date" content="2026-04-17">
@@ -76,9 +76,9 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 </head>
 <body>
 <div class="content">
-<h1>PumpDriver Test Harness</h1>
+<h1>PumpDriverTh Test Harness</h1>
 <!--introduction-->
-<p>Standalone test environment for the PumpDriver component.</p>
+<p>Standalone test environment for the DCDC (PumpDriver) component.</p>
 <!--/introduction-->
 <h2>Contents</h2>
 <div>
@@ -102,7 +102,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 </div>
 <h2 id="1">Overview</h2>
 <p>The PumpDriverTestHarness provides a standalone simulation environment for validating the pump driver controller. The harness supplies a DC voltage input, coolant boundary conditions, and pump enable signals.</p>
-<p>Parameters are initialized by <tt>PumpDriverTestHarnessParams.m</tt>, which loads <tt>PumpDriverParams.m</tt>.</p>
+<p>Parameters are initialized by <tt>PumpDriverTestHarnessParams.m</tt>, which loads <tt>PumpDriverThParams.m</tt>.</p>
 <p>
 <b>Harness:</b> <a href="matlab:open_system('PumpDriverTestHarness')">PumpDriverTestHarness.slx</a>
 </p>
@@ -113,7 +113,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <b>Test Case:</b> <a href="matlab:edit('PumpDriverPassTests.m')">PumpDriverPassTests.m</a>
 </p>
 <p>
-<b>Fidelity:</b> PumpDriver</p>
+<b>Fidelity:</b> PumpDriverTh</p>
 <h2 id="2">Setup</h2>
 <p>Load parameters and open the test harness.</p>
 <pre class="language-matlab">model = <span class="string">'PumpDriverTestHarness'</span>;
@@ -134,6 +134,9 @@ disp(results)
 <li>
 <a href="PumpDriverDescription.html">PumpDriver</a>
 </li>
+<li>
+<a href="PumpDriverThDescription.html">PumpDriverTh</a>
+</li>
 </ul>
 </div>
 <p class="footer">Copyright 2022 - 2025 The MathWorks, Inc.<br>
@@ -143,8 +146,8 @@ disp(results)
 </div>
 <!--
 ##### SOURCE BEGIN #####
-%% PumpDriver Test Harness
-% Standalone test environment for the PumpDriver component.
+%% PumpDriverTh Test Harness
+% Standalone test environment for the DCDC (PumpDriver) component.
 
 %% Overview
 % The PumpDriverTestHarness provides a standalone simulation environment
@@ -152,7 +155,7 @@ disp(results)
 % voltage input, coolant boundary conditions, and pump enable signals.
 %
 % Parameters are initialized by |PumpDriverTestHarnessParams.m|, which
-% loads |PumpDriverParams.m|.
+% loads |PumpDriverThParams.m|.
 %
 % *Harness:* <matlab:open_system('PumpDriverTestHarness') PumpDriverTestHarness.slx>
 %
@@ -160,7 +163,7 @@ disp(results)
 %
 % *Test Case:* <matlab:edit('PumpDriverPassTests.m') PumpDriverPassTests.m>
 %
-% *Fidelity:* PumpDriver
+% *Fidelity:* PumpDriverTh
 
 %% Setup
 % Load parameters and open the test harness.
@@ -188,6 +191,7 @@ plotPumpDriverHarnessResults(simout.logsout)
 
 %% See Also
 % * <PumpDriverDescription.html PumpDriver>
+% * <PumpDriverThDescription.html PumpDriverTh>
 
 % Copyright 2022 - 2025 The MathWorks, Inc.
 

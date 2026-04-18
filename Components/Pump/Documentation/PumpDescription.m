@@ -50,6 +50,7 @@ open_system('Pump')
 
 %% See Also
 % * <PumpDummyDescription.html PumpDummy>
+% * <PumpDummyThDescription.html PumpDummyTh>
 % * <PumpTestHarnessDescription.html Pump Test Harness>
 
 % Copyright 2022 - 2025 The MathWorks, Inc.

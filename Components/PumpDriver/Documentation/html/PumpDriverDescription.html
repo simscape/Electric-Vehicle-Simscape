@@ -7,9 +7,9 @@ This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
       -->
 <title>PumpDriver</title>
-<meta name="generator" content="MATLAB 24.2">
+<meta name="generator" content="MATLAB 26.1">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2026-04-16">
+<meta name="DC.date" content="2026-04-18">
 <meta name="DC.source" content="PumpDriverDescription.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
@@ -78,7 +78,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <div class="content">
 <h1>PumpDriver</h1>
 <!--introduction-->
-<p>Pump driver controller for the BEV thermal management system.</p>
+<p>DC-DC pump driver without thermal coupling.</p>
 <!--/introduction-->
 <h2>Contents</h2>
 <div>
@@ -104,7 +104,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 </ul>
 </div>
 <h2 id="1">Overview</h2>
-<p>The PumpDriver translates thermal management status signals and pump enable commands into shaft speed setpoints for the coolant circulation pump. It determines the required coolant flow rate based on the thermal state of the system (battery temperature, motor temperature, etc.) and drives the Pump component accordingly.</p>
+<p>The PumpDriver is a simplified DC-DC converter model that translates thermal management status signals and pump enable commands into shaft speed setpoints for the coolant circulation pump. This variant has no coolant ports or thermal coupling - it provides only the electrical conversion and control logic.</p>
 <p>
 <b>Model:</b> <a href="matlab:open_system('PumpDriver')">PumpDriver.slx</a>
 </p>
@@ -112,11 +112,11 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <b>Parameters:</b> <a href="matlab:edit('PumpDriverParams.m')">PumpDriverParams.m</a>
 </p>
 <p>
-<b>Thermal Coupling:</b> Yes (coolant system interface)</p>
+<b>Thermal Coupling:</b> No</p>
 <h2 id="2">Open Model</h2>
 <pre class="codeinput">open_system(<span class="string">'PumpDriver'</span>)
 </pre>
-<img vspace="5" hspace="5" src="../images/PumpDriverDescription_01.png" alt=""> <h2 id="3">Ports</h2>
+<img vspace="5" hspace="5" src="../images/PumpDriverDescription_01.png" alt=""> <img vspace="5" hspace="5" src="../images/PumpDriverDescription_02.png" alt=""> <h2 id="3">Ports</h2>
 <p>
 <b>Inputs</b>
 </p>
@@ -138,15 +138,13 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 </ul>
 </div>
 <h2 id="4">Workflows</h2>
-<p>The PumpDriver is part of the coolant loop in the <b>VehicleElectroThermal</b> template. It pairs with the Pump component to form the coolant circulation subsystem. Parameters include coolant pipe and jacket dimensions shared with other thermal components.</p>
+<p>The PumpDriver is the non-thermal DCDC variant used in the <b>VehicleElecAux</b> template. It pairs with PumpDummy to provide pump control without coolant loop modelling.</p>
 <h2 id="5">Parameters</h2>
 <p>
 <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
 <tr><th>Name</th><th>Default</th><th>Description</th></tr>
-<tr><td>Coolant pipe diameter</td><td>0.019 m</td><td>Diameter of coolant piping</td></tr>
-<tr><td>Coolant jacket channel diameter</td><td>0.0092 m</td><td>Diameter of coolant jacket channels</td></tr>
-<tr><td>Initial coolant temperature</td><td>298.15 K</td><td>Coolant temperature at simulation start</td></tr>
-<tr><td>Initial coolant pressure</td><td>0.101325 MPa</td><td>Coolant pressure at simulation start</td></tr>
+<tr><td>Output voltage</td><td>24 V</td><td>DC-DC converter output voltage</td></tr>
+<tr><td>Output power</td><td>2400 W</td><td>DC-DC converter output power</td></tr>
 </table>
 </p>
 <p>See <tt>PumpDriverParams.m</tt> for a complete list.</p>
@@ -154,32 +152,35 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <div>
 <ul>
 <li>
+<a href="PumpDriverThDescription.html">PumpDriverTh (thermal)</a>
+</li>
+<li>
 <a href="PumpDriverTestHarnessDescription.html">PumpDriver Test Harness</a>
 </li>
 </ul>
 </div>
-<p class="footer">Copyright 2022 - 2025 The MathWorks, Inc.<br>
-<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2024b</a>
+<p class="footer">Copyright 2022 - 2026 The MathWorks, Inc.<br>
+<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2026a</a>
 <br>
 </p>
 </div>
 <!--
 ##### SOURCE BEGIN #####
 %% PumpDriver
-% Pump driver controller for the BEV thermal management system.
+% DC-DC pump driver without thermal coupling.
 
 %% Overview
-% The PumpDriver translates thermal management status signals and pump
-% enable commands into shaft speed setpoints for the coolant circulation
-% pump. It determines the required coolant flow rate based on the thermal
-% state of the system (battery temperature, motor temperature, etc.) and
-% drives the Pump component accordingly.
+% The PumpDriver is a simplified DC-DC converter model that translates
+% thermal management status signals and pump enable commands into shaft
+% speed setpoints for the coolant circulation pump. This variant has no
+% coolant ports or thermal coupling - it provides only the electrical
+% conversion and control logic.
 %
 % *Model:* <matlab:open_system('PumpDriver') PumpDriver.slx>
 %
 % *Parameters:* <matlab:edit('PumpDriverParams.m') PumpDriverParams.m>
 %
-% *Thermal Coupling:* Yes (coolant system interface)
+% *Thermal Coupling:* No
 
 %% Open Model
 
@@ -196,29 +197,27 @@ open_system('PumpDriver')
 % * *Pump speed command* - Shaft speed setpoint for the Pump.
 
 %% Workflows
-% The PumpDriver is part of the coolant loop in the
-% *VehicleElectroThermal* template. It pairs with the Pump component to
-% form the coolant circulation subsystem. Parameters include coolant pipe
-% and jacket dimensions shared with other thermal components.
+% The PumpDriver is the non-thermal DCDC variant used in the
+% *VehicleElecAux* template. It pairs with PumpDummy to provide pump
+% control without coolant loop modelling.
 
 %% Parameters
 %
 % <html>
 % <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
 % <tr><th>Name</th><th>Default</th><th>Description</th></tr>
-% <tr><td>Coolant pipe diameter</td><td>0.019 m</td><td>Diameter of coolant piping</td></tr>
-% <tr><td>Coolant jacket channel diameter</td><td>0.0092 m</td><td>Diameter of coolant jacket channels</td></tr>
-% <tr><td>Initial coolant temperature</td><td>298.15 K</td><td>Coolant temperature at simulation start</td></tr>
-% <tr><td>Initial coolant pressure</td><td>0.101325 MPa</td><td>Coolant pressure at simulation start</td></tr>
+% <tr><td>Output voltage</td><td>24 V</td><td>DC-DC converter output voltage</td></tr>
+% <tr><td>Output power</td><td>2400 W</td><td>DC-DC converter output power</td></tr>
 % </table>
 % </html>
 %
 % See |PumpDriverParams.m| for a complete list.
 
 %% See Also
+% * <PumpDriverThDescription.html PumpDriverTh (thermal)>
 % * <PumpDriverTestHarnessDescription.html PumpDriver Test Harness>
 
-% Copyright 2022 - 2025 The MathWorks, Inc.
+% Copyright 2022 - 2026 The MathWorks, Inc.
 
 ##### SOURCE END #####
 -->

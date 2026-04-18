@@ -18,7 +18,7 @@ Self-contained, reusable subsystem modules for the Battery Electric Vehicle (BEV
 | [HVAC](HVAC/README.md) | Cabin climate system (empirical, simple-thermal) | 2 | Yes | Yes |
 | [MotorDrive](MotorDrive/README.md) | Electric motor drive unit with gear, thermal, and lubrication variants | 3 + library | Yes | Yes |
 | [Pump](Pump/README.md) | Coolant circulation pump (full, dummy) | 2 | Yes | Yes |
-| [PumpDriver](PumpDriver/README.md) | DC-DC converter driving the coolant pump | 1 | Yes | Yes |
+| [DCDC](PumpDriver/README.md) | DC-DC converter driving the coolant pump (PumpDriver, PumpDriverTh) | 2 | Yes | Yes |
 | [Radiator](Radiator/README.md) | Coolant-to-air radiator with fan | 1 | Yes | Yes |
 
 ---
@@ -63,7 +63,7 @@ BEVsystemModel.slx
   ├── HVAC              → Components/HVAC/Model/HVACsimpleTh.slx
   ├── Battery Pump      → Components/Pump/Model/Pump.slx
   ├── Motor Pump        → Components/Pump/Model/Pump.slx
-  ├── PumpDriver        → Components/PumpDriver/Model/PumpDriver.slx
+  ├── DCDC              → Components/PumpDriver/Model/PumpDriverTh.slx
   ├── Radiator          → Components/Radiator/Model/Radiator.slx
   ├── BatteryHeater     → Components/BatteryHeater/Model/Heater.slx
   └── Chiller           → Components/Chiller/Model/Chiller.slx

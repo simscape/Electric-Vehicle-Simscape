@@ -1,5 +1,5 @@
-%% PumpDriver Test Harness
-% Standalone test environment for the PumpDriver component.
+%% PumpDriverTh Test Harness
+% Standalone test environment for the DCDC (PumpDriver) component.
 
 %% Overview
 % The PumpDriverTestHarness provides a standalone simulation environment
@@ -7,7 +7,7 @@
 % voltage input, coolant boundary conditions, and pump enable signals.
 %
 % Parameters are initialized by |PumpDriverTestHarnessParams.m|, which
-% loads |PumpDriverParams.m|.
+% loads |PumpDriverThParams.m|.
 %
 % *Harness:* <matlab:open_system('PumpDriverTestHarness') PumpDriverTestHarness.slx>
 %
@@ -15,7 +15,7 @@
 %
 % *Test Case:* <matlab:edit('PumpDriverPassTests.m') PumpDriverPassTests.m>
 %
-% *Fidelity:* PumpDriver
+% *Fidelity:* PumpDriverTh
 
 %% Setup
 % Load parameters and open the test harness.
@@ -43,5 +43,6 @@ plotPumpDriverHarnessResults(simout.logsout)
 
 %% See Also
 % * <PumpDriverDescription.html PumpDriver>
+% * <PumpDriverThDescription.html PumpDriverTh>
 
 % Copyright 2022 - 2025 The MathWorks, Inc.

@@ -9,9 +9,5 @@
 %   vehicleThermal.coolant_p_init = 0.101325;      % [MPa] Coolant initial pressure
 
 %% Component Parameters
-auxPower.outputVoltage = 24;   % [V] DC-DC converter output voltage
-auxPower.outputPower   = 2400; % [W] DC-DC converter output power
-
-%% Coolant Geometry
-pumpDriver.coolant_pipe_D    = 0.019;  % [m] Coolant pipe diameter
-pumpDriver.coolant_channel_D = 0.0092; % [m] Coolant jacket channels diameter
+pumpDriver.outputVoltage = 24;   % [V] DC-DC converter output voltage
+pumpDriver.outputPower   = 2400; % [W] DC-DC converter output power

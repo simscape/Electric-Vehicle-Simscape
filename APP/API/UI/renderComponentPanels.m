@@ -37,10 +37,10 @@ function renderComponentPanels(app, availability, root)
 
         gl = uigridlayout(panel, ...
             'RowHeight',     {'fit', 'fit', 'fit', 'fit'}, ...
-            'ColumnWidth',   {'1x', '0.4x', '1x', '0.4x', 'fit'}, ...
+            'ColumnWidth',   {'1x', '1x', 'fit'}, ...
             'Padding',       [5 5 5 5], ...
             'RowSpacing',    5, ...
-            'ColumnSpacing', 10);
+            'ColumnSpacing', 5);
         gl.BackgroundColor = min(gl.BackgroundColor * 2, [1 1 1]);
 
         % ---- Row 1: instance label + description button ----
@@ -50,7 +50,7 @@ function renderComponentPanels(app, availability, root)
             'FontWeight', 'bold', ...
             'WordWrap',   'on');
         lbl.Layout.Row    = 1;
-        lbl.Layout.Column = [1 3];
+        lbl.Layout.Column = [1 2];
 
         descBtn = uibutton(gl, 'push', ...
             'Text',            '?', ...
@@ -59,29 +59,29 @@ function renderComponentPanels(app, availability, root)
             'FontColor',       [0 0 0], ...
             'ButtonPushedFcn', @(~,~) showInstanceDescription(app, info.Comp, info.Label));
         descBtn.Layout.Row    = 1;
-        descBtn.Layout.Column = 5;
+        descBtn.Layout.Column = 3;
 
         % ---- Row 2: model dropdown ----
 
         compDropDown = buildComponentDropdown(gl, info);
         compDropDown.Layout.Row    = 2;
-        compDropDown.Layout.Column = [1 5];
+        compDropDown.Layout.Column = [1 3];
 
         % ---- Row 3: action buttons ----
 
         openBtn = uibutton(gl, 'push', ...
-            'Text',            'Open', ...
+            'Text',            'Open Model', ...
             'Tooltip',         'Open selected model in Simulink', ...
             'ButtonPushedFcn', @(~,~) openInstanceModel(app, info.Comp, info.Label));
         openBtn.Layout.Row    = 3;
-        openBtn.Layout.Column = [1 2];
+        openBtn.Layout.Column = 1;
 
         paramBtn = uibutton(gl, 'push', ...
-            'Text',            'Param', ...
+            'Text',            'Param File', ...
             'Tooltip',         'Open parameter script (auto or linked)', ...
             'ButtonPushedFcn', @(~,~) openParamSmart(app, info.Comp, compDropDown, root));
         paramBtn.Layout.Row    = 3;
-        paramBtn.Layout.Column = [3 4];
+        paramBtn.Layout.Column = 2;
 
         % ---- Wire UserData references ----
 
@@ -107,17 +107,19 @@ function renderComponentPanels(app, availability, root)
 
         paramBtn.ContextMenu = cm;
 
-        % ---- Initialize tooltip and button state ----
-
-        updateParamTooltip(paramBtn, compDropDown, root);
-
         if isempty(info.Valid) || startsWith(string(compDropDown.Value), "__MISSING__")
             openBtn.Enable = 'off';
         end
 
         % ---- Row 4: red note for missing models/params ----
+        % computeParamMissingNote (inside renderRedNoteLabel) discovers and
+        % sets the default ParamFile in UserData, so tooltip must come AFTER.
 
         renderRedNoteLabel(gl, info, compDropDown, root);
+
+        % ---- Initialize tooltip (after ParamFile is set) ----
+
+        updateParamTooltip(paramBtn, compDropDown, root);
 
         % ---- Store handles ----
 
@@ -206,7 +208,7 @@ function renderRedNoteLabel(gl, info, compDropDown, root)
         'FontColor', [0.85 0 0], ...
         'WordWrap',  'on');
     missLbl.Layout.Row    = 4;
-    missLbl.Layout.Column = [1 5];
+    missLbl.Layout.Column = [1 3];
 
     % Store handle so dropdown callback can update this label
     ud = compDropDown.UserData;

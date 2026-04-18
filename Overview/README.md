@@ -63,11 +63,11 @@ Each template entry contains:
 
 ### Template → Component Matrix
 
-| Template | Battery | Motor | Charger | HVAC | Chiller | Heater | Driveline | Pump | Radiator | Controller |
-|----------|---------|-------|---------|------|---------|--------|-----------|------|----------|------------|
-| VehicleElectric | BatteryLumped | MotorDriveGear | Charger, ChargerDummy | — | — | — | Driveline, DrivelineWithBraking | — | — | ControllerFRM |
-| VehicleElecAux | BatteryLumped | MotorDriveGear | Charger, ChargerDummy | HVACsimpleTh, HVACEmpiricalRef | — | — | Driveline, DrivelineWithBraking | — | — | ControllerHVAC |
-| VehicleElectroThermal | BatteryTableBased, BatteryLumpedThermal | MotorDriveGearTh, MotorDriveLube | ChargerThermal, ChargerThermalDummy | HVACsimpleTh, HVACEmpiricalRef | Chiller, ChillerDummy | Heater, HeaterDummy | Driveline, DrivelineWithBraking | Pump, PumpDummy | Radiator | Controller |
+| Template | Battery | Motor | Charger | HVAC | Chiller | Heater | Driveline | Pump | DCDC | Radiator | Controller |
+|----------|---------|-------|---------|------|---------|--------|-----------|------|------|----------|------------|
+| VehicleElectric | BatteryLumped | MotorDriveGear | Charger, ChargerDummy | — | — | — | Driveline, DrivelineWithBraking | — | — | — | ControllerFRM |
+| VehicleElecAux | BatteryLumped | MotorDriveGear | Charger, ChargerDummy | HVACsimpleTh, HVACEmpiricalRef | — | — | Driveline, DrivelineWithBraking | PumpDummy | PumpDriver | — | ControllerHVAC |
+| VehicleElectroThermal | BatteryTableBased, BatteryLumpedThermal | MotorDriveGearTh, MotorDriveLube | ChargerThermal, ChargerThermalDummy | HVACsimpleTh, HVACEmpiricalRef | Chiller, ChillerDummy | Heater, HeaterDummy | Driveline, DrivelineWithBraking | Pump, PumpDummyTh | PumpDriverTh | Radiator | Controller |
 
 `VehicleElectroThermalLowTemp` is a `.slx` template on disk but not in the JSON configs — it is a pre-wired cold-climate variant of VehicleElectroThermal, not a separately configurable template.
 
@@ -102,11 +102,11 @@ Every component under `Components/` follows this structure:
 | [Driveline](../Components/Driveline/README.md) | Driveline, DrivelineWithBraking | No | Yes |
 | [HVAC](../Components/HVAC/README.md) | HVACEmpiricalRef, HVACSimpleTh | Yes | Yes |
 | [MotorDrive](../Components/MotorDrive/README.md) | MotorDriveGear, MotorDriveGearTh, MotorDriveLube, EmotorLib | Yes | Yes |
-| [Pump](../Components/Pump/README.md) | Pump, PumpDummy | Yes | Yes |
-| [PumpDriver](../Components/PumpDriver/README.md) | PumpDriver | Yes | Yes |
+| [Pump](../Components/Pump/README.md) | Pump, PumpDummy, PumpDummyTh | Yes | Yes |
+| [DCDC](../Components/PumpDriver/README.md) | PumpDriver, PumpDriverTh | Yes | Yes |
 | [Radiator](../Components/Radiator/README.md) | Radiator | Yes | Yes |
 
-**Totals:** 12 components, 31 fidelity variants, 10 test harnesses.
+**Totals:** 12 components, 32 fidelity variants, 10 test harnesses.
 
 ### Parameter convention
 

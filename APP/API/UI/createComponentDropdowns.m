@@ -21,6 +21,9 @@ function createComponentDropdowns(app, skipCache)
     root   = char(getBEVProjectRoot(app));
     rawCfg = jsondecode(fileread(app.ConfigDropDown.Value));
 
+    % ---- Filter template dropdown to config-available templates ----
+    filterTemplateDropdown(app, rawCfg);
+
     % ---- Resolve template name against config ----
     [templateKey, templateNotes, templateMatched] = ...
         resolveTemplateName(rawCfg, app.VehicleTemplateDropDown.Value);
@@ -284,6 +287,34 @@ function storeCacheTag(app)
 
     app.UIFigure.UserData.lastCacheTag = ...
         matlab.lang.makeValidName([templateBase '__' configBase]);
+end
+
+function filterTemplateDropdown(app, rawCfg)
+%FILTERTEMPLATEDROPDOWN Limit template dropdown to templates present in config JSON.
+    cfgKeys  = string(fieldnames(rawCfg));
+    dd       = app.VehicleTemplateDropDown;
+    allItems = string(dd.Items);
+
+    % Keep items whose basename (minus .slx) matches a config key
+    keep = false(size(allItems));
+    for k = 1:numel(allItems)
+        base = erase(allItems(k), ".slx");
+        keep(k) = any(strcmpi(cfgKeys, base));
+    end
+
+    filtered = allItems(keep);
+
+    if isempty(filtered)
+        % Config has no matching .slx templates — leave dropdown unchanged
+        return;
+    end
+
+    dd.Items = cellstr(filtered);
+
+    % If current value was filtered out, select first available
+    if ~any(strcmpi(filtered, string(dd.Value)))
+        dd.Value = dd.Items{1};
+    end
 end
 
 function syncTemplateDropdown(app, templateKey, matched)

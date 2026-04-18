@@ -17,7 +17,13 @@
                     },
             "Driveline": {"Instances": ["Driveline"],
                           "Models": ["Driveline","DrivelineWithBraking"]
-                         }
+                         },
+            "Pump": {"Instances": ["Battery Pump", "Motor Pump"],
+                     "Models": ["PumpDummy"]
+                    },
+            "PumpDriver": {"Instances": ["DCDC"],
+                           "Models": ["PumpDriver"]
+                          }
                    },
         "Controls": {
                         "Instances":["Controller"],
@@ -58,7 +64,11 @@
             },
             "Pump": {
                 "Instances": ["Battery Pump", "Motor Pump"],
-                "Models": ["Pump","PumpDummy"]
+                "Models": ["Pump","PumpDummyTh"]
+            },
+            "PumpDriver": {
+                "Instances": ["DCDC"],
+                "Models": ["PumpDriverTh"]
             },
             "Radiator": {
                 "Instances": ["Radiator"],

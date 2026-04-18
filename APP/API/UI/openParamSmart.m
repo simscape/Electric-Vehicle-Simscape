@@ -11,7 +11,26 @@ function openParamSmart(app, compName, dd, rootFolder)
                 return;
             end
 
-            % Stale link: clear it and inform user
+            % Stale link: clear it and reset to default
+            ud = dd.UserData;
+            if isfield(ud, 'ParamFile')
+                ud = rmfield(ud, 'ParamFile');
+                dd.UserData = ud;
+            end
+
+            % Re-discover default param file
+            if isstruct(dd.UserData) && isfield(dd.UserData, 'CompName')
+                computeParamMissingNote(dd.UserData.CompName, dd, dd.UserData.RootFolder);
+            end
+
+            % Update tooltip
+            if isstruct(dd.UserData) ...
+                    && isfield(dd.UserData, 'ParamButton') ...
+                    && ~isempty(dd.UserData.ParamButton) ...
+                    && isvalid(dd.UserData.ParamButton)
+                updateParamTooltip(dd.UserData.ParamButton, dd, dd.UserData.RootFolder);
+            end
+
             try
                 uialert(app.UIFigure, ...
                     "The linked param file no longer exists:" + newline + ...
@@ -20,12 +39,6 @@ function openParamSmart(app, compName, dd, rootFolder)
                     "Linked File Missing", 'Icon', 'warning');
             catch ME
                 warning('BEVapp:openParamSmart', 'uialert failed: %s', ME.message);
-            end
-
-            ud = dd.UserData;
-            if isfield(ud, 'ParamFile')
-                ud = rmfield(ud, 'ParamFile');
-                dd.UserData = ud;
             end
         end
     end
