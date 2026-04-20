@@ -119,7 +119,12 @@ function sysParams = buildSystemParameterState(configFile, templateName)
     sysParams = {'NA'};
 
     try
-        rawCfg   = jsondecode(fileread(configFile));
+        rawCfg = jsondecode(fileread(configFile));
+
+        if ~isfield(rawCfg, templateName)
+            return;
+        end
+
         sysParam = rawCfg.(templateName).SystemParameter;
 
         if iscell(sysParam)
