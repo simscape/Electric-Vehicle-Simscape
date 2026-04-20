@@ -55,7 +55,6 @@ function L = buildOverviewSection(state, outFolder)
     L{end+1} = '| Field | Value |';
     L{end+1} = '|-------|-------|';
     L{end+1} = sprintf('| Timestamp | %s |', state.Timestamp);
-    L{end+1} = sprintf('| Output Folder | %s |', relPath(outFolder, state.Root));
     L{end+1} = sprintf('| Model | %s |', state.BEVModel);
     L{end+1} = sprintf('| Model Path | %s |', ...
         fwdSlash(fullfile('Model', [state.BEVModel '.slx'])));

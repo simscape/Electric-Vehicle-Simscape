@@ -17,6 +17,8 @@ function outPath = exportSetupScript(app, state)
 
     if nargin < 2, state = buildSetupState(app); end
 
+    outPath = '';  % default so early returns don't crash caller
+
     % ---- Read identifiers from flat state ----
     topModelName     = state.BEVModel;
     vehicleTemplate  = state.TemplateName;

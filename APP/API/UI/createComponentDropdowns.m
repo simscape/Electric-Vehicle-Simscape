@@ -291,9 +291,13 @@ end
 
 function filterTemplateDropdown(app, rawCfg)
 %FILTERTEMPLATEDROPDOWN Limit template dropdown to templates present in config JSON.
+%   Re-scans disk each time so switching configs restores the full list.
     cfgKeys  = string(fieldnames(rawCfg));
     dd       = app.VehicleTemplateDropDown;
-    allItems = string(dd.Items);
+
+    % Always start from the full disk list (not the already-filtered Items)
+    paths    = getBEVAppPaths(app);
+    allItems = string(getSLXFiles(paths.VehicleTemplate));
 
     % Keep items whose basename (minus .slx) matches a config key
     keep = false(size(allItems));
