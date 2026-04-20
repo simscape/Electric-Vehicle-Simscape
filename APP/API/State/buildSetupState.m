@@ -12,7 +12,6 @@ function state = buildSetupState(app)
 %
 %   Output fields:
 %     state.TemplateName     — vehicle template basename
-%     state.SchemaVersion
 %     state.Timestamp
 %     state.BEVModel
 %     state.ConfigFile
@@ -44,7 +43,6 @@ function state = buildSetupState(app)
     state = struct();
 
     state.TemplateName   = templateName;
-    state.SchemaVersion  = '1.0';
     state.Timestamp      = char(datetime('now', 'Format', 'yyyy-MM-dd HH:mm:ss'));
     state.BEVModel       = bevModel;
     state.ConfigFile     = configFile;

@@ -13,7 +13,6 @@ function paths = getBEVAppPaths(app)
 %     paths.PresetConfig       — shipped JSON configs (APP/Config/Preset)
 %     paths.UserConfig         — user-saved JSON configs (APP/Config/User)
 %     paths.UserSetupScript    — user-exported setup scripts (Script_Data/Setup/User)
-%     paths.PresetSetupScript  — preset setup scripts (Script_Data/Setup/Preset)
 
     projectRoot = getBEVProjectRoot(app);
 
@@ -24,5 +23,4 @@ function paths = getBEVAppPaths(app)
     paths.PresetConfig      = getPresetConfigFolder();
     paths.UserConfig        = getUserConfigFolder();
     paths.UserSetupScript   = getUserSetupScriptFolder(projectRoot);
-    paths.PresetSetupScript = getPresetSetupScriptFolder(projectRoot);
 end

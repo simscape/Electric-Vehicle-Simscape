@@ -9,13 +9,13 @@ Configure and export a battery electric vehicle Simulink model through a single 
 ```
 APP/
   BEVapp.mlapp        -- App Designer GUI
-  API/                -- 49 supporting functions
+  API/                -- 50 supporting functions
     Catalog/   (3)    -- Config validation, template resolution
     Detect/    (5)    -- Model scanning, platform/controls detection
     State/     (4)    -- Setup state build, save, cache
-    Export/    (4)    -- Script generation, param export, link validation
+    Export/    (5)    -- Script generation, param export, build snapshot
     UI/       (23)    -- Dropdowns, descriptions, panels, preview
-    Util/     (14)    -- Project root, path helpers, file listing, SSR masking
+    Util/     (10)    -- Project root, path helpers, file listing, param namespace
   Config/             -- JSON configuration files
     Preset/           -- Shipped template configs (read-only)
     User/             -- User-saved setup configs (gitignored)

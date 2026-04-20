@@ -7,7 +7,7 @@ Single-page reference for how the BEV Simscape repository is organized, where tr
 | Folder | Responsibility |
 |--------|---------------|
 | [`APP/`](../APP/README.md) | BEV Setup App — GUI, API back-end, config presets, user-saved setups |
-| [`APP/API/`](../APP/API/README.md) | 53 functions in 6 domain subfolders (Catalog, Detect, State, Export, UI, Util) |
+| [`APP/API/`](../APP/API/README.md) | 50 functions in 6 domain subfolders (Catalog, Detect, State, Export, UI, Util) |
 | [`APP/Config/`](../APP/Config/README.md) | Shipped JSON configs (Preset) and user-saved configs (User, gitignored) |
 | [`Components/`](../Components/README.md) | 12 self-contained component packages with models, params, tests, docs |
 | [`Model/`](../Model/README.md) | System-level Simulink model (`BEVsystemModel.slx`) — authored assets only |
@@ -101,12 +101,12 @@ Every component under `Components/` follows this structure:
 | [Controller](../Components/Controller/README.md) | Controller, ControllerFRM, ControllerHVAC | No | No |
 | [Driveline](../Components/Driveline/README.md) | Driveline, DrivelineWithBraking | No | Yes |
 | [HVAC](../Components/HVAC/README.md) | HVACEmpiricalRef, HVACSimpleTh | Yes | Yes |
-| [MotorDrive](../Components/MotorDrive/README.md) | MotorDriveGear, MotorDriveGearTh, MotorDriveLube, EmotorLib | Yes | Yes |
+| [MotorDrive](../Components/MotorDrive/README.md) | MotorDriveGear, MotorDriveGearTh, MotorDriveLube | Yes | Yes |
 | [Pump](../Components/Pump/README.md) | Pump, PumpDummy, PumpDummyTh | Yes | Yes |
 | [DCDC](../Components/PumpDriver/README.md) | PumpDriver, PumpDriverTh | Yes | Yes |
 | [Radiator](../Components/Radiator/README.md) | Radiator | Yes | Yes |
 
-**Totals:** 12 components, 32 fidelity variants, 11 test harnesses.
+**Totals:** 12 components, 31 fidelity variants, 11 test harnesses.
 
 ### Parameter convention
 
@@ -136,7 +136,7 @@ All fidelities within the same component type share a common Simulink port inter
 | State | `APP/API/State/` (4) | `setupState` struct build, save, cache |
 | Export | `APP/API/Export/` (4) | Script generation, param export, link validation |
 | UI | `APP/API/UI/` (23) | Dropdown population, descriptions, panels, preview |
-| Util | `APP/API/Util/` (14) | Path helpers, project root, file listing, SSR masking |
+| Util | `APP/API/Util/` (10) | Path helpers, project root, file listing, param namespace |
 
 ### Key data flow
 
@@ -212,7 +212,6 @@ Workflows live under `Workflow/<Domain>/<WorkflowName>/`. Each expects the syste
 | `Test/VehicleWorkflowTests.m` | Vehicle workflow smoke tests | 1 |
 | `Test/CheckProject/` | MATLAB Project integrity checks | Varies |
 | `Components/*/TestCase/*PassTests.m` | Component-level unit tests (all 12) | 12 |
-| `APP/Test/BuildComponentEntriesTest.m` | App catalog logic unit test | 8 methods |
 
 ## Known Drift Points
 

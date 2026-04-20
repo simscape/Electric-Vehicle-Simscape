@@ -168,7 +168,7 @@ end
 
 function restoreSelectionsAfterRender(app, templateConfig, skipCache)
 %RESTORESELECTIONSAFTERRENDER Apply saved selections or restore from cache.
-    if isfield(templateConfig, 'SchemaVersion')
+    if isfield(templateConfig, 'Environment')
         % Saved setup file: apply selections directly
         try
             applySelections(app, templateConfig);

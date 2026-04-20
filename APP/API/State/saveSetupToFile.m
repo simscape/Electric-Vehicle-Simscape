@@ -5,7 +5,7 @@ function saveSetupToFile(app)
 %   Produces a JSON that is a superset of the raw template config:
 %   it keeps Instances/Models arrays (so the file can be loaded back
 %   through ConfigDropDown) and adds Selections, Environment, OperatingModes,
-%   DriveCycle, and a SchemaVersion marker.
+%   DriveCycle, and Environment/OperatingModes fields.
 %
 %   Raw config (no selections):         Saved setup (with selections):
 %     Components.Battery.Instances        same + .Selections
