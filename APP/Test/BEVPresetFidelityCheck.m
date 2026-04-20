@@ -22,11 +22,7 @@ function results = BEVPresetFidelityCheck(templateFilter)
     if nargin < 1, templateFilter = ''; end
 
     % ---- Resolve paths ----
-    try
-        root = char(matlab.project.rootProject().RootFolder);
-    catch
-        root = pwd;
-    end
+    root = char(matlab.project.rootProject().RootFolder);
 
     configFile = fullfile(root, 'APP', 'Config', 'Preset', 'VehicleTemplateConfig.json');
     rawCfg     = jsondecode(fileread(configFile));
@@ -68,30 +64,31 @@ function results = BEVPresetFidelityCheck(templateFilter)
     app = [];
 
     for k = 1:numel(plan)
-        p = plan(k);
-        results(k).Template = p.Template;
-        results(k).Name     = p.FolderName;
+        currentCombo = plan(k);
+        results(k).Template = currentCombo.Template;
+        results(k).Name     = currentCombo.FolderName;
 
-        fprintf('[%2d/%2d] %s ... ', k, numel(plan), p.FolderName);
+        fprintf('[%2d/%2d] %s ... ', k, numel(plan), currentCombo.FolderName);
 
         try
             % Reopen app for each new template (clean state per template)
-            if ~strcmp(p.Template, lastTemplate)
-                if ~isempty(app), try delete(app); catch, end; end
+            if ~strcmp(currentCombo.Template, lastTemplate)
+                if ~isempty(app), delete(app); end
                 fprintf('opening app ... ');
                 app = BEVapp;
                 drawnow; pause(3);
 
-                setTemplateDropdown(app, p.Template);
+                setTemplateDropdown(app, currentCombo.Template);
                 createComponentDropdowns(app, true);
                 controlSelectionDropdown(app);
                 drawnow;
-                lastTemplate = p.Template;
+                lastTemplate = currentCombo.Template;
             end
 
             % Apply fidelity selections to component and controller dropdowns
-            tmpl = buildApplyStruct(rawCfg.(p.Template), p.Fidelities, p.Controller);
-            applySelections(app, tmpl);
+            applyStruct = buildApplyStruct(rawCfg.(currentCombo.Template), ...
+                currentCombo.Fidelities, currentCombo.Controller);
+            applySelections(app, applyStruct);
             drawnow;
 
             % Build state and export (same path as CreateModelButton)
@@ -102,16 +99,16 @@ function results = BEVPresetFidelityCheck(templateFilter)
                 error('exportSetupScript returned empty — model or vehicle block not found');
             end
 
-            [folder, ~, ~] = fileparts(outFileModel);
+            [outputFolder, ~, ~] = fileparts(outFileModel);
             modelName = state.BEVModel;
-            outFileParam = fullfile(folder, [modelName '_params_setup.m']);
+            outFileParam = fullfile(outputFolder, [modelName '_params_setup.m']);
             exportParamScript(app, outFileParam, state);
-            exportBuildReadme(state, folder, {outFileModel, outFileParam});
+            exportBuildReadme(state, outputFolder, {outFileModel, outFileParam});
 
             % Rename timestamped folder to named folder
-            namedFolder = fullfile(setupRoot, p.FolderName);
+            namedFolder = fullfile(setupRoot, currentCombo.FolderName);
             if isfolder(namedFolder), rmdir(namedFolder, 's'); end
-            movefile(folder, namedFolder);
+            movefile(outputFolder, namedFolder);
 
             fprintf('generated ... ');
 
@@ -130,9 +127,9 @@ function results = BEVPresetFidelityCheck(templateFilter)
 
             results(k).Status = 'PASS';
             fprintf('COMPILE OK\n');
-        catch ME
+        catch setupError
             % Mark as COMPILE_FAIL if scripts were generated but compile failed
-            if isfolder(fullfile(setupRoot, p.FolderName))
+            if isfolder(fullfile(setupRoot, currentCombo.FolderName))
                 results(k).Status = 'COMPILE_FAIL';
             else
                 results(k).Status = 'ERROR';
@@ -205,17 +202,17 @@ end
 
 function setTemplateDropdown(app, templateKey)
 %SETTEMPLATEDROPDOWN Set the vehicle template dropdown to the given template key.
-    dd    = app.VehicleTemplateDropDown;
-    items = string(dd.Items);
-    bases = erase(items, '.slx');
+    dropdown = app.VehicleTemplateDropDown;
+    items    = string(dropdown.Items);
+    bases    = erase(items, '.slx');
 
     idx = find(strcmpi(bases, templateKey), 1);
     if ~isempty(idx)
-        dd.Value = dd.Items{idx};
+        dropdown.Value = dropdown.Items{idx};
     else
         % Template not in dropdown yet — add it
-        dd.Items = [dd.Items, {templateKey}];
-        dd.Value = templateKey;
+        dropdown.Items = [dropdown.Items, {templateKey}];
+        dropdown.Value = templateKey;
     end
 end
 
@@ -236,13 +233,13 @@ function tmpl = buildApplyStruct(config, fidelities, controller)
 
         model = fidelities(comp);  % from containers.Map
 
-        sels = struct();
+        selections = struct();
         for i = 1:numel(instances)
             instKey = matlab.lang.makeValidName(instances{i});
-            sels.(instKey) = struct('Model', model);
+            selections.(instKey) = struct('Model', model);
         end
 
-        tmpl.Components.(comp).Selections = sels;
+        tmpl.Components.(comp).Selections = selections;
     end
 end
 

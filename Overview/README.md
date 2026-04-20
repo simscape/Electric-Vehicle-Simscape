@@ -14,6 +14,7 @@ Single-page reference for how the BEV Simscape repository is organized, where tr
 | [`Model/VehicleTemplate/`](../Model/VehicleTemplate/README.md) | 4 vehicle template `.slx` files assembled from component references |
 | [`Model/Display/`](../Model/Display/README.md) | Energy-flow visualisation subsystems used during simulation |
 | `Script_Data/` | System-level param scripts, legacy setup scripts |
+| `Script_Data/Setup/Preset/` | Shipped preset configurations — ready-to-apply setup scripts ([picker](../Script_Data/OpenPresetPicker.m)) |
 | `Script_Data/Setup/User/` | Generated setup/param scripts from app export (gitignored) |
 | [`Workflow/`](../Workflow/README.md) | Engineering workflows — Battery, MotorDrive, Vehicle (range estimation) |
 | `Overview/` | Published MATLAB overview pages (`.m` source → `html/` output) |
@@ -160,6 +161,7 @@ All fidelities within the same component type share a common Simulink port inter
 | Build snapshot README | Same timestamped folder | No (gitignored) |
 | User-saved JSON configs | `APP/Config/User/` | No (gitignored) |
 | Preset JSON configs | `APP/Config/Preset/` | Yes |
+| Preset setup scripts | `Script_Data/Setup/Preset/<name>/` | Yes |
 | Component models | `Components/*/Model/` | Yes |
 | Vehicle templates | `Model/VehicleTemplate/` | Yes |
 
@@ -170,6 +172,16 @@ All fidelities within the same component type share a common Simulink port inter
 **Param setup script** (`*_params_setup.m`): Sets environment variables, adds component `Model/` folders to path, calls each component's `*Params.m` in sequence, calls system-level param scripts.
 
 Both scripts are designed to be replayable from a fresh checkout — they resolve paths relative to the project root.
+
+### Preset configurations
+
+Ready-to-use preset configurations are shipped in `Script_Data/Setup/Preset/`. Each preset folder contains an SSR setup script, a param setup script, and a README describing the build. To browse and apply presets, run [`OpenPresetPicker`](../Script_Data/OpenPresetPicker.m) or call `bevPresetUI.applyPreset('<name>')` programmatically.
+
+| Preset | Template | Description |
+|--------|----------|-------------|
+| `VehicleElectric_default` | VehicleElectric | Basic powertrain — battery, dual motors, charger, driveline |
+| `VehicleElecAux_default` | VehicleElecAux | Adds HVAC, coolant pumps, pump driver |
+| `VehicleElectroThermal_default` | VehicleElectroThermal | Full thermal — radiator, chiller, heater, coolant loops |
 
 ## Documentation Chain
 

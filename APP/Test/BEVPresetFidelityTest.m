@@ -85,9 +85,9 @@ classdef BEVPresetFidelityTest < matlab.unittest.TestCase
 
             % ---- Apply fidelity selections ----
             fidelities = containers.Map(Setup.CompTypes, Setup.Models);
-            sel = localBuildApplyStruct( ...
+            applyStruct = localBuildApplyStruct( ...
                 testCase.RawCfg.(Setup.Template), fidelities, Setup.Controller);
-            applySelections(testCase.App, sel);
+            applySelections(testCase.App, applyStruct);
             drawnow;
 
             % ---- Generate scripts (same path as Model Setup button) ----
@@ -97,16 +97,16 @@ classdef BEVPresetFidelityTest < matlab.unittest.TestCase
             testCase.assertNotEmpty(outFileModel, ...
                 'exportSetupScript returned empty — model or vehicle block not found');
 
-            [folder, ~, ~] = fileparts(outFileModel);
+            [outputFolder, ~, ~] = fileparts(outFileModel);
             modelName    = state.BEVModel;
-            outFileParam = fullfile(folder, [modelName '_params_setup.m']);
+            outFileParam = fullfile(outputFolder, [modelName '_params_setup.m']);
             exportParamScript(testCase.App, outFileParam, state);
-            exportBuildReadme(state, folder, {outFileModel, outFileParam});
+            exportBuildReadme(state, outputFolder, {outFileModel, outFileParam});
 
             % ---- Rename timestamped folder to named folder ----
             namedFolder = fullfile(testCase.SetupRoot, Setup.FolderName);
             if isfolder(namedFolder), rmdir(namedFolder, 's'); end
-            movefile(folder, namedFolder);
+            movefile(outputFolder, namedFolder);
 
             % ---- Verify output files ----
             ssrScript   = fullfile(namedFolder, [modelName '_ssr_setup.m']);
@@ -137,11 +137,7 @@ function params = localBuildParams()
 %LOCALBUILDPARAMS Generate one test parameter per unique template x fidelity combo.
 %   Scans ALL JSON files in APP/Config/Preset/ and deduplicates so
 %   overlapping configs (e.g. same template in two JSONs) are tested once.
-    try
-        root = char(matlab.project.rootProject().RootFolder);
-    catch
-        root = pwd;
-    end
+    root = char(matlab.project.rootProject().RootFolder);
 
     presetDir = fullfile(root, 'APP', 'Config', 'Preset');
     jsonFiles = dir(fullfile(presetDir, '*.json'));
@@ -208,25 +204,25 @@ end
 
 function localSetTemplateDropdown(app, templateKey)
 %LOCALSETTEMPLATEDROPDOWN Set the vehicle template dropdown value.
-    dd    = app.VehicleTemplateDropDown;
-    items = string(dd.Items);
-    bases = erase(items, '.slx');
-    idx   = find(strcmpi(bases, templateKey), 1);
+    dropdown = app.VehicleTemplateDropDown;
+    items    = string(dropdown.Items);
+    bases    = erase(items, '.slx');
+    idx      = find(strcmpi(bases, templateKey), 1);
     if ~isempty(idx)
-        dd.Value = dd.Items{idx};
+        dropdown.Value = dropdown.Items{idx};
     else
-        dd.Items = [dd.Items, {templateKey}];
-        dd.Value = templateKey;
+        dropdown.Items = [dropdown.Items, {templateKey}];
+        dropdown.Value = templateKey;
     end
 end
 
-function tmpl = localBuildApplyStruct(config, fidelities, controller)
+function applyStruct = localBuildApplyStruct(config, fidelities, controller)
 %LOCALBUILDAPPLYSTRUCT Build the struct that applySelections expects.
-    tmpl = struct();
-    tmpl.Controls.Model = controller;
+    applyStruct = struct();
+    applyStruct.Controls.Model = controller;
 
     comps = fieldnames(config.Components);
-    tmpl.Components = struct();
+    applyStruct.Components = struct();
 
     for c = 1:numel(comps)
         comp      = comps{c};
@@ -234,12 +230,12 @@ function tmpl = localBuildApplyStruct(config, fidelities, controller)
         if ~iscell(instances), instances = {instances}; end
         model = fidelities(comp);
 
-        sels = struct();
+        selections = struct();
         for i = 1:numel(instances)
             instKey = matlab.lang.makeValidName(instances{i});
-            sels.(instKey) = struct('Model', model);
+            selections.(instKey) = struct('Model', model);
         end
-        tmpl.Components.(comp).Selections = sels;
+        applyStruct.Components.(comp).Selections = selections;
     end
 end
 

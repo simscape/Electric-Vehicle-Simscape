@@ -15,11 +15,11 @@ function results = runBEVFidelityReport(templateFilter)
     import matlab.unittest.plugins.XMLPlugin
     import matlab.unittest.plugins.TestReportPlugin
 
-    relstr = char(matlabRelease().Release);
-    prjroot = char(currentProject().RootFolder);
+    releaseStr = char(matlabRelease().Release);
+    projectRoot = char(currentProject().RootFolder);
 
     %% Ensure APP/Test is on path
-    appTestDir = fullfile(prjroot, 'APP', 'Test');
+    appTestDir = fullfile(projectRoot, 'APP', 'Test');
     addpath(appTestDir);
 
     %% Build suite
@@ -31,7 +31,7 @@ function results = runBEVFidelityReport(templateFilter)
                 'Property', 'Setup', 'Name', ['*' char(templateFilter) '*']));
     end
 
-    fprintf('Running %d test points (%s)\n', numel(suite), relstr);
+    fprintf('Running %d test points (%s)\n', numel(suite), releaseStr);
 
     %% Report folder
     reportDir = fullfile(appTestDir, 'Reports');
@@ -41,11 +41,11 @@ function results = runBEVFidelityReport(templateFilter)
     runner = TestRunner.withTextOutput('OutputDetail', Verbosity.Detailed);
 
     % JUnit XML (CI-friendly)
-    xmlFile = fullfile(reportDir, ['FidelityResults_' relstr '.xml']);
+    xmlFile = fullfile(reportDir, ['FidelityResults_' releaseStr '.xml']);
     addPlugin(runner, XMLPlugin.producingJUnitFormat(xmlFile));
 
     % HTML report
-    htmlFile = fullfile(reportDir, ['FidelityReport_' relstr '.html']);
+    htmlFile = fullfile(reportDir, ['FidelityReport_' releaseStr '.html']);
     addPlugin(runner, TestReportPlugin.producingHTML(htmlFile));
 
     %% Run

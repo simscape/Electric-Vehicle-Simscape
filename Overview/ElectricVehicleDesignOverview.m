@@ -55,8 +55,8 @@ open_system('BEVsystemModel')
 % </tr>
 % <tr>
 %   <td><strong>Start from a preset</strong></td>
-%   <td>Use a shipped vehicle configuration from <strong>APP/Config/Preset/</strong> as a ready-made component and fidelity selection.</td>
-%   <td>Running workflows with a known-good configuration (electrical-only, electro-thermal, or cold-climate).</td>
+%   <td>Use the <a href="matlab:run('OpenPresetPicker')">Preset Picker</a> to browse and apply a shipped vehicle configuration. Three defaults are available: <em>VehicleElectric</em>, <em>VehicleElecAux</em>, and <em>VehicleElectroThermal</em>.</td>
+%   <td>Running workflows with a known-good configuration (electrical-only, auxiliary, or full electro-thermal).</td>
 % </tr>
 % <tr>
 %   <td><strong>Use the BEV Setup App</strong></td>

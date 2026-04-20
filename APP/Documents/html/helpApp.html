@@ -54,17 +54,16 @@
 <div id="landing" class="landing" role="region" aria-label="Overview" style="display:none">
   <h1>BEV App Overview</h1>
   <div>
-    <p>Build a BEV model by choosing the vehicle configuration and subsystem fidelity. You can preview the model and parameter file, toggle environment, HVAC, and driver settings, and export the setup.</p>
+    <p>Build a BEV model by choosing the vehicle configuration and component fidelity. You can preview the model and parameter file, toggle environment, HVAC, and driver settings, and export the setup.</p>
     <p><strong>Why:</strong> This standardizes model creation, speeds up configuration, and makes selections reproducible.</p>
   </div>
 
   <section class="panel" aria-label="Overview steps">
     <ol style="margin:0 0 8px 18px;padding:0">
-      <li>Choose <strong>vehicle configuration</strong>.</li>
-      <li>Load <strong>scenario file</strong>.</li>
-      <li>Pick <strong>component fidelity</strong>.</li>
-      <li>Set <strong>Env, HVAC, and Driver</strong>.</li>
-      <li><strong>Save Setup</strong>, export <strong>parameters</strong>, or <strong>Create Model</strong>.</li>
+      <li>Pick <strong>Base Model</strong>, <strong>Design Scenario</strong>, and <strong>Vehicle Config</strong>.</li>
+      <li>Choose <strong>component fidelity</strong> for each component.</li>
+      <li>Set <strong>Environment</strong>, <strong>HVAC</strong>, and <strong>Driver Setup</strong>.</li>
+      <li><strong>Save Setup</strong>, <strong>Export Parameter</strong>, or <strong>Model Setup</strong>.</li>
     </ol>
     <button id="startBtn" class="nav primary" style="width:100%;margin-top:8px">Start tutorial</button>
   </section>
@@ -97,63 +96,58 @@
 </div>
 
 <script>
-  // Steps content (exactly as in your version)
   const steps = [
-    { t: "Vehicle Configuration (top-left)", h: `
-        <p><strong>Base Model:</strong> select the .slx canvas to configure (model laid out on the canvas).</p>
-        <p><strong>Veh. Config:</strong> choose vehicle type and fidelity (e.g., Car/SUV; with/without Thermal & HVAC; level of detail).</p>
-        <p><strong>Design Scenario:</strong> select a scenario file that defines allowed components and fidelity for the chosen platform.</p>
-        <div class="note"><strong>Why it matters:</strong> This aligns the app UI to the platform’s architecture & available options for everything that follows.</div>
+    { t: "Vehicle Configuration", h: `
+        <p><strong>Base Model</strong> — pick the Simulink model that contains your BEV layout.</p>
+        <p><strong>Design Scenario</strong> — pick a configuration that controls which components and fidelities are available.</p>
+        <p><strong>Vehicle Config</strong> — pick the vehicle template (e.g. electric-only, electro-thermal, with HVAC).</p>
+        <div class="note">These three choices control what the rest of the app offers.</div>
       ` },
-    { t: "Component Selection (left column)", h: `
-        <p>Each subsystem (e.g., <em>BatteryHV</em>, <em>Front Motor</em>, <em>Rear Motor</em>) gets a dropdown built <em>on the fly</em> from your component folders.</p>
+    { t: "Component Selection", h: `
+        <p>Each component (e.g. <em>BatteryHV</em>, <em>Front Motor</em>, <em>Rear Motor</em>) has a dropdown listing available fidelities.</p>
         <ul>
-          <li><strong>Open</strong> — open the component’s model.</li>
-          <li><strong>Param</strong> — open its linked parameter file; right‑click the <em>Param</em> button to <em>Link Param File…</em> or <em>Unlink</em>.</li>
-	 <li><strong>?</strong> — show the preview and description of the modell selected.</li>
+          <li><strong>?</strong> — show preview and description of the selected model.</li>
+          <li><strong>Open Model</strong> — open the selected model in Simulink.</li>
+          <li><strong>Param File</strong> — open the parameter file. Right-click to <em>Link Param File…</em> or <em>Unlink</em>.</li>
         </ul>
       ` },
-    { t: "Selection Preview (center-top)", h: `
-        <p>Shows a <strong>dynamic canvas screenshot</strong> of the BEV model.</p>
+    { t: "Selection Preview", h: `
+        <p>Shows a preview image of the selected component model. Auto-updates when you change a dropdown.</p>
+      ` },
+    { t: "Description", h: `
+        <p>Shows what the selected model does, its inputs and outputs, and notes on fidelity. Use it to check you picked the right one.</p>
+      ` },
+    { t: "Environment and Initial Condition", h: `
+        <p>Set the starting conditions for your simulation:</p>
         <ul>
-          <li>Auto-updates when you change selections.</li>
-          <li>Click the <strong>?</strong> button to refresh on demand.</li>
+          <li><strong>Ambient Temperature</strong> — outside air temperature (default 25 degC).</li>
+          <li><strong>Ambient Pressure Initial</strong> — starting air pressure (default 1 bar).</li>
+          <li><strong>Relative Humidity Initial</strong> — humidity of the outside air (default 0.3).</li>
+          <li><strong>CO2 Fraction Initial</strong> — CO2 level in outside air (default 0.0004).</li>
         </ul>
       ` },
-    { t: "Description (center)", h: `
-        <p>Context for the current selection, expected IOs, assumptions, and short notes on fidelity or limitations. Use this to quickly sanity-check that you picked the right asset.</p>
-      ` },
-    { t: "Env. Condition (top-right)", h: `
-        <p>Global simulation ambient setting:</p>
+    { t: "HVAC", h: `
         <ul>
-          <li><strong>Ambient</strong> — temperature & air press</li>
-          <li><strong>Relative Humidity</strong> — surface friction & wind</li>
+          <li><strong>AC status</strong> — toggle air conditioning on or off. When on, it draws extra power from the battery.</li>
+          <li><strong>Cabin Temperature Setpoint</strong> — the target cabin temperature (default 20 degC).</li>
         </ul>
       ` },
-    { t: "HVAC (middle-right)", h: `
-        <p>Enable A/C load like a car dashboard:</p>
+    { t: "Driver Setup", h: `
         <ul>
-          <li><strong>AC On/Off</strong> — enable/disable A/C; adds compressor load to the plant.</li>
-          <li><strong>Target Cabin Temp</strong> — desired cabin setpoint used to compute HVAC thermal load.</li>
+          <li><strong>AWD On</strong> — toggle all-wheel drive. When on, both front and rear motors are active.</li>
+          <li><strong>Regen On</strong> — toggle regenerative braking. When on, braking feeds energy back to the battery.</li>
+          <li><strong>Charging Off</strong> — toggle charging mode. Disables AWD and Regen when on.</li>
+          <li><strong>Control Selection</strong> — pick the controller for your configuration.</li>
+          <li><strong>Drive Cycle</strong> — pick the speed profile (e.g. FTP72, WLTP, US06).</li>
         </ul>
       ` },
-    { t: "Driver (middle-right)", h: `
-        <p>Control toggles that affect the plant:</p>
+    { t: "Save, Export, and Model Setup", h: `
         <ul>
-          <li><strong>AWD / RWD</strong> — select the drivetrain mode used for torque split and which motor(s) are active.</li>
-          <li><strong>Regeneration</strong> — enable/adjust regen so decel feeds energy back to the battery.</li>
-          <li><strong>Charging</strong> — enable/disable charging logic for the scenario (e.g., plug‑in, fast‑charge).</li>
-          <li><strong>Control Selection</strong> — choose cotroller for the components and configuration selected.</li>
-          <li><strong>Drive Cycle</strong> — choose the speed/grade profile (standard cycles or a custom signal).</li>
+          <li><strong>Save Setup</strong> — save your selections to reload later from the Design Scenario dropdown.</li>
+          <li><strong>Export Parameter</strong> — generate a MATLAB script with all parameter values.</li>
+          <li><strong>Model Setup</strong> — build the Simulink model with your selected fidelities and settings.</li>
         </ul>
-      ` },
-    { t: "Model Actions (bottom-right corner)", h: `
-        <ul>
-          <li><strong>Save Setup</strong> — save the current session (component selections, environment, HVAC, driver settings) as a JSON config file under <em>APP/Config/User</em>. Saved setups appear in the Design Scenario dropdown and can be loaded back to restore a full session.</li>
-          <li><strong>Parameter Export</strong> — generate a MATLAB parameter script that calls all linked component parameter files and sets environment/HVAC variables.</li>
-          <li><strong>Create Model</strong> — update the Simulink model subsystem references, apply environment and driver settings, and prepare the model for simulation.</li>
-        </ul>
-        <div class="note"><strong>Quick Start:</strong> 1) Pick <em>.slx</em>, platform, design scenario → 2) Choose components + Env/HVAC/Driver → 3) Review preview → <em>Create Model</em>.</div>
+        <div class="note"><strong>Quick start:</strong> Vehicle Configuration → Component Selection → Environment / HVAC / Driver Setup → <em>Model Setup</em>.</div>
       ` }
   ];
 

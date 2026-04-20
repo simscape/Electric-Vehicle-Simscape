@@ -346,29 +346,29 @@
           <ul>
             <li><a href="#overview">Overview</a></li>
             <li><a href="#prepare">Prerequisites</a></li>
-            <li><a href="#select-platform">Select a Vehicle Platform</a></li>
+            <li><a href="#select-platform">Vehicle Configuration</a></li>
             <li>
               <button class="sidebar-toggle" aria-expanded="false" aria-controls="nav-components">
-                <span class="sidebar-toggle-label">Choose Component Models</span>
+                <span class="sidebar-toggle-label">Component Selection</span>
                 <span class="sidebar-toggle-icon">&#9654;</span>
               </button>
               <ul id="nav-components" class="sidebar-sublist">
-                <li><a href="#choose-components">Component Selection</a></li>
+                <li><a href="#choose-components">Overview</a></li>
                 <li><a href="#dropdown-population">Dropdown Population</a></li>
                 <li><a href="#component-controls">Row Controls</a></li>
                 <li><a href="#link-params">Link Parameter Files</a></li>
               </ul>
             </li>
-            <li><a href="#review-preview">Review Preview and Description</a></li>
-            <li><a href="#define-environment">Environment and Initial Conditions</a></li>
-            <li><a href="#configure-hvac">HVAC Settings</a></li>
+            <li><a href="#review-preview">Selection Preview and Description</a></li>
+            <li><a href="#define-environment">Environment and Initial Condition</a></li>
+            <li><a href="#configure-hvac">HVAC</a></li>
             <li>
               <button class="sidebar-toggle" aria-expanded="false" aria-controls="nav-driver">
-                <span class="sidebar-toggle-label">Driver, Controls, Drive Cycle</span>
+                <span class="sidebar-toggle-label">Driver Setup</span>
                 <span class="sidebar-toggle-icon">&#9654;</span>
               </button>
               <ul id="nav-driver" class="sidebar-sublist">
-                <li><a href="#setup-driver">Driver Setup</a></li>
+                <li><a href="#setup-driver">Overview</a></li>
                 <li><a href="#drive-modes">Drive Mode Buttons</a></li>
                 <li><a href="#control-selection">Control Selection</a></li>
                 <li><a href="#drive-cycle">Drive Cycle</a></li>
@@ -376,15 +376,14 @@
             </li>
             <li>
               <button class="sidebar-toggle" aria-expanded="false" aria-controls="nav-actions">
-                <span class="sidebar-toggle-label">Save, Export, Create</span>
+                <span class="sidebar-toggle-label">Save, Export, Model Setup</span>
                 <span class="sidebar-toggle-icon">&#9654;</span>
               </button>
               <ul id="nav-actions" class="sidebar-sublist">
-                <li><a href="#export">Actions Overview</a></li>
                 <li><a href="#save-setup">Save Setup</a></li>
-                <li><a href="#param-export">Parameter Export</a></li>
+                <li><a href="#param-export">Export Parameter</a></li>
                 <li><a href="#missing-params">Missing Param Links</a></li>
-                <li><a href="#create-model">Create Model</a></li>
+                <li><a href="#create-model">Model Setup</a></li>
               </ul>
             </li>
           </ul>
@@ -406,27 +405,26 @@
       <section id="overview">
         <h2>Overview</h2>
         <p>
-          The <strong>BEV App</strong> provides a guided interface for assembling a battery electric vehicle model from
-          component subsystems. Instead of manually wiring models and editing scripts, you select a vehicle configuration,
-          pick component fidelities from dropdowns, set environment and HVAC conditions, and let the app generate the
-          configured model and parameter scripts.
+          The <strong>BEV App</strong> walks you through building a battery electric vehicle model step by step.
+          Instead of wiring models and editing scripts by hand, you pick your vehicle setup, choose components
+          from dropdowns, set weather and cabin conditions, and the app builds the model and scripts for you.
         </p>
 
         <div class="workflow-flowchart" aria-label="App workflow overview">
           <div class="flow-step">
             <div class="flow-step-number">1</div>
             <div class="flow-step-title">Platform</div>
-            <div class="flow-step-text">Select base model, design scenario, and vehicle template.</div>
+            <div class="flow-step-text">Pick the base model and vehicle type you want to work with.</div>
           </div>
           <div class="flow-step">
             <div class="flow-step-number">2</div>
             <div class="flow-step-title">Components</div>
-            <div class="flow-step-text">Pick fidelity for each subsystem instance and link parameter files.</div>
+            <div class="flow-step-text">Choose a fidelity for each component and link its parameter file.</div>
           </div>
           <div class="flow-step">
             <div class="flow-step-number">3</div>
             <div class="flow-step-title">Configure</div>
-            <div class="flow-step-text">Set environment, HVAC, driver modes, controller, and drive cycle.</div>
+            <div class="flow-step-text">Set weather, cabin temperature, driving mode, and drive cycle.</div>
           </div>
           <div class="flow-step">
             <div class="flow-step-number">4</div>
@@ -448,8 +446,8 @@
             <p>Before starting, open the project by running the project file.</p>
             <pre><code>openProject("ElectricVehicleSimscape.prj")</code></pre>
             <p>
-              Opening the project initializes the environment and makes all models, component folders,
-              configuration files, and helper scripts available to the app.
+              Opening the project sets up your MATLAB path so the app can find all models,
+              components, and configuration files it needs.
             </p>
           </div>
 
@@ -477,18 +475,18 @@
 
       <!-- Select a vehicle platform -->
       <section id="select-platform">
-        <h2>Select a Vehicle Platform</h2>
+        <h2>Vehicle Configuration</h2>
         <p>
-          Select a base model and a vehicle configuration so the app can determine which component and control options are available.
+          Start by telling the app which vehicle you want to work with. The dropdowns below control which components and options become available in the rest of the app.
         </p>
 
         <img src="../images/VehicleConfigPanel.png" alt="Vehicle platform selection panel" style="max-width: 280px;" />
 
         <p>The following list describes what each dropdown does.</p>
         <ol>
-          <li><strong>Base Model</strong> &mdash; select the .slx canvas that contains the BEV layout.</li>
-          <li><strong>Design Scenario</strong> &mdash; select the JSON config that defines allowed components and fidelities. Preset configs ship with the project; user-saved setups appear below a separator.</li>
-          <li><strong>Veh. Config</strong> &mdash; select the vehicle template that defines the model architecture.</li>
+          <li><strong>Base Model</strong> &mdash; pick the Simulink model file that contains your BEV layout.</li>
+          <li><strong>Design Scenario</strong> &mdash; pick a preset configuration that controls which components and fidelities are available. Setups you have saved yourself appear below a separator line.</li>
+          <li><strong>Vehicle Config</strong> &mdash; pick the vehicle template that sets the overall model structure (e.g. electric-only, electro-thermal, with HVAC).</li>
         </ol>
 
         <img src="../images/BEVmodel.png" alt="Example base model structure" />
@@ -497,84 +495,73 @@
 
       <!-- Choose component models -->
       <section id="choose-components">
-        <h2>Choose Component Models</h2>
+        <h2>Component Selection</h2>
         <p>
-          Select the component variants used to build the configured model. The app reads the design scenario JSON
-          and matches each instance in the base model to its list of allowed component models.
+          Each row in this panel represents one component in the vehicle (battery, motor, pump, etc.).
+          Use the dropdown in each row to choose which fidelity you want for that component.
         </p>
 
         <img src="../images/ComponentPanel.png" alt="Component selection panel" style="max-width: 280px;" />
 
         <p>
-          The label in each row comes from the config <code>Instances</code> list and must match a subsystem name in your base model.
-          The dropdown lists model files defined under <code>Models</code>, filtered to show only models that exist on disk.
+          The row label shows the component name (e.g. "Battery", "Rear Motor (EM2)").
+          The dropdown next to it lists the available fidelities for that component.
+          Only models that are present in the project folder appear in the list.
         </p>
 
         <h3 id="dropdown-population">How the dropdown gets populated</h3>
         <ul>
-          <li>The app scans the component repository for available model files.</li>
-          <li>It filters them against the config <code>Models</code> list for each component.</li>
-          <li>Only matching models appear in the dropdown. Missing models are marked with a red note.</li>
+          <li>The app looks through the project's component folders for available model files.</li>
+          <li>It only shows models that are allowed by the Design Scenario you selected.</li>
+          <li>If a model file is missing from the project, it is marked with a red note.</li>
         </ul>
-
-        <p>Example config structure:</p>
-        <pre><code>"Components": {
-  "BatteryHV": {
-    "Instances": ["Battery"],
-    "Models": ["BatteryLumped", "BatteryLumpedThermal", "BatteryTableBased"]
-  },
-  "MotorDrive": {
-    "Instances": ["Rear Motor (EM2)", "Front Motor (EM1)"],
-    "Models": ["MotorDriveGear", "MotorDriveGearTh", "MotorDriveLube"]
-  }
-}</code></pre>
 
         <h3 id="component-controls">Controls in each component row</h3>
         <table>
           <tr><th>Control</th><th>Description</th></tr>
-          <tr><td><strong>Label</strong></td><td>Instance name from config <code>Instances</code>; must match the subsystem name in the base model.</td></tr>
-          <tr><td><strong>Dropdown</strong></td><td>Select a component model from the filtered <code>Models</code> list.</td></tr>
-          <tr><td><strong>Open</strong></td><td>Open the selected component model in Simulink.</td></tr>
-          <tr><td><strong>Param</strong></td><td>Open the parameter script for the component. Right-click to link or unlink a custom param file.</td></tr>
-          <tr><td><strong>?</strong></td><td>Show the preview snapshot and description for the selected model.</td></tr>
+          <tr><td><strong>Label</strong></td><td>The name of the component (e.g. "Battery", "Front Motor (EM1)").</td></tr>
+          <tr><td><strong>Dropdown</strong></td><td>Pick which fidelity to use for this component.</td></tr>
+          <tr><td><strong>Open Model</strong></td><td>Open the selected model in Simulink so you can inspect it.</td></tr>
+          <tr><td><strong>Param File</strong></td><td>Open the parameter file for this component. Right-click to link or unlink a different parameter file.</td></tr>
+          <tr><td><strong>?</strong></td><td>Show a preview image and description of the selected model.</td></tr>
         </table>
 
         <h3 id="link-params">Link parameter files</h3>
         <p>
-          Link a parameter file to a component so the Param button opens the correct script during setup and export.
-          The default convention is <code>&lt;ModelName&gt;Params.m</code> in the component's Model folder.
-          Right-click the Param button to link or unlink a custom file.
+          Each component can have a parameter file that defines its values (sizes, ratings, etc.).
+          By default, the app looks for a file named <code>&lt;ModelName&gt;Params.m</code> in the component's Model folder.
+          If you want to use a different file, right-click the Param File button to link or unlink it.
         </p>
 
         <img src="../images/ComponentPanelParam.png" alt="Right-click Param menu" style="max-width: 280px;" />
 
         <div class="note">
-          Start with nonthermal variants to check connectivity, then switch to electro-thermal variants after the setup is stable.
+          Start with simpler (nonthermal) fidelities to make sure everything connects properly. Once the setup works, switch to electro-thermal fidelities for more detailed results.
         </div>
       </section>
 
       <!-- Review preview and description -->
       <section id="review-preview">
-        <h2>Review the Preview and Description</h2>
+        <h2>Selection Preview and Description</h2>
         <p>
-          Confirm that the selected component model matches what you intend to use.
-          The preview and description update automatically when you change a dropdown selection.
+          After picking a component from the dropdown, check the preview and description to make sure it is the right one.
+          Both panels update automatically whenever you change a selection.
         </p>
 
         <h3>Preview panel</h3>
         <ul>
           <li>Shows a snapshot of the selected model canvas.</li>
           <li>Updates when you change a dropdown selection.</li>
-          <li>Helps catch missing connections or wrong instance selection before creating the model.</li>
+          <li>Helps you spot problems (missing connections, wrong component) before creating the model.</li>
         </ul>
 
         <img src="../images/SelectionPreviewPanel.png" alt="Preview panel" style="max-width: 340px;" />
 
         <h3>Description panel</h3>
         <ul>
-          <li>Summarizes the purpose of the selected model.</li>
-          <li>Describes main interfaces and key assumptions.</li>
-          <li>Provides context when multiple fidelity variants exist.</li>
+          <li>Explains what the selected model does.</li>
+          <li>Lists its main inputs, outputs, and any important assumptions.</li>
+          <li>Helps you decide between fidelities when more than one is available.</li>
         </ul>
 
         <img src="../images/SelectionDescriptionPanel.png" alt="Description panel" style="max-width: 340px;" />
@@ -582,156 +569,150 @@
 
       <!-- Environment and initial conditions -->
       <section id="define-environment">
-        <h2>Define Environment and Initial Conditions</h2>
+        <h2>Environment and Initial Condition</h2>
         <p>
-          Define ambient environment and initial state values used by thermal and fluid components.
-          These values propagate to the environment subsystem in the base model.
+          Set the weather and starting conditions for your simulation.
+          These values are used by any component that depends on temperature, pressure, or humidity.
         </p>
 
         <table>
           <tr><th>Parameter</th><th>Description</th><th>Default</th></tr>
-          <tr><td>Amb. Temp</td><td>Ambient air temperature around the vehicle</td><td>25 &deg;C</td></tr>
-          <tr><td>Amb. Press Init</td><td>Initial atmospheric pressure</td><td>1 bar</td></tr>
-          <tr><td>Rel. Humidity Init</td><td>Initial relative humidity of ambient air</td><td>0.3</td></tr>
-          <tr><td>CO2 Fraction Init</td><td>Carbon dioxide volume fraction in ambient air</td><td>0.0004</td></tr>
+          <tr><td>Ambient Temperature</td><td>Outside air temperature</td><td>25 degC</td></tr>
+          <tr><td>Ambient Pressure Initial</td><td>Starting air pressure (lower at high altitude)</td><td>1 bar</td></tr>
+          <tr><td>Relative Humidity Initial</td><td>Starting humidity of the outside air (0 = dry, 1 = fully humid)</td><td>0.3</td></tr>
+          <tr><td>CO2 Fraction Initial</td><td>CO2 level in outside air (typical outdoor value is 0.0004)</td><td>0.0004</td></tr>
         </table>
 
         <img src="../images/EnvInitPanel.png" alt="Environment panel" style="max-width: 340px;" />
 
         <div class="note">
-          Define multiple environment presets (Hot City, Cold Highway, Altitude Test), then compare results by switching presets.
+          Try saving different environment setups (e.g. Hot City, Cold Highway, Altitude Test) and compare simulation results by switching between them.
         </div>
       </section>
 
       <!-- HVAC settings -->
       <section id="configure-hvac">
-        <h2>Configure HVAC Settings</h2>
+        <h2>HVAC</h2>
         <p>
-          Control whether cabin air conditioning is active during simulation and set the target cabin temperature.
-          This panel is enabled only when the selected configuration includes an HVAC component.
+          Turn the cabin air conditioning on or off and set the target cabin temperature.
+          This panel is only active when your vehicle configuration includes an HVAC component.
         </p>
 
         <table>
           <tr><th>Control</th><th>Description</th><th>Default</th></tr>
-          <tr><td>AC Status</td><td>Toggle the air conditioning system on or off</td><td>Off</td></tr>
-          <tr><td>Cabin Temp Setpoint</td><td>Desired cabin air temperature</td><td>20 &deg;C</td></tr>
+          <tr><td>AC status</td><td>Toggle air conditioning on or off</td><td>Off</td></tr>
+          <tr><td>Cabin Temperature Setpoint</td><td>Target cabin air temperature</td><td>20 degC</td></tr>
         </table>
 
         <p>
-          Turning AC on increases total power demand and thermal load, which affects battery drain and range.
-          For baseline studies, run with AC off first, then enable AC to measure the impact on efficiency.
+          Turning AC on draws more power from the battery, which reduces driving range.
+          To see the difference, run once with AC off, then again with AC on and compare the results.
         </p>
 
         <img src="../images/HVACConfigPanel.png" alt="HVAC configuration panel" style="max-width: 340px;" />
       </section>
 
-      <!-- Driver, controls, drive cycle -->
+      <!-- Driver Setup -->
       <section id="setup-driver">
-        <h2>Set Up Driver, Controls, and Drive Cycle</h2>
+        <h2>Driver Setup</h2>
         <p>
-          Set drive mode options, select a controller model, and choose a drive cycle.
-          These settings define how the vehicle is driven in simulation and which speed profile the driver follows.
+          Choose how the vehicle is driven: which wheels are powered, whether braking recovers energy,
+          which controller runs the logic, and which drive cycle sets the target speed.
         </p>
 
-        <img src="../images/DriverSetupPanel.png" alt="Driver setup panel" style="max-width: 340px;" />
+        <img src="../images/DriverSetupPanel.png" alt="Driver Setup panel" style="max-width: 340px;" />
 
         <h3 id="drive-modes">Drive mode buttons</h3>
         <table>
           <tr><th>Button</th><th>Description</th></tr>
-          <tr><td><strong>AWD</strong></td><td>Enable or disable all-wheel drive. When enabled, both front and rear motors are active.</td></tr>
-          <tr><td><strong>Regen</strong></td><td>Enable or disable regenerative braking. When disabled, the model needs a mechanical brake subsystem.</td></tr>
-          <tr><td><strong>Charging</strong></td><td>Switch to charging mode. Disables propulsion settings such as AWD and Regen.</td></tr>
+          <tr><td><strong>AWD On</strong></td><td>Toggle all-wheel drive. When on, both front and rear motors are active.</td></tr>
+          <tr><td><strong>Regen On</strong></td><td>Toggle regenerative braking. When on, braking feeds energy back to the battery.</td></tr>
+          <tr><td><strong>Charging Off</strong></td><td>Toggle charging mode. When on, disables AWD and Regen.</td></tr>
         </table>
 
-        <h3 id="control-selection">Control selection</h3>
+        <h3 id="control-selection">Control Selection</h3>
         <p>
-          The controller dropdown is populated from the config <code>Controls</code> section.
-          It lists control models available for the selected configuration.
+          Pick the controller that matches your vehicle configuration.
+          Different controllers handle different features (e.g. basic powertrain control vs. HVAC-aware control).
         </p>
-
-        <pre><code>"Controls": {
-  "Instances": ["Controller"],
-  "Models": ["ControllerFRM", "ControllerHVAC"]
-}</code></pre>
 
         <table>
           <tr><th>Element</th><th>Description</th></tr>
-          <tr><td><strong>Dropdown</strong></td><td>Lists control models from config <code>Models</code>.</td></tr>
-          <tr><td><strong>?</strong></td><td>Shows the control description and preview of the control block layout.</td></tr>
+          <tr><td><strong>Control Selection</strong></td><td>Pick a controller from the available options.</td></tr>
+          <tr><td><strong>?</strong></td><td>Show a description and preview of the selected controller.</td></tr>
         </table>
 
-        <h3 id="drive-cycle">Drive cycle selection</h3>
+        <h3 id="drive-cycle">Drive Cycle</h3>
         <p>
-          The drive cycle dropdown defines which speed-versus-time profile the driver follows.
-          The list is populated from options available in the drive cycle source block inside the base model.
+          Pick the speed pattern the driver will follow during simulation
+          (e.g. city driving, highway, or a standard test cycle).
         </p>
         <ul>
           <li>Common cycles: <code>FTP72</code>, <code>WLTP</code>, <code>NEDC</code>, <code>US06</code>.</li>
           <li>If no options appear, install the Simulink Support Package for Vehicle Drive Cycles.</li>
-          <li>The <strong>?</strong> button opens the description and preview of the selected drive cycle.</li>
+          <li>The <strong>?</strong> button shows the description and preview of the selected drive cycle.</li>
         </ul>
 
         <div class="note">
-          Start with a short cycle such as FTP72 to verify setup, then switch to longer cycles such as WLTP for performance studies.
+          Start with a short cycle such as FTP72 to verify setup, then switch to longer cycles such as WLTP for detailed studies.
         </div>
       </section>
 
       <!-- Save, export, create -->
       <section id="export">
-        <h2>Save Setup, Export Parameters, and Create Model</h2>
+        <h2>Save Setup, Export Parameter, and Model Setup</h2>
         <p>
-          In this section, you save your configuration, generate parameter scripts, and create the Simulink model.
+          Once you are happy with your selections, use these buttons to save your work, generate parameter files, or build the final model.
         </p>
 
         <img src="../images/ExportPanel.png" alt="Action controls" style="max-width: 340px;" />
 
         <h3 id="save-setup">Save Setup</h3>
         <p>
-          Save the current session as a JSON config file. The saved setup captures all component selections,
-          environment settings, HVAC conditions, and operating modes.
+          Save everything you have selected (components, environment, HVAC, driver settings) so you can reload it later.
         </p>
         <ul>
-          <li>Saves to <code>APP/Config/User/</code> as a JSON file.</li>
-          <li>The saved setup appears in the Design Scenario dropdown below a separator.</li>
-          <li>Loading a saved setup restores the full session including all selections and settings.</li>
+          <li>Your setup is saved as a file in <code>APP/Config/User/</code>.</li>
+          <li>Saved setups appear in the Design Scenario dropdown so you can load them back in one click.</li>
+          <li>Loading a saved setup restores all your selections and settings exactly as they were.</li>
         </ul>
 
         <div class="note">
-          <strong>Save Setup</strong> creates a reusable JSON config that can be loaded back into the app.
-          <strong>Parameter Export</strong> generates a MATLAB script for simulation. They serve different purposes.
+          <strong>Save Setup</strong> saves your selections so you can reload them in the app later.
+          <strong>Export Parameter</strong> creates a MATLAB script you can run before simulation. They do different things.
         </div>
 
-        <h3 id="param-export">Parameter Export</h3>
+        <h3 id="param-export">Export Parameter</h3>
         <p>
-          Generate MATLAB parameter scripts that correspond to the selected components and controls.
+          Create a MATLAB script that sets up all the parameter values your model needs to run.
         </p>
         <ul>
-          <li>Creates or updates a parameter script for the current configuration.</li>
-          <li>Collects linked component parameter files from the Components panel.</li>
-          <li>Writes HVAC, environment, and driver variables when exposed by the configuration.</li>
+          <li>Generates a script that loads parameters for every component you selected.</li>
+          <li>Pulls in the parameter files you linked in the Components panel.</li>
+          <li>Includes environment, HVAC, and driver values if your configuration uses them.</li>
         </ul>
 
         <h3 id="missing-params">Missing parameter link panel</h3>
         <p>
-          If components do not have a parameter file linked, the app opens a link panel when you press Parameter Export.
+          If any component does not have a parameter file linked yet, the app will ask you to link one when you press Export Parameter.
         </p>
         <ul>
-          <li>Browse to an existing parameter file and link it.</li>
-          <li>Continue with defaults for components that remain unlinked.</li>
+          <li>Browse to a parameter file and link it.</li>
+          <li>Or skip it to use default values for that component.</li>
         </ul>
         <p>
-          This uses the same linking mechanism as the right-click option in the Components panel.
+          This works the same way as right-clicking the Param File button in the Component Selection panel.
         </p>
 
-        <h3 id="create-model">Create Model</h3>
+        <h3 id="create-model">Model Setup</h3>
         <p>
-          Generate or update the configured Simulink model so it is ready to simulate.
+          Build the Simulink model based on everything you configured in the app.
         </p>
         <ul>
-          <li>Opens the selected base model.</li>
-          <li>Locates subsystem instances defined by config <code>Instances</code>.</li>
-          <li>Replaces or configures those subsystems with the selected component models.</li>
-          <li>Applies environment, HVAC, driver, controls, and drive cycle settings.</li>
+          <li>Opens the base model you selected.</li>
+          <li>Swaps in the component models you chose for each slot (battery, motor, pump, etc.).</li>
+          <li>Applies your environment, HVAC, driver, controller, and drive cycle settings.</li>
+          <li>The model is then ready to simulate.</li>
         </ul>
       </section>
     </main>
