@@ -11,8 +11,8 @@ function [detect, matchIdx] = detectSSRFromBEVModel(bevModelName, rootFolder, ca
 
     bevModelName = regexprep(char(bevModelName), '\.slx$', '', 'ignorecase');
 
-    % ---- Get cached or fresh SSR basenames ----
-    refBases = getCachedSSR(bevModelName, rootFolder);
+    % ---- Scan SSR basenames (always fresh) ----
+    refBases = scanSSR(bevModelName, rootFolder);
 
     if isempty(refBases)
         return;
@@ -30,16 +30,9 @@ function [detect, matchIdx] = detectSSRFromBEVModel(bevModelName, rootFolder, ca
     end
 end
 
-function refBases = getCachedSSR(mdlName, rootFolder)
-%GETCACHEDSSR Return cached SSR basenames, or scan the model on first call.
-    persistent cache
+function refBases = scanSSR(mdlName, rootFolder)
+%SCANSSR Scan the BEV model for SSR basenames (always fresh, no cache).
     refBases = strings(0, 1);
-
-    % Return cached if available
-    if ~isempty(cache) && strcmp(cache.model, mdlName)
-        refBases = cache.refBases;
-        return;
-    end
 
     % ---- Find model file ----
     bevFile = '';
@@ -105,9 +98,6 @@ function refBases = getCachedSSR(mdlName, rootFolder)
 
         refBases = unique(refBases(refBases ~= ""), 'stable');
     end
-
-    % ---- Cache results ----
-    cache = struct('model', mdlName, 'refBases', refBases);
 
     % ---- Close if we opened it ----
     if ~wasLoaded

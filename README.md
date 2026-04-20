@@ -55,7 +55,7 @@ workflows**:
 ## 1. Estimate Driving Range of Electric Vehicle
 <table>
   <tr>
-    <td class="image-column" width=600><img src="Overview/Image/BEVplantModelCanvas.png" alt="Range Estimation"></td>
+    <td class="image-column" width=600><img src="Overview/Image/BatteryElectricVehicleModelOverview_01.png" alt="BEV system model canvas"></td>
     <td class="text-column" width=300>Estimate the on-road range of the vehicle. Run drive cycles with different ambient conditions to determine the range of the vehicle with a given capacity. See <strong><a href="Workflow/Vehicle/RangeEstimation/README.md">Workflow/Vehicle/RangeEstimation</a></strong>.</td>
   </tr>
 </table>
