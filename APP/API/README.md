@@ -9,7 +9,7 @@ Supporting functions for `BEVapp.mlapp`, organized into responsibility-based sub
 | `Catalog/` | What's valid — config validation, template resolution, component entries | 3 |
 | `Detect/` | What exists — model scanning, SSR detection, platform/controls detection | 5 |
 | `State/` | What's selected — flat setup state build, save/load, session cache | 4 |
-| `Export/` | Artifact generation — setup scripts, param scripts, param link validation | 4 |
+| `Export/` | Artifact generation — setup scripts, param scripts, param link validation, build snapshot | 5 |
 | `UI/` | Presentation — dropdowns, descriptions, panels, preview, selection apply | 23 |
 | `Util/` | Generic helpers — project root, path resolution, file listing, SSR masking | 14 |
 
@@ -46,6 +46,7 @@ Supporting functions for `BEVapp.mlapp`, organized into responsibility-based sub
 |----------|---------|
 | `ensureParamLinks` | Validate all component param file links; show fix-up dialog for missing links |
 | `ParamConfigButtonPushed` | Thin orchestrator — validate links via `ensureParamLinks`, then export via `exportParamScript` |
+| `exportBuildReadme` | Write a README.md build snapshot into the timestamped output folder |
 | `exportParamScript` | Generate a `.m` script that calls linked component parameter files |
 | `exportSetupScript` | Generate a replayable `.m` script that sets all Subsystem References |
 
@@ -127,6 +128,7 @@ flowchart TD
     P --> Q[exportParamScript]
     N --> O
     N --> Q
+    N --> NR[exportBuildReadme]
     N --> R[modelDashboardSetup]
 
     K --> S["Preview / Open"]

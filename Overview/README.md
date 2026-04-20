@@ -157,6 +157,7 @@ All fidelities within the same component type share a common Simulink port inter
 |------|-------|---------|
 | SSR setup scripts | `Script_Data/Setup/User/<model>_<timestamp>/` | No (gitignored) |
 | Param setup scripts | Same timestamped folder | No (gitignored) |
+| Build snapshot README | Same timestamped folder | No (gitignored) |
 | User-saved JSON configs | `APP/Config/User/` | No (gitignored) |
 | Preset JSON configs | `APP/Config/Preset/` | Yes |
 | Component models | `Components/*/Model/` | Yes |
