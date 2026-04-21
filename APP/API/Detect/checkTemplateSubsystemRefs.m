@@ -45,70 +45,79 @@ function [presentMask, missingLines, templateSubsystemRefs] = ...
         openedByUs = true;
     end
 
-    % ---- Scan for SSR blocks ----
-    ssrPaths = scanForSSRBlocks(mdlName);
+    try
+        % ---- Scan for SSR blocks ----
+        ssrPaths = scanForSSRBlocks(mdlName);
 
-    % ---- Extract SSR properties ----
-    ssrNames      = string(get_param(ssrPaths, 'Name'));
-    ssrBlockPaths = string(ssrPaths);
-    ssrRefFiles   = string(get_param(ssrPaths, 'ReferencedSubsystem'));
+        % ---- Extract SSR properties ----
+        ssrNames      = string(get_param(ssrPaths, 'Name'));
+        ssrBlockPaths = string(ssrPaths);
+        ssrRefFiles   = string(get_param(ssrPaths, 'ReferencedSubsystem'));
 
-    ssrFolders = strings(size(ssrRefFiles));
-    for k = 1:numel(ssrRefFiles)
-        [folder, ~, ~] = fileparts(char(ssrRefFiles(k)));
-        ssrFolders(k) = string(folder);
-    end
+        ssrFolders = strings(size(ssrRefFiles));
+        for k = 1:numel(ssrRefFiles)
+            [folder, ~, ~] = fileparts(char(ssrRefFiles(k)));
+            ssrFolders(k) = string(folder);
+        end
 
-    % ---- Normalize SSR block names for matching ----
-    normalizedNames = lower(ssrNames);
-    normalizedNames = regexprep(normalizedNames, '\s+', '');
+        % ---- Normalize SSR block names for matching ----
+        normalizedNames = lower(ssrNames);
+        normalizedNames = regexprep(normalizedNames, '\s+', '');
 
-    [uniqueNormalized, uniqueIdx] = unique(normalizedNames, 'stable');
+        [uniqueNormalized, uniqueIdx] = unique(normalizedNames, 'stable');
 
-    ssrNameToPathMap = containers.Map( ...
-        cellstr(uniqueNormalized), ...
-        cellstr(ssrBlockPaths(uniqueIdx)));
+        ssrNameToPathMap = containers.Map( ...
+            cellstr(uniqueNormalized), ...
+            cellstr(ssrBlockPaths(uniqueIdx)));
 
-    % ---- Bundle SSR results ----
-    templateSubsystemRefs = struct( ...
-        'Names',     ssrNames(:), ...
-        'Paths',     ssrBlockPaths(:), ...
-        'NormNames', normalizedNames(:), ...
-        'Map',       ssrNameToPathMap, ...
-        'RefFile',   ssrRefFiles(:), ...
-        'Folder',    ssrFolders(:));
+        % ---- Bundle SSR results ----
+        templateSubsystemRefs = struct( ...
+            'Names',     ssrNames(:), ...
+            'Paths',     ssrBlockPaths(:), ...
+            'NormNames', normalizedNames(:), ...
+            'Map',       ssrNameToPathMap, ...
+            'RefFile',   ssrRefFiles(:), ...
+            'Folder',    ssrFolders(:));
 
-    % ---- Test presence: match each entry label against SSR names ----
-    missingByComponent = containers.Map('KeyType', 'char', 'ValueType', 'any');
+        % ---- Test presence: match each entry label against SSR names ----
+        missingByComponent = containers.Map('KeyType', 'char', 'ValueType', 'any');
 
-    for i = 1:numel(entries)
-        labelNorm = normalizeName(string(entries(i).Label));
-        presentMask(i) = ismember(labelNorm, uniqueNormalized);
+        for i = 1:numel(entries)
+            labelNorm = normalizeName(string(entries(i).Label));
+            presentMask(i) = ismember(labelNorm, uniqueNormalized);
 
-        if ~presentMask(i)
-            compName = entries(i).Comp;
+            if ~presentMask(i)
+                compName = entries(i).Comp;
 
-            if ~isKey(missingByComponent, compName)
-                missingByComponent(compName) = strings(0, 1);
+                if ~isKey(missingByComponent, compName)
+                    missingByComponent(compName) = strings(0, 1);
+                end
+
+                missingByComponent(compName) = unique([ ...
+                    missingByComponent(compName); string(entries(i).Label)]);
             end
-
-            missingByComponent(compName) = unique([ ...
-                missingByComponent(compName); string(entries(i).Label)]);
         end
-    end
 
-    % ---- Build warning lines for popup ----
-    compNames = sort(missingByComponent.keys);
+        % ---- Build warning lines for popup ----
+        compNames = sort(missingByComponent.keys);
 
-    for k = 1:numel(compNames)
-        comp = compNames{k};
-        missingLabels = missingByComponent(comp);
+        for k = 1:numel(compNames)
+            comp = compNames{k};
+            missingLabels = missingByComponent(comp);
 
-        if ~isempty(missingLabels)
-            missingLines(end+1, 1) = sprintf( ...
-                "%s → %s (dropdowns omitted)", ...
-                comp, strjoin(missingLabels, ', '));       %#ok<AGROW>
+            if ~isempty(missingLabels)
+                missingLines(end+1, 1) = sprintf( ...
+                    "%s → %s (dropdowns omitted)", ...
+                    comp, strjoin(missingLabels, ', '));       %#ok<AGROW>
+            end
         end
+
+    catch scanErr
+        % Ensure model cleanup even on error, then rethrow
+        if openedByUs
+            try, close_system(mdlName, 0); catch, end
+        end
+        rethrow(scanErr);
     end
 
     % ---- Cleanup: close model if we opened it ----

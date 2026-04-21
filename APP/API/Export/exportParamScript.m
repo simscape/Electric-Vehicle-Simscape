@@ -31,7 +31,7 @@ function outPath = exportParamScript(app, outFile, state)
     % Default output path — show save dialog defaulting to Script_Data/Setup/User/
     if strlength(string(outFile)) == 0
         defaultDir    = getUserSetupScriptFolder(projectRoot);
-        suggestedName = sprintf('%s_params_setup.m', topModel);
+        suggestedName = 'setupModelParameters.m';
         [file, path]  = uiputfile('*.m', 'Save Param Setup Script', ...
             fullfile(defaultDir, suggestedName));
         if isequal(file, 0)
@@ -83,6 +83,9 @@ function outPath = exportParamScript(app, outFile, state)
         "% Set the environment and HVAC variables"
         "% Load battery characteristics"
         "% Load all supporting Param files and data"
+        "%"
+        "% NOTE: Run setupModelReferences.m first to set all Subsystem"
+        "% References before running this parameter script."
         "%"
         "% Copyright 2022 - 2026 The MathWorks, Inc."
         ""];

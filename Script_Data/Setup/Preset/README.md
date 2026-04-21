@@ -15,8 +15,8 @@ Default model setups for each vehicle template. Each folder contains everything 
 | File | Purpose |
 |------|---------|
 | `applyPreset.m` | Run this to apply the preset. Calls the two scripts below. |
-| `BEVsystemModel_ssr_setup.m` | Sets subsystem references to the correct component fidelities. |
-| `BEVsystemModel_params_setup.m` | Loads all component parameter files and sets environment values. |
+| `setupModelReferences.m` | Sets subsystem references to the correct component fidelities. |
+| `setupModelParameters.m` | Loads all component parameter files and sets environment values. |
 | `README.md` | Build summary showing selected fidelities, parameter files, and settings. |
 
 ## Usage

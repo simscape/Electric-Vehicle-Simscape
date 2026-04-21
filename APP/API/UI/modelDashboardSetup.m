@@ -9,7 +9,8 @@ function modelDashboardSetup(app)
 
     try
         % Load the model if needed
-        if ~bdIsLoaded(modelName)
+        wasLoaded = bdIsLoaded(modelName);
+        if ~wasLoaded
             ws = warning('off', 'all');
             load_system(modelName);
             warning(ws);
@@ -32,6 +33,9 @@ function modelDashboardSetup(app)
             'Gain', num2str(regenStatus));
 
     catch
+        if exist('wasLoaded','var') && ~wasLoaded
+            try, close_system(modelName, 0); catch, end
+        end
         uialert(app.UIFigure, ...
             sprintf("Dashboard items couldn't be set automatically. " + ...
                 "Please change the values manually in the model %s", ...

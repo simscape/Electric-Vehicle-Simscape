@@ -63,7 +63,9 @@ function preventMissingSelection(dd)
     end
 
     % ---- Re-discover default param file for new selection ----
-    if isstruct(dd.UserData) && isfield(dd.UserData, 'CompName')
+    if isstruct(dd.UserData) ...
+            && isfield(dd.UserData, 'CompName') ...
+            && isfield(dd.UserData, 'RootFolder')
         computeParamMissingNote(dd.UserData.CompName, dd, dd.UserData.RootFolder);
     end
 

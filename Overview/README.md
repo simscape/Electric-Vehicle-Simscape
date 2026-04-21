@@ -167,15 +167,15 @@ All fidelities within the same component type share a common Simulink port inter
 
 ### Generated script content
 
-**SSR setup script** (`*_ssr_setup.m`): Opens the system model, issues `set_param()` calls to change each subsystem reference to the selected fidelity, configures drive cycle, saves model.
+**SSR setup script** (`setupModelReferences.m`): Opens the system model, issues `set_param()` calls to change each subsystem reference to the selected fidelity, configures drive cycle, saves model.
 
-**Param setup script** (`*_params_setup.m`): Sets environment variables, adds component `Model/` folders to path, calls each component's `*Params.m` in sequence, calls system-level param scripts.
+**Param setup script** (`setupModelParameters.m`): Sets environment variables, adds component `Model/` folders to path, calls each component's `*Params.m` in sequence, calls system-level param scripts.
 
 Both scripts are designed to be replayable from a fresh checkout — they resolve paths relative to the project root.
 
 ### Preset configurations
 
-Ready-to-use preset configurations are shipped in `Script_Data/Setup/Preset/`. Each preset folder contains an SSR setup script, a param setup script, and a README describing the build. To browse and apply presets, run [`OpenPresetPicker`](../Script_Data/OpenPresetPicker.m) or call `bevPresetUI.applyPreset('<name>')` programmatically.
+Ready-to-use preset configurations are shipped in `Script_Data/Setup/Preset/`. Each preset folder contains `setupModelReferences.m`, `setupModelParameters.m`, `applyPreset.m`, and a README describing the build. The **preferred way** to get started is to run the [Preset Picker](../Script_Data/OpenPresetPicker.m) — it configures the model references, loads parameters, and opens the model ready to simulate.
 
 | Preset | Template | Description |
 |--------|----------|-------------|

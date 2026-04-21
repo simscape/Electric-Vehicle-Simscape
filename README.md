@@ -26,22 +26,23 @@ Simscape Fluids&trade; Libraries. </td>
   <img src="Overview/Image/BEVWorkflow.png" alt="BEV Design Workflow" width="700">
 </p>
 
-The project includes preset vehicle configurations that define the model
-architecture — component fidelities, thermal subsystems, and control strategy.
-Choose an entry point that fits your workflow, then proceed to the
-engineering studies below.
+The project supports two ways to configure and load the vehicle model.
+Choose the one that fits your workflow.
 
 <table>
   <tr>
     <td class="text-column" width=400>
-      <strong>Open the base model</strong> — Load <code>BEVsystemModel.slx</code>
-      directly to explore the reference vehicle architecture.<br><br>
-      <strong>Start from a preset</strong> — Pick a shipped vehicle configuration
-      from <code>APP/Config/Preset</code> to begin with a ready-made component
-      and fidelity selection.<br><br>
-      <strong>Use the BEV Setup App</strong> — Run <code>BEVapp</code> to select a
-      template, choose component variants, and configure initial design
-      parameters for your specific use case.
+      <strong>Preferred way (Preset)</strong> — Use the
+      <a href="Script_Data/OpenPresetPicker.m">Preset Picker</a> to browse and
+      apply a shipped vehicle configuration. Three defaults are available:
+      <em>VehicleElectric</em>, <em>VehicleElecAux</em>, and
+      <em>VehicleElectroThermal</em>. Each preset configures the model
+      references, loads the correct parameters, and opens the model ready to
+      simulate. No manual configuration needed.<br><br>
+      <strong>Custom configuration</strong> — Launch the
+      <a href="APP/README.md">BEV Setup App</a> (<code>BEVapp</code>) to select
+      a template, choose component fidelities, link parameter files, and
+      configure environment, HVAC, and driver settings.
     </td>
     <td class="image-column" width=500><img src="APP/Documents/images/BEVappWindow.png" alt="BEV Setup App"></td>
   </tr>

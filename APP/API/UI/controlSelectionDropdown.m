@@ -4,7 +4,13 @@ function controlSelectionDropdown(app, rawCfg)
 %   controlSelectionDropdown(app, rawCfg)
 
     if nargin < 2
-        rawCfg = jsondecode(fileread(app.ConfigDropDown.Value));
+        cfgPath = app.ConfigDropDown.Value;
+        if isempty(cfgPath) || ~isfile(cfgPath)
+            app.ControlSelectionDropDown.Enable = "off";
+            app.ControlDesc.Enable = "off";
+            return;
+        end
+        rawCfg = jsondecode(fileread(cfgPath));
     end
 
     root = getBEVProjectRoot(app);

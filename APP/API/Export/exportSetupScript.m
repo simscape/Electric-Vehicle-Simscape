@@ -88,8 +88,9 @@ function outPath = exportSetupScript(app, state)
         end
     end
 
-    % Final save + message
+    % Final save + bring model to foreground
     L{end+1} = "saveAll(topModelName);";
+    L{end+1} = "open_system(topModelName);";
     L{end+1} = "disp('Setup complete and saved.');";
     L{end+1} = "";
 
@@ -101,7 +102,7 @@ function outPath = exportSetupScript(app, state)
     timestamp = datestr(now, 'yyyy_mm_dd_HHMMSS');
     outFolder = fullfile(setupDir, sprintf('%s_%s', topModelName, timestamp));
     mkdir(outFolder);
-    outPath = fullfile(outFolder, [topModelName '_ssr_setup.m']);
+    outPath = fullfile(outFolder, 'setupModelReferences.m');
 
     fid = fopen(outPath, 'w');
     if fid < 0

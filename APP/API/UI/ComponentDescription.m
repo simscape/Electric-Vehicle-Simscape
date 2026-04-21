@@ -73,6 +73,9 @@ function ComponentDescription(app, modelName)
         close(d);
 
     catch ME
+        if exist('wasLoaded','var') && ~wasLoaded
+            try, close_system(modelBaseName, 0); catch, end
+        end
         close(d);
         uialert(app.UIFigure, ME.message, 'Error');
     end

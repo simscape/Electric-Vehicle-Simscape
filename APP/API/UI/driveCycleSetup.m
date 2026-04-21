@@ -20,6 +20,10 @@ function driveCycleSetup(app)
         drvSourceBlocks = find_system(modelName, opts{:}, ...
             'ReferenceBlock', 'autolibshared/Drive Cycle Source');
 
+        if isempty(drvSourceBlocks)
+            error('driveCycleSetup:notFound', 'Drive Cycle Source block not found.');
+        end
+
         % Read cycle options from mask
         driveCycleMask = get_param(drvSourceBlocks{1}, 'MaskObject');
         cycleOptions = driveCycleMask.Parameters(1, 1).TypeOptions;
@@ -32,6 +36,10 @@ function driveCycleSetup(app)
         end
 
     catch
+        % Close if we opened it
+        if exist('wasLoaded','var') && ~wasLoaded
+            try, close_system(modelName, 0); catch, end
+        end
         uialert(app.UIFigure, ...
             sprintf("Drive cycle source block missing in the base model: %s", ...
                 app.BEVModelDropDown.Value), ...

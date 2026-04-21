@@ -22,8 +22,8 @@ Each preset folder in `Script_Data/Setup/Preset/` contains:
 | File | Role |
 |------|------|
 | `applyPreset.m` | Self-contained script to configure model and load parameters |
-| `BEVsystemModel_ssr_setup.m` | Subsystem reference setup |
-| `BEVsystemModel_params_setup.m` | Parameter initialization |
+| `setupModelReferences.m` | Subsystem reference setup |
+| `setupModelParameters.m` | Parameter initialization |
 | `README.md` | Build snapshot with template, components, parameters, environment |
 
 ## Shortcut

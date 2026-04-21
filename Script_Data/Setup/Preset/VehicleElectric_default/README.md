@@ -59,7 +59,7 @@ Basic electric powertrain with battery, dual motor-drives, charger, and drivelin
 
 | File | Path |
 |------|------|
-| BEVsystemModel_ssr_setup.m | Script_Data/Setup/Preset/VehicleElectric_default/BEVsystemModel_ssr_setup.m |
-| BEVsystemModel_params_setup.m | Script_Data/Setup/Preset/VehicleElectric_default/BEVsystemModel_params_setup.m |
+| setupModelReferences.m | Script_Data/Setup/Preset/VehicleElectric_default/setupModelReferences.m |
+| setupModelParameters.m | Script_Data/Setup/Preset/VehicleElectric_default/setupModelParameters.m |
 | README.md | Script_Data/Setup/Preset/VehicleElectric_default/README.md |
 

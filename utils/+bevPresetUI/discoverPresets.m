@@ -40,8 +40,8 @@ function presets = localScanFolder(folder, source)
         applyScriptPath = fullfile(entryFolder, 'applyPreset.m');
         if ~isfile(applyScriptPath), applyScriptPath = ''; end
 
-        ssrScriptPath   = localFindFile(entryFolder, '*_ssr_setup.m');
-        paramScriptPath = localFindFile(entryFolder, '*_params_setup.m');
+        ssrScriptPath   = localFindFile(entryFolder, 'setupModelReferences.m');
+        paramScriptPath = localFindFile(entryFolder, 'setupModelParameters.m');
         readmePath      = localFindReadme(entryFolder);
 
         % Build status from missing files

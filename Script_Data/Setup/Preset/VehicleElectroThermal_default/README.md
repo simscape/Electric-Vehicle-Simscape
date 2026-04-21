@@ -73,7 +73,7 @@ Full electro-thermal vehicle model with thermal-aware battery, motor-drives, cha
 
 | File | Path |
 |------|------|
-| BEVsystemModel_ssr_setup.m | Script_Data/Setup/Preset/VehicleElectroThermal_default/BEVsystemModel_ssr_setup.m |
-| BEVsystemModel_params_setup.m | Script_Data/Setup/Preset/VehicleElectroThermal_default/BEVsystemModel_params_setup.m |
+| setupModelReferences.m | Script_Data/Setup/Preset/VehicleElectroThermal_default/setupModelReferences.m |
+| setupModelParameters.m | Script_Data/Setup/Preset/VehicleElectroThermal_default/setupModelParameters.m |
 | README.md | Script_Data/Setup/Preset/VehicleElectroThermal_default/README.md |
 
