@@ -1,4 +1,4 @@
-%BEVPRESETFIDELITYCHECK Validate all JSON preset fidelity variants.
+%BEVFIDELITYAPPCHECK Validate all JSON preset fidelity variants.
 %   Opens the BEV app and programmatically drives its UI to generate
 %   setup output for each template x fidelity combination.
 %
@@ -12,12 +12,12 @@
 %     <Template>_01_<Component>_<Fidelity>/
 %
 %   Usage:
-%     BEVPresetFidelityCheck            % all templates
-%     BEVPresetFidelityCheck('VehicleElecAux')  % one template
+%     BEVFidelityAppCheck            % all templates
+%     BEVFidelityAppCheck('VehicleElecAux')  % one template
 %
 %   Copyright 2026 The MathWorks, Inc.
 
-function results = BEVPresetFidelityCheck(templateFilter)
+function results = BEVFidelityAppCheck(templateFilter)
 
     if nargin < 1, templateFilter = ''; end
 

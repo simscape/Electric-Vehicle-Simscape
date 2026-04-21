@@ -23,7 +23,7 @@ function results = runBEVFidelityReport(templateFilter)
     addpath(appTestDir);
 
     %% Build suite
-    suite = TestSuite.fromClass(?BEVPresetFidelityTest);
+    suite = TestSuite.fromClass(?BEVFidelityTest);
 
     if nargin > 0 && ~isempty(templateFilter)
         suite = suite.selectIf( ...

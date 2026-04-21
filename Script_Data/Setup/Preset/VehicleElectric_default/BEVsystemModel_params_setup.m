@@ -10,11 +10,13 @@
 % Scenario settings
 vehicleThermal.ambient   = 25+273.15;          % [K] Ambient temperature
 
-%% Ensure Param script folders are on path
-addpath('C:\Users\jjha\MATLAB\Projects\Git\BEVGitHub\Components\BatteryHV\Model');
-addpath('C:\Users\jjha\MATLAB\Projects\Git\BEVGitHub\Components\Charger\Model');
-addpath('C:\Users\jjha\MATLAB\Projects\Git\BEVGitHub\Components\Driveline\Model');
-addpath('C:\Users\jjha\MATLAB\Projects\Git\BEVGitHub\Components\MotorDrive\Model');
+%% Check that project is open
+try
+    prjRoot = matlab.project.rootProject().RootFolder;
+catch
+    error(['This script requires the BEV project to be open. ' ...
+           'Open ElectricVehicleSimscape.prj and re-run.']);
+end
 
 %% Initialization from the UI for thermal and HVAC
 vehicleThermal.CabinSpTp = 20+273.15;        % **NOT USED** [K] Cabin set point for HVAC

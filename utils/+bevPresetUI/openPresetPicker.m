@@ -144,7 +144,18 @@ function localApplyPreset(presetListBox, pickerFig)
     selectedPreset = presets(selectedIdx);
 
     try
-        run(selectedPreset.ApplyScript);
+        presetDir = fileparts(selectedPreset.ApplyScript);
+        ssrScript = fullfile(presetDir, 'BEVsystemModel_ssr_setup.m');
+        paramScript = fullfile(presetDir, 'BEVsystemModel_params_setup.m');
+
+        % SSR setup (opens model, changes references)
+        evalin('base', sprintf("run('%s');", strrep(ssrScript, '''', '''''')));
+
+        pause(5);
+
+        % Load params into base workspace
+        evalin('base', sprintf("run('%s');", strrep(paramScript, '''', '''''')));
+
         uialert(pickerFig, ...
             sprintf('Preset "%s" applied.', selectedPreset.Name), ...
             'Preset Applied', 'Icon', 'success');

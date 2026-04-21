@@ -4,10 +4,11 @@ function outPath = exportParamScript(app, outFile, state)
 %   outPath = exportParamScript(app, outFile)       — explicit path, builds state
 %   outPath = exportParamScript(app, outFile, state) — explicit path and state
 %
-%   The generated script:
-%     - Sets environment/thermal variables from the app UI
-%     - Calls all linked per-instance param files
-%     - Optionally includes controller and system parameter calls
+%   The generated script requires the BEV project to be open. In-project
+%   param folders resolve automatically through the project's path
+%   management. addpath calls are emitted only for param files linked
+%   from outside the project tree; these are flagged as machine-specific
+%   in the generated script.
 
     if nargin < 2, outFile = ""; end
     if nargin < 3, state = buildSetupState(app); end
@@ -70,7 +71,7 @@ function outPath = exportParamScript(app, outFile, state)
     paramLinks(isMissing) = [];
 
     % ---- Build param call lines and addpath entries ----
-    [paramCallLines, addpathFolders] = buildParamCallLines(paramLinks);
+    [paramCallLines, externalFolders] = buildParamCallLines(paramLinks, projectRoot);
 
     % ---- Assemble script ----
     L = strings(0, 1);
@@ -83,7 +84,7 @@ function outPath = exportParamScript(app, outFile, state)
         "% Load battery characteristics"
         "% Load all supporting Param files and data"
         "%"
-        "% Copyright 2022 - 2025 The MathWorks, Inc."
+        "% Copyright 2022 - 2026 The MathWorks, Inc."
         ""];
 
     % Environment
@@ -94,12 +95,24 @@ function outPath = exportParamScript(app, outFile, state)
             ambTempKelvin)
         ""];
 
-    % Addpath block (only if param scripts are not on path)
-    if ~isempty(addpathFolders)
-        L = [L; "%% Ensure Param script folders are on path"];
-        for i = 1:numel(addpathFolders)
-            L = [L; sprintf("addpath('%s');", ...
-                escapeSingleQuotes(char(addpathFolders(i))))]; %#ok<AGROW>
+    % Project-open check preamble
+    L = [L;
+        "%% Check that project is open"
+        "try"
+        "    prjRoot = matlab.project.rootProject().RootFolder;"
+        "catch"
+        "    error(['This script requires the BEV project to be open. ' ..."
+        "           'Open ElectricVehicleSimscape.prj and re-run.']);"
+        "end"
+        ""];
+
+    % External addpath block (only for param files outside the project tree)
+    if ~isempty(externalFolders)
+        L = [L; "%% External param file folders (machine-specific)"];
+        for i = 1:numel(externalFolders)
+            L = [L; sprintf("addpath('%s');   %% External - %s", ...
+                escapeSingleQuotes(char(externalFolders(i).Folder)), ...
+                externalFolders(i).Component)]; %#ok<AGROW>
         end
         L = [L; ""];
     end
@@ -166,12 +179,19 @@ end
 
 %% ========================= Local helpers =========================
 
-function [callLines, addpathFolders] = buildParamCallLines(paramLinks)
+function [callLines, externalFolders] = buildParamCallLines(paramLinks, projectRoot)
 %BUILDPARAMCALLLINES Convert param file links into script call lines.
 %   For .m files with valid MATLAB names: emit bare function call.
 %   Otherwise: emit run('full/path').
-    callLines    = strings(0, 1);
-    addpathFolders = strings(0, 1);
+%   In-project param folders are discarded (the project path handles them).
+%   Only external (out-of-project) folders are returned for addpath emission.
+    callLines = strings(0, 1);
+    extFolders = strings(0, 1);
+    extComps   = strings(0, 1);
+
+    % Normalize projectRoot for comparison
+    normRoot = strrep(char(projectRoot), '\', '/');
+    if ~endsWith(normRoot, '/'), normRoot = [normRoot '/']; end
 
     for i = 1:numel(paramLinks)
         filePath = paramLinks(i).ParamFilePath;
@@ -179,17 +199,28 @@ function [callLines, addpathFolders] = buildParamCallLines(paramLinks)
 
         if strcmpi(ext, '.m') && isvarname(baseName)
             callLines(end+1) = sprintf('%s;', baseName); %#ok<AGROW>
-            addpathFolders(end+1) = string(folder); %#ok<AGROW>
+
+            % Only collect external (out-of-project) folders
+            normFolder = strrep(char(folder), '\', '/');
+            if ~startsWith(normFolder, normRoot, 'IgnoreCase', ispc)
+                extFolders(end+1) = string(folder); %#ok<AGROW>
+                extComps(end+1)   = string(paramLinks(i).Comp); %#ok<AGROW>
+            end
         else
             callLines(end+1) = sprintf("run('%s');", ...
                 escapeSingleQuotes(filePath)); %#ok<AGROW>
         end
     end
 
-    % Deduplicate folders and remove ones already on path
-    addpathFolders = unique(addpathFolders(addpathFolders ~= ""));
-    onPath = arrayfun(@(f) ~isempty(which(f)), addpathFolders);
-    addpathFolders(onPath) = [];
+    % Deduplicate external folders
+    externalFolders = struct('Folder', {}, 'Component', {});
+    if ~isempty(extFolders)
+        [uFolders, idx] = unique(extFolders);
+        for j = 1:numel(uFolders)
+            externalFolders(end+1).Folder    = char(uFolders(j)); %#ok<AGROW>
+            externalFolders(end).Component   = char(extComps(idx(j)));
+        end
+    end
 end
 
 function L = appendSystemParams(L, sysParam)

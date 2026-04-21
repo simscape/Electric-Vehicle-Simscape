@@ -1,13 +1,13 @@
-classdef BEVPresetFidelityTest < matlab.unittest.TestCase
-%BEVPRESETFIDELITYTEST Parameterized test for all JSON preset fidelity variants.
+classdef BEVFidelityTest < matlab.unittest.TestCase
+%BEVFIDELITYTEST Parameterized test for all JSON preset fidelity variants.
 %   Generates setup output and compile-checks every template x fidelity
 %   combination defined in VehicleTemplateConfig.json.
 %
 %   Run all:
-%     results = runtests('BEVPresetFidelityTest');
+%     results = runtests('BEVFidelityTest');
 %
 %   Run one template:
-%     results = runtests('BEVPresetFidelityTest', ...
+%     results = runtests('BEVFidelityTest', ...
 %         'ParameterProperty','Setup','ParameterName','VehicleElectric*');
 %
 %   Run with report:

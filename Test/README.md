@@ -50,8 +50,8 @@ Tests under `APP/Test/` verify the BEV Setup App configuration layer:
 | File | Purpose |
 |------|---------|
 | `BuildComponentEntriesTest.m` | Validates component entry struct generation for all components |
-| `BEVPresetFidelityTest.m` | Confirms preset JSON fidelity mappings resolve to valid model files |
-| `BEVPresetFidelityCheck.m` | Quick-check script for preset fidelity consistency |
+| `BEVFidelityTest.m` | Compile-checks every template × fidelity combination from JSON config |
+| `BEVFidelityAppCheck.m` | Drives the app UI to validate setup output for all fidelity variants |
 | `runBEVFidelityReport.m` | Generates a summary report of fidelity coverage across presets |
 
 ## Running Tests
