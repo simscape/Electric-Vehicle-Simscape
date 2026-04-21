@@ -8,6 +8,7 @@ function populateConfigDropDown(app)
 %
 %   Preset files appear first, then a separator, then user-saved files
 %   prefixed with [Saved].
+%
 % Copyright 2026 The MathWorks, Inc.
 
     presetFolder = getPresetConfigFolder();

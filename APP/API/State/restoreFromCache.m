@@ -6,6 +6,8 @@ function restored = restoreFromCache(app)
 %   current template + config basename. If found, applies selections
 %   directly (no UI rebuild). If not found, returns false so the caller
 %   keeps defaults.
+%
+% Copyright 2026 The MathWorks, Inc.
 
     restored = false;
 

@@ -1,5 +1,12 @@
 function preventMissingSelection(dd)
-%PREVENTMISSINGSELECTION Dropdown callback: block [missing] selections, manage param state.
+% PREVENTMISSINGSELECTION Dropdown ValueChanged callback that blocks [missing] selections.
+%   preventMissingSelection(dd)
+%
+%   Reverts to the last valid selection when a missing model is chosen,
+%   auto-unlinks stale param files, re-discovers default params, and
+%   updates the tooltip and warning label accordingly.
+%
+% Copyright 2026 The MathWorks, Inc.
 
     valStr    = string(dd.Value);
     items     = string(dd.Items);
@@ -78,38 +85,39 @@ function preventMissingSelection(dd)
     end
 
     % ---- Update red note label (param portion only) ----
-    if isstruct(dd.UserData) ...
-            && isfield(dd.UserData, 'ParamStatusLabel') ...
-            && ~isempty(dd.UserData.ParamStatusLabel) ...
-            && isvalid(dd.UserData.ParamStatusLabel)
+    if ~isstruct(dd.UserData) ...
+            || ~isfield(dd.UserData, 'ParamStatusLabel') ...
+            || isempty(dd.UserData.ParamStatusLabel) ...
+            || ~isvalid(dd.UserData.ParamStatusLabel)
+        return;
+    end
 
-        noteLabel = dd.UserData.ParamStatusLabel;
-        hasParam = isfield(dd.UserData, 'ParamFile') ...
-                   && strlength(string(dd.UserData.ParamFile)) > 0;
+    noteLabel = dd.UserData.ParamStatusLabel;
+    hasParam = isfield(dd.UserData, 'ParamFile') ...
+               && strlength(string(dd.UserData.ParamFile)) > 0;
 
-        currentText = string(noteLabel.Text);
-        hasParamNote = contains(currentText, "No param script");
+    currentText = string(noteLabel.Text);
+    hasParamNote = contains(currentText, "No param script");
 
-        if hasParam && hasParamNote
-            % Param found — strip the param-missing portion, keep model notes
-            parts = strsplit(currentText, '  |  ');
-            parts = parts(~contains(parts, "No param script"));
-            if isempty(parts)
-                noteLabel.Text    = "";
-                noteLabel.Visible = 'off';
-            else
-                noteLabel.Text = strjoin(parts, '  |  ');
-            end
-        elseif ~hasParam && ~hasParamNote
-            % Param missing — append note without clobbering model notes
-            paramNote = sprintf("No param script found: %sParams.m", ...
-                regexprep(char(dd.Value), '\.slx$', '', 'ignorecase'));
-            if strlength(currentText) > 0
-                noteLabel.Text = currentText + "  |  " + paramNote;
-            else
-                noteLabel.Text = paramNote;
-            end
-            noteLabel.Visible = 'on';
+    if hasParam && hasParamNote
+        % Param found — strip the param-missing portion, keep model notes
+        parts = strsplit(currentText, '  |  ');
+        parts = parts(~contains(parts, "No param script"));
+        if isempty(parts)
+            noteLabel.Text    = "";
+            noteLabel.Visible = 'off';
+        else
+            noteLabel.Text = strjoin(parts, '  |  ');
         end
+    elseif ~hasParam && ~hasParamNote
+        % Param missing — append note without clobbering model notes
+        paramNote = sprintf("No param script found: %sParams.m", ...
+            regexprep(char(dd.Value), '\.slx$', '', 'ignorecase'));
+        if strlength(currentText) > 0
+            noteLabel.Text = currentText + "  |  " + paramNote;
+        else
+            noteLabel.Text = paramNote;
+        end
+        noteLabel.Visible = 'on';
     end
 end

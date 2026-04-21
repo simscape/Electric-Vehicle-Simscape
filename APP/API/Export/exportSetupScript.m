@@ -14,6 +14,8 @@ function outPath = exportSetupScript(app, state)
 %     4. Sets the controller SSR (if active)
 %     5. Sets the drive cycle (if active)
 %     6. Saves the model
+%
+% Copyright 2026 The MathWorks, Inc.
 
     if nargin < 2, state = buildSetupState(app); end
 

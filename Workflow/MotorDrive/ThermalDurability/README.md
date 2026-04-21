@@ -1,6 +1,6 @@
 # Drive Unit Thermal Durability
 
-Evaluate electric drive unit thermal behaviour over extended duty cycles to assess durability margins.
+Evaluate electric drive unit thermal behavior over extended duty cycles to assess durability margins.
 
 | Item | Detail |
 |------|--------|

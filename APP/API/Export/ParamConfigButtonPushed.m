@@ -2,6 +2,8 @@ function ParamConfigButtonPushed(app)
 %PARAMCONFIGBUTTONPUSHED Validate param links, then export param script.
 %   Thin orchestrator: delegates link validation to ensureParamLinks,
 %   then exports via exportParamScript (which shows a save dialog).
+%
+% Copyright 2026 The MathWorks, Inc.
 
     if ~ensureParamLinks(app), return; end
 

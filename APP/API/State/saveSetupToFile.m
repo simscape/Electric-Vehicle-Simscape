@@ -15,6 +15,8 @@ function saveSetupToFile(app)
 %     (no Environment)                    + Environment
 %     (no OperatingModes)                 + OperatingModes
 %     (no DriveCycle)                     + DriveCycle
+%
+% Copyright 2026 The MathWorks, Inc.
 
     % ---- Build state from current UI ----
     try

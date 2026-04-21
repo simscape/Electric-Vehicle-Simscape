@@ -1,6 +1,8 @@
 function modelDashboardSetup(app)
 %MODELDASHBOARDSETUP Configure model HMI blocks from app toggle buttons.
 %   Sets AWD, Charging/BatCmd, and Regen Gain blocks in the live model.
+%
+% Copyright 2026 The MathWorks, Inc.
 
     modelName    = erase(app.BEVModelDropDown.Value, '.slx');
     awdStatus    = double(app.AWDButton.Value);

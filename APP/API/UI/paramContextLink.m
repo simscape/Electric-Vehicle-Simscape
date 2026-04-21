@@ -1,14 +1,20 @@
 function paramContextLink(app, btn, dd, rootFolder)
-%PARAMCONTEXTLINK Context menu action: link a param file to this instance.
+% PARAMCONTEXTLINK Link a user-chosen param file to this component instance.
+%   paramContextLink(app, btn, dd, rootFolder)
+%
+%   Opens a file picker, persists the chosen file in dd.UserData.ParamFile,
+%   refreshes the tooltip, and hides the "no param" warning label.
+%
+% Copyright 2026 The MathWorks, Inc.
 
     startFolder = getParamStartFolder(dd, rootFolder);
 
-    [f, p] = uigetfile({'*.m', 'MATLAB Files (*.m)'}, 'Select parameter file', startFolder);
-    if isequal(f, 0) || isequal(p, 0)
+    [fileName, selectedFolder] = uigetfile({'*.m', 'MATLAB Files (*.m)'}, 'Select parameter file', startFolder);
+    if isequal(fileName, 0) || isequal(selectedFolder, 0)
         return;
     end
 
-    chosen = fullfile(p, f);
+    chosen = fullfile(selectedFolder, fileName);
 
     % Persist link without clobbering other UserData fields
     userDataSetField(dd, 'ParamFile', char(chosen));
@@ -37,7 +43,8 @@ function paramContextLink(app, btn, dd, rootFolder)
 end
 
 function startFolder = getParamStartFolder(dd, rootFolder)
-%GETPARAMSTARTFOLDER Determine best starting folder for param file picker.
+% GETPARAMSTARTFOLDER Pick the best starting folder for the param file browser.
+%   Prefers the current linked file's folder, then the model folder, then rootFolder.
     startFolder = char(rootFolder);
 
     % If a linked file exists, start in its folder
@@ -55,10 +62,10 @@ function startFolder = getParamStartFolder(dd, rootFolder)
 
     % Else prefer the ModelFolder recorded on the dropdown
     if isstruct(dd.UserData) && isfield(dd.UserData, 'ModelFolder')
-        mf = char(dd.UserData.ModelFolder);
+        modelFolder = char(dd.UserData.ModelFolder);
 
-        if isfolder(mf)
-            startFolder = mf;
+        if isfolder(modelFolder)
+            startFolder = modelFolder;
         end
     end
 end

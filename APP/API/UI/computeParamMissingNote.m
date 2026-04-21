@@ -1,6 +1,8 @@
 function note = computeParamMissingNote(compName, dd, rootFolder)
 %COMPUTEPARAMMISSINGNOTE Return red-note text if no auto param file found.
 %   Returns "" if a param file exists, else a human-friendly note.
+%
+% Copyright 2026 The MathWorks, Inc.
     note = "";
 
     val = string(dd.Value);

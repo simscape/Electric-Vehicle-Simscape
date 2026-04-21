@@ -15,6 +15,8 @@ function [tmplName, popupNotes, matched] = resolveTemplateName(rawCfg, uiSelecti
 %     tmplName   — resolved config field name (char)
 %     popupNotes — string array of warning notes (empty if exact match)
 %     matched    — true if exact match found, false if fallback was used
+%
+% Copyright 2026 The MathWorks, Inc.
 
     popupNotes = strings(0,1);
     uiBase = erase(char(uiSelection), '.slx');

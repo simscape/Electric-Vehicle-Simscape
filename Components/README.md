@@ -28,8 +28,8 @@ Self-contained, reusable subsystem modules for the Battery Electric Vehicle (BEV
 ```
 Components/<ComponentName>/
   Model/           - Simulink models (.slx) and parameter scripts (*Params.m)   [always]
-  TestBench/       - Standalone test harness with boundary conditions            [always]
-  TestCase/        - MATLAB unit tests (*PassTests.m)                            [always]
+  TestBench/       - Standalone test harness with boundary conditions            [optional]
+  TestCase/        - MATLAB unit tests (*PassTests.m)                            [optional]
   Documentation/   - Published HTML documentation                                [always]
     html/          - HTML pages                                                  [always]
     images/        - Screenshots and figures                                     [always]

@@ -7,6 +7,8 @@ function entries = buildComponentEntries(rawCfg, templateKey)
 %     entries(i).Comp   — component type name (e.g. 'MotorDrive')
 %     entries(i).Label  — instance display name (e.g. 'Front Motor (EM1)')
 %     entries(i).Models — cell array of configured model names
+%
+% Copyright 2026 The MathWorks, Inc.
 
     templateConfig = rawCfg.(templateKey);
     componentNames = fieldnames(templateConfig.Components);

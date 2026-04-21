@@ -1,6 +1,8 @@
 function scaleAppToMonitor(app)
 %SCALEAPPTOMONITOR Auto-scale app UI to monitor DPI and resolution.
 %   Uses setappdata/getappdata on UIFigure to store baseline sizes.
+%
+% Copyright 2026 The MathWorks, Inc.
 
     baselineDPI = 96;
     minScale = 0.7;

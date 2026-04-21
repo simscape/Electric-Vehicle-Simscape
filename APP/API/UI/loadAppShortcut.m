@@ -1,23 +1,29 @@
 function app = loadAppShortcut()
-%LOADAPPSHORTCUT Shows a loader popup, launches BEVapp, then closes the loader.
+% LOADAPPSHORTCUT Show a loader popup, launch BEVapp, then close the loader.
+%   app = loadAppShortcut()
+%
+%   Creates a modal splash figure with a progress bar, launches the main
+%   BEVapp, waits for its UIFigure to become visible, then closes the splash.
+%
+% Copyright 2026 The MathWorks, Inc.
 
     % ---- Loader UI ----
-    f = uifigure( ...
+    loaderFig = uifigure( ...
         'Name',        'Starting…', ...
         'Position',    centerOnScreen([360 120]), ...
         'Resize',      'off', ...
         'WindowStyle', 'modal');
 
-    gl = uigridlayout(f, [2 1]);
-    gl.RowHeight = {'1x', 30};
-    gl.Padding   = [15 15 15 10];
+    gridLayout = uigridlayout(loaderFig, [2 1]);
+    gridLayout.RowHeight = {'1x', 30};
+    gridLayout.Padding   = [15 15 15 10];
 
-    uilabel(gl, ...
+    uilabel(gridLayout, ...
         'Text',                'Loading BEV app…', ...
         'FontSize',            14, ...
         'HorizontalAlignment', 'center');
 
-    d = uiprogressdlg(f, ...
+    progressDlg = uiprogressdlg(loaderFig, ...
         'Title',         'Please wait', ...
         'Message',       'Initializing…', ...
         'Indeterminate', 'on');
@@ -31,30 +37,30 @@ function app = loadAppShortcut()
         app = BEVapp();
         waitForMainUIFigure(app, 8.0);
     catch ME
-        safeClose(d, f);
+        safeClose(progressDlg, loaderFig);
         rethrow(ME);
     end
 
     % ---- Close loader ----
-    safeClose(d, f);
+    safeClose(progressDlg, loaderFig);
 end
 
 %% Local helpers
 
-function pos = centerOnScreen(sz)
-%CENTERONSCREEN Compute centered position for a figure of the given size.
-    mp = get(0, 'MonitorPositions');
-    m  = mp(1, :);
-    x  = m(1) + (m(3) - sz(1)) / 2;
-    y  = m(2) + (m(4) - sz(2)) / 2;
-    pos = [x y sz(1) sz(2)];
+function pos = centerOnScreen(figSize)
+% CENTERONSCREEN Compute [x y w h] position to center a figure on the primary monitor.
+    monitorPositions = get(0, 'MonitorPositions');
+    primaryMonitor   = monitorPositions(1, :);
+    xPos = primaryMonitor(1) + (primaryMonitor(3) - figSize(1)) / 2;
+    yPos = primaryMonitor(2) + (primaryMonitor(4) - figSize(2)) / 2;
+    pos  = [xPos yPos figSize(1) figSize(2)];
 end
 
 function waitForMainUIFigure(app, timeoutSec)
-%WAITFORMAINUIFIGURE Poll until the app's UIFigure is visible or timeout.
-    t0 = tic;
+% WAITFORMAINUIFIGURE Poll until the app's UIFigure becomes visible, or time out.
+    startTime = tic;
 
-    while toc(t0) < timeoutSec
+    while toc(startTime) < timeoutSec
         if ~isempty(app) && isvalid(app) && isprop(app, 'UIFigure')
             fig = app.UIFigure;
             if ~isempty(fig) && isvalid(fig) && strcmp(fig.Visible, 'on')
@@ -68,18 +74,18 @@ function waitForMainUIFigure(app, timeoutSec)
     end
 end
 
-function safeClose(d, f)
-%SAFECLOSE Safely close progress dialog and loader figure.
+function safeClose(progressDlg, loaderFig)
+% SAFECLOSE Close the progress dialog and loader figure, suppressing errors.
     try
-        if ~isempty(d)
-            close(d);
+        if ~isempty(progressDlg)
+            close(progressDlg);
         end
     catch
     end
 
     try
-        if ~isempty(f) && isvalid(f)
-            delete(f);
+        if ~isempty(loaderFig) && isvalid(loaderFig)
+            delete(loaderFig);
         end
     catch
     end

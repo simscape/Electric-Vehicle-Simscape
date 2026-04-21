@@ -5,6 +5,8 @@ function [detect, matchIdx] = detectSSRFromBEVModel(bevModelName, rootFolder, ca
 %   Caches the SSR scan per model name so the model is only loaded once
 %   per session. If the model is already open, reads without modifying.
 %   If not open, loads silently, scans, then closes.
+%
+% Copyright 2026 The MathWorks, Inc.
 
     detect   = false;
     matchIdx = [];

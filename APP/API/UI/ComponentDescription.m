@@ -1,6 +1,12 @@
 function ComponentDescription(app, modelName)
-%COMPONENTDESCRIPTION Generate preview snapshot and load component description text.
-%   Also looks for published HTML documentation and adds a clickable link.
+% COMPONENTDESCRIPTION Load a component's description and preview snapshot into the app.
+%   ComponentDescription(app, modelName)
+%
+%   Opens the model headlessly, captures a canvas snapshot, reads its
+%   Description field, and (if available) adds a clickable link to published
+%   HTML documentation.
+%
+% Copyright 2026 The MathWorks, Inc.
 
     modelBaseName = erase(convertStringsToChars(modelName), '.slx');
     root = getBEVProjectRoot(app);
@@ -10,7 +16,8 @@ function ComponentDescription(app, modelName)
     tempPng    = fullfile(tempdir, [modelBaseName, '_', timestamp, '.png']);
     previewPng = fullfile(root, 'preview.png');
 
-    d = uiprogressdlg(app.UIFigure, ...
+    % ---- Progress dialog ----
+    progressDlg = uiprogressdlg(app.UIFigure, ...
         'Title', 'Please wait', ...
         'Message', 'Loading component description…', ...
         'Indeterminate', 'on', ...
@@ -70,13 +77,13 @@ function ComponentDescription(app, modelName)
         % Pause to allow UI update, then delete temp file
         pause(1);
         delete(tempPng);
-        close(d);
+        close(progressDlg);
 
     catch ME
         if exist('wasLoaded','var') && ~wasLoaded
             try, close_system(modelBaseName, 0); catch, end
         end
-        close(d);
+        close(progressDlg);
         uialert(app.UIFigure, ME.message, 'Error');
     end
 

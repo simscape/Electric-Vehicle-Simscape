@@ -9,6 +9,7 @@ function initAppDropdowns(app)
 %     4. Control Selection dropdown   — .slx files from Components/Controller/Model/
 %
 %   Replaces the inline path + dropdown setup in mlapp startupFcn.
+%
 % Copyright 2026 The MathWorks, Inc.
 
     paths = getBEVAppPaths(app);

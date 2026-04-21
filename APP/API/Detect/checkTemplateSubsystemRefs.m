@@ -18,6 +18,8 @@ function [presentMask, missingLines, templateSubsystemRefs] = ...
 %     missingLines         — string array of warning lines for the popup
 %     templateSubsystemRefs — struct with SSR scan results:
 %                              Names, Paths, NormNames, Map, RefFile, Folder
+%
+% Copyright 2026 The MathWorks, Inc.
 
     missingLines = strings(0, 1);
     presentMask  = true(numel(entries), 1);

@@ -1,5 +1,7 @@
 function driveCycleSetup(app)
 %DRIVECYCLESETUP Populate drive cycle dropdown from the BEV model's Drive Cycle Source block.
+%
+% Copyright 2026 The MathWorks, Inc.
 
     modelName = erase(app.BEVModelDropDown.Value, '.slx');
     app.DriveCycleDropDown.Enable = "on";

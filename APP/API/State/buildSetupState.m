@@ -25,6 +25,8 @@ function state = buildSetupState(app)
 %
 %   The struct contains NO handle objects, NO function handles —
 %   only strings, doubles, logicals, and struct arrays.
+%
+% Copyright 2026 The MathWorks, Inc.
 
     % ---- Core identifiers ----
     configFile    = safeValue(app, 'ConfigDropDown', '');

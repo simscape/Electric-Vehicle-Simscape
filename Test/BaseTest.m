@@ -1,5 +1,6 @@
 classdef BaseTest < matlab.unittest.TestCase
 %Tester
+% Copyright 2026 The MathWorks, Inc.
     properties
         openfigureListBefore;
         openModelsBefore;

@@ -6,6 +6,8 @@ function createComponentDropdowns(app, skipCache)
 %   Reads the selected config JSON, resolves the template, validates it,
 %   detects the vehicle platform, scans component availability, renders
 %   dropdown panels, and applies saved/cached selections.
+%
+% Copyright 2026 The MathWorks, Inc.
 
     if nargin < 2
         skipCache = false;

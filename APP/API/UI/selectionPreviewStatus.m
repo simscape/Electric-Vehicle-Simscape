@@ -1,5 +1,7 @@
 function selectionPreviewStatus(app, event)
 %SELECTIONPREVIEWSTATUS Toggle visibility of the preview image panel.
+%
+% Copyright 2026 The MathWorks, Inc.
 
     isHidden = app.HideShowButton.Value;
 

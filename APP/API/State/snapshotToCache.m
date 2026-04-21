@@ -6,6 +6,8 @@ function snapshotToCache(app)
 %   to the session cache folder, tagged by template + config basename.
 %   Uses lastCacheTag (set after each build) so the snapshot is tagged
 %   with the OLD template+config, not the new one the user just picked.
+%
+% Copyright 2026 The MathWorks, Inc.
 
     % Get or create cache directory
     cacheDir = getCacheDir(app);

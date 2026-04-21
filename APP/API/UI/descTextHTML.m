@@ -1,5 +1,7 @@
 function descHTML = descTextHTML(desc)
 %DESCTEXTHTML Convert plain-text model description to styled HTML.
+%
+% Copyright 2026 The MathWorks, Inc.
 
     % Replace line breaks with <br>
     descHTML = strrep(desc, newline, '<br>');

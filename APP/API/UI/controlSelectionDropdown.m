@@ -1,8 +1,14 @@
 function controlSelectionDropdown(app, rawCfg)
-%CONTROLSELECTIONDROPDOWN Populate controller dropdown from config and model detection.
+% CONTROLSELECTIONDROPDOWN Populate the controller dropdown from config and model detection.
 %   controlSelectionDropdown(app)
 %   controlSelectionDropdown(app, rawCfg)
+%
+%   Detects controller SSR blocks in the BEV model, cross-references with
+%   the config JSON, and sets the dropdown to the intersection of both.
+%
+% Copyright 2026 The MathWorks, Inc.
 
+    % ---- Load config JSON if not provided ----
     if nargin < 2
         cfgPath = app.ConfigDropDown.Value;
         if isempty(cfgPath) || ~isfile(cfgPath)
@@ -13,6 +19,7 @@ function controlSelectionDropdown(app, rawCfg)
         rawCfg = jsondecode(fileread(cfgPath));
     end
 
+    % ---- Resolve current template and project root ----
     root = getBEVProjectRoot(app);
     vehicleConfig = erase(app.VehicleTemplateDropDown.Value, ".slx");
 
@@ -26,7 +33,7 @@ function controlSelectionDropdown(app, rawCfg)
         return;
     end
 
-    % ---- Read control models from config JSON ----
+    % ---- Validate config has control models for this template ----
     if ~isfield(rawCfg, vehicleConfig) ...
             || ~isfield(rawCfg.(vehicleConfig), 'Controls') ...
             || ~isfield(rawCfg.(vehicleConfig).Controls, 'Models')
@@ -55,7 +62,7 @@ function controlSelectionDropdown(app, rawCfg)
         return;
     end
 
-    % Set dropdown to valid items only
+    % ---- Populate dropdown with valid items ----
     app.ControlSelectionDropDown.Items = cellfun(@char, validModels, 'UniformOutput', false);
 
     % Select the config-specified model if it's in the list

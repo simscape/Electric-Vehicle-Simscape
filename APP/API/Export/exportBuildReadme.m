@@ -1,5 +1,5 @@
 function readmePath = exportBuildReadme(state, outFolder, generatedFiles)
-%EXPORTBUILDREADME Write a README.md build snapshot into the output folder.
+% EXPORTBUILDREADME Write a README.md build snapshot summarizing the export.
 %   readmePath = exportBuildReadme(state, outFolder, generatedFiles)
 %
 %   Inputs:
@@ -10,21 +10,22 @@ function readmePath = exportBuildReadme(state, outFolder, generatedFiles)
 %
 %   Output:
 %     readmePath     - char, full path to the written README.md
+%
 % Copyright 2026 The MathWorks, Inc.
 
     readmePath = fullfile(outFolder, 'README.md');
 
     try
-        L = {};
-        L{end+1} = '# Build Snapshot';
-        L{end+1} = '';
+        lines = {};
+        lines{end+1} = '# Build Snapshot';
+        lines{end+1} = '';
 
-        L = [L, buildOverviewSection(state, outFolder)];
-        L = [L, buildTemplateSection(state)];
-        L = [L, buildModelConfigSection(state)];
-        L = [L, buildParamFilesSection(state)];
-        L = [L, buildEnvironmentSection(state)];
-        L = [L, buildGeneratedFilesSection(state.Root, outFolder, generatedFiles, readmePath)];
+        lines = [lines, buildOverviewSection(state, outFolder)];
+        lines = [lines, buildTemplateSection(state)];
+        lines = [lines, buildModelConfigSection(state)];
+        lines = [lines, buildParamFilesSection(state)];
+        lines = [lines, buildEnvironmentSection(state)];
+        lines = [lines, buildGeneratedFilesSection(state.Root, outFolder, generatedFiles, readmePath)];
 
         % Write file
         fid = fopen(readmePath, 'w', 'n', 'UTF-8');
@@ -35,8 +36,8 @@ function readmePath = exportBuildReadme(state, outFolder, generatedFiles)
             return;
         end
         cleanup = onCleanup(@() fclose(fid));
-        for k = 1:numel(L)
-            fprintf(fid, '%s\n', char(L{k}));
+        for k = 1:numel(lines)
+            fprintf(fid, '%s\n', char(lines{k}));
         end
 
     catch ME
@@ -48,40 +49,40 @@ end
 
 %% ========================= Section builders =========================
 
-function L = buildOverviewSection(state, outFolder)
-%BUILDOVERVIEWSECTION Build Overview table.
-    L = {};
-    L{end+1} = '## Build Overview';
-    L{end+1} = '';
-    L{end+1} = '| Field | Value |';
-    L{end+1} = '|-------|-------|';
-    L{end+1} = sprintf('| Timestamp | %s |', state.Timestamp);
-    L{end+1} = sprintf('| Model | %s |', state.BEVModel);
-    L{end+1} = sprintf('| Model Path | %s |', ...
+function lines = buildOverviewSection(state, outFolder)
+% BUILDOVERVIEWSECTION Build the Overview markdown table.
+    lines = {};
+    lines{end+1} = '## Build Overview';
+    lines{end+1} = '';
+    lines{end+1} = '| Field | Value |';
+    lines{end+1} = '|-------|-------|';
+    lines{end+1} = sprintf('| Timestamp | %s |', state.Timestamp);
+    lines{end+1} = sprintf('| Model | %s |', state.BEVModel);
+    lines{end+1} = sprintf('| Model Path | %s |', ...
         fwdSlash(fullfile('Model', [state.BEVModel '.slx'])));
-    L{end+1} = '';
+    lines{end+1} = '';
 end
 
-function L = buildTemplateSection(state)
-%BUILDTEMPLATESECTION Selected Template table.
-    L = {};
-    L{end+1} = '## Selected Template';
-    L{end+1} = '';
-    L{end+1} = '| Field | Value |';
-    L{end+1} = '|-------|-------|';
-    L{end+1} = sprintf('| Template | %s |', state.TemplateName);
-    L{end+1} = sprintf('| Config Source | %s |', relPath(state.ConfigFile, state.Root));
+function lines = buildTemplateSection(state)
+% BUILDTEMPLATESECTION Build the Selected Template markdown table.
+    lines = {};
+    lines{end+1} = '## Selected Template';
+    lines{end+1} = '';
+    lines{end+1} = '| Field | Value |';
+    lines{end+1} = '|-------|-------|';
+    lines{end+1} = sprintf('| Template | %s |', state.TemplateName);
+    lines{end+1} = sprintf('| Config Source | %s |', relPath(state.ConfigFile, state.Root));
 
     desc = readTemplateDescription(state);
     if ~isempty(desc)
-        L{end+1} = sprintf('| Description | %s |', desc);
+        lines{end+1} = sprintf('| Description | %s |', desc);
     end
-    L{end+1} = '';
+    lines{end+1} = '';
 end
 
-function L = buildModelConfigSection(state)
-%BUILDMODELCONFIGSECTION Instance-to-Selection table from Components, Controls, DriveCycle.
-    L = {};
+function lines = buildModelConfigSection(state)
+% BUILDMODELCONFIGSECTION Build the Instance-to-Selection markdown table.
+    lines = {};
     rows = {};
 
     % Component selections
@@ -123,17 +124,17 @@ function L = buildModelConfigSection(state)
 
     if isempty(rows), return; end
 
-    L{end+1} = '## Model Configuration';
-    L{end+1} = '';
-    L{end+1} = '| Instance | Selection |';
-    L{end+1} = '|----------|-----------|';
-    L = [L, rows];
-    L{end+1} = '';
+    lines{end+1} = '## Model Configuration';
+    lines{end+1} = '';
+    lines{end+1} = '| Instance | Selection |';
+    lines{end+1} = '|----------|-----------|';
+    lines = [lines, rows];
+    lines{end+1} = '';
 end
 
-function L = buildParamFilesSection(state)
-%BUILDPARAMFILESSECTION Parameter files table with namespace and type.
-    L = {};
+function lines = buildParamFilesSection(state)
+% BUILDPARAMFILESSECTION Build the Parameter Files markdown table with namespace and type.
+    lines = {};
     rows = {};
 
     if isfield(state, 'Components')
@@ -178,17 +179,17 @@ function L = buildParamFilesSection(state)
 
     if isempty(rows), return; end
 
-    L{end+1} = '## Loaded Parameter Files';
-    L{end+1} = '';
-    L{end+1} = '| Instance | Parameter File | Namespace | Path | Type |';
-    L{end+1} = '|----------|---------------|-----------|------|------|';
-    L = [L, rows];
-    L{end+1} = '';
+    lines{end+1} = '## Loaded Parameter Files';
+    lines{end+1} = '';
+    lines{end+1} = '| Instance | Parameter File | Namespace | Path | Type |';
+    lines{end+1} = '|----------|---------------|-----------|------|------|';
+    lines = [lines, rows];
+    lines{end+1} = '';
 end
 
-function L = buildEnvironmentSection(state)
-%BUILDENVIRONMENTSECTION Environment and dashboard settings table.
-    L = {};
+function lines = buildEnvironmentSection(state)
+% BUILDENVIRONMENTSECTION Build the Environment and Dashboard Settings markdown table.
+    lines = {};
     rows = {};
 
     % Environment
@@ -233,43 +234,43 @@ function L = buildEnvironmentSection(state)
 
     if isempty(rows), return; end
 
-    L{end+1} = '## Environment and Dashboard Settings';
-    L{end+1} = '';
-    L{end+1} = '| Setting | Value |';
-    L{end+1} = '|---------|-------|';
-    L = [L, rows];
-    L{end+1} = '';
+    lines{end+1} = '## Environment and Dashboard Settings';
+    lines{end+1} = '';
+    lines{end+1} = '| Setting | Value |';
+    lines{end+1} = '|---------|-------|';
+    lines = [lines, rows];
+    lines{end+1} = '';
 end
 
-function L = buildGeneratedFilesSection(root, outFolder, generatedFiles, readmePath)
-%BUILDGENERATEDFILESSECTION Table of files written to the output folder.
-    L = {};
+function lines = buildGeneratedFilesSection(root, outFolder, generatedFiles, readmePath)
+% BUILDGENERATEDFILESSECTION Build the Generated Files markdown table.
+    lines = {};
 
     allFiles = generatedFiles(:)';
     allFiles{end+1} = readmePath;
 
     rows = {};
     for k = 1:numel(allFiles)
-        f = char(allFiles{k});
-        if isempty(f), continue; end
-        [~, name, ext] = fileparts(f);
-        rows{end+1} = sprintf('| %s | %s |', [name ext], relPath(f, root)); %#ok<AGROW>
+        filePath = char(allFiles{k});
+        if isempty(filePath), continue; end
+        [~, name, ext] = fileparts(filePath);
+        rows{end+1} = sprintf('| %s | %s |', [name ext], relPath(filePath, root)); %#ok<AGROW>
     end
 
     if isempty(rows), return; end
 
-    L{end+1} = '## Generated Files';
-    L{end+1} = '';
-    L{end+1} = '| File | Path |';
-    L{end+1} = '|------|------|';
-    L = [L, rows];
-    L{end+1} = '';
+    lines{end+1} = '## Generated Files';
+    lines{end+1} = '';
+    lines{end+1} = '| File | Path |';
+    lines{end+1} = '|------|------|';
+    lines = [lines, rows];
+    lines{end+1} = '';
 end
 
 %% ========================= Utility helpers =========================
 
 function r = relPath(absPath, root)
-%RELPATH Convert absolute path to project-relative with forward slashes.
+% RELPATH Convert absolute path to project-relative with forward slashes.
     absPath = char(absPath);
     root    = char(root);
     if ~endsWith(root, filesep)
@@ -280,12 +281,12 @@ function r = relPath(absPath, root)
 end
 
 function s = fwdSlash(s)
-%FWDSLASH Normalize backslashes to forward slashes for markdown.
+% FWDSLASH Normalize backslashes to forward slashes for markdown.
     s = strrep(char(s), '\', '/');
 end
 
 function s = onOff(val)
-%ONOFF Convert logical to On/Off string.
+% ONOFF Convert logical to On/Off string.
     if val
         s = 'On';
     else
@@ -294,7 +295,7 @@ function s = onOff(val)
 end
 
 function selType = inferSelectionType(paramFile, modelName)
-%INFERSELECTIONTYPE Classify param file as Default or Selected.
+% INFERSELECTIONTYPE Classify param file as Default or Selected.
 %   Default means the file matches <ModelName>Params.m convention.
     [~, paramBase, ~] = fileparts(paramFile);
     expectedBase = [char(modelName) 'Params'];
@@ -306,7 +307,7 @@ function selType = inferSelectionType(paramFile, modelName)
 end
 
 function ns = discoverNamespaceSafe(paramFile)
-%DISCOVERNAMESPACESAFE Call discoverParamNamespace with guard.
+% DISCOVERNAMESPACESAFE Call discoverParamNamespace with guard.
     ns = '';
     try
         ns = discoverParamNamespace(paramFile);
@@ -317,7 +318,7 @@ function ns = discoverNamespaceSafe(paramFile)
 end
 
 function desc = readTemplateDescription(state)
-%READTEMPLATEDESCRIPTION Read Description field from config JSON.
+% READTEMPLATEDESCRIPTION Read Description field from config JSON.
     desc = '';
     try
         rawCfg = jsondecode(fileread(state.ConfigFile));

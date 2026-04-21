@@ -16,6 +16,8 @@ function applySetupState(app, state)
 %   Inputs:
 %     app   — BEVapp handle
 %     state — struct from buildSetupState or jsondecode of a saved setup JSON
+%
+% Copyright 2026 The MathWorks, Inc.
 
     % ---- Validate and normalize input ----
     if ~isstruct(state), return; end

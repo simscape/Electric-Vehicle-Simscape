@@ -1,4 +1,8 @@
 function modelDescription(app, modelName)
+% MODELDESCRIPTION Display model description and preview image in the app.
+%   modelDescription(app, modelName)
+%
+% Copyright 2026 The MathWorks, Inc.
     modelBaseName = erase(convertStringsToChars(modelName), '.slx');
 
     % Create unique PNG file name in temp folder
@@ -7,7 +11,8 @@ function modelDescription(app, modelName)
     root = getBEVProjectRoot(app);
     previewPng = fullfile(root, 'preview.png');
 
-    d = uiprogressdlg(app.UIFigure, ...
+    % ---- Progress dialog ----
+    progressDlg = uiprogressdlg(app.UIFigure, ...
         'Title','Please wait', ...
         'Message','Loading model description…', ...
         'Indeterminate','on', ...
@@ -43,13 +48,13 @@ function modelDescription(app, modelName)
         % Pause to allow UI update, then delete temp file
         pause(1);
         delete(tempPng);
-        close(d);
+        close(progressDlg);
 
     catch ME
         if exist('wasLoaded','var') && ~wasLoaded
             try, close_system(modelBaseName, 0); catch, end
         end
-        close(d);
+        close(progressDlg);
         uialert(app.UIFigure, ME.message, 'Error');
     end
 

@@ -8,6 +8,8 @@ function applySelections(app, tmpl)
 %   Inputs:
 %     app  — BEVapp handle
 %     tmpl — template-level struct (e.g. state.VehicleElectroThermal)
+%
+% Copyright 2026 The MathWorks, Inc.
 
     % ---- Control selection ----
     if isfield(tmpl, 'Controls') && isfield(tmpl.Controls, 'Model')

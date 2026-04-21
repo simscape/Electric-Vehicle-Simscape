@@ -12,7 +12,7 @@ Single-page reference for how the BEV Simscape repository is organized, where tr
 | [`Components/`](../Components/README.md) | 12 self-contained component packages with models, params, tests, docs |
 | [`Model/`](../Model/README.md) | System-level Simulink model (`BEVsystemModel.slx`) — authored assets only |
 | [`Model/VehicleTemplate/`](../Model/VehicleTemplate/README.md) | 4 vehicle template `.slx` files assembled from component references |
-| [`Model/Display/`](../Model/Display/README.md) | Energy-flow visualisation subsystems used during simulation |
+| [`Model/Display/`](../Model/Display/README.md) | Energy-flow visualization subsystems used during simulation |
 | `Script_Data/` | System-level param scripts, legacy setup scripts |
 | `Script_Data/Setup/Preset/` | Shipped preset configurations — ready-to-apply setup scripts ([picker](../Script_Data/OpenPresetPicker.m)) |
 | `Script_Data/Setup/User/` | Generated setup/param scripts from app export (gitignored) |
@@ -20,7 +20,7 @@ Single-page reference for how the BEV Simscape repository is organized, where tr
 | `Overview/` | Published MATLAB overview pages (`.m` source → `html/` output) |
 | `Overview/Image/` | Images referenced by overview documentation |
 | [`Test/`](../Test/README.md) | Project-level test suite — system model, workflow, and project checks |
-| `utils/` | Shared utilities — signal designer, cell characterisation methods |
+| `utils/` | Shared utilities — signal designer, cell characterization methods |
 
 ## Source of Truth
 
@@ -197,14 +197,14 @@ Ready-to-use preset configurations are shipped in `Script_Data/Setup/Preset/`. E
 - Source `.m` files are the canonical copy. Never patch generated HTML directly.
 - Images generated during publish go to `Documentation/images/`. HTML `src=` attributes reference `../images/`.
 - Cross-links between published pages use relative paths (same-folder links use just the filename).
-- The app loads component HTML via `ComponentDescription()`, which searches `Components/**/Documentation/html/` by fidelity name.
+- The App loads component HTML via `ComponentDescription()`, which searches `Components/**/Documentation/html/` by fidelity name.
 
 ## Workflow Organization
 
 | Domain | Workflow | Entry Point | Template Needed |
 |--------|----------|-------------|-----------------|
 | Battery | [Battery Sizing](../Workflow/Battery/BatterySizing/README.md) | `BEVBatterySizingMain.mlx` | Any |
-| Battery | [Cell Characterisation](../Workflow/Battery/CellCharacterization/README.md) | `CellCharacterizationForBEV.mlx` | Any |
+| Battery | [Cell Characterization](../Workflow/Battery/CellCharacterization/README.md) | `CellCharacterizationForBEV.mlx` | Any |
 | Battery | [Neural Net Virtual Sensor](../Workflow/Battery/VirtualSensorNeuralNetModel/README.md) | `VirtualSensorNeuralNetModel.mlx` | Electro-thermal |
 | MotorDrive | [Gear Ratio Selection](../Workflow/MotorDrive/GearRatioSelect/README.md) | `minimumRequiredGearRatio.mlx` | Electro-thermal |
 | MotorDrive | [PMSM Loss Map Generation](../Workflow/MotorDrive/GenerateMotInvLoss/README.md) | `generateDULossMap.mlx` | Any |
@@ -231,8 +231,8 @@ These are areas where sources can fall out of sync. Check after any structural c
 
 | Drift Risk | What Can Go Wrong | How to Check |
 |-----------|-------------------|-------------|
-| JSON config vs disk | Config declares a fidelity that doesn't exist as `.slx` | `scanComponentAvailability()` reports missing models |
-| Template `.slx` vs JSON | A template exists on disk but isn't in any config | Compare `Model/VehicleTemplate/*.slx` against JSON keys |
+| JSON config vs disk | Config declares a fidelity that does not exist as `.slx` | `scanComponentAvailability()` reports missing models |
+| Template `.slx` vs JSON | A template exists on disk but is not in any config | Compare `Model/VehicleTemplate/*.slx` against JSON keys |
 | Param script vs model | Model renamed but param script not updated | Check `<Fidelity>Params.m` exists for every `<Fidelity>.slx` |
 | Doc source vs published HTML | Source `.m` edited but HTML not republished | Compare timestamps: `Documentation/*.m` vs `Documentation/html/*.html` |
 | App function count vs README | Functions added/removed but README counts stale | Count files in `APP/API/*/` vs documented counts |
@@ -261,7 +261,7 @@ These are areas where sources can fall out of sync. Check after any structural c
 2. Add `Model/`, `Documentation/`, `TestCase/` at minimum
 3. Add component entries to relevant templates in `APP/Config/Preset/*.json`
 4. Update `Components/README.md` and `Overview/ElectricVehicleComponentOverview.m`
-5. The app picks up new component types automatically from the JSON config
+5. The App picks up new component types automatically from the JSON config
 
 ### Add a new workflow
 

@@ -1,12 +1,11 @@
 function ok = ensureParamLinks(app)
-%ENSUREPARAMLINKS Validate that all component instances have param file links.
+% ENSUREPARAMLINKS Validate that every component instance has a valid param file link.
 %   ok = ensureParamLinks(app)
 %
-%   Returns true if all links are valid (either already valid, or user
-%   fixed them via the modal dialog). Returns false if the user cancelled.
+%   Returns true if all links are valid (already present or user-linked via
+%   the modal dialog). Returns false if the user cancelled or links remain
+%   incomplete. Missing-model instances (__MISSING__) are skipped.
 %
-%   If any component instances have missing or invalid param file links,
-%   a modal dialog is shown allowing the user to link each one.
 % Copyright 2026 The MathWorks, Inc.
 
     % ---- Find components with missing param links ----
@@ -35,7 +34,7 @@ end
 %% ========================= Helpers =========================
 
 function [labels, keys, selections] = findMissingParamLinks(app)
-%FINDMISSINGPARAMLINKS Return component keys whose param file is missing or unlinked.
+% FINDMISSINGPARAMLINKS Scan all component dropdowns for missing or invalid param links.
     labels     = {};
     keys       = {};
     selections = {};
@@ -57,7 +56,7 @@ function [labels, keys, selections] = findMissingParamLinks(app)
 end
 
 function ok = showLinkDialog(app, missingLabels, missingKeys)
-%SHOWLINKDIALOG Display a modal panel for linking missing param files.
+% SHOWLINKDIALOG Display a modal panel for linking missing param files.
 %   Returns true if user completed linking, false if cancelled.
     numMissing = numel(missingLabels);
     rowHeight  = 28;
@@ -81,28 +80,28 @@ function ok = showLinkDialog(app, missingLabels, missingKeys)
     setappdata(app.UIFigure, 'ensureParamLinksOK', false);
 
     % Build grid: one row per missing component + bottom button row
-    gl = uigridlayout(dlg, [numMissing + 1, 3]);
-    gl.Padding     = [10 10 10 10];
-    gl.RowSpacing  = 6;
-    gl.ColumnSpacing = 8;
-    gl.ColumnWidth = {'1x', 80, 90};
-    gl.RowHeight   = [repmat({rowHeight}, 1, numMissing), {'fit'}];
+    gridLayout = uigridlayout(dlg, [numMissing + 1, 3]);
+    gridLayout.Padding     = [10 10 10 10];
+    gridLayout.RowSpacing  = 6;
+    gridLayout.ColumnSpacing = 8;
+    gridLayout.ColumnWidth = {'1x', 80, 90};
+    gridLayout.RowHeight   = [repmat({rowHeight}, 1, numMissing), {'fit'}];
 
     statusLabels = gobjects(numMissing, 1);
     for i = 1:numMissing
         compKey = missingKeys{i};
-        uilabel(gl, 'Text', compKey, 'HorizontalAlignment', 'left');
-        statusLabels(i) = uilabel(gl, ...
+        uilabel(gridLayout, 'Text', compKey, 'HorizontalAlignment', 'left');
+        statusLabels(i) = uilabel(gridLayout, ...
             'Text', 'Not linked', 'FontColor', [0.85 0.33 0.10]);
-        uibutton(gl, 'Text', 'Link...', ...
+        uibutton(gridLayout, 'Text', 'Link...', ...
             'ButtonPushedFcn', @(~, ~) onLinkOne(app, compKey, statusLabels(i), doneBtn));
     end
 
     % Bottom row: spacer, Done, Cancel
-    uilabel(gl, 'Text', '');
-    doneBtn = uibutton(gl, 'Text', 'Done', 'Enable', 'off', ...
+    uilabel(gridLayout, 'Text', '');
+    doneBtn = uibutton(gridLayout, 'Text', 'Done', 'Enable', 'off', ...
         'ButtonPushedFcn', @(~, ~) onDone(app, dlg, storedStates));
-    uibutton(gl, 'Text', 'Cancel', ...
+    uibutton(gridLayout, 'Text', 'Cancel', ...
         'ButtonPushedFcn', @(~, ~) onCancel(app, dlg, storedStates));
 
     % Update Done button state
@@ -119,11 +118,11 @@ function ok = showLinkDialog(app, missingLabels, missingKeys)
 end
 
 function onLinkOne(app, compKey, statusLabel, doneBtn)
-%ONLINKONE Handle "Link..." button: file picker for one component.
-    [f, p] = uigetfile('*.m', sprintf('Select Param file for %s', compKey));
-    if isequal(f, 0), return; end
+% ONLINKONE Handle "Link..." button: file picker for one component.
+    [fileName, selectedFolder] = uigetfile('*.m', sprintf('Select Param file for %s', compKey));
+    if isequal(fileName, 0), return; end
 
-    paramPath = fullfile(p, f);
+    paramPath = fullfile(selectedFolder, fileName);
     app.ComponentDropdowns.(compKey).UserData.ParamFile = paramPath;
 
     % Update tooltip and status label
@@ -138,7 +137,7 @@ function onLinkOne(app, compKey, statusLabel, doneBtn)
 end
 
 function onDone(app, dlg, storedStates)
-%ONDONE Validate all links; if complete, mark success and close.
+% ONDONE Validate all links; if complete, mark success and close.
     compKeys = fieldnames(app.ComponentDropdowns);
     stillMissing = {};
     for j = 1:numel(compKeys)
@@ -164,7 +163,7 @@ function onDone(app, dlg, storedStates)
 end
 
 function onCancel(app, dlg, storedStates)
-%ONCANCEL Close dialog without linking.
+% ONCANCEL Close dialog without linking.
     setappdata(app.UIFigure, 'ensureParamLinksOK', false);
     closeDialog(dlg, storedStates);
     uialert(app.UIFigure, ...
@@ -174,7 +173,7 @@ function onCancel(app, dlg, storedStates)
 end
 
 function updateDoneButton(app, doneBtn)
-%UPDATEDONEBTN Enable Done only when all components have valid param links.
+% UPDATEDONEBTN Enable Done only when all components have valid param links.
     compKeys = fieldnames(app.ComponentDropdowns);
     allLinked = true;
     for j = 1:numel(compKeys)
@@ -194,7 +193,7 @@ function updateDoneButton(app, doneBtn)
 end
 
 function storedStates = disableBackground(app, dlg)
-%DISABLEBACKGROUND Disable top-level children for modal behavior, return prior states.
+% DISABLEBACKGROUND Disable top-level children for modal behavior, return prior states.
     topChildren = app.UIFigure.Children;
     storedStates = struct('handle', {}, 'hadEnable', {}, 'priorEnable', {});
 
@@ -213,7 +212,7 @@ function storedStates = disableBackground(app, dlg)
 end
 
 function closeDialog(dlg, storedStates)
-%CLOSEDIALOG Delete dialog panel and restore prior Enable states.
+% CLOSEDIALOG Delete dialog panel and restore prior Enable states.
     if isvalid(dlg), delete(dlg); end
     for ii = 1:numel(storedStates)
         rec = storedStates(ii);

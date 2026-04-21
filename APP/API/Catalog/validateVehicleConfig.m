@@ -12,6 +12,8 @@ function valid = validateVehicleConfig(data, platformName)
 %
 %   Optional fields:
 %     Controls             — struct with Instances and Models
+%
+% Copyright 2026 The MathWorks, Inc.
 
     allPlatforms = fieldnames(data);
     valid = true;

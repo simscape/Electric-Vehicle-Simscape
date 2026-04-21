@@ -13,6 +13,7 @@ function paths = getBEVAppPaths(app)
 %     paths.PresetConfig       — shipped JSON configs (APP/Config/Preset)
 %     paths.UserConfig         — user-saved JSON configs (APP/Config/User)
 %     paths.UserSetupScript    — user-exported setup scripts (Script_Data/Setup/User)
+%
 % Copyright 2026 The MathWorks, Inc.
 
     projectRoot = getBEVProjectRoot(app);

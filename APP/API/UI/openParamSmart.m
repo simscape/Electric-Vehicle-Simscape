@@ -1,5 +1,11 @@
 function openParamSmart(app, compName, dd, rootFolder)
-%OPENPARAMSMART Open linked param file, or fall back to auto-detect.
+% OPENPARAMSMART Open the linked param file for a component instance.
+%   openParamSmart(app, compName, dd, rootFolder)
+%
+%   If a user-linked file exists, opens it directly. If the link is stale,
+%   clears it and falls back to auto-detection via <ModelName>Params.m.
+%
+% Copyright 2026 The MathWorks, Inc.
 
     % ---- 1. If a user-linked file exists, open it ----
     if isstruct(dd.UserData) && isfield(dd.UserData, 'ParamFile')
@@ -48,7 +54,8 @@ function openParamSmart(app, compName, dd, rootFolder)
 end
 
 function openParamForCurrentSelection(app, compName, dd, rootFolder)
-%OPENPARAMFORCURRENTSELECTION Derive <ModelName>Params.m from dropdown selection.
+% OPENPARAMFORCURRENTSELECTION Derive and open <ModelName>Params.m from the dropdown selection.
+%   Checks the component's Model folder first, then falls back to project-wide search.
 
     val = char(dd.Value);
 

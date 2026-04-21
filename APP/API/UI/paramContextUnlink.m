@@ -1,5 +1,11 @@
 function paramContextUnlink(app, btn, dd, rootFolder)
-%PARAMCONTEXTUNLINK Context menu action: unlink param file, reset to default.
+% PARAMCONTEXTUNLINK Remove the user-linked param file and reset to auto-detected default.
+%   paramContextUnlink(app, btn, dd, rootFolder)
+%
+%   Clears dd.UserData.ParamFile, re-discovers the default param file,
+%   refreshes the tooltip, and updates the warning label.
+%
+% Copyright 2026 The MathWorks, Inc.
 
     % Clear the explicit link
     if isfield(dd.UserData, 'ParamFile')
@@ -30,17 +36,20 @@ function paramContextUnlink(app, btn, dd, rootFolder)
     % Refresh tooltip (now shows default param file)
     updateParamTooltip(btn, dd);
 
-    % Update the red note label
-    if isstruct(dd.UserData) ...
-            && isfield(dd.UserData, 'ParamStatusLabel') ...
-            && ~isempty(dd.UserData.ParamStatusLabel) ...
-            && isvalid(dd.UserData.ParamStatusLabel)
-        if strlength(note) ~= 0
-            dd.UserData.ParamStatusLabel.Text    = string(note);
-            dd.UserData.ParamStatusLabel.Visible = 'on';
-        else
-            dd.UserData.ParamStatusLabel.Text    = "";
-            dd.UserData.ParamStatusLabel.Visible = 'off';
-        end
+    % ---- Update the red note label ----
+    if ~isstruct(dd.UserData) ...
+            || ~isfield(dd.UserData, 'ParamStatusLabel') ...
+            || isempty(dd.UserData.ParamStatusLabel) ...
+            || ~isvalid(dd.UserData.ParamStatusLabel)
+        return;
+    end
+
+    noteLabel = dd.UserData.ParamStatusLabel;
+    if strlength(note) ~= 0
+        noteLabel.Text    = string(note);
+        noteLabel.Visible = 'on';
+    else
+        noteLabel.Text    = "";
+        noteLabel.Visible = 'off';
     end
 end

@@ -9,6 +9,8 @@ function renderComponentPanels(app, availability, root)
 %     - Red note label for missing models/params (row 4)
 %
 %   Populates app.ComponentDropdowns and app.ComponentButtons.
+%
+% Copyright 2026 The MathWorks, Inc.
 
     % ---- Outer scrollable grid ----
     app.GridLayoutComponent = uigridlayout(app.ComponentsPanel, ...

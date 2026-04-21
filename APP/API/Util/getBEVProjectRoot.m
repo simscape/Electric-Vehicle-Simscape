@@ -2,6 +2,7 @@ function projectRoot = getBEVProjectRoot(app)
     %GETBEVPROJECTROOT Safely returns the BEV project root folder
     %   Checks if a MATLAB project is loaded and returns its root folder.
     %   If not, displays a UI alert and throws an error.
+% Copyright 2026 The MathWorks, Inc.
     
     try
         proj = matlab.project.rootProject();

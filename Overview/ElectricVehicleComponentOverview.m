@@ -177,7 +177,7 @@
 % The system model *BEVsystemModel.slx* assembles components via subsystem
 % references. Pre-configured vehicle templates in *Model/VehicleTemplate/*
 % provide ready-made assemblies at different fidelity scopes. The
-% *Model/Display/* folder contains energy-flow visualisation subsystems
+% *Model/Display/* folder contains energy-flow visualization subsystems
 % (*EnergyElectric*, *EnergyElectroThermal*) used during simulation.
 %
 % <html>

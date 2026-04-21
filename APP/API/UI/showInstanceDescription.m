@@ -1,5 +1,7 @@
 function showInstanceDescription(app, compName, label)
 %SHOWINSTANCEDESCRIPTION Show model preview and description for a component instance.
+%
+% Copyright 2026 The MathWorks, Inc.
 
     handleKey = matlab.lang.makeValidName([compName '_' label]);
 

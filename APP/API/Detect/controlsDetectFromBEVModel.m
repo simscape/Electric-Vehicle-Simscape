@@ -2,6 +2,8 @@ function detect = controlsDetectFromBEVModel(app, rootFolder)
 %CONTROLSDETECTFROMBEVMODEL Detect controller from BEV model SSRs.
 %   Populates the controller dropdown from the Controller/Model folder,
 %   then scans the BEV model for a matching Subsystem Reference.
+%
+% Copyright 2026 The MathWorks, Inc.
 
     detect = false;
 

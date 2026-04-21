@@ -1,19 +1,27 @@
-function s = buildList(val)
-%BUILDLIST Recursively build HTML UL/LI from a struct, cell, or scalar.
+function htmlStr = buildList(val)
+% BUILDLIST Recursively build HTML UL/LI from a struct, cell, or scalar.
+%   htmlStr = buildList(val)
+%
+%   Converts a nested MATLAB value (struct, cell array, or scalar) into
+%   an HTML unordered list string for display in uihtml components.
+%
+% Copyright 2026 The MathWorks, Inc.
 
+    % ---- Struct: recurse into each field ----
     if isstruct(val)
         parts = "<ul>";
-        fn = fieldnames(val);
+        fieldNames = fieldnames(val);
 
-        for i = 1:numel(fn)
-            name = fn{i};
+        for i = 1:numel(fieldNames)
+            name = fieldNames{i};
             parts = parts + "<li><strong>" + name + "</strong>: " ...
                 + buildList(val.(name)) + "</li>";
         end
 
         parts = parts + "</ul>";
-        s = strjoin(string(parts), "");
+        htmlStr = strjoin(string(parts), "");
 
+    % ---- Cell array: recurse into each element ----
     elseif iscell(val)
         parts = "<ul>";
 
@@ -22,10 +30,10 @@ function s = buildList(val)
         end
 
         parts = parts + "</ul>";
-        s = strjoin(string(parts), "");
+        htmlStr = strjoin(string(parts), "");
 
+    % ---- Scalar leaf: escape HTML and wrap in span ----
     else
-        % Leaf node: escape HTML and wrap in span
         txt = string(val);
 
         % Compress file paths to just filename for display
@@ -38,6 +46,6 @@ function s = buildList(val)
         txt = strrep(txt, '<', '&lt;');
         txt = strrep(txt, '>', '&gt;');
 
-        s = strjoin(string("<span>" + txt + "</span>"), "");
+        htmlStr = strjoin(string("<span>" + txt + "</span>"), "");
     end
 end

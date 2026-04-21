@@ -1,5 +1,7 @@
 function openInstanceModel(app, compName, label)
 %OPENINSTANCEMODEL Open the SLX file selected for a given component instance.
+%
+% Copyright 2026 The MathWorks, Inc.
 
     handleKey = matlab.lang.makeValidName([compName '_' label]);
 

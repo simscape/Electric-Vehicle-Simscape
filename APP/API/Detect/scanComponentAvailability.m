@@ -15,6 +15,8 @@ function [availability, missingMap] = scanComponentAvailability(root, entries)
 %                     .Comp, .Label, .Valid, .Missing, .MissingNoteStrings, .Folder
 %     missingMap   — containers.Map keyed "Comp|Model" with
 %                     .Instances (string array), .FoundElsewhere (string)
+%
+% Copyright 2026 The MathWorks, Inc.
 
     missingMap   = containers.Map('KeyType', 'char', 'ValueType', 'any');
     availability = repmat(emptyAvailability(), 0, 1);
