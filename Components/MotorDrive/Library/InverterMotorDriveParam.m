@@ -1,7 +1,7 @@
 % Inverter parameters for MotorDriveGearTh component model
 % Subset of InverterParams.m — only params used by the .slx blocks.
 
-% Copyright 2022 - 2025 The MathWorks, Inc.
+% Copyright 2022 - 2026 The MathWorks, Inc.
 
 %% Required Environment Parameters
 % These parameters must be defined before running this script.

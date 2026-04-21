@@ -22,7 +22,7 @@ function [ns, fields, values, comments, nsPerField] = discoverParamNamespace(par
 %   Example:
 %     [ns, fields, ~, ~, nsPerField] = discoverParamNamespace('PumpParams.m');
 
-% Copyright 2025-2026 The MathWorks, Inc.
+% Copyright 2026 The MathWorks, Inc.
 
     txt = fileread(paramFile);
     lines = splitlines(txt);

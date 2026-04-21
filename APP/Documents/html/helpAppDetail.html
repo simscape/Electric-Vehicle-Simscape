@@ -173,7 +173,7 @@
       font-size: 18px;
       font-weight: 700;
       margin: 20px 0 8px 0;
-      color: var(--mw-orange);
+      color: #1a1a1a;
     }
 
     p { margin: 10px 0; }
@@ -313,6 +313,111 @@
       line-height: 1.5;
     }
 
+    /* ---- Figure captions ---- */
+    figure {
+      margin: 12px auto 16px;
+      display: table;
+      text-align: center;
+    }
+    figure img {
+      margin-bottom: 4px;
+      display: block;
+    }
+    figcaption {
+      font-size: 13px;
+      color: var(--mw-muted);
+      line-height: 1.4;
+      text-align: center;
+    }
+
+    /* ---- Panel + text side-by-side ---- */
+    .panel-layout {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+      margin: 14px 0;
+    }
+    .panel-layout img {
+      margin: 0;
+      max-width: 280px;
+    }
+    .panel-layout-wide img {
+      max-width: 340px;
+    }
+    @media (max-width: 980px) {
+      .panel-layout { grid-template-columns: 1fr; }
+    }
+
+    /* ---- Export panel + flowchart pair ---- */
+    .export-pair {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 24px;
+      align-items: center;
+      margin: 14px 0;
+    }
+    .export-pair figure { text-align: center; }
+    @media (max-width: 980px) {
+      .export-pair { grid-template-columns: 1fr; }
+    }
+
+    /* ---- Action branch flowchart ---- */
+    .action-branch {
+      max-width: 540px;
+      margin: 18px auto 10px;
+      text-align: center;
+    }
+    .branch-svg { display: block; margin: 0 auto; }
+    .branch-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .branch-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .branch-node {
+      border: 2px solid var(--mw-border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 14px;
+      background: #fff;
+      width: 100%;
+    }
+    .branch-support { background: #f7f7f7; }
+    .branch-primary {
+      background: #fff7ed;
+      border-color: var(--mw-orange);
+      border-width: 3px;
+    }
+    .branch-output {
+      font-size: 13px;
+      color: var(--mw-muted);
+      line-height: 1.5;
+      border: 1px dashed #22c55e;
+      border-radius: 8px;
+      background: #f0fdf4;
+      padding: 8px 10px;
+      width: 100%;
+    }
+    .branch-end {
+      font-size: 13px;
+      color: var(--mw-muted);
+      background: #f3f4f6;
+      border: 1px solid #9ca3af;
+      border-radius: 16px;
+      padding: 6px 10px;
+      width: 100%;
+    }
+    @media (max-width: 980px) {
+      .branch-row { grid-template-columns: 1fr; }
+      .branch-svg { display: none; }
+    }
+
     footer {
       max-width: 1440px;
       margin: 0 auto;
@@ -374,18 +479,8 @@
                 <li><a href="#drive-cycle">Drive Cycle</a></li>
               </ul>
             </li>
-            <li>
-              <button class="sidebar-toggle" aria-expanded="false" aria-controls="nav-actions">
-                <span class="sidebar-toggle-label">Save, Export, Model Setup</span>
-                <span class="sidebar-toggle-icon">&#9654;</span>
-              </button>
-              <ul id="nav-actions" class="sidebar-sublist">
-                <li><a href="#save-setup">Save Setup</a></li>
-                <li><a href="#param-export">Export Parameter</a></li>
-                <li><a href="#missing-params">Missing Param Links</a></li>
-                <li><a href="#create-model">Model Setup</a></li>
-              </ul>
-            </li>
+            <li><a href="#export">Save, Export, Model Setup</a></li>
+            <li><a href="#related-links">See Also</a></li>
           </ul>
         </div>
       </div>
@@ -433,9 +528,10 @@
           </div>
         </div>
 
-        <div style="margin: 16px 0; text-align: center;">
+        <figure>
           <img src="../images/BEVappWindow.png" alt="BEV App main window" style="max-width: 100%; height: auto;" />
-        </div>
+          <figcaption>BEV App main window</figcaption>
+        </figure>
       </section>
 
       <!-- Prerequisites -->
@@ -479,18 +575,6 @@
           Keep the base SLX model under version control and create a copy for experiments.
         </div>
 
-        <h3>First-use path</h3>
-        <p style="font-size:14px; line-height:2; color:var(--mw-text);">
-          <strong>Open project</strong> &#8594;
-          <strong>Launch app</strong> (<code>BEVapp</code>) &#8594;
-          <strong>Select base model &amp; design scenario</strong> &#8594;
-          <strong>Choose components</strong> &#8594;
-          <strong>Set environment &amp; driver</strong> &#8594;
-          <strong>Model Setup</strong>
-        </p>
-        <p>
-          Follow this sequence your first time through. Each section below explains one step in detail.
-        </p>
       </section>
 
       <!-- Select a vehicle platform -->
@@ -500,41 +584,51 @@
           After launching the app, use this panel to select your vehicle platform. The three dropdowns here control which components and options become available in the rest of the app.
         </p>
 
-        <img src="../images/VehicleConfigPanel.png" alt="Vehicle platform selection panel" style="max-width: 280px;" />
+        <div class="panel-layout">
+          <figure>
+            <img src="../images/VehicleConfigPanel.png" alt="Vehicle Configuration panel" />
+            <figcaption>Vehicle Configuration panel</figcaption>
+          </figure>
+          <ol>
+            <li><strong>Base Model</strong> &mdash; pick the Simulink model file that contains your BEV layout.</li>
+            <li><strong>Design Scenario</strong> &mdash; pick a preset configuration that controls which components and fidelities are available. Setups you have saved yourself appear below a separator line.</li>
+            <li><strong>Vehicle Config</strong> &mdash; pick the vehicle template that sets the overall model structure (e.g. electric-only, electro-thermal, with HVAC).</li>
+          </ol>
+        </div>
 
-        <p>The following list describes what each dropdown does.</p>
-        <ol>
-          <li><strong>Base Model</strong> &mdash; pick the Simulink model file that contains your BEV layout.</li>
-          <li><strong>Design Scenario</strong> &mdash; pick a preset configuration that controls which components and fidelities are available. Setups you have saved yourself appear below a separator line.</li>
-          <li><strong>Vehicle Config</strong> &mdash; pick the vehicle template that sets the overall model structure (e.g. electric-only, electro-thermal, with HVAC).</li>
-        </ol>
-
-        <img src="../../../Overview/Image/BatteryElectricVehicleModelOverview_01.png" alt="BEV system model canvas" />
-        <img src="../images/VehicleConfiguration.png" alt="Example vehicle configuration model" />
+        <figure>
+          <img src="../../../Overview/Image/BatteryElectricVehicleModelOverview_01.png" alt="BEV system model canvas" />
+          <figcaption>BEV system model canvas</figcaption>
+        </figure>
+        <figure>
+          <img src="../images/VehicleConfiguration.png" alt="Example vehicle configuration in Simulink" />
+          <figcaption>Example vehicle configuration in Simulink</figcaption>
+        </figure>
       </section>
 
       <!-- Choose component models -->
       <section id="choose-components">
         <h2>Component Selection</h2>
-        <p>
-          Each row in this panel represents one component in the vehicle (battery, motor, pump, etc.).
-          Use the dropdown in each row to choose which fidelity you want for that component.
-        </p>
-
-        <img src="../images/ComponentPanel.png" alt="Component selection panel" style="max-width: 280px;" />
-
-        <p>
-          The row label shows the component name (e.g. "Battery", "Rear Motor (EM2)").
-          The dropdown next to it lists the available fidelities for that component.
-          Only models that are present in the project folder appear in the list.
-        </p>
-
-        <h3 id="dropdown-population">How the dropdown gets populated</h3>
-        <ul>
-          <li>The app looks through the project's component folders for available model files.</li>
-          <li>It only shows models that are allowed by the Design Scenario you selected.</li>
-          <li>If a model file is missing from the project, it is marked with a red note.</li>
-        </ul>
+        <div class="panel-layout">
+          <figure>
+            <img src="../images/ComponentPanel.png" alt="Component Selection panel" />
+            <figcaption>Component Selection panel</figcaption>
+          </figure>
+          <div>
+            <p>
+              Each row represents one component in the vehicle (battery, motor, pump, etc.).
+              Use the dropdown in each row to choose which fidelity you want for that component.
+              Only models that are present in the project folder appear in the list.
+              See the <a href="../../../Overview/html/ComponentModelsReference.html">Component Models Reference</a> for a full list of components and fidelities.
+            </p>
+            <h3 id="dropdown-population" style="margin-top:14px;">How the dropdown gets populated</h3>
+            <ul>
+              <li>The app looks through the project's component folders for available model files.</li>
+              <li>It only shows models that are allowed by the Design Scenario you selected.</li>
+              <li>If a model file is missing from the project, it is marked with a red note.</li>
+            </ul>
+          </div>
+        </div>
 
         <h3 id="component-controls">Controls in each component row</h3>
         <table>
@@ -547,17 +641,22 @@
         </table>
 
         <h3 id="link-params">Link parameter files</h3>
-        <p>
-          Each component can have a parameter file that defines its values (sizes, ratings, etc.).
-          By default, the app looks for a file named <code>&lt;ModelName&gt;Params.m</code> in the component's Model folder.
-          If you want to use a different file, right-click the Param File button to link or unlink it.
-        </p>
-
-        <img src="../images/ComponentPanelParam.png" alt="Right-click Param menu" style="max-width: 280px;" />
+        <div class="panel-layout">
+          <figure>
+            <img src="../images/ComponentPanelParam.png" alt="Right-click context menu for parameter linking" style="min-width: 360px;" />
+            <figcaption>Parameter file context menu</figcaption>
+          </figure>
+          <p>
+            Each component can have a parameter file that defines its values (sizes, ratings, etc.).
+            By default, the app looks for a file named <code>&lt;ModelName&gt;Params.m</code> in the component's Model folder.
+            If you want to use a different file, right-click the Param File button to link or unlink it.
+          </p>
+        </div>
 
         <div class="note">
           Start with simpler (nonthermal) fidelities to make sure everything connects properly. Once the setup works, switch to electro-thermal fidelities for more detailed results.
         </div>
+
       </section>
 
       <!-- Review preview and description -->
@@ -569,22 +668,29 @@
         </p>
 
         <h3>Preview panel</h3>
-        <ul>
-          <li>Shows a snapshot of the selected model canvas.</li>
-          <li>Updates when you change a dropdown selection.</li>
-          <li>Helps you spot problems (missing connections, wrong component) before creating the model.</li>
-        </ul>
-
-        <img src="../images/SelectionPreviewPanel.png" alt="Preview panel" style="max-width: 340px;" />
+        <div class="panel-layout panel-layout-wide">
+          <figure>
+            <img src="../images/SelectionPreviewPanel.png" alt="Selection Preview panel" />
+            <figcaption>Selection Preview panel</figcaption>
+          </figure>
+          <ul>
+            <li>Shows a snapshot of the selected model canvas.</li>
+            <li>Helps you spot problems (missing connections, wrong component) before creating the model.</li>
+          </ul>
+        </div>
 
         <h3>Description panel</h3>
-        <ul>
-          <li>Explains what the selected model does.</li>
-          <li>Lists its main inputs, outputs, and any important assumptions.</li>
-          <li>Helps you decide between fidelities when more than one is available.</li>
-        </ul>
-
-        <img src="../images/SelectionDescriptionPanel.png" alt="Description panel" style="max-width: 340px;" />
+        <div class="panel-layout panel-layout-wide">
+          <figure>
+            <img src="../images/SelectionDescriptionPanel.png" alt="Selection Description panel" />
+            <figcaption>Selection Description panel</figcaption>
+          </figure>
+          <ul>
+            <li>Explains what the selected model does.</li>
+            <li>Lists its main inputs, outputs, and any important assumptions.</li>
+            <li>Helps you decide between fidelities when more than one is available.</li>
+          </ul>
+        </div>
       </section>
 
       <!-- Environment and initial conditions -->
@@ -595,6 +701,12 @@
           These values are used by any component that depends on temperature, pressure, or humidity.
         </p>
 
+        <figure>
+          <img src="../images/EnvInitPanel.png" alt="Environment and Initial Condition panel" style="max-width: 340px;" />
+          <figcaption>Environment and Initial Condition panel</figcaption>
+        </figure>
+
+        <h3>Environment parameters</h3>
         <table>
           <tr><th>Parameter</th><th>Description</th><th>Default</th></tr>
           <tr><td>Ambient Temperature</td><td>Outside air temperature</td><td>25 degC</td></tr>
@@ -602,8 +714,6 @@
           <tr><td>Relative Humidity Initial</td><td>Starting humidity of the outside air (0 = dry, 1 = fully humid)</td><td>0.3</td></tr>
           <tr><td>CO2 Fraction Initial</td><td>CO2 level in outside air (typical outdoor value is 0.0004)</td><td>0.0004</td></tr>
         </table>
-
-        <img src="../images/EnvInitPanel.png" alt="Environment panel" style="max-width: 340px;" />
 
         <div class="note">
           Try saving different environment setups (e.g. Hot City, Cold Highway, Altitude Test) and compare simulation results by switching between them.
@@ -618,6 +728,12 @@
           This panel is only active when your vehicle configuration includes an HVAC component.
         </p>
 
+        <figure>
+          <img src="../images/HVACConfigPanel.png" alt="HVAC configuration panel" style="max-width: 340px;" />
+          <figcaption>HVAC configuration panel</figcaption>
+        </figure>
+
+        <h3>HVAC controls</h3>
         <table>
           <tr><th>Control</th><th>Description</th><th>Default</th></tr>
           <tr><td>AC status</td><td>Toggle air conditioning on or off</td><td>Off</td></tr>
@@ -628,19 +744,20 @@
           Turning AC on draws more power from the battery, which reduces driving range.
           To see the difference, run once with AC off, then again with AC on and compare the results.
         </p>
-
-        <img src="../images/HVACConfigPanel.png" alt="HVAC configuration panel" style="max-width: 340px;" />
       </section>
 
       <!-- Driver Setup -->
       <section id="setup-driver">
         <h2>Driver Setup</h2>
         <p>
-          Choose how the vehicle is driven: which wheels are powered, whether braking recovers energy,
-          which controller runs the logic, and which drive cycle sets the target speed.
+          Configure the drivetrain mode (AWD/FWD), regenerative braking, charging state,
+          supervisory controller, and drive cycle for the simulation.
         </p>
 
-        <img src="../images/DriverSetupPanel.png" alt="Driver Setup panel" style="max-width: 340px;" />
+        <figure>
+          <img src="../images/DriverSetupPanel.png" alt="Driver Setup panel" style="max-width: 340px;" />
+          <figcaption>Driver Setup panel</figcaption>
+        </figure>
 
         <h3 id="drive-modes">Drive mode buttons</h3>
         <table>
@@ -664,17 +781,17 @@
 
         <h3 id="drive-cycle">Drive Cycle</h3>
         <p>
-          Pick the speed pattern the driver will follow during simulation
-          (e.g. city driving, highway, or a standard test cycle).
+          Pick the drive cycle the driver will follow during simulation
+          (e.g. FTP75 for city driving, US06 for highway, or WLTP for a combined cycle).
         </p>
         <ul>
-          <li>Common cycles: <code>FTP72</code>, <code>WLTP</code>, <code>NEDC</code>, <code>US06</code>.</li>
+          <li>Common cycles: <code>FTP75</code>, <code>WLTP</code>, <code>NEDC</code>, <code>US06</code>.</li>
           <li>If no options appear, install the Simulink Support Package for Vehicle Drive Cycles.</li>
           <li>The <strong>?</strong> button shows the description and preview of the selected drive cycle.</li>
         </ul>
 
         <div class="note">
-          Start with a short cycle such as FTP72 to verify setup, then switch to longer cycles such as WLTP for detailed studies.
+          Start with a short cycle such as FTP75 to verify setup, then switch to longer cycles such as WLTP for detailed studies.
         </div>
       </section>
 
@@ -682,77 +799,87 @@
       <section id="export">
         <h2>Save Setup, Export Parameter, and Model Setup</h2>
         <p>
-          Once you are happy with your selections, use these buttons to save your work, generate parameter files, or build the final model.
+          Once you are happy with your selections, choose one of the three actions below.
         </p>
 
-        <img src="../images/ExportPanel.png" alt="Action controls" style="max-width: 340px;" />
+        <div class="export-pair">
+          <figure>
+            <img src="../images/ExportPanel.png" alt="Save, Export, and Model Setup controls" style="max-width: 280px;" />
+            <figcaption>Save, Export, and Model Setup controls</figcaption>
+          </figure>
+          <figure>
+            <div class="action-branch" aria-label="Action branch flowchart">
+              <svg class="branch-svg" width="540" height="50" viewBox="0 0 540 50" preserveAspectRatio="xMidYMid meet">
+                <defs>
+                  <marker id="ah" markerWidth="8" markerHeight="6" refX="4" refY="3" orient="auto">
+                    <path d="M0,0 L8,3 L0,6 Z" fill="#9ca3af"/>
+                  </marker>
+                </defs>
+                <path d="M270,0 C270,24 90,24 90,48" stroke="#9ca3af" stroke-width="2" fill="none" marker-end="url(#ah)"/>
+                <path d="M270,0 C270,24 270,24 270,48" stroke="#9ca3af" stroke-width="2" fill="none" marker-end="url(#ah)"/>
+                <path d="M270,0 C270,24 450,24 450,48" stroke="#9ca3af" stroke-width="2" fill="none" marker-end="url(#ah)"/>
+              </svg>
 
-        <h3 id="save-setup">Save Setup</h3>
-        <p>
-          Save everything you have selected (components, environment, HVAC, driver settings) so you can reload it later.
-        </p>
-        <ul>
-          <li>Your setup is saved as a file in <code>APP/Config/User/</code>.</li>
-          <li>Saved setups appear in the Design Scenario dropdown so you can load them back in one click.</li>
-          <li>Loading a saved setup restores all your selections and settings exactly as they were.</li>
-        </ul>
-
-        <div class="note">
-          <strong>Save Setup</strong> saves your selections so you can reload them in the app later.
-          <strong>Export Parameter</strong> creates a MATLAB script you can run before simulation. They do different things.
+              <div class="branch-row">
+                <div class="branch-col">
+                  <div class="branch-node branch-support" id="save-setup">
+                    <strong>Save Setup</strong>
+                  </div>
+                  <div class="branch-output">
+                    JSON saved to <code>APP/Config/User/</code><br>Reloadable anytime
+                  </div>
+                </div>
+                <div class="branch-col">
+                  <div class="branch-node branch-support" id="param-export">
+                    <strong>Export Parameter</strong>
+                  </div>
+                  <div class="branch-output">
+                    Param script saved to user-chosen location
+                  </div>
+                </div>
+                <div class="branch-col">
+                  <div class="branch-node branch-primary" id="create-model">
+                    <strong>Model Setup</strong>
+                  </div>
+                  <div class="branch-output">
+                    Scripts + README saved to <code>Script_Data/Setup/User/</code>
+                  </div>
+                  <div class="branch-end">Model opens, ready to simulate</div>
+                </div>
+              </div>
+            </div>
+            <figcaption>Action flowchart</figcaption>
+          </figure>
         </div>
 
-        <h3 id="param-export">Export Parameter</h3>
-        <p>
-          Create a MATLAB script that sets up all the parameter values your model needs to run.
-        </p>
         <ul>
-          <li>Generates a script that loads parameters for every component you selected.</li>
-          <li>Pulls in the parameter files you linked in the Components panel.</li>
-          <li>Includes environment, HVAC, and driver values if your configuration uses them.</li>
+          <li><strong>Save Setup</strong> &mdash; saved setups appear in the Design Scenario dropdown below the separator, so you can reload them in one click.</li>
+          <li><strong>Export Parameter</strong> &mdash; generates a standalone <code>.m</code> script that loads parameters for every component you selected. Useful for running outside the app or committing to version control.</li>
+          <li><strong>Model Setup</strong> &mdash; opens the base model, swaps in your selected components, applies environment and driver settings, and runs the generated scripts. The model is then ready to simulate.</li>
         </ul>
 
-        <h3 id="missing-params">Missing parameter link panel</h3>
+        <h3 id="missing-params">Missing parameter links</h3>
         <p>
-          If any component does not have a parameter file linked yet, the app will ask you to link one when you press Export Parameter.
-        </p>
-        <ul>
-          <li>Browse to a parameter file and link it.</li>
-          <li>Or skip it to use default values for that component.</li>
-        </ul>
-        <p>
+          If any component does not have a parameter file linked, the app prompts you to link one before proceeding with Export Parameter or Model Setup.
           This works the same way as right-clicking the Param File button in the Component Selection panel.
         </p>
+      </section>
 
-        <h3 id="create-model">Model Setup</h3>
-        <p>
-          Build the Simulink model based on everything you configured in the app.
-        </p>
+      <!-- See Also -->
+      <section id="related-links">
+        <h2>See Also</h2>
         <ul>
-          <li>Opens the base model you selected.</li>
-          <li>Swaps in the component models you chose for each slot (battery, motor, pump, etc.).</li>
-          <li>Applies your environment, HVAC, driver, controller, and drive cycle settings.</li>
-          <li>The model is then ready to simulate.</li>
+          <li><a href="../../../Overview/html/BatteryElectricVehicleModelOverview.html">BEV Model Overview</a></li>
+          <li><a href="../../../Overview/html/ComponentModelsReference.html">Component Models Reference</a></li>
+          <li><a href="../../../Overview/html/ElectricVehicleDesignOverview.html">Electric Vehicle Design Overview</a></li>
+          <li><a href="../../../Overview/html/ElectricVehicleComponentOverview.html">Component Overview</a></li>
         </ul>
-
-        <h3>Typical beginner path</h3>
-        <p>
-          Configure your vehicle in the app, then press <strong>Model Setup</strong> to build the model and simulate.
-          The other two buttons are useful but optional support actions:
-        </p>
-        <ul>
-          <li><strong>Save Setup</strong> &mdash; saves your selections so you can reload and iterate later without re-picking everything.</li>
-          <li><strong>Export Parameter</strong> &mdash; generates a standalone parameter script you can run outside the app or commit to version control.</li>
-        </ul>
-        <p>
-          To apply your selections and build the model, click <strong>Model Setup</strong>.
-        </p>
       </section>
     </main>
   </div>
 
   <footer>
-    Copyright 2022 &ndash; 2025 The MathWorks, Inc.
+    Copyright 2026 The MathWorks, Inc.
   </footer>
 
   <script>

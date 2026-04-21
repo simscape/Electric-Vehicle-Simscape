@@ -4,6 +4,7 @@
 %
 % Usage:
 %   run('Script_Data/Setup/Preset/VehicleElectroThermal_default/applyPreset.m')
+% Copyright 2026 The MathWorks, Inc.
 
 thisDir = fileparts(mfilename('fullpath'));
 

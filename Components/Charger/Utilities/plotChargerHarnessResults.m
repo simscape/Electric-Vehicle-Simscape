@@ -1,6 +1,7 @@
 function plotChargerHarnessResults(logsout)
 %plotChargerHarnessResults Plot all logged signals from ChargerTestHarness.
 %   plotChargerHarnessResults(LOGSOUT) creates one figure per logged signal.
+% Copyright 2026 The MathWorks, Inc.
 
     signals = {
         'Charging Current',          'Current (A)'

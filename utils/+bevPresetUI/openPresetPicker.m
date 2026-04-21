@@ -2,6 +2,7 @@ function openPresetPicker()
 %OPENPRESETPICKER Open the BEV preset picker UI.
 %   bevPresetUI.openPresetPicker()
 %   Quick-start entry point: pick a ready preset and apply it to the model.
+% Copyright 2026 The MathWorks, Inc.
 
     figKey = 'BEV_PRESET_PICKER_HANDLE';
     existingFig = getappdata(groot, figKey);

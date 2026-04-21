@@ -7,9 +7,9 @@ This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
       -->
 <title>HVAC Test Harness</title>
-<meta name="generator" content="MATLAB 24.2">
+<meta name="generator" content="MATLAB 26.1">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2026-04-17">
+<meta name="DC.date" content="2026-04-21">
 <meta name="DC.source" content="HVACTestHarnessDescription.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
@@ -123,6 +123,10 @@ open_system(model)
 <img vspace="5" hspace="5" src="../images/HVACTestHarnessDescription_01.png" alt=""> <h2 id="3">Run Simulation and Results</h2>
 <pre class="language-matlab">simout = sim(model, <span class="string">'SrcWorkspace'</span>, <span class="string">'current'</span>);
 </pre>
+<pre class="codeoutput">Warning: Remapping selected signal 'Cntrl.acOnOff' to 'Cntrl.CabinHMI.acOnOff'
+in 'HVACTestHarness/HVAC/Bus Element In4' to match the bus hierarchy. Save your
+file to make this change permanent. 
+</pre>
 <img vspace="5" hspace="5" src="../images/HVACTestHarnessDescription_02.png" alt=""> <img vspace="5" hspace="5" src="../images/HVACTestHarnessDescription_03.png" alt=""> <img vspace="5" hspace="5" src="../images/HVACTestHarnessDescription_04.png" alt=""> <img vspace="5" hspace="5" src="../images/HVACTestHarnessDescription_05.png" alt=""> <h2 id="4">Running Unit Tests</h2>
 <p>Run the MQC test suite from the command line:</p>
 <pre class="language-matlab">results = runtests(<span class="string">'HVACPassTests'</span>);
@@ -139,8 +143,8 @@ disp(results)
 </li>
 </ul>
 </div>
-<p class="footer">Copyright 2022 - 2025 The MathWorks, Inc.<br>
-<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2024b</a>
+<p class="footer">Copyright 2022 - 2026 The MathWorks, Inc.<br>
+<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2026a</a>
 <br>
 </p>
 </div>
@@ -197,7 +201,7 @@ plotHVACHarnessResults(simout.logsout)
 % * <HVACEmpiricalRefDescription.html HVACEmpiricalRef>
 % * <HVACSimpleThDescription.html HVACsimpleTh>
 
-% Copyright 2022 - 2025 The MathWorks, Inc.
+% Copyright 2022 - 2026 The MathWorks, Inc.
 
 ##### SOURCE END #####
 -->

@@ -1,6 +1,7 @@
 function plotRadiatorHarnessResults(logsout)
 %plotRadiatorHarnessResults Plot all logged signals from RadiatorTestHarness.
 %   plotRadiatorHarnessResults(LOGSOUT) creates one figure per logged signal.
+% Copyright 2026 The MathWorks, Inc.
 
     signals = {
         'Coolant Inlet Temperature', 'Temperature (K)'

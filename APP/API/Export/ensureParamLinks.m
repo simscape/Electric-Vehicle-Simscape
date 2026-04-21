@@ -7,6 +7,7 @@ function ok = ensureParamLinks(app)
 %
 %   If any component instances have missing or invalid param file links,
 %   a modal dialog is shown allowing the user to link each one.
+% Copyright 2026 The MathWorks, Inc.
 
     % ---- Find components with missing param links ----
     [missingLabels, missingKeys, missingSelections] = findMissingParamLinks(app);

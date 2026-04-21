@@ -147,4 +147,4 @@ captureSubsystemImage('EmotorLib/Emotor Thermal')
 % * <MotorDriveLubeDescription.html MotorDriveLube>
 % * <MotorTestHarnessDescription.html Motor Test Harness>
 
-% Copyright 2022 - 2025 The MathWorks, Inc.
+% Copyright 2022 - 2026 The MathWorks, Inc.

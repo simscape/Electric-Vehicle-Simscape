@@ -2,6 +2,7 @@
 % Generated: 2026-04-20 15:09:50
 % Vehicle block detected at export: BEVsystemModel/Vehicle
 % Control block detected at export: BEVsystemModel/Controller
+% Copyright 2026 The MathWorks, Inc.
 
 % ---- Project root and model path ----
 try root = matlab.project.rootProject().RootFolder; catch, root = pwd; end

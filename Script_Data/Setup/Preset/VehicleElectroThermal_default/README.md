@@ -35,7 +35,7 @@ Full electro-thermal vehicle model with thermal-aware battery, motor-drives, cha
 | DCDC | PumpDriverTh |
 | Radiator | Radiator |
 | Controller | Controller |
-| Drive Cycle | FTP72 |
+| Drive Cycle | FTP75 |
 
 ## Loaded Parameter Files
 

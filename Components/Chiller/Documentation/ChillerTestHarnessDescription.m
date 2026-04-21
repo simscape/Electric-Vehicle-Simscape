@@ -49,4 +49,4 @@ plotChillerHarnessResults(simout.logsout)
 % * <ChillerDescription.html Chiller>
 % * <ChillerNoCoolantDescription.html ChillerNoCoolant>
 
-% Copyright 2022 - 2025 The MathWorks, Inc.
+% Copyright 2022 - 2026 The MathWorks, Inc.

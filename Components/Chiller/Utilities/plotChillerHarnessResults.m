@@ -1,6 +1,7 @@
 function plotChillerHarnessResults(logsout)
 %plotChillerHarnessResults Plot all logged signals from ChillerTestHarness.
 %   plotChillerHarnessResults(LOGSOUT) creates one figure per logged signal.
+% Copyright 2026 The MathWorks, Inc.
 
     signals = {
         'DC Input Voltage',          'Voltage (V)'

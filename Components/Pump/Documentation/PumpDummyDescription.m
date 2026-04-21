@@ -53,4 +53,4 @@ open_system('PumpDummy')
 % * <PumpDummyThDescription.html PumpDummyTh>
 % * <PumpTestHarnessDescription.html Pump Test Harness>
 
-% Copyright 2022 - 2025 The MathWorks, Inc.
+% Copyright 2022 - 2026 The MathWorks, Inc.

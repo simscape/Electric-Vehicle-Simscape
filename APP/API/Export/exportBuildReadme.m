@@ -10,6 +10,7 @@ function readmePath = exportBuildReadme(state, outFolder, generatedFiles)
 %
 %   Output:
 %     readmePath     - char, full path to the written README.md
+% Copyright 2026 The MathWorks, Inc.
 
     readmePath = fullfile(outFolder, 'README.md');
 

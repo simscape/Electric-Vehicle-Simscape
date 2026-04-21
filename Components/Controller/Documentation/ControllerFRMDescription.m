@@ -48,4 +48,4 @@ open_system('ControllerFRM')
 % * <ControllerHVACDescription.html ControllerHVAC>
 % * <matlab:web('BMSDescription.html') BMS>
 
-% Copyright 2022 - 2025 The MathWorks, Inc.
+% Copyright 2022 - 2026 The MathWorks, Inc.

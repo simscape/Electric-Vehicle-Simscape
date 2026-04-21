@@ -1,7 +1,7 @@
 % Chiller Dummy Parameters
 % Minimal parameter set — fixed electrical load only.
 
-% Copyright 2025 The MathWorks, Inc.
+% Copyright 2026 The MathWorks, Inc.
 
 %% Required Environment Parameters
 % These parameters must be defined before running this script.

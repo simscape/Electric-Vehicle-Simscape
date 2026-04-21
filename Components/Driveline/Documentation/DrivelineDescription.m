@@ -56,4 +56,4 @@ open_system('Driveline')
 % * <DrivelineWithBrakingDescription.html DrivelineWithBraking>
 % * <DrivelineTestHarnessDescription.html Driveline Test Harness>
 
-% Copyright 2022 - 2025 The MathWorks, Inc.
+% Copyright 2022 - 2026 The MathWorks, Inc.

@@ -58,4 +58,4 @@ open_system('HeaterDummy')
 % * <HeaterDescription.html Heater>
 % * <HeaterTestHarnessDescription.html Heater Test Harness>
 
-% Copyright 2022 - 2025 The MathWorks, Inc.
+% Copyright 2022 - 2026 The MathWorks, Inc.

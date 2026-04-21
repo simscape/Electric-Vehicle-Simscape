@@ -32,7 +32,7 @@ Electric powertrain with auxiliary systems including HVAC, coolant pumps, and pu
 | Motor Pump | PumpDummy |
 | DCDC | PumpDriver |
 | Controller | ControllerHVAC |
-| Drive Cycle | FTP72 |
+| Drive Cycle | FTP75 |
 
 ## Loaded Parameter Files
 

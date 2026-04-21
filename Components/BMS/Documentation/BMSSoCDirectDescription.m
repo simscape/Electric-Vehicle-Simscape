@@ -37,4 +37,4 @@ open_system('BMSSoCDirect')
 % * <BMSSoCEKFDescription.html BMSSoCEKF>
 % * <matlab:web('ControllerDescription.html') Controller>
 
-% Copyright 2022 - 2025 The MathWorks, Inc.
+% Copyright 2022 - 2026 The MathWorks, Inc.

@@ -3,6 +3,7 @@ function captureSubsystemImage(subsystemPath)
 %   captureSubsystemImage(SUBSYSTEMPATH) prints the subsystem to a
 %   temporary PNG file and displays it in a figure so that MATLAB publish
 %   includes the image in the generated HTML.
+% Copyright 2026 The MathWorks, Inc.
 
     tmpFile = fullfile(tempdir, 'subsystem_snapshot.png');
     print(['-s' subsystemPath], '-dpng', '-r100', tmpFile)

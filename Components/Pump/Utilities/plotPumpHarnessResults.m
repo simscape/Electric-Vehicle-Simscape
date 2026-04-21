@@ -1,6 +1,7 @@
 function plotPumpHarnessResults(logsout)
 %plotPumpHarnessResults Plot all logged signals from PumpTestHarness.
 %   plotPumpHarnessResults(LOGSOUT) creates one figure per logged signal.
+% Copyright 2026 The MathWorks, Inc.
 
     signals = {
         'Pump Current',              'Current (A)'

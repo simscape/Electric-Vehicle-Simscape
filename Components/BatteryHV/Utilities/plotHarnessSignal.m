@@ -2,6 +2,7 @@ function plotHarnessSignal(logsout, idx, titleStr, ylabelStr)
 %plotHarnessSignal Plot a logged signal from simulation output.
 %   plotHarnessSignal(LOGSOUT, IDX, TITLESTR, YLABELSTR) extracts element
 %   IDX from LOGSOUT and plots its timeseries data.
+% Copyright 2026 The MathWorks, Inc.
 
     el = logsout.getElement(idx);
     figure

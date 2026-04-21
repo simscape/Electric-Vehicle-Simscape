@@ -62,4 +62,4 @@ open_system('HVACsimpleTh')
 % * <HVACEmpiricalRefDescription.html HVACEmpiricalRef>
 % * <HVACTestHarnessDescription.html HVAC Test Harness>
 
-% Copyright 2022 - 2025 The MathWorks, Inc.
+% Copyright 2022 - 2026 The MathWorks, Inc.

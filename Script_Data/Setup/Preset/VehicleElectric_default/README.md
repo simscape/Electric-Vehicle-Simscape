@@ -28,7 +28,7 @@ Basic electric powertrain with battery, dual motor-drives, charger, and drivelin
 | Charger | Charger |
 | Driveline | Driveline |
 | Controller | ControllerFRM |
-| Drive Cycle | FTP72 |
+| Drive Cycle | FTP75 |
 
 ## Loaded Parameter Files
 

@@ -2,6 +2,7 @@ function plotHVACHarnessResults(logsout)
 %plotHVACHarnessResults Plot all logged signals from HVACTestHarness.
 %   plotHVACHarnessResults(LOGSOUT) creates one figure per logged signal.
 %   Bus signals are expanded into individual sub-signal plots.
+% Copyright 2026 The MathWorks, Inc.
 
     for k = 1:logsout.numElements
         el = logsout.getElement(k);

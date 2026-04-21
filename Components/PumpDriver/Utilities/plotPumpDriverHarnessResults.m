@@ -1,6 +1,7 @@
 function plotPumpDriverHarnessResults(logsout)
 %plotPumpDriverHarnessResults Plot all logged signals from PumpDriverTestHarness.
 %   plotPumpDriverHarnessResults(LOGSOUT) creates one figure per logged signal.
+% Copyright 2026 The MathWorks, Inc.
 
     signals = {
         'DC Input Voltage',          'Voltage (V)'

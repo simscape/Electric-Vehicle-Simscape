@@ -4,7 +4,7 @@
 % Load battery characteristics
 % Load all supporting Param files and data
 %
-% Copyright 2022 - 2025 The MathWorks, Inc.
+% Copyright 2022 - 2026 The MathWorks, Inc.
 
 %% Environment setting
 % Scenario settings

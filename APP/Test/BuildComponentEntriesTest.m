@@ -2,6 +2,9 @@ classdef BuildComponentEntriesTest < matlab.unittest.TestCase
 %BUILDCOMPONENTENTRIESTEST Unit tests for buildComponentEntries.
 %   Validates struct array output from parsed JSON config input.
 
+    % Copyright 2026 The MathWorks, Inc.
+
+
     methods (Test)
 
         function testSingleComponentSingleInstance(testCase)

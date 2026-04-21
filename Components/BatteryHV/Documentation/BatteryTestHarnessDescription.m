@@ -63,4 +63,4 @@ end
 % * <BatteryLumpedThermalDescription.html BatteryLumpedThermal>
 % * <BatteryTableBasedDescription.html BatteryTableBased>
 
-% Copyright 2022 - 2025 The MathWorks, Inc.
+% Copyright 2022 - 2026 The MathWorks, Inc.

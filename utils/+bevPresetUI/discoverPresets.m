@@ -4,6 +4,7 @@ function presets = discoverPresets()
 %
 %   Returns a struct array with fields:
 %     Name, Folder, Source, ApplyScript, SSRScript, ParamScript, ReadmePath, Status
+% Copyright 2026 The MathWorks, Inc.
 
     projectRoot = char(matlab.project.rootProject().RootFolder);
 
