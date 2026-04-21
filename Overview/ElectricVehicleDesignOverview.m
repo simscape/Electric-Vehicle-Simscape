@@ -55,7 +55,7 @@
 % </tr>
 % <tr>
 %   <td><strong>Custom configuration</strong></td>
-%   <td>Launch the <a href="matlab:BEVapp">BEV Setup App</a> to select a template, choose component fidelities, link parameter files, and configure environment, HVAC, and driver settings.</td>
+%   <td>Launch the <a href="matlab:loadAppShortcut">BEV Setup App</a> to select a template, choose component fidelities, link parameter files, and configure environment, HVAC, and driver settings.</td>
 %   <td>When you need specific fidelities, custom environment settings, or non-default operating modes.</td>
 % </tr>
 % </table>
