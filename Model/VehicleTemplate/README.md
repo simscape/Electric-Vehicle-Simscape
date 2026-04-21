@@ -6,12 +6,12 @@ Pre-configured vehicle models at different fidelity levels. Each template is a c
 
 ## Templates
 
-| Template | Description | Thermal | Auxiliary |
-|----------|-------------|:-------:|:---------:|
-| VehicleElectric | Minimal electrical powertrain -- battery, motor, charger, driveline | No | No |
-| VehicleElecAux | Electrical powertrain with HVAC, pump, DCDC, and auxiliary loads | No | Yes |
-| VehicleElectroThermal | Full electro-thermal vehicle with coolant loop, chiller, heater, radiator | Yes | Yes |
-| VehicleElectroThermalLowTemp | Electro-thermal configured for cold-climate studies | Yes | Yes |
+| Template | Description | Thermal | Auxiliary | App Support |
+|----------|-------------|:-------:|:---------:|:-----------:|
+| VehicleElectric | Minimal electrical powertrain -- battery, motor, charger, driveline | No | No | Yes |
+| VehicleElecAux | Electrical powertrain with HVAC, pump, DCDC, and auxiliary loads | No | Yes | Yes |
+| VehicleElectroThermal | Full electro-thermal vehicle with coolant loop, chiller, heater, radiator | Yes | Yes | Yes |
+| VehicleElectroThermalLowTemp | Electro-thermal configured for cold-climate studies; not yet wired into the BEV Setup App JSON configs | Yes | Yes | Direct-open |
 
 ---
 

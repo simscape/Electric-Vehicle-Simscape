@@ -23,22 +23,22 @@ Self-contained, reusable subsystem modules for the Battery Electric Vehicle (BEV
 
 ---
 
-## Folder Structure
-
-Every component follows a standardized layout:
+## Most components follow this standardized layout
 
 ```
 Components/<ComponentName>/
-  Model/           - Simulink models (.slx) and parameter scripts (*Params.m)
-  TestBench/       - Standalone test harness with boundary conditions
-  TestCase/        - MATLAB unit tests (*PassTests.m)
-  Documentation/   - Published HTML documentation
-    html/          - HTML pages
-    images/        - Screenshots and figures
-  Utilities/       - Plot functions and helpers
-  Library/         - Reusable Simulink library blocks (BatteryHV, HVAC, MotorDrive only)
-  README.md        - Component overview and fidelity table
+  Model/           - Simulink models (.slx) and parameter scripts (*Params.m)   [always]
+  TestBench/       - Standalone test harness with boundary conditions            [always]
+  TestCase/        - MATLAB unit tests (*PassTests.m)                            [always]
+  Documentation/   - Published HTML documentation                                [always]
+    html/          - HTML pages                                                  [always]
+    images/        - Screenshots and figures                                     [always]
+  Utilities/       - Plot functions and helpers                                  [optional]
+  Library/         - Reusable Simulink library blocks (BatteryHV, HVAC, MotorDrive only) [optional]
+  README.md        - Component overview and fidelity table                       [always]
 ```
+
+**Exceptions:** Controller has no TestBench/ or TestCase/ folders (supervisory logic is validated at system level). BMS has no Utilities/ folder.
 
 ---
 

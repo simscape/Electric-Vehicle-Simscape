@@ -4,6 +4,14 @@ System-level and workflow tests for the BEV Simscape project. All test classes i
 
 Component-level tests are inside each component folder (`Components/<Name>/TestCase/`).
 
+### Test Locations
+
+| Location | Scope |
+|----------|-------|
+| `Test/` | System-level simulation and workflow tests |
+| `Components/<Name>/TestCase/` | Per-component unit tests |
+| `APP/Test/` | BEV Setup App configuration and UI tests |
+
 ## Folder Structure
 
 ```
@@ -35,11 +43,27 @@ Test/
 | `BEVProjectCheckProject.m` | Runs `runChecks(prj)` on the MATLAB project and asserts all checks pass |
 | `BEVProjectRuntestsCheckProject.m` | Creates test suite, runs with JUnit XML output and code coverage report |
 
+## APP Tests
+
+Tests under `APP/Test/` verify the BEV Setup App configuration layer:
+
+| File | Purpose |
+|------|---------|
+| `BuildComponentEntriesTest.m` | Validates component entry struct generation for all components |
+| `BEVPresetFidelityTest.m` | Confirms preset JSON fidelity mappings resolve to valid model files |
+| `BEVPresetFidelityCheck.m` | Quick-check script for preset fidelity consistency |
+| `runBEVFidelityReport.m` | Generates a summary report of fidelity coverage across presets |
+
 ## Running Tests
 
 ```matlab
+% System-level and workflow tests
 results = runtests('Test');
 disp(results);
+
+% APP configuration tests
+appResults = runtests('APP/Test');
+disp(appResults);
 ```
 
 Copyright 2022 - 2026 The MathWorks, Inc.
