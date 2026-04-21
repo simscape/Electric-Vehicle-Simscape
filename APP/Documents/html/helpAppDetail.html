@@ -449,6 +449,13 @@
               Opening the project sets up your MATLAB path so the app can find all models,
               components, and configuration files it needs.
             </p>
+
+            <p>Then launch the BEV App from the MATLAB command window:</p>
+            <pre><code>BEVapp</code></pre>
+            <p>
+              The app window opens with the Vehicle Configuration panel on the left.
+              From here, select a base model and design scenario, then work through the panels top to bottom.
+            </p>
           </div>
 
           <aside class="side-box">
@@ -471,13 +478,26 @@
         <div class="note">
           Keep the base SLX model under version control and create a copy for experiments.
         </div>
+
+        <h3>First-use path</h3>
+        <p style="font-size:14px; line-height:2; color:var(--mw-text);">
+          <strong>Open project</strong> &#8594;
+          <strong>Launch app</strong> (<code>BEVapp</code>) &#8594;
+          <strong>Select base model &amp; design scenario</strong> &#8594;
+          <strong>Choose components</strong> &#8594;
+          <strong>Set environment &amp; driver</strong> &#8594;
+          <strong>Model Setup</strong>
+        </p>
+        <p>
+          Follow this sequence your first time through. Each section below explains one step in detail.
+        </p>
       </section>
 
       <!-- Select a vehicle platform -->
       <section id="select-platform">
         <h2>Vehicle Configuration</h2>
         <p>
-          Start by telling the app which vehicle you want to work with. The dropdowns below control which components and options become available in the rest of the app.
+          After launching the app, use this panel to select your vehicle platform. The three dropdowns here control which components and options become available in the rest of the app.
         </p>
 
         <img src="../images/VehicleConfigPanel.png" alt="Vehicle platform selection panel" style="max-width: 280px;" />
@@ -714,6 +734,19 @@
           <li>Applies your environment, HVAC, driver, controller, and drive cycle settings.</li>
           <li>The model is then ready to simulate.</li>
         </ul>
+
+        <h3>Typical beginner path</h3>
+        <p>
+          Configure your vehicle in the app, then press <strong>Model Setup</strong> to build the model and simulate.
+          The other two buttons are useful but optional support actions:
+        </p>
+        <ul>
+          <li><strong>Save Setup</strong> &mdash; saves your selections so you can reload and iterate later without re-picking everything.</li>
+          <li><strong>Export Parameter</strong> &mdash; generates a standalone parameter script you can run outside the app or commit to version control.</li>
+        </ul>
+        <p>
+          To apply your selections and build the model, click <strong>Model Setup</strong>.
+        </p>
       </section>
     </main>
   </div>

@@ -39,9 +39,9 @@ engineering studies below.
       <strong>Start from a preset</strong> — Pick a shipped vehicle configuration
       from <code>APP/Config/Preset</code> to begin with a ready-made component
       and fidelity selection.<br><br>
-      <strong>Use the BEV Setup App</strong> — Select a template, choose component
-      variants, and configure initial design parameters for your specific
-      use case.
+      <strong>Use the BEV Setup App</strong> — Run <code>BEVapp</code> to select a
+      template, choose component variants, and configure initial design
+      parameters for your specific use case.
     </td>
     <td class="image-column" width=500><img src="APP/Documents/images/BEVappWindow.png" alt="BEV Setup App"></td>
   </tr>
