@@ -101,7 +101,7 @@ Every component under `Components/` follows this structure:
 | [Chiller](../Components/Chiller/README.md) | Chiller, ChillerNoCoolant, ChillerDummy | Yes | Yes |
 | [Controller](../Components/Controller/README.md) | Controller, ControllerFRM, ControllerHVAC | No | No |
 | [Driveline](../Components/Driveline/README.md) | Driveline, DrivelineWithBraking | No | Yes |
-| [HVAC](../Components/HVAC/README.md) | HVACEmpiricalRef, HVACSimpleTh | Yes | Yes |
+| [HVAC](../Components/HVAC/README.md) | HVACEmpiricalRef, HVACsimpleTh | Yes | Yes |
 | [MotorDrive](../Components/MotorDrive/README.md) | MotorDriveGear, MotorDriveGearTh, MotorDriveLube | Yes | Yes |
 | [Pump](../Components/Pump/README.md) | Pump, PumpDummy, PumpDummyTh | Yes | Yes |
 | [DCDC](../Components/PumpDriver/README.md) | PumpDriver, PumpDriverTh | Yes | Yes |
@@ -135,7 +135,7 @@ All fidelities within the same component type share a common Simulink port inter
 | Catalog | `APP/API/Catalog/` (3) | Config parsing, template resolution, validation |
 | Detect | `APP/API/Detect/` (5) | Runtime model scanning — SSR detection, platform/controls ID |
 | State | `APP/API/State/` (4) | `setupState` struct build, save, cache |
-| Export | `APP/API/Export/` (4) | Script generation, param export, link validation |
+| Export | `APP/API/Export/` (5) | Script generation, param export, link validation |
 | UI | `APP/API/UI/` (23) | Dropdown population, descriptions, panels, preview |
 | Util | `APP/API/Util/` (10) | Path helpers, project root, file listing, param namespace |
 
@@ -224,6 +224,7 @@ Workflows live under `Workflow/<Domain>/<WorkflowName>/`. Each expects the syste
 | `Test/VehicleWorkflowTests.m` | Vehicle workflow smoke tests | 1 |
 | `Test/CheckProject/` | MATLAB Project integrity checks | Varies |
 | `Components/*/TestCase/*PassTests.m` | Component-level unit tests (all 12) | 12 |
+| `APP/Test/` | App config, preset, fidelity, and hyperlink validation tests | 7 |
 
 ## Known Drift Points
 

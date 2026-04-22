@@ -31,7 +31,6 @@ vehicleThermal.coolant_p_init  = 1/10;   % [MPa] Coolant initial pressure
 %% Component params
 BatteryLumpedParams;
 MotorDriveGearParams;
-MotorDriveGearParams;
 ChargerParams;
 DrivelineParams;
 

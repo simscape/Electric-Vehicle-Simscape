@@ -2,13 +2,14 @@
 
 % Copyright 2022 - 2025 The MathWorks, Inc.
 
-%Other Parameters
+%% System-level environment parameters (required by component param files)
+vehicleThermal.coolant_T_init = 300;
+
+%% Component Parameters
 ControllerParams;
 MotorDriveGearThParams;
 InverterThermalParams;
 DrivelineParams;
-
-vehicleThermal.coolant_T_init = 300;
 %% Test Environment/Plant Model Parameters
 % Vehicle parameters
 electricDrive.VehicleParams.rolling_res_ratio = 0.03;

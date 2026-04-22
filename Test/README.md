@@ -52,7 +52,10 @@ Tests under `APP/Test/` verify the BEV Setup App configuration layer:
 | `BuildComponentEntriesTest.m` | Validates component entry struct generation for all components |
 | `BEVFidelityTest.m` | Compile-checks every template × fidelity combination from JSON config |
 | `BEVFidelityAppCheck.m` | Drives the app UI to validate setup output for all fidelity variants |
+| `BEVHyperlinkTest.m` | Validates all hyperlinks and image references across project HTML files |
+| `BEVPresetTest.m` | Clears workspace, applies each discovered preset, and compile-checks the model |
 | `runBEVFidelityReport.m` | Generates a summary report of fidelity coverage across presets |
+| `runBEVHyperlinkReport.m` | Generates HTML + JUnit report for hyperlink validation |
 
 ## Running Tests
 

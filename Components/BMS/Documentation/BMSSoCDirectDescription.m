@@ -10,7 +10,7 @@
 %
 % *Model:* |SOC/BMSSoCDirect.slx|
 %
-% *Parameters:* <matlab:edit('BMSSoCDirectParams.m') BMSSoCDirectParams.m>
+% *Parameters:* <matlab:edit('BMSParams.m') BMSParams.m>
 %
 % *Thermal Coupling:* Yes
 

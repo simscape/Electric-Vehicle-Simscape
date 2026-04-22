@@ -97,7 +97,7 @@ classdef BEVFidelityTest < matlab.unittest.TestCase
             testCase.assertNotEmpty(outFileModel, ...
                 'exportSetupScript returned empty — model or vehicle block not found');
 
-            [outputFolder, ~, ~] = fileparts(outFileModel);
+            [outputFolder, ssrBaseName, ssrExt] = fileparts(outFileModel);
             modelName    = state.BEVModel;
             outFileParam = fullfile(outputFolder, [modelName '_params_setup.m']);
             exportParamScript(testCase.App, outFileParam, state);
@@ -109,7 +109,7 @@ classdef BEVFidelityTest < matlab.unittest.TestCase
             movefile(outputFolder, namedFolder);
 
             % ---- Verify output files ----
-            ssrScript   = fullfile(namedFolder, [modelName '_ssr_setup.m']);
+            ssrScript   = fullfile(namedFolder, strcat(ssrBaseName, ssrExt));
             paramScript = fullfile(namedFolder, [modelName '_params_setup.m']);
             readmePath  = fullfile(namedFolder, 'README.md');
 

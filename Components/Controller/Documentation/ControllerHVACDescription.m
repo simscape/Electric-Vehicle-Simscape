@@ -11,7 +11,7 @@
 %
 % *Model:* <matlab:open_system('ControllerHVAC') ControllerHVAC.slx>
 %
-% *Parameters:* <matlab:edit('ControllerHVACParams.m') ControllerHVACParams.m>
+% *Parameters:* <matlab:edit('ControllerParams.m') ControllerParams.m>
 %
 % *Thermal Coupling:* No
 

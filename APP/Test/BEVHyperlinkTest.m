@@ -63,7 +63,8 @@ classdef BEVHyperlinkTest < matlab.unittest.TestCase
                 if isempty(link) || startsWith(link, '#')
                     continue;
                 end
-                if startsWith(link, 'http://') || startsWith(link, 'https://')
+                if startsWith(link, 'http://') || startsWith(link, 'https://') ...
+                        || startsWith(link, 'data:')
                     continue;
                 end
 
@@ -201,11 +202,15 @@ function found = localFileExistsInProject(testCase, target)
         return;
     end
 
+    % Subsystem paths (e.g. 'Model/Sub/Block') — validate the root model
+    parts = strsplit(target, '/');
+    rootTarget = parts{1};
+
     % Strip path separators from target for filename-only search
-    [~, baseName, ext] = fileparts(target);
+    [~, baseName, ext] = fileparts(rootTarget);
     if isempty(ext)
-        % Could be a model name (open_system) — try .slx and .mdl
-        candidates = {[baseName '.slx'], [baseName '.mdl']};
+        % Could be a model or script — try .slx, .mdl, and .m
+        candidates = {[baseName '.slx'], [baseName '.mdl'], [baseName '.m']};
     else
         candidates = {[baseName ext]};
     end

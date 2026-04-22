@@ -15,6 +15,7 @@ electricDrive.PMparams.tauthDiode  = [0.001,0.03,0.25,1.5]*6;
 electricDrive.PMparams.tauthIGBT   = [0.001,0.03,0.25,1.5]*6;
 electricDrive.PMparams.TinitDiode  = vehicleThermal.coolant_T_init * ones(1,4);
 electricDrive.PMparams.TinitIGBT   = vehicleThermal.coolant_T_init * ones(1,4);
+electricDrive.PMparams.TinitCase   = vehicleThermal.coolant_T_init;
 
 %% Heatsink
 electricDrive.HeatsinkParams.Height  = 0.05;

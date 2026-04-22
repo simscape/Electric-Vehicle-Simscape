@@ -10,7 +10,7 @@
 %
 % *Model:* |SOC/BMSSoCEKF.slx|
 %
-% *Parameters:* <matlab:edit('BMSSoCEKFParams.m') BMSSoCEKFParams.m>
+% *Parameters:* <matlab:edit('BMSParams.m') BMSParams.m>
 %
 % *Thermal Coupling:* Yes
 

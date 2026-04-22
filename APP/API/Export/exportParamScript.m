@@ -186,11 +186,15 @@ function [callLines, externalFolders] = buildParamCallLines(paramLinks, projectR
 %BUILDPARAMCALLLINES Convert param file links into script call lines.
 %   For .m files with valid MATLAB names: emit bare function call.
 %   Otherwise: emit run('full/path').
+%   Duplicate param files (e.g. two instances sharing the same script)
+%   are emitted only once — calling a stateless param script twice is
+%   redundant and clutters the generated output.
 %   In-project param folders are discarded (the project path handles them).
 %   Only external (out-of-project) folders are returned for addpath emission.
-    callLines = strings(0, 1);
+    callLines  = strings(0, 1);
     extFolders = strings(0, 1);
     extComps   = strings(0, 1);
+    seenFiles  = containers.Map();
 
     % Normalize projectRoot for comparison
     normRoot = strrep(char(projectRoot), '\', '/');
@@ -198,6 +202,12 @@ function [callLines, externalFolders] = buildParamCallLines(paramLinks, projectR
 
     for i = 1:numel(paramLinks)
         filePath = paramLinks(i).ParamFilePath;
+
+        % ---- Skip duplicate param files ----
+        normPath = lower(strrep(char(filePath), '\', '/'));
+        if isKey(seenFiles, normPath), continue; end
+        seenFiles(normPath) = true;
+
         [folder, baseName, ext] = fileparts(filePath);
 
         if strcmpi(ext, '.m') && isvarname(baseName)

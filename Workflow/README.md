@@ -17,7 +17,6 @@ Workflow/
     GenerateMotInvLoss/             - Motor and inverter loss map generation
     InverterLife/                    - Power module lifetime estimation
     Model/                          - Motor drive thermal and detailed test benches
-    ScriptsData/                    - PMSM motor characterization scripts
     ThermalDurability/              - Drive unit thermal stress analysis
   Vehicle/
     RangeEstimation/                - Vehicle range over EPA, NEDC, WLTC drive cycles
@@ -43,7 +42,6 @@ Workflow/
 | [GenerateMotInvLoss](MotorDrive/GenerateMotInvLoss/README.md) | Generate motor and inverter loss maps from detailed PMSM FOC simulation. Includes `PMSMdetailTestbench.slx` for motor-level characterization | `generateDULossMap.mlx` |
 | [InverterLife](MotorDrive/InverterLife/README.md) | Estimate inverter power module lifetime from thermal cycling data | `inverterPowerModuleLife.mlx` |
 | [Model](MotorDrive/Model/README.md) | Motor drive thermal and detailed test benches | `MotorDriveThermalTestBenchDescription.mlx` |
-| [ScriptsData](MotorDrive/ScriptsData/README.md) | PMSM motor characterization | `PMSMmotorTestBench.mlx` |
 | [ThermalDurability](MotorDrive/ThermalDurability/README.md) | Evaluate drive unit thermal behavior over extended duty cycles | `DUThermalDurability.mlx` |
 
 ### Vehicle

@@ -10,7 +10,7 @@
 %
 % *Model:* <matlab:open_system('ControllerFRM') ControllerFRM.slx>
 %
-% *Parameters:* <matlab:edit('ControllerFRMParams.m') ControllerFRMParams.m>
+% *Parameters:* <matlab:edit('ControllerParams.m') ControllerParams.m>
 %
 % *Thermal Coupling:* No
 
