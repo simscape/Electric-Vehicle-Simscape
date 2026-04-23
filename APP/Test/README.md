@@ -9,6 +9,7 @@ Validation tests for the BEV Setup App. All tests use the MATLAB Unit Testing Fr
 | `BEVFidelityTest.m` | Parameterized test — generates setup output and compile-checks every template × fidelity combination from `VehicleTemplateConfig.json` |
 | `BEVFidelityAppCheck.m` | Standalone script — drives the app UI to generate setup folders for all preset fidelity variants |
 | `BEVHyperlinkTest.m` | Validates all hyperlinks and image references across project HTML files |
+| `BEVMLXLinkTest.m` | Validates all hyperlinks inside project MLX (Live Script) files |
 | `BEVPresetTest.m` | Parameterized test — clears workspace, applies each discovered preset, and compile-checks the model |
 | `BuildComponentEntriesTest.m` | Unit test for `buildComponentEntries` — verifies struct array output from parsed JSON config |
 

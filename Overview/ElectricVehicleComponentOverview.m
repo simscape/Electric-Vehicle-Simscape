@@ -274,5 +274,5 @@
 %% See Also
 %
 % * <matlab:web('ElectricVehicleDesignOverview.html') Electric Vehicle Design Overview>
-% * <matlab:web('../../APP/Documents/html/helpAppDetail.html') BEV Setup App Reference>
+% * <matlab:web('helpAppDetail.html') BEV Setup App Reference>
 % * <matlab:open_system('BEVsystemModel') BEV System Model>
