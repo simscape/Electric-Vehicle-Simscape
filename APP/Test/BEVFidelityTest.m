@@ -1,7 +1,7 @@
 classdef BEVFidelityTest < matlab.unittest.TestCase
 %BEVFIDELITYTEST Parameterized test for all JSON preset fidelity variants.
-%   Generates setup output and compile-checks every template x fidelity
-%   combination defined in VehicleTemplateConfig.json.
+%   Generates setup output, compile-checks, and simulates (100 s) every
+%   template x fidelity combination defined in VehicleTemplateConfig.json.
 %
 %   Run all:
 %     results = runtests('BEVFidelityTest');
@@ -127,6 +127,16 @@ classdef BEVFidelityTest < matlab.unittest.TestCase
 
             % ---- Compile check (diagram update) ----
             set_param(modelName, 'SimulationCommand', 'update');
+
+            % ---- Simulate for 100 seconds ----
+            origStop = get_param(modelName, 'StopTime');
+            set_param(modelName, 'StopTime', '100');
+            simout = sim(modelName, 'SrcWorkspace', 'base');
+            set_param(modelName, 'StopTime', origStop);
+
+            testCase.verifyNotEmpty(simout, ...
+                sprintf('Simulation returned empty for %s.', Setup.FolderName));
+            fprintf('   Simulation passed: %s\n', Setup.FolderName);
         end
     end
 end

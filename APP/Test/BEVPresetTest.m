@@ -5,6 +5,7 @@ classdef BEVPresetTest < matlab.unittest.TestCase
 %     2. Run the SSR script  (setupModelReferences — sets subsystem refs)
 %     3. Run the param script (setupModelParameters — loads params)
 %     4. Diagram-update the model (compile check)
+%     5. Simulate for 100 seconds (runtime check)
 %
 %   Run all:
 %     results = runtests('BEVPresetTest');
@@ -72,6 +73,16 @@ classdef BEVPresetTest < matlab.unittest.TestCase
 
             set_param(modelName, 'SimulationCommand', 'update');
             fprintf('   Compile check passed: %s\n', Preset.Name);
+
+            % ---- Simulate for a short duration ----
+            origStop = get_param(modelName, 'StopTime');
+            set_param(modelName, 'StopTime', '100');
+            simout = sim(modelName, 'SrcWorkspace', 'base');
+            set_param(modelName, 'StopTime', origStop);
+
+            testCase.verifyNotEmpty(simout, ...
+                sprintf('Simulation returned empty for preset %s.', Preset.Name));
+            fprintf('   Simulation passed: %s\n', Preset.Name);
         end
     end
 end
