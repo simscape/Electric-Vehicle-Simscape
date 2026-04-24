@@ -33,7 +33,7 @@ Choose the one that fits your workflow.
   <tr>
     <td class="text-column" width=400>
       <strong>Preferred way (Preset)</strong> — Use the
-      <a href="Script_Data/OpenPresetPicker.m">Preset Picker</a> to browse and
+      <strong>Preset Picker</strong> to browse and
       apply a shipped vehicle configuration. Three defaults are available:
       <em>VehicleElectric</em>, <em>VehicleElecAux</em>, and
       <em>VehicleElectroThermal</em>. Each preset configures the model
