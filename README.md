@@ -128,7 +128,7 @@ For the full project architecture — folder responsibilities, source-of-truth, 
 - BEV Setup App — GUI-based vehicle configuration and script export
 - JSON config-driven template/fidelity system with presets
 - 3 new dummy fidelities for simplified simulations
-- Standardized documentation across all 12 components and 9 workflows
+- Standardized documentation across all 12 components and 7 workflows
 - Architecture reference doc with extension guides
 
 ## Related Solutions

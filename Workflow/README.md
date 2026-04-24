@@ -39,7 +39,6 @@ Workflow/
 | [GearRatioSelect](MotorDrive/GearRatioSelect/README.md) | Batch-sweep gear ratios to find the most efficient fixed ratio for a drive cycle | `minimumRequiredGearRatio.mlx` |
 | [GenerateMotInvLoss](MotorDrive/GenerateMotInvLoss/README.md) | Generate motor and inverter loss maps from detailed PMSM FOC simulation. Includes `PMSMdetailTestbench.slx` for motor-level characterization | `generateDULossMap.mlx` |
 | [InverterLife](MotorDrive/InverterLife/README.md) | Estimate inverter power module lifetime from thermal cycling data | `inverterPowerModuleLife.mlx` |
-| [Model](MotorDrive/Model/README.md) | Motor drive thermal and detailed test benches | `MotorDriveThermalTestBenchDescription.mlx` |
 | [ThermalDurability](MotorDrive/ThermalDurability/README.md) | Evaluate drive unit thermal behavior over extended duty cycles | `DUThermalDurability.mlx` |
 
 ### Vehicle
