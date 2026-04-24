@@ -32,7 +32,7 @@ Test/
 |-------|----------|---------------|
 | `BaseTest` | `matlab.unittest.TestCase` | Shared setup: working folder fixture, open figure/model tracking, teardown cleanup |
 | `BEVSystemMainModel` | `BaseTest` | Simulates `BEVsystemModel` under Default, PlantAbstract, and PlantElectroThermal configurations |
-| `BatteryWorkflowTests` | `BaseTest` | Cell characterization HPPC model/verification, `.mlx` workflows, virtual sensor neural net |
+| `BatteryWorkflowTests` | `BaseTest` | Battery sizing, `.mlx` workflows, virtual sensor neural net |
 | `MotorDriveWorkflowTests` | `BaseTest` | Gear ratio selection, motor inverter loss generation, thermal bench run and plot |
 | `VehicleWorkflowTests` | `BaseTest` | Range estimation scripts (NEDC, WLTC) and `.mlx` workflow |
 

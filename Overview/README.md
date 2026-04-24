@@ -204,7 +204,6 @@ Ready-to-use preset configurations are shipped in `Script_Data/Setup/Preset/`. E
 | Domain | Workflow | Entry Point | Template Needed |
 |--------|----------|-------------|-----------------|
 | Battery | [Battery Sizing](../Workflow/Battery/BatterySizing/README.md) | `BEVBatterySizingMain.mlx` | Any |
-| Battery | [Cell Characterization](../Workflow/Battery/CellCharacterization/README.md) | `CellCharacterizationForBEV.mlx` | Any |
 | Battery | [Neural Net Virtual Sensor](../Workflow/Battery/VirtualSensorNeuralNetModel/README.md) | `VirtualSensorNeuralNetModel.mlx` | Electro-thermal |
 | MotorDrive | [Gear Ratio Selection](../Workflow/MotorDrive/GearRatioSelect/README.md) | `minimumRequiredGearRatio.mlx` | Electro-thermal |
 | MotorDrive | [PMSM Loss Map Generation](../Workflow/MotorDrive/GenerateMotInvLoss/README.md) | `generateDULossMap.mlx` | Any |

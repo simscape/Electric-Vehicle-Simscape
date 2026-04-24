@@ -7,9 +7,9 @@ This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
       -->
 <title>Battery Test Harness</title>
-<meta name="generator" content="MATLAB 26.1">
+<meta name="generator" content="MATLAB 24.2">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2026-04-21">
+<meta name="DC.date" content="2026-04-23">
 <meta name="DC.source" content="BatteryTestHarnessDescription.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
@@ -124,13 +124,13 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 BatteryTestHarnessParams;
 open_system(model)
 </pre>
-<img vspace="5" hspace="5" src="../images/BatteryTestHarnessDescription_01.png" alt=""> <img vspace="5" hspace="5" src="../images/BatteryTestHarnessDescription_02.png" alt=""> <h2 id="3">Run Simulation</h2>
+<img vspace="5" hspace="5" src="../images/BatteryTestHarnessDescription_01.png" alt=""> <h2 id="3">Run Simulation</h2>
 <pre class="language-matlab">simout = sim(model, <span class="string">'SrcWorkspace'</span>, <span class="string">'current'</span>);
 logsout = simout.logsout;
 </pre>
 <h2 id="4">Simulation Results</h2>
 <p>The following plots show all logged signals from the harness run.</p>
-<img vspace="5" hspace="5" src="../images/BatteryTestHarnessDescription_03.png" alt=""> <img vspace="5" hspace="5" src="../images/BatteryTestHarnessDescription_04.png" alt=""> <img vspace="5" hspace="5" src="../images/BatteryTestHarnessDescription_05.png" alt=""> <img vspace="5" hspace="5" src="../images/BatteryTestHarnessDescription_06.png" alt=""> <h2 id="5">Running Unit Tests</h2>
+<img vspace="5" hspace="5" src="../images/BatteryTestHarnessDescription_02.png" alt=""> <img vspace="5" hspace="5" src="../images/BatteryTestHarnessDescription_03.png" alt=""> <img vspace="5" hspace="5" src="../images/BatteryTestHarnessDescription_04.png" alt=""> <img vspace="5" hspace="5" src="../images/BatteryTestHarnessDescription_05.png" alt=""> <img vspace="5" hspace="5" src="../images/BatteryTestHarnessDescription_06.png" alt=""> <h2 id="5">Running Unit Tests</h2>
 <p>Run the MQC test suite from the command line:</p>
 <pre class="language-matlab">results = runtests(<span class="string">'BatteryHVPassTests'</span>);
 disp(results)
@@ -150,7 +150,7 @@ disp(results)
 </ul>
 </div>
 <p class="footer">Copyright 2022 - 2026 The MathWorks, Inc.<br>
-<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2026a</a>
+<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2024b</a>
 <br>
 </p>
 </div>
