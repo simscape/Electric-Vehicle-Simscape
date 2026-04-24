@@ -69,16 +69,7 @@ workflows**:
   </tr>
 </table>
 
-## 3. Characterize Battery using HPPC Test Data
-<table>
-  <tr>
-    <td class="image-column" width=300><img src="Overview/Image/cellCharacterization01.png" alt="Cell Characterization"></td>
-    <td class="image-column" width=300><img src="Overview/Image/cellCharacterization02.png" alt="Cell Characterization"></td>
-    <td class="text-column" width=300>Find parameters for an equivalent circuit based battery model from HPPC test data. See <strong><a href="Workflow/Battery/CellCharacterization/README.md">Workflow/Battery/CellCharacterization</a></strong>.</td>
-  </tr>
-</table>
-
-## 4. Create Battery Virtual Sensors (Neural Networks)
+## 3. Create Battery Virtual Sensors (Neural Networks)
 <table>
   <tr>
     <td class="image-column" width=600><img src="Overview/Image/BatteryNeuralNetResults.png" alt="Battery NN"></td>
@@ -86,7 +77,7 @@ workflows**:
   </tr>
 </table>
 
-## 5. Estimate Efficient Gear Ratio for Electric Drive
+## 4. Estimate Efficient Gear Ratio for Electric Drive
 <table>
   <tr>
     <td class="image-column" width=600><img src="Overview/Image/PMSMThermalTestGearResult.png" alt="Gear Ratio"></td>
@@ -94,7 +85,7 @@ workflows**:
   </tr>
 </table>
 
-## 6. Setup Electric Motor Test Bench for System Integration
+## 5. Setup Electric Motor Test Bench for System Integration
 <table>
   <tr>
     <td class="text-column" width=300>Learn how to generate a permanent magnet synchronous motor (PMSM) for a system level (electro-thermal) simulation by creating a motor loss map and integrating it into the system level blocks. See <strong><a href="Workflow/MotorDrive/GenerateMotInvLoss/README.md">Workflow/MotorDrive/GenerateMotInvLoss</a></strong>.</td>
@@ -102,7 +93,7 @@ workflows**:
   </tr>
 </table>
 
-## 7. Verify Electric Drive Durability and Life
+## 6. Verify Electric Drive Durability and Life
 <table>
   <tr>
     <td class="image-column" width=600><img src="Overview/Image/PMSMThermalTestInverterResult.png" alt="Durability"></td>
@@ -113,7 +104,7 @@ workflows**:
 
 ## Repository Architecture
 
-For the full project architecture — folder responsibilities, source-of-truth contracts, config schema, app layers, export flow, component inventory, workflow catalog, drift risks, and extension guides — see **[Overview/README.md](Overview/README.md)**.
+For the full project architecture — folder responsibilities, source-of-truth, config schema, app layers, export flow, component inventory, workflow catalog, drift risks, and extension guides — see **[Overview/README.md](Overview/README.md)**.
 
 ## Release Notes
 
@@ -133,11 +124,11 @@ For the full project architecture — folder responsibilities, source-of-truth c
 - Range estimation workflow updated
 - PMSM model block and motor drive workflow updates
 
-**BEVsetupApp** (next release)
+**R2024b Update 2** (Apr 2026) — Latest release
 - BEV Setup App — GUI-based vehicle configuration and script export
 - JSON config-driven template/fidelity system with presets
 - 3 new dummy fidelities for simplified simulations
-- Standardized documentation across all 12 components and 10 workflows
+- Standardized documentation across all 12 components and 9 workflows
 - Architecture reference doc with extension guides
 
 ## Related Solutions

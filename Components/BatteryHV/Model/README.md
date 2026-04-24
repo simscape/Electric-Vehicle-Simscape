@@ -88,7 +88,6 @@ High-fidelity table-based battery model. Electrical characteristics come from lo
 
 - **Default battery fidelity** in the assembled BEV system model (`BEVsystemModel.slx`).
 - Used by `BEVSystemModelParams.m` when running range estimation (NEDC, WLTC, EPA) and battery sizing workflows.
-- Cell characterization workflow (`Workflow/Battery/CellCharacterization/`) generates the lookup-table parameters consumed by this model.
 - Virtual sensor neural network workflow uses simulation data from this model for training.
 
 ### Inputs

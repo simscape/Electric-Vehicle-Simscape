@@ -10,7 +10,6 @@ Design workflows and analysis scripts for the BEV project. Each workflow is a se
 Workflow/
   Battery/
     BatterySizing/                  - Battery pack sizing for range targets
-    CellCharacterization/           - Cell parameter extraction from HPPC data
     VirtualSensorNeuralNetModel/    - Neural network-based virtual battery sensor
   MotorDrive/
     GearRatioSelect/                - Optimal gear ratio sweep
@@ -31,7 +30,6 @@ Workflow/
 | Workflow | Description | Entry Point |
 |----------|-------------|-------------|
 | [BatterySizing](Battery/BatterySizing/README.md) | Sweep battery configurations against range targets using NEDC drive cycle data | `BEVBatterySizingMain.mlx` |
-| [CellCharacterization](Battery/CellCharacterization/README.md) | Extract equivalent-circuit parameters from HPPC pulse test data and verify against drive profile | `CellCharacterizationForBEV.mlx` |
 | [VirtualSensorNeuralNetModel](Battery/VirtualSensorNeuralNetModel/README.md) | Train and verify a neural network model for battery state estimation | `VirtualSensorNeuralNetModel.mlx` |
 
 ### MotorDrive

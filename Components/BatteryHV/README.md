@@ -24,7 +24,6 @@ BatteryHV/
 
 - **Range Estimation** (`Workflow/Vehicle/RangeEstimation/`) -- Uses BatteryTableBased in the full electro-thermal vehicle model to estimate driving range under NEDC, WLTC, and EPA cycles.
 - **Battery Sizing** (`Workflow/Battery/BatterySizing/`) -- Sweeps cell capacity and vehicle mass to size the HV pack for a target range.
-- **Cell Characterization** (`Workflow/Battery/CellCharacterization/`) -- Identifies equivalent-circuit parameters from HPPC test data for use in the table-based model.
 - **Virtual Sensor Neural Network** (`Workflow/Battery/VirtualSensorNeuralNetModel/`) -- Trains a neural network to predict battery temperature from voltage and current measurements.
 
 ## Vehicle Configurations

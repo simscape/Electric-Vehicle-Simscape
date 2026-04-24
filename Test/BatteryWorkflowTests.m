@@ -4,28 +4,6 @@ classdef BatteryWorkflowTests < BaseTest
 
     % Copyright 2024-2026 The MathWorks, Inc.
     methods (Test)
-        function CellCharacterizationHPPCModel(testCase)
-            mdl = "CellCharacterizationHPPC";
-            load_system(mdl)
-            testCase.addTeardown(@()close_system(mdl,0));
-            sim(mdl);
-        end
-
-        function CellCharacterizationVerifyModel(testCase)
-            mdl = "CellCharacterizationVerify";
-            load_system(mdl)
-            testCase.addTeardown(@()close_system(mdl,0));
-            sim(mdl);
-        end
-
-        function MLXCellCharacterizationForBEV(test)
-            %The test runs the |.mlx| file and makes sure that there are
-            %no errors or warning thrown.
-            test.verifyWarningFree(@()runCellCharacterizationForBEV, "'CellCharacterizationForBEV mlx'  should execute wihtout any warning or error.");
-            test.addTeardown(@()close_system('CellCharacterizationHPPC', 0));
-
-        end
-
         function MLXVirtualSensorNeuralNetModel(test)
             %The test runs the |.mlx| file and makes sure that there are
             %no errors or warning thrown.
@@ -51,11 +29,6 @@ classdef BatteryWorkflowTests < BaseTest
     end
 
 end  % classdef
-
-function runCellCharacterizationForBEV()
-% Function runs the |.mlx| script.
-CellCharacterizationForBEV;
-end
 
 function runVirtualSensorNeuralNetModel()
 % Function runs the |.mlx| script.
