@@ -64,7 +64,7 @@ coverageFiles = { ...
     };
 
 codeCoveragePlugin = matlab.unittest.plugins.CodeCoveragePlugin.forFile( ...
-    coverageFiles, Producing = coverageReport);
+    cellstr(coverageFiles), Producing = coverageReport);
 
 addPlugin(runner, codeCoveragePlugin)
 
