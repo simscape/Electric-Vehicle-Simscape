@@ -1,0 +1,241 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      -->
+<title>HeaterDummy</title>
+<meta name="generator" content="MATLAB 26.1">
+<link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
+<meta name="DC.date" content="2026-04-21">
+<meta name="DC.source" content="HeaterDummyDescription.m">
+<style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style>
+</head>
+<body>
+<div class="content">
+<h1>HeaterDummy</h1>
+<!--introduction-->
+<p>Minimal battery heater stub with fixed electrical load.</p>
+<!--/introduction-->
+<h2>Contents</h2>
+<div>
+<ul>
+<li>
+<a href="#1">Overview</a>
+</li>
+<li>
+<a href="#2">Open Model</a>
+</li>
+<li>
+<a href="#3">Ports</a>
+</li>
+<li>
+<a href="#4">Workflows</a>
+</li>
+<li>
+<a href="#5">Parameters</a>
+</li>
+<li>
+<a href="#6">See Also</a>
+</li>
+</ul>
+</div>
+<h2 id="1">Overview</h2>
+<p>The HeaterDummy block is a minimal stub that maintains the same port interface as the full Heater model. It draws a fixed electrical current from the HV bus when the heater is active (<tt>cmdHeater = 1</tt>) and zero current when off. Coolant ports A and B are connected through a simple pipe so the coolant loop stays closed, but no heat is exchanged.</p>
+<p>This fidelity is used when the heater subsystem is not the focus of the study but the system model needs a connected heater block to simulate without errors.</p>
+<p>
+<b>Model:</b> <a href="matlab:open_system('HeaterDummy')">HeaterDummy.slx</a>
+</p>
+<p>
+<b>Parameters:</b> <a href="matlab:edit('HeaterDummyParams.m')">HeaterDummyParams.m</a>
+</p>
+<p>
+<b>Thermal Coupling:</b> No (coolant pass-through, no heat exchange)</p>
+<h2 id="2">Open Model</h2>
+<pre class="codeinput">open_system(<span class="string">'HeaterDummy'</span>)
+</pre>
+<img vspace="5" hspace="5" src="../images/HeaterDummyDescription_01.png" alt=""> <h2 id="3">Ports</h2>
+<p>
+<b>Inputs</b>
+</p>
+<div>
+<ul>
+<li>
+<b>Battery status</b> - Pack state signals (terminated internally).</li>
+<li>
+<b>Heater command</b> - 1 = active (draws load), 0 = off (no load).</li>
+<li>
+<b>HV bus connection</b> - Electrical connection for fixed power draw.</li>
+<li>
+<b>Coolant port</b> - Thermal-liquid interface (pass-through, no heat exchange).</li>
+</ul>
+</div>
+<p>
+<b>Outputs</b>
+</p>
+<div>
+<ul>
+<li>
+<b>Heater Current</b> - Fixed current when active, zero when off.</li>
+</ul>
+</div>
+<h2 id="4">Workflows</h2>
+<p>The HeaterDummy block is a placeholder variant for integration testing or fast simulations. It can replace the full Heater in the <b>VehicleElectroThermal</b> template without breaking the coolant loop. Parameters are loaded by <tt>HeaterDummyParams.m</tt>.</p>
+<h2 id="5">Parameters</h2>
+<p>
+<table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+<tr><th>Name</th><th>Default</th><th>Description</th></tr>
+<tr><td>Maximum heater power</td><td>4000 W</td><td>Fixed electrical power draw when active</td></tr>
+<tr><td>Coolant pipe diameter</td><td>0.019 m</td><td>Inner diameter of coolant piping (pass-through)</td></tr>
+<tr><td>Initial coolant temperature</td><td>298.15 K</td><td>Coolant temperature at simulation start</td></tr>
+<tr><td>Initial coolant pressure</td><td>0.101325 MPa</td><td>Coolant pressure at simulation start</td></tr>
+</table>
+</p>
+<p>See <tt>HeaterDummyParams.m</tt> for a complete list of parameters.</p>
+<h2 id="6">See Also</h2>
+<div>
+<ul>
+<li>
+<a href="HeaterDescription.html">Heater</a>
+</li>
+<li>
+<a href="HeaterTestHarnessDescription.html">Heater Test Harness</a>
+</li>
+</ul>
+</div>
+<p class="footer">Copyright 2022 - 2026 The MathWorks, Inc.<br>
+<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2026a</a>
+<br>
+</p>
+</div>
+<!--
+##### SOURCE BEGIN #####
+%% HeaterDummy
+% Minimal battery heater stub with fixed electrical load.
+
+%% Overview
+% The HeaterDummy block is a minimal stub that maintains the same port
+% interface as the full Heater model. It draws a fixed electrical current
+% from the HV bus when the heater is active (|cmdHeater = 1|) and zero
+% current when off. Coolant ports A and B are connected through a simple
+% pipe so the coolant loop stays closed, but no heat is exchanged.
+%
+% This fidelity is used when the heater subsystem is not the focus of
+% the study but the system model needs a connected heater block to
+% simulate without errors.
+%
+% *Model:* <matlab:open_system('HeaterDummy') HeaterDummy.slx>
+%
+% *Parameters:* <matlab:edit('HeaterDummyParams.m') HeaterDummyParams.m>
+%
+% *Thermal Coupling:* No (coolant pass-through, no heat exchange)
+
+%% Open Model
+
+open_system('HeaterDummy')
+
+%% Ports
+% *Inputs*
+%
+% * *Battery status* - Pack state signals (terminated internally).
+% * *Heater command* - 1 = active (draws load), 0 = off (no load).
+% * *HV bus connection* - Electrical connection for fixed power draw.
+% * *Coolant port* - Thermal-liquid interface (pass-through, no heat exchange).
+%
+% *Outputs*
+%
+% * *Heater Current* - Fixed current when active, zero when off.
+
+%% Workflows
+% The HeaterDummy block is a placeholder variant for integration testing
+% or fast simulations. It can replace the full Heater in the
+% *VehicleElectroThermal* template without breaking the coolant loop.
+% Parameters are loaded by |HeaterDummyParams.m|.
+
+%% Parameters
+%
+% <html>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Name</th><th>Default</th><th>Description</th></tr>
+% <tr><td>Maximum heater power</td><td>4000 W</td><td>Fixed electrical power draw when active</td></tr>
+% <tr><td>Coolant pipe diameter</td><td>0.019 m</td><td>Inner diameter of coolant piping (pass-through)</td></tr>
+% <tr><td>Initial coolant temperature</td><td>298.15 K</td><td>Coolant temperature at simulation start</td></tr>
+% <tr><td>Initial coolant pressure</td><td>0.101325 MPa</td><td>Coolant pressure at simulation start</td></tr>
+% </table>
+% </html>
+%
+% See |HeaterDummyParams.m| for a complete list of parameters.
+
+%% See Also
+% * <HeaterDescription.html Heater>
+% * <HeaterTestHarnessDescription.html Heater Test Harness>
+
+% Copyright 2022 - 2026 The MathWorks, Inc.
+
+##### SOURCE END #####
+-->
+</body>
+</html>

@@ -1,14 +1,9 @@
 % Copyright 2025 The MathWorks, Inc.
 
+%% Environment Parameters
+vehicleThermal.ambient        = 25 + 273.15;  % [K] Ambient temperature
+vehicleThermal.coolant_T_init = 25 + 273.15;  % [K] Coolant initial temperature
+vehicleThermal.coolant_p_init = 0.101325;      % [MPa] Coolant initial pressure
 
-%% Environment setting
-vehicleThermal.ambient=25+273;
-vehicleThermal.cabin_T_init=25+273.15;     % [K] Cabin initial temperature
-% HVAC settings
-vehicleThermal.CabinSpTp=20+273.15;        % [K] Cabin set point for HVAC
-vehicleThermal.AConoff=1;                  % AC on/off flag, On==1, Off==0
-
-vehicleThermal.cabin_p_init   = 0.101325;
-
-
+%% Component Parameters
 BatteryLumpedThermalParams;

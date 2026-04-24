@@ -1,62 +1,74 @@
 %% Script to run unit tests
-% This script runs all the unit tests that are the child classes of
-% matlab.unittest.TestCase in the project.
-% Unit test classes are automatically detected by
-% the matlab.unittest.TestSuite.fromFolder function.
+% This script runs the unit tests and generates the code coverage report.
 
-% Copyright 2021-2022 The MathWorks, Inc.
+% Copyright 2021-2026 The MathWorks, Inc.
 
-relstr = matlabRelease().Release;
-disp("This is MATLAB " + relstr + ".")
+relStr = matlabRelease().Release;
+disp("This is MATLAB " + relStr + ".")
+
+topFolder = currentProject().RootFolder;
 
 %% Create test suite
 
-prjRoot = currentProject().RootFolder;
-
-suite_1 = matlab.unittest.TestSuite.fromFolder( ...
-  fullfile(prjRoot, "Components","BatteryHV"), IncludingSubfolders = true);
+suite_1 = matlab.unittest.TestSuite.fromFile( ...
+    fullfile(topFolder, "Test", "BEVSystemMainModel.m"));
 
 suite_2 = matlab.unittest.TestSuite.fromFile( ...
-    fullfile(prjRoot, "Test", "BEVSystemUnitTestMQC.m"));
+    fullfile(topFolder, "Test", "BatteryWorkflowTests.m"));
 
-suite_3 = matlab.unittest.TestSuite.fromFolder( ...
-  fullfile(prjRoot, "Components","MotorDrive"), IncludingSubfolders = true);
+suite_3 = matlab.unittest.TestSuite.fromFile( ...
+    fullfile(topFolder, "Test", "MotorDriveWorkflowTests.m"));
 
+suite_4 = matlab.unittest.TestSuite.fromFile( ...
+    fullfile(topFolder, "Test", "VehicleWorkflowTests.m"));
 
+suite_5 = matlab.unittest.TestSuite.fromFolder( ...
+    fullfile(topFolder, "Components"), IncludingSubfolders = true);
 
-suite = [suite_1 suite_2 suite_3];
+suite = [suite_1 suite_2 suite_3 suite_4 suite_5];
 
 %% Create test runner
 
 runner = matlab.unittest.TestRunner.withTextOutput( ...
-          "OutputDetail", matlab.unittest.Verbosity.Detailed);
+    OutputDetail = matlab.unittest.Verbosity.Detailed);
 
 %% JUnit style test result
 
-plugin = matlab.unittest.plugins.XMLPlugin.producingJUnitFormat( ...
-          fullfile(prjRoot,"Test", "TestResults_"+relstr+".xml"));
+junitPlugin = matlab.unittest.plugins.XMLPlugin.producingJUnitFormat( ...
+    fullfile(topFolder, "Test", "TestResults_" + relStr + ".xml"));
 
-addPlugin(runner, plugin)
+addPlugin(runner, junitPlugin)
 
+%% MATLAB Code Coverage Report
 
-%% Code Coverage Report Plugin
-coverageReportFolder = fullfile(currentProject().RootFolder,"", "coverage" + relstr);
-if ~isfolder(coverageReportFolder)
-  mkdir(coverageReportFolder)
+coverageReportFolder = fullfile(topFolder, "coverage" + relStr);
+if not(isfolder(coverageReportFolder))
+    mkdir(coverageReportFolder)
 end
-coverageReport = matlab.unittest.plugins.codecoverage.CoverageReport(coverageReportFolder, MainFile = "BEVmqcCoverage_" + relstr + ".html" );
 
-%% Code Coverage Plugin
-list = dir(fullfile(prjRoot, 'Script_Data'));
-list = list(~[list.isdir] & startsWith({list.name}, 'BEV') & endsWith({list.name}, {'.m', '.mlx'}));
-fileList = arrayfun(@(x)[x.folder, filesep, x.name], list, 'UniformOutput', false);
-codeCoveragePlugin = matlab.unittest.plugins.CodeCoveragePlugin.forFile(fileList, Producing = coverageReport );
-addPlugin(runner, codeCoveragePlugin);
+coverageReport = matlab.unittest.plugins.codecoverage.CoverageReport( ...
+    coverageReportFolder, ...
+    MainFile = "BEVCoverage_" + relStr + ".html");
 
+coverageFiles = { ...
+    fullfile(topFolder, "Workflow", "Vehicle", "RangeEstimation", "BEVrangeEstimationNEDC.m"); ...
+    fullfile(topFolder, "Workflow", "Vehicle", "RangeEstimation", "BEVrangeEstimationWLTC.m"); ...
+    fullfile(topFolder, "Workflow", "Battery", "BatterySizing", "BEVbatterySizing.m"); ...
+    fullfile(topFolder, "Workflow", "MotorDrive", "GearRatioSelect", "testThermalBenchRun.m"); ...
+    fullfile(topFolder, "Workflow", "MotorDrive", "GearRatioSelect", "plotMotTemperature.m"); ...
+    fullfile(topFolder, "Workflow", "MotorDrive", "GenerateMotInvLoss", "getLossTable.m"); ...
+    fullfile(topFolder, "Workflow", "MotorDrive", "InverterLife", "countEqTest.m"); ...
+    fullfile(topFolder, "Workflow", "MotorDrive", "InverterLife", "getDutyLife.m"); ...
+    fullfile(topFolder, "Workflow", "MotorDrive", "InverterLife", "runInverterLife.m"); ...
+    fullfile(topFolder, "Workflow", "MotorDrive", "ThermalDurability", "testBenchDuraRun.m") ...
+    };
+
+codeCoveragePlugin = matlab.unittest.plugins.CodeCoveragePlugin.forFile( ...
+    coverageFiles, Producing = coverageReport);
+
+addPlugin(runner, codeCoveragePlugin)
 
 %% Run tests
 
 results = run(runner, suite);
-
-out = assertSuccess(results);
-disp(out);
+assertSuccess(results)

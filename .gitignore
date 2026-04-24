@@ -1,1 +1,9 @@
 # List of untracked files to ignore
+APP/.sessionCache/
+APP/Config/User/
+Script_Data/Setup/User/
+
+# MATLAB build artifacts
+simcache/
+slprj/
+*.slxc

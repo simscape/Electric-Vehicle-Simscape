@@ -1,0 +1,206 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>BEV App — Guide</title>
+<style>
+  :root{
+    --accent:#d97706; --text:#1f2937; --muted:#6b7280; --bg:#fff; --panel:#f9fafb; --line:#e5e7eb; --radius:10px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font:14px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text);background:var(--bg)}
+
+  /* Compact headings */
+  .wrap h1{font-size:16px;margin:2px 0 6px;color:var(--accent)}
+  .title{margin:0 0 6px;color:var(--accent);font-size:15px}
+  .content{font-size:14px}
+
+  /* Panel */
+  .panel{border:1px solid var(--line);background:var(--panel);border-radius:var(--radius);padding:10px}
+  .wrap{max-width:900px;margin:10px auto;padding:8px 10px}
+
+  /* Progress bar */
+  .bar{height:3px;background:var(--panel);border-radius:999px;overflow:hidden;margin:4px 0 8px;border:1px solid var(--line)}
+  .bar > .fill{height:100%;width:0;background:var(--accent);transition:width .25s ease}
+
+  /* Controls */
+  .controls{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+  .controls .left{display:flex;gap:6px}
+  button.nav{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 10px;cursor:pointer}
+  button.nav.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+  button.nav:disabled{opacity:.5;cursor:not-allowed}
+  .toplink{font-size:12px;color:var(--muted);text-decoration:underline;background:none;border:none;cursor:pointer;padding:0;margin:0 0 6px auto;display:block}
+
+  /* Landing page (clean, grid-based; no overlaps) */
+  .landing{max-width:900px;margin:10px auto;padding:8px 10px}
+  .hero{display:flex;gap:8px;align-items:flex-start;margin:4px 0 8px}
+  .hero .badge{background:var(--accent);color:#fff;border-radius:999px;padding:2px 6px;font-size:11px}
+  .hero p{margin:0;color:var(--muted)}
+  .grid{display:grid;grid-template-columns:repeat(2, minmax(0,1fr));gap:8px;margin-top:6px}
+  .card{background:#fff;border:1px dashed var(--line);border-radius:8px;padding:8px;font-size:12px}
+  .card b{color:var(--accent)}
+  /* Step grouping styles */
+  /* Fixed-height step card so Next stays put */
+  :root{ --stepcard-h: 380px; }
+  .panel.step{ display:flex; flex-direction:column; height:var(--stepcard-h); }
+  .panel.step .content{ flex:1; overflow:auto; }
+  .progress{font-size:12px;color:var(--muted)}
+  .content p{margin:10px 0}
+  .content p strong{font-weight:700}
+  .note{position:relative;background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:10px}
+  .note::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--accent);border-radius:12px 0 0 12px}
+.landing h1{text-align:center}
+</style>
+
+<!-- Landing (Overview) -->
+<div id="landing" class="landing" role="region" aria-label="Overview" style="display:none">
+  <h1>BEV App Overview</h1>
+  <div>
+    <p>Build a BEV model by choosing the vehicle configuration and component fidelity. You can preview the model and parameter file, toggle environment, HVAC, and driver settings, and export the setup.</p>
+    <p><strong>Why:</strong> This standardizes model creation, speeds up configuration, and makes selections reproducible.</p>
+  </div>
+
+  <section class="panel" aria-label="Overview steps">
+    <ol style="margin:0 0 8px 18px;padding:0">
+      <li>Pick <strong>Base Model</strong>, <strong>Design Scenario</strong>, and <strong>Vehicle Config</strong>.</li>
+      <li>Choose <strong>component fidelity</strong> for each component.</li>
+      <li>Set <strong>Environment</strong>, <strong>HVAC</strong>, and <strong>Driver Setup</strong>.</li>
+      <li><strong>Save Setup</strong>, <strong>Export Parameter</strong>, or <strong>Model Setup</strong>.</li>
+    </ol>
+    <button id="startBtn" class="nav primary" style="width:100%;margin-top:8px">Start tutorial</button>
+  </section>
+</div>
+
+
+<!-- Wizard (Tutorial) -->
+<div id="wizard" class="wrap" role="application" aria-label="BEV App Guided Workflow">
+  <button id="btnOverviewTop" class="toplink" aria-label="Back to Overview">Overview</button>
+  <h1>BEV App — Guided Workflow</h1>
+
+  <!-- Thin progress bar -->
+  <div class="bar"><div class="fill" id="barFill"></div></div>
+
+  <!-- Main panel -->
+  <section class="panel step" aria-live="polite">
+    <div class="progress" id="progress" style="font-size:12px;color:var(--muted);"></div>
+    <h2 class="title" id="title"></h2>
+    <div class="content" id="content"></div>
+
+    <div class="controls">
+      <div class="left">
+        <button class="nav" id="btnBack" aria-label="Back (Left Arrow)">← Back</button>
+        <button class="nav" id="btnRestart" aria-label="Start Over">Start Over</button>
+        <!-- Only one Overview button (toplink) -->
+      </div>
+      <button class="nav primary" id="btnNext" aria-label="Next (Right Arrow)">Next →</button>
+    </div>
+  </section>
+</div>
+
+<script>
+  const steps = [
+    { t: "Vehicle Configuration", h: `
+        <p><strong>Base Model</strong> — pick the Simulink model that contains your BEV layout.</p>
+        <p><strong>Design Scenario</strong> — pick a configuration that controls which components and fidelities are available.</p>
+        <p><strong>Vehicle Config</strong> — pick the vehicle template (e.g. electric-only, electro-thermal, with HVAC).</p>
+        <div class="note">These three choices control what the rest of the app offers.</div>
+      ` },
+    { t: "Component Selection", h: `
+        <p>Each component (e.g. <em>BatteryHV</em>, <em>Front Motor</em>, <em>Rear Motor</em>) has a dropdown listing available fidelities.</p>
+        <ul>
+          <li><strong>?</strong> — show preview and description of the selected model.</li>
+          <li><strong>Open Model</strong> — open the selected model in Simulink.</li>
+          <li><strong>Param File</strong> — open the parameter file. Right-click to <em>Link Param File…</em> or <em>Unlink</em>.</li>
+        </ul>
+      ` },
+    { t: "Selection Preview", h: `
+        <p>Shows a preview image of the selected component model. Auto-updates when you change a dropdown.</p>
+      ` },
+    { t: "Description", h: `
+        <p>Shows what the selected model does, its inputs and outputs, and notes on fidelity. Use it to check you picked the right one.</p>
+      ` },
+    { t: "Environment and Initial Condition", h: `
+        <p>Set the starting conditions for your simulation:</p>
+        <ul>
+          <li><strong>Ambient Temperature</strong> — outside air temperature (default 25 degC).</li>
+          <li><strong>Ambient Pressure Initial</strong> — starting air pressure (default 1 bar).</li>
+          <li><strong>Relative Humidity Initial</strong> — humidity of the outside air (default 0.3).</li>
+          <li><strong>CO2 Fraction Initial</strong> — CO2 level in outside air (default 0.0004).</li>
+        </ul>
+      ` },
+    { t: "HVAC", h: `
+        <ul>
+          <li><strong>AC status</strong> — toggle air conditioning on or off. When on, it draws extra power from the battery.</li>
+          <li><strong>Cabin Temperature Setpoint</strong> — the target cabin temperature (default 20 degC).</li>
+        </ul>
+      ` },
+    { t: "Driver Setup", h: `
+        <ul>
+          <li><strong>AWD On</strong> — toggle all-wheel drive. When on, both front and rear motors are active.</li>
+          <li><strong>Regen On</strong> — toggle regenerative braking. When on, braking feeds energy back to the battery.</li>
+          <li><strong>Charging Off</strong> — toggle charging mode. Disables AWD and Regen when on.</li>
+          <li><strong>Control Selection</strong> — pick the controller for your configuration.</li>
+          <li><strong>Drive Cycle</strong> — pick the speed profile (e.g. FTP75, WLTP, US06).</li>
+        </ul>
+      ` },
+    { t: "Save, Export, and Model Setup", h: `
+        <ul>
+          <li><strong>Save Setup</strong> — save your selections to reload later from the Design Scenario dropdown.</li>
+          <li><strong>Export Parameter</strong> — generate a MATLAB script with all parameter values.</li>
+          <li><strong>Model Setup</strong> — build the Simulink model with your selected fidelities and settings.</li>
+        </ul>
+        <div class="note"><strong>Quick start:</strong> Vehicle Configuration → Component Selection → Environment / HVAC / Driver Setup → <em>Model Setup</em>.</div>
+      ` }
+  ];
+
+  const titleEl = document.getElementById('title');
+  const contentEl = document.getElementById('content');
+  const progressEl = document.getElementById('progress');
+  const barFill = document.getElementById('barFill');
+  const btnBack = document.getElementById('btnBack');
+  const btnNext = document.getElementById('btnNext');
+  const btnRestart = document.getElementById('btnRestart');
+  const landingEl = document.getElementById('landing');
+  const wizardEl  = document.getElementById('wizard');
+  const startBtn  = document.getElementById('startBtn');
+  const btnOverviewTop = document.getElementById('btnOverviewTop');
+
+  // Core navigation
+  let idx = 0;
+  function goTo(i){
+    idx = Math.max(0, Math.min(steps.length-1, i));
+    const s = steps[idx];
+    titleEl.textContent = s.t;
+    contentEl.innerHTML = s.h;
+    progressEl.textContent = `Step ${idx+1} of ${steps.length}`;
+    btnBack.disabled = (idx === 0);
+    btnNext.textContent = 'Next →';
+    btnNext.disabled = (idx === steps.length-1);
+    const pct = steps.length > 1 ? (idx/(steps.length-1))*100 : 100;
+    barFill.style.width = pct + '%';
+    titleEl.setAttribute('tabindex','-1'); titleEl.focus({preventScroll:true}); titleEl.blur();
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(idx-1); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); goTo(idx+1); }
+  });
+
+  btnBack.addEventListener('click', () => goTo(idx-1));
+  btnNext.addEventListener('click', () => { if (idx < steps.length-1) goTo(idx+1); });
+  btnRestart.addEventListener('click', () => goTo(0));
+
+  // Overview ⇄ Tutorial
+  function showLanding(){ wizardEl.style.display='none'; landingEl.style.display='block'; }
+  function showWizard(){ landingEl.style.display='none'; wizardEl.style.display='block'; goTo(0); }
+  if (startBtn) startBtn.addEventListener('click', showWizard);
+  if (btnOverviewTop) btnOverviewTop.addEventListener('click', showLanding);
+
+  // Auto-start tutorial; Overview available via top link
+// On load, open Overview by default; allow deep-link to jump into tutorial
+const hash = window.location.hash || "";
+if (/#start\b|step=\d+/.test(hash)) {
+  showWizard();     // jump straight to the tutorial if URL has #start or #step=n
+} else {
+  showLanding();    // otherwise show the Overview first
+}
+</script>

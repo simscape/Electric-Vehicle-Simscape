@@ -1,0 +1,235 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      -->
+<title>Pump</title>
+<meta name="generator" content="MATLAB 26.1">
+<link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
+<meta name="DC.date" content="2026-04-21">
+<meta name="DC.source" content="PumpDescription.m">
+<style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style>
+</head>
+<body>
+<div class="content">
+<h1>Pump</h1>
+<!--introduction-->
+<p>Coolant circulation pump for the BEV thermal management system.</p>
+<!--/introduction-->
+<h2>Contents</h2>
+<div>
+<ul>
+<li>
+<a href="#1">Overview</a>
+</li>
+<li>
+<a href="#2">Open Model</a>
+</li>
+<li>
+<a href="#3">Ports</a>
+</li>
+<li>
+<a href="#4">Workflows</a>
+</li>
+<li>
+<a href="#5">Mask Parameters</a>
+</li>
+<li>
+<a href="#6">See Also</a>
+</li>
+</ul>
+</div>
+<h2 id="1">Overview</h2>
+<p>The Pump block is a volumetric displacement pump that circulates coolant through the BEV thermal management loop. The pump speed is controlled by the thermal management controller (via the PumpDriver) and determines the coolant flow rate through the battery, motor drive, charger, chiller, heater, and radiator subsystems.</p>
+<p>
+<b>Model:</b> <a href="matlab:open_system('Pump')">Pump.slx</a>
+</p>
+<p>
+<b>Parameters:</b> <a href="matlab:edit('PumpParams.m')">PumpParams.m</a>
+</p>
+<p>
+<b>Thermal Coupling:</b> N/A (supporting thermal infrastructure component)</p>
+<h2 id="2">Open Model</h2>
+<pre class="codeinput">open_system(<span class="string">'Pump'</span>)
+</pre>
+<img vspace="5" hspace="5" src="../images/PumpDescription_01.png" alt=""> <h2 id="3">Ports</h2>
+<p>
+<b>Inputs</b>
+</p>
+<div>
+<ul>
+<li>
+<b>Pump speed command</b> - Shaft speed from the PumpDriver.</li>
+<li>
+<b>Coolant inlet port</b> - Thermal-liquid inlet from the coolant loop.</li>
+</ul>
+</div>
+<p>
+<b>Outputs</b>
+</p>
+<div>
+<ul>
+<li>
+<b>Coolant outlet port</b> - Pressurized coolant flow to downstream components.</li>
+<li>
+<b>Pump power</b> - Mechanical power consumed.</li>
+</ul>
+</div>
+<h2 id="4">Workflows</h2>
+<p>The Pump block is part of the coolant loop in the <b>VehicleElectroThermal</b> template. It works in conjunction with the PumpDriver component, which translates thermal controller commands into pump speed. Parameters are set via the model mask, with defaults from <tt>PumpParams.m</tt>.</p>
+<h2 id="5">Mask Parameters</h2>
+<p>The model exposes the following mask parameters. Defaults are read from the <tt>pump</tt> struct defined in <tt>PumpParams.m</tt>.</p>
+<p>
+<table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+<tr><th>Mask Variable</th><th>Default Source</th><th>Unit</th><th>Description</th></tr>
+<tr><td><tt>pump_displacement</tt></td><td><tt>pump.pump_displacement</tt></td><td>L/rev</td><td>Coolant pump volumetric displacement</td></tr>
+<tr><td><tt>pump_speed_max</tt></td><td><tt>pump.pump_speed_max</tt></td><td>rpm</td><td>Maximum pump shaft speed</td></tr>
+<tr><td><tt>coolant_pipe_D</tt></td><td><tt>pump.coolant_pipe_D</tt></td><td>m</td><td>Diameter of coolant piping</td></tr>
+</table>
+</p>
+<h2 id="6">See Also</h2>
+<div>
+<ul>
+<li>
+<a href="PumpDummyDescription.html">PumpDummy</a>
+</li>
+<li>
+<a href="PumpDummyThDescription.html">PumpDummyTh</a>
+</li>
+<li>
+<a href="PumpTestHarnessDescription.html">Pump Test Harness</a>
+</li>
+</ul>
+</div>
+<p class="footer">Copyright 2022 - 2026 The MathWorks, Inc.<br>
+<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2026a</a>
+<br>
+</p>
+</div>
+<!--
+##### SOURCE BEGIN #####
+%% Pump
+% Coolant circulation pump for the BEV thermal management system.
+
+%% Overview
+% The Pump block is a volumetric displacement pump that circulates coolant
+% through the BEV thermal management loop. The pump speed is controlled by
+% the thermal management controller (via the PumpDriver) and determines the
+% coolant flow rate through the battery, motor drive, charger, chiller,
+% heater, and radiator subsystems.
+%
+% *Model:* <matlab:open_system('Pump') Pump.slx>
+%
+% *Parameters:* <matlab:edit('PumpParams.m') PumpParams.m>
+%
+% *Thermal Coupling:* N/A (supporting thermal infrastructure component)
+
+%% Open Model
+
+open_system('Pump')
+
+%% Ports
+% *Inputs*
+%
+% * *Pump speed command* - Shaft speed from the PumpDriver.
+% * *Coolant inlet port* - Thermal-liquid inlet from the coolant loop.
+%
+% *Outputs*
+%
+% * *Coolant outlet port* - Pressurized coolant flow to downstream components.
+% * *Pump power* - Mechanical power consumed.
+
+%% Workflows
+% The Pump block is part of the coolant loop in the *VehicleElectroThermal*
+% template. It works in conjunction with the PumpDriver component, which
+% translates thermal controller commands into pump speed. Parameters are
+% set via the model mask, with defaults from |PumpParams.m|.
+
+%% Mask Parameters
+% The model exposes the following mask parameters. Defaults are read from
+% the |pump| struct defined in |PumpParams.m|.
+%
+% <html>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Mask Variable</th><th>Default Source</th><th>Unit</th><th>Description</th></tr>
+% <tr><td><tt>pump_displacement</tt></td><td><tt>pump.pump_displacement</tt></td><td>L/rev</td><td>Coolant pump volumetric displacement</td></tr>
+% <tr><td><tt>pump_speed_max</tt></td><td><tt>pump.pump_speed_max</tt></td><td>rpm</td><td>Maximum pump shaft speed</td></tr>
+% <tr><td><tt>coolant_pipe_D</tt></td><td><tt>pump.coolant_pipe_D</tt></td><td>m</td><td>Diameter of coolant piping</td></tr>
+% </table>
+% </html>
+
+%% See Also
+% * <PumpDummyDescription.html PumpDummy>
+% * <PumpDummyThDescription.html PumpDummyTh>
+% * <PumpTestHarnessDescription.html Pump Test Harness>
+
+% Copyright 2022 - 2026 The MathWorks, Inc.
+
+##### SOURCE END #####
+-->
+</body>
+</html>

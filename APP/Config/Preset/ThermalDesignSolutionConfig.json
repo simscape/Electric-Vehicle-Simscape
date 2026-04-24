@@ -1,0 +1,55 @@
+{
+    
+    "VehicleElectroThermal": {
+        "Description": "Electric Vehicle with Full Thermal",
+        "Components": {
+            "BatteryHV": {
+                "Instances":["Battery"],
+                "Models": ["BatteryTableBased", "BatteryLumpedThermal"]
+            },
+            "MotorDrive": {
+                "Instances": ["Rear Motor (EM2)", "Front Motor (EM1)"],
+                "Models": ["MotorDriveGearTh","MotorDriveLube"]
+            },
+            "HVAC": {
+                "Instances": ["HVAC"],
+                "Models": ["HVACsimpleTh","HVACEmpiricalRef"]
+            },
+            "Charger": {
+                "Instances": ["Charger"],
+                "Models": ["ChargerThermal"]
+            },
+            "Chiller": {
+                "Instances": ["Chiller"],
+                "Models": ["Chiller","ChillerDummy"]
+            },
+            "BatteryHeater": {
+                "Instances": ["Heater"],
+                "Models": ["Heater","HeaterDummy"]
+            },
+            "Driveline": {
+                "Instances": ["Driveline"],
+                "Models": ["Driveline","DrivelineWithBraking"]
+            },
+            "Pump": {
+                "Instances": ["Battery Pump", "Motor Pump"],
+                "Models": ["Pump","PumpDummyTh"]
+            },
+            "PumpDriver": {
+                "Instances": ["DCDC"],
+                "Models": ["PumpDriverTh"]
+            },
+            "Radiator": {
+                "Instances": ["Radiator"],
+                "Models": ["Radiator"]
+            }
+        },
+        "Controls": {
+                        "Instances":["Controller"],
+                          "Models":["Controller"]
+                   },
+        "SystemParameter": ["BEVThermalParams"]
+    }
+
+    
+}

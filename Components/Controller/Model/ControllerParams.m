@@ -12,9 +12,4 @@ controller.BrakeFactor = 0.4;
 controller.MaxSpeed = 140/0.06; % [m/min] max speed for controller 140 km/h
 controller.motorDriveTrqMax = 360;
 
-% controller.vehMass_kg = 1600;
-% controller.roadGrade=0;
-% 
-% % Motor Drive
-% controller.max_torque = 220;
-% controller.max_power = 50000;
+BMSParams;
