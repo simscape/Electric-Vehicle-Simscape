@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BEV Preset Picker</title>
+  <style>
+    :root {
+      --mw-blue: #0072bd;
+      --mw-blue-dark: #005f9e;
+      --mw-link: #006699;
+      --mw-link-hover: #004b73;
+      --mw-orange: #d95319;
+      --mw-border: #cfcfcf;
+      --mw-border-light: #e6e6e6;
+      --mw-text: #1a1a1a;
+      --mw-muted: #666666;
+      --mw-bg: #ffffff;
+      --mw-page: #f5f5f5;
+      --mw-code: #f7f7f7;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--mw-text);
+      background: var(--mw-page);
+      line-height: 1.6;
+    }
+
+    a { color: var(--mw-link); text-decoration: none; }
+    a:hover { color: var(--mw-link-hover); text-decoration: underline; }
+
+    .page {
+      max-width: 1440px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 240px minmax(0, 1fr);
+      gap: 32px;
+      padding: 24px;
+      align-items: start;
+      background: var(--mw-bg);
+    }
+
+    /* ---- Sidebar ---- */
+    .sidebar {
+      position: sticky;
+      top: 12px;
+      font-size: 14px;
+    }
+    .sidebar-title {
+      font-size: 13px;
+      font-weight: 700;
+      padding: 0 0 8px 0;
+      color: #000;
+    }
+    .sidebar ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .sidebar li { margin: 2px 0; }
+    .sidebar a {
+      display: block;
+      padding: 5px 8px;
+      margin-left: -8px;
+      border-left: 2px solid transparent;
+      color: #000;
+      transition: background-color 0.15s ease, border-color 0.15s ease;
+    }
+    .sidebar a:hover {
+      color: #000;
+      text-decoration: none;
+      background: #f2f2f2;
+    }
+    .sidebar a.active {
+      color: #000;
+      background: #f3f3f3;
+      border-left-color: var(--mw-orange);
+      font-weight: 700;
+    }
+
+    /* ---- Content ---- */
+    .content { min-width: 0; }
+
+    .article-header {
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--mw-border-light);
+      padding-bottom: 16px;
+    }
+    .article-header h1 {
+      margin: 0 0 6px 0;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--mw-orange);
+    }
+    .article-header .tagline {
+      margin: 0;
+      font-size: 16px;
+      color: var(--mw-muted);
+    }
+
+    section { margin-bottom: 34px; }
+
+    h2 {
+      font-size: 24px;
+      font-weight: 700;
+      margin: 28px 0 10px 0;
+      padding-top: 10px;
+      border-top: 1px solid var(--mw-border-light);
+      color: var(--mw-orange);
+    }
+    h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 20px 0 8px 0;
+      color: #1a1a1a;
+    }
+
+    p { margin: 10px 0; }
+    ul, ol { margin: 10px 0 10px 22px; }
+    li { margin: 4px 0; }
+
+    pre {
+      background: var(--mw-code);
+      border: 1px solid var(--mw-border);
+      border-left: 4px solid var(--mw-blue);
+      padding: 14px;
+      overflow-x: auto;
+      font-size: 13px;
+      line-height: 1.5;
+      margin: 12px 0 16px 0;
+    }
+    code {
+      font-family: Consolas, "Courier New", monospace;
+    }
+    p code, li code, td code {
+      background: var(--mw-code);
+      padding: 1px 5px;
+      border: 1px solid var(--mw-border-light);
+      font-size: 13px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--mw-border);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: #f3f3f3;
+      font-weight: 700;
+    }
+
+    .note {
+      border-left: 4px solid var(--mw-orange);
+      padding: 10px 14px;
+      background: #fff7f2;
+      margin: 14px 0;
+    }
+
+    img.screenshot {
+      max-width: 100%;
+      border: 1px solid var(--mw-border);
+      margin: 14px 0;
+    }
+
+    .footer {
+      margin-top: 40px;
+      padding-top: 12px;
+      border-top: 1px dotted var(--mw-border);
+      font-size: 12px;
+      color: var(--mw-muted);
+    }
+
+    @media (max-width: 980px) {
+      .page { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ---- Sidebar ---- -->
+  <nav class="sidebar">
+    <div class="sidebar-title">On This Page</div>
+    <ul>
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#open">Open the Preset Picker</a></li>
+      <li><a href="#shipped">Shipped Presets</a></li>
+      <li><a href="#apply">Apply a Preset</a></li>
+      <li><a href="#create">Create Your Own Preset</a></li>
+      <li><a href="#folder-structure">Folder Structure</a></li>
+      <li><a href="#see-also">See Also</a></li>
+    </ul>
+  </nav>
+
+  <!-- ---- Content ---- -->
+  <div class="content">
+
+    <div class="article-header">
+      <h1>BEV Preset Picker</h1>
+      <p class="tagline">Browse, preview, and apply ready-to-use vehicle configurations</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <section id="overview">
+      <h2>Overview</h2>
+
+      <p>The Preset Picker is a lightweight UI that lists all available
+      preset configurations, displays a README summary for each, and applies
+      the selected preset to the system model with one click.</p>
+
+      <img class="screenshot" src="../images/PresetAppWindow.png"
+           alt="Preset Picker window" />
+
+      <p>Each preset is a self-contained folder containing scripts that
+      configure subsystem references and load parameters. Presets are the
+      fastest way to get a model ready to simulate without opening the
+      full BEV Setup App.</p>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="open">
+      <h2>Open the Preset Picker</h2>
+
+      <p>Run the entry-point script from the MATLAB command window or
+      double-click it in the project.</p>
+
+<pre><code>OpenPresetPicker</code></pre>
+
+      <p>The picker scans <code>Script_Data/Setup/Preset/</code> for
+      preset folders and lists them in the left panel.</p>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="shipped">
+      <h2>Shipped Presets</h2>
+
+      <p>Three presets are shipped with the project.</p>
+
+      <table>
+        <tr><th>Preset</th><th>Template</th><th>Description</th></tr>
+        <tr>
+          <td><code>VehicleElectric_default</code></td>
+          <td>VehicleElectric</td>
+          <td>Basic powertrain &mdash; battery, dual motors, charger, driveline. No thermal.</td>
+        </tr>
+        <tr>
+          <td><code>VehicleElecAux_default</code></td>
+          <td>VehicleElecAux</td>
+          <td>Adds HVAC, coolant pumps, and pump driver to the base powertrain.</td>
+        </tr>
+        <tr>
+          <td><code>VehicleElectroThermal_default</code></td>
+          <td>VehicleElectroThermal</td>
+          <td>Full thermal plant &mdash; radiator, chiller, heater, coolant loops.</td>
+        </tr>
+      </table>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="apply">
+      <h2>Apply a Preset</h2>
+
+      <ol>
+        <li>Select a preset from the list on the left.</li>
+        <li>Review the README summary on the right &mdash; it shows the
+        template, component selections, parameter files, and environment
+        settings.</li>
+        <li>Click <strong>Apply Preset</strong>. The picker runs
+        <code>setupModelReferences.m</code> to configure the model, waits
+        for subsystems to load, then runs <code>setupModelParameters.m</code>
+        to load parameters.</li>
+        <li>The system model opens automatically when the preset is applied.</li>
+      </ol>
+
+      <p>You can also apply a preset from the command line without opening
+      the picker.</p>
+
+<pre><code>run('Script_Data/Setup/Preset/VehicleElectric_default/applyPreset.m')</code></pre>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="create">
+      <h2>Create Your Own Preset</h2>
+
+      <h3>1. Configure in the BEV App</h3>
+      <p>Open the BEV Setup App, select your template, pick component
+      fidelities, set environment conditions, and choose a drive cycle.</p>
+
+      <h3>2. Export with Model Setup</h3>
+      <p>Click <strong>Model Setup</strong> in the app. This generates a
+      timestamped folder under <code>Script_Data/Setup/User/</code>
+      containing:</p>
+      <ul>
+        <li><code>setupModelReferences.m</code> &mdash; configures subsystem references</li>
+        <li><code>setupModelParameters.m</code> &mdash; loads all parameter files</li>
+        <li><code>README.md</code> &mdash; build snapshot with selections and settings</li>
+      </ul>
+
+      <h3>3. Promote to a Preset</h3>
+      <p>Copy the exported folder into <code>Script_Data/Setup/Preset/</code>
+      and rename it to describe the configuration
+      (e.g., <code>VehicleElectric_thermal_study</code>).</p>
+
+      <p>Add an <code>applyPreset.m</code> script to the folder. The
+      boilerplate is the same for every preset.</p>
+
+<pre><code>%% Apply Preset: YourPresetName
+% Short description of this preset.
+%
+% Copyright 2026 The MathWorks, Inc.
+
+thisDir = fileparts(mfilename('fullpath'));
+
+fprintf('Applying preset: YourPresetName\n');
+
+% Configure model subsystem references
+run(fullfile(thisDir, 'setupModelReferences.m'));
+
+% Wait for model and referenced subsystems to fully load
+pause(5);
+
+% Load preset parameters
+run(fullfile(thisDir, 'setupModelParameters.m'));
+
+fprintf('Preset applied: YourPresetName\n');</code></pre>
+
+      <h3>4. Verify</h3>
+      <p>Open the Preset Picker, confirm your new preset appears in the
+      list, review its README, and click <strong>Apply Preset</strong> to
+      test it.</p>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="folder-structure">
+      <h2>Folder Structure</h2>
+
+<pre><code>Script_Data/Setup/
+  Preset/                              &larr; shipped presets (tracked in git)
+    VehicleElectric_default/
+      applyPreset.m
+      setupModelReferences.m
+      setupModelParameters.m
+      README.md
+    VehicleElecAux_default/
+      ...
+    VehicleElectroThermal_default/
+      ...
+  User/                                &larr; app-exported configs (gitignored)
+    BEVsystemModel_2026-04-20_15h09/
+      setupModelReferences.m
+      setupModelParameters.m
+      README.md</code></pre>
+
+      <div class="note">
+        <strong>Note:</strong> The <code>User/</code> folder is gitignored.
+        To share a configuration, promote it to <code>Preset/</code> and
+        commit it to the repository.
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="see-also">
+      <h2>See Also</h2>
+      <ul>
+        <li><a href="helpAppDetail.html">Configure a BEV Model Using the BEV App</a></li>
+        <li><a href="authoringWorkflow.html">Add Templates and Fidelities to the BEV App</a></li>
+      </ul>
+    </section>
+
+    <p class="footer">Copyright 2026 The MathWorks, Inc.</p>
+  </div>
+</div>
+
+<!-- ---- Scroll-based active sidebar ---- -->
+<script>
+(function () {
+  var links = document.querySelectorAll('.sidebar a[href^="#"]');
+  var sections = [];
+  links.forEach(function (a) {
+    var s = document.querySelector(a.getAttribute('href'));
+    if (s) sections.push({ link: a, top: 0, el: s });
+  });
+  function measure() {
+    sections.forEach(function (s) { s.top = s.el.getBoundingClientRect().top + window.scrollY - 80; });
+  }
+  function update() {
+    var y = window.scrollY;
+    var active = sections[0];
+    for (var i = 0; i < sections.length; i++) {
+      if (sections[i].top <= y) active = sections[i];
+    }
+    links.forEach(function (a) { a.classList.remove('active'); });
+    if (active) active.link.classList.add('active');
+  }
+  measure();
+  window.addEventListener('scroll', update);
+  window.addEventListener('resize', measure);
+  update();
+})();
+</script>
+</body>
+</html>
