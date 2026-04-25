@@ -78,6 +78,8 @@ jobs:
             Simscape_Electrical
             Powertrain_Blockset
             Simscape_Battery
+            Signal_Processing_Toolbox
+            Deep_Learning_Toolbox
       - name: Run tests
         uses: matlab-actions/run-command@v3
         with:

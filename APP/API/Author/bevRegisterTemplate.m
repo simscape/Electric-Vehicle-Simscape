@@ -5,16 +5,19 @@ function configEntry = bevRegisterTemplate(templatePath, options)
 %
 %   Scans the template .slx for subsystem reference (SSR) blocks, maps
 %   each referenced model to a component folder under Components/, groups
-%   instances by component type, lists available fidelities from disk,
-%   and builds a config JSON entry compatible with VehicleTemplateConfig.json.
+%   instances by component type, and builds a config JSON entry compatible
+%   with VehicleTemplateConfig.json.
+%
+%   The config key is always the .slx model basename (e.g.,
+%   VehicleThreeWheel.slx → "VehicleThreeWheel"). Different fidelity
+%   presets for the same template go in separate config JSON files.
 %
 %   Inputs:
 %     templatePath — path to the vehicle template .slx file
 %
 %   Name-Value Arguments:
-%     TemplateName    — config key name (default: model basename)
 %     Description     — short description string (default: "")
-%     ConfigFile      — existing JSON to append to, or new file to create
+%     ConfigFile      — JSON filename or path to write to (default: dry run)
 %     DryRun          — if true, print summary but do not write (default: true)
 %     SystemParameter — system-level param file names (default: "NA")
 %     ProjectRoot     — project root (default: auto-detect via MATLAB project)
@@ -24,20 +27,18 @@ function configEntry = bevRegisterTemplate(templatePath, options)
 %
 %   Example:
 %     entry = bevRegisterTemplate( ...
-%         'Model/VehicleTemplate/VehicleThreeWheel.slx', DryRun=true);
+%         'Model/VehicleTemplate/VehicleThreeWheel.slx');
 %
 %     bevRegisterTemplate( ...
 %         'Model/VehicleTemplate/VehicleThreeWheel.slx', ...
-%         TemplateName = "VehicleThreeWheel", ...
 %         Description  = "Three-wheel electric vehicle", ...
-%         ConfigFile   = "APP/Config/Preset/VehicleTemplateConfig.json", ...
+%         ConfigFile   = "ThreeWheelConfig.json", ...
 %         DryRun       = false);
 %
 % Copyright 2026 The MathWorks, Inc.
 
     arguments
         templatePath              (1,1) string
-        options.TemplateName      (1,1) string  = ""
         options.Description       (1,1) string  = ""
         options.ConfigFile        (1,1) string  = ""
         options.DryRun            (1,1) logical = true
@@ -46,19 +47,22 @@ function configEntry = bevRegisterTemplate(templatePath, options)
     end
 
     % ---- Resolve project root ----
-    projectRoot = resolveProjectRoot(options.ProjectRoot);
-
-    % ---- Resolve template path ----
-    templateFile = resolveTemplatePath(templatePath, projectRoot);
-    [~, modelBasename] = fileparts(templateFile);
-
-    templateName = options.TemplateName;
-    if templateName == ""
-        templateName = string(modelBasename);
+    if options.ProjectRoot ~= ""
+        projectRoot = options.ProjectRoot;
+    else
+        projectRoot = string(getBEVProjectRoot());
     end
 
+    % ---- Resolve template path and derive name ----
+    templateFile = resolveTemplatePath(templatePath, projectRoot);
+    [~, modelBasename] = fileparts(templateFile);
+    templateName = string(modelBasename);
+
+    % ---- Check existing preset configs ----
+    printPresetStatus(templateName, projectRoot);
+
     % ---- Scan template model for SSR blocks ----
-    fprintf('\n  Scanning template: %s\n', modelBasename);
+    fprintf('  Scanning template: %s\n', modelBasename);
     ssrBlocks = scanTemplateSSRBlocks(templateFile);
 
     if isempty(ssrBlocks.Names)
@@ -69,14 +73,12 @@ function configEntry = bevRegisterTemplate(templatePath, options)
 
     fprintf('  Found %d SSR blocks.\n', numel(ssrBlocks.Names));
 
-    % ---- Build component model lookup from disk ----
+    % ---- Map SSR blocks to component folders ----
     componentLookup = buildComponentModelLookup(projectRoot);
-
-    % ---- Map each SSR block to a component ----
     [componentGroups, controllerGroup, unmappedBlocks] = ...
         mapSSRToComponents(ssrBlocks, componentLookup);
 
-    % ---- Print unmapped blocks (non-component SSRs) ----
+    % ---- Report unmapped blocks ----
     if ~isempty(unmappedBlocks)
         fprintf('\n  Skipped %d SSR blocks (not in Components/):\n', ...
             numel(unmappedBlocks));
@@ -87,7 +89,7 @@ function configEntry = bevRegisterTemplate(templatePath, options)
         end
     end
 
-    % ---- Build the config entry struct ----
+    % ---- Build config entry ----
     configEntry = buildConfigStruct( ...
         componentGroups, controllerGroup, ...
         options.Description, options.SystemParameter);
@@ -95,37 +97,43 @@ function configEntry = bevRegisterTemplate(templatePath, options)
     % ---- Print summary ----
     printSummary(templateName, configEntry, componentGroups, controllerGroup);
 
-    % ---- Write to file if requested ----
+    % ---- Write to file ----
     if ~options.DryRun && options.ConfigFile ~= ""
-        configFilePath = resolveConfigPath(options.ConfigFile, projectRoot);
-        writeConfigEntry(configFilePath, templateName, configEntry);
-    elseif options.DryRun
+        [existingConfig, configFilePath] = bevConfigRead( ...
+            options.ConfigFile, projectRoot);
+
+        templateKey = char(templateName);
+        if isfield(existingConfig, templateKey)
+            fprintf('\n  WARNING: Template "%s" already exists in config.\n', ...
+                templateKey);
+            response = input('  Overwrite? (y/n): ', 's');
+            if ~strcmpi(response, 'y')
+                fprintf('  Aborted.\n');
+                return;
+            end
+        end
+
+        existingConfig.(templateKey) = configEntry;
+
+        % ---- Validate before writing ----
+        validateVehicleConfig(existingConfig, templateKey);
+
+        bevConfigWrite(existingConfig, configFilePath);
+        fprintf('  Written: %s\n', configFilePath);
+    elseif ~options.DryRun && options.ConfigFile == ""
+        fprintf('\n  No file written. To write, specify ConfigFile:\n');
+        fprintf('    bevRegisterTemplate("%s", ConfigFile = "<name>.json", DryRun = false)\n', ...
+            templatePath);
+    else
         fprintf('\n  DryRun = true. No file written.\n');
-        fprintf('  Set DryRun=false and provide ConfigFile to write.\n');
     end
 
     fprintf('\n');
 end
 
 %% ========================================================================
-%  Local helpers
+%  Local helpers — template-registration-specific
 %  ========================================================================
-
-function projectRoot = resolveProjectRoot(rootOption)
-% RESOLVEPROJECTROOT Get project root from option or MATLAB project.
-    if rootOption ~= ""
-        projectRoot = rootOption;
-    else
-        try
-            proj = matlab.project.rootProject();
-            projectRoot = string(proj.RootFolder);
-        catch
-            error('bevRegisterTemplate:NoProject', ...
-                'MATLAB project not loaded. Provide ProjectRoot explicitly.');
-        end
-    end
-end
-
 
 function templateFile = resolveTemplatePath(templatePath, projectRoot)
 % RESOLVETEMPLATEPATH Resolve template path to an absolute .slx path.
@@ -145,7 +153,9 @@ end
 
 
 function ssrBlocks = scanTemplateSSRBlocks(templateFile)
-% SCANTEMPLATESSR Blocks Load template and scan for subsystem references.
+% SCANTEMPLATESSRBLOCKS Load template and extract SSR block names and refs.
+%   Uses shared scanForSSRBlocks from APP/API/Detect/.
+
     [~, mdlName] = fileparts(templateFile);
     openedByUs = false;
 
@@ -156,29 +166,10 @@ function ssrBlocks = scanTemplateSSRBlocks(templateFile)
         openedByUs = true;
     end
 
-    cleanupObj = onCleanup(@() closeModelIfOpened(mdlName, openedByUs)); %#ok<NASGU>
+    cleanupObj = onCleanup(@() closeIfOpened(mdlName, openedByUs)); %#ok<NASGU>
 
-    % ---- Fast scan: active variants only ----
-    ssrPaths = find_system(mdlName, ...
-        'LookUnderMasks',   'none', ...
-        'FollowLinks',      'off', ...
-        'IncludeCommented',  'off', ...
-        'Regexp',           'on', ...
-        'MatchFilter',      @Simulink.match.activeVariants, ...
-        'BlockType',        'SubSystem', ...
-        'ReferencedSubsystem', '.+');
-
-    % ---- Fallback: heavy scan ----
-    if isempty(ssrPaths)
-        ssrPaths = find_system(mdlName, ...
-            'LookUnderMasks',   'all', ...
-            'FollowLinks',      'on', ...
-            'IncludeCommented',  'on', ...
-            'Regexp',           'on', ...
-            'MatchFilter',      @Simulink.match.allVariants, ...
-            'BlockType',        'SubSystem', ...
-            'ReferencedSubsystem', '.+');
-    end
+    % ---- Scan using shared utility ----
+    ssrPaths = scanForSSRBlocks(mdlName);
 
     if isempty(ssrPaths)
         ssrBlocks = struct('Names', strings(0,1), 'RefModels', strings(0,1));
@@ -200,51 +191,10 @@ function ssrBlocks = scanTemplateSSRBlocks(templateFile)
 end
 
 
-function componentLookup = buildComponentModelLookup(projectRoot)
-% BUILDCOMPONENTMODELLOOKUP Scan Components/ folders and map model names.
-%   Returns a containers.Map: modelBasename -> struct with ComponentName,
-%   ComponentFolder, and AllModels (all .slx basenames in that folder).
-
-    componentsDir = fullfile(projectRoot, 'Components');
-    componentFolders = dir(componentsDir);
-    componentFolders = componentFolders([componentFolders.isdir]);
-    componentFolders = componentFolders(~ismember({componentFolders.name}, {'.', '..'}));
-
-    componentLookup = containers.Map('KeyType', 'char', 'ValueType', 'any');
-
-    for idx = 1:numel(componentFolders)
-        compName = componentFolders(idx).name;
-        modelDir = fullfile(componentsDir, compName, 'Model');
-
-        if ~isfolder(modelDir)
-            continue;
-        end
-
-        slxFiles = dir(fullfile(modelDir, '*.slx'));
-        modelBasenames = strings(numel(slxFiles), 1);
-
-        for fileIdx = 1:numel(slxFiles)
-            [~, modelBasenames(fileIdx)] = fileparts(slxFiles(fileIdx).name);
-        end
-
-        compInfo = struct( ...
-            'ComponentName', string(compName), ...
-            'ComponentFolder', string(modelDir), ...
-            'AllModels', modelBasenames);
-
-        for fileIdx = 1:numel(modelBasenames)
-            lookupKey = lower(char(modelBasenames(fileIdx)));
-            componentLookup(lookupKey) = compInfo;
-        end
-    end
-end
-
-
 function [componentGroups, controllerGroup, unmappedBlocks] = ...
         mapSSRToComponents(ssrBlocks, componentLookup)
-% MAPSSRTOCOMPONENTS Map SSR blocks to component types.
-%   Groups SSR blocks by component folder. Controller entries are
-%   separated into controllerGroup. Unrecognized SSRs go to unmappedBlocks.
+% MAPSSRTOCOMPONENTS Group SSR blocks by component type.
+%   Controller entries go to controllerGroup. Unrecognized go to unmappedBlocks.
 
     componentGroups = containers.Map('KeyType', 'char', 'ValueType', 'any');
     controllerGroup = struct('Instances', {{}}, 'Models', {{}});
@@ -268,7 +218,9 @@ function [componentGroups, controllerGroup, unmappedBlocks] = ...
         % ---- Separate Controller into Controls section ----
         if strcmp(compName, 'Controller')
             controllerGroup.Instances{end+1} = char(blockName);
-            controllerGroup.Models = cellstr(compInfo.AllModels);
+            if ~ismember(char(refModel), controllerGroup.Models)
+                controllerGroup.Models{end+1} = char(refModel);
+            end
             continue;
         end
 
@@ -276,19 +228,15 @@ function [componentGroups, controllerGroup, unmappedBlocks] = ...
         if ~isKey(componentGroups, compName)
             componentGroups(compName) = struct( ...
                 'Instances', {{}}, ...
-                'Models', {cellstr(compInfo.AllModels)}, ...
-                'CurrentRef', {{}});
+                'Models', {{}});
         end
 
         group = componentGroups(compName);
         group.Instances{end+1} = char(blockName);
-        group.CurrentRef{end+1} = char(refModel);
+        if ~ismember(char(refModel), group.Models)
+            group.Models{end+1} = char(refModel);
+        end
         componentGroups(compName) = group;
-    end
-
-    % ---- Deduplicate controller models ----
-    if ~isempty(controllerGroup.Models)
-        controllerGroup.Models = unique(controllerGroup.Models, 'stable');
     end
 end
 
@@ -303,14 +251,12 @@ function configEntry = buildConfigStruct(componentGroups, controllerGroup, ...
         configEntry.Description = char(description);
     end
 
-    % ---- Components section ----
     compStruct = struct();
     compNames = sort(componentGroups.keys);
 
     for idx = 1:numel(compNames)
         compName = compNames{idx};
         group = componentGroups(compName);
-
         compStruct.(compName) = struct( ...
             'Instances', {group.Instances}, ...
             'Models', {group.Models});
@@ -318,14 +264,12 @@ function configEntry = buildConfigStruct(componentGroups, controllerGroup, ...
 
     configEntry.Components = compStruct;
 
-    % ---- Controls section (optional) ----
     if ~isempty(controllerGroup.Instances)
         configEntry.Controls = struct( ...
             'Instances', {controllerGroup.Instances}, ...
             'Models', {controllerGroup.Models});
     end
 
-    % ---- SystemParameter (optional) ----
     configEntry.SystemParameter = cellstr(systemParameter);
 end
 
@@ -341,8 +285,7 @@ function printSummary(templateName, configEntry, componentGroups, controllerGrou
 
     fprintf('  ============================================\n');
 
-    % ---- Components table ----
-    fprintf('\n  %-20s %-30s %-s\n', 'Component', 'Instances', 'Available Models');
+    fprintf('\n  %-20s %-30s %-s\n', 'Component', 'Instances', 'Models');
     fprintf('  %-20s %-30s %-s\n', ...
         '--------------------', '------------------------------', ...
         '-----------------------------');
@@ -351,23 +294,18 @@ function printSummary(templateName, configEntry, componentGroups, controllerGrou
     for idx = 1:numel(compNames)
         compName = compNames{idx};
         group = componentGroups(compName);
-
-        instanceStr = strjoin(group.Instances, ', ');
-        modelStr = strjoin(group.Models, ', ');
-
-        fprintf('  %-20s %-30s %s\n', compName, instanceStr, modelStr);
+        fprintf('  %-20s %-30s %s\n', compName, ...
+            strjoin(group.Instances, ', '), strjoin(group.Models, ', '));
     end
 
-    % ---- Controls ----
     if ~isempty(controllerGroup.Instances)
         fprintf('\n  Controls:\n');
         fprintf('    Instances: %s\n', strjoin(controllerGroup.Instances, ', '));
         fprintf('    Models:    %s\n', strjoin(controllerGroup.Models, ', '));
     else
-        fprintf('\n  Controls: (none detected — add manually if needed)\n');
+        fprintf('\n  Controls: (none detected)\n');
     end
 
-    % ---- SystemParameter ----
     if isfield(configEntry, 'SystemParameter')
         fprintf('  SystemParameter: %s\n', ...
             strjoin(string(configEntry.SystemParameter), ', '));
@@ -375,135 +313,54 @@ function printSummary(templateName, configEntry, componentGroups, controllerGrou
 end
 
 
-function configFilePath = resolveConfigPath(configFile, projectRoot)
-% RESOLVECONFIGPATH Resolve config file path to absolute.
-    if isfile(configFile)
-        configFilePath = configFile;
-    elseif isfile(fullfile(projectRoot, configFile))
-        configFilePath = fullfile(projectRoot, configFile);
-    else
-        configFilePath = configFile;
+function printPresetStatus(templateName, projectRoot)
+% PRINTPRESETSTATUS Scan all preset configs and report which contain this template.
+
+    presetDir = fullfile(projectRoot, 'APP', 'Config', 'Preset');
+    if ~isfolder(presetDir)
+        return;
     end
-end
 
-
-function writeConfigEntry(configFilePath, templateName, configEntry)
-% WRITECONFIGENTRY Append or create a config JSON file.
+    jsonFiles = dir(fullfile(presetDir, '*.json'));
+    if isempty(jsonFiles)
+        return;
+    end
 
     templateKey = char(templateName);
+    matchingPresets = {};
 
-    % ---- Load existing config or start fresh ----
-    if isfile(configFilePath)
-        existingJson = fileread(configFilePath);
-        existingConfig = jsondecode(existingJson);
-
-        if isfield(existingConfig, templateKey)
-            fprintf('\n  WARNING: Template "%s" already exists in %s.\n', ...
-                templateKey, configFilePath);
-            response = input('  Overwrite? (y/n): ', 's');
-            if ~strcmpi(response, 'y')
-                fprintf('  Aborted. Config file not modified.\n');
-                return;
+    for idx = 1:numel(jsonFiles)
+        jsonPath = fullfile(presetDir, jsonFiles(idx).name);
+        try
+            rawCfg = jsondecode(fileread(jsonPath));
+            if isfield(rawCfg, templateKey)
+                matchingPresets{end+1} = jsonFiles(idx).name; %#ok<AGROW>
             end
+        catch
+            % ---- Skip malformed JSON files ----
         end
+    end
+
+    fprintf('\n');
+    if isempty(matchingPresets)
+        fprintf('  Preset status: "%s" not found in any preset config.\n', templateKey);
     else
-        existingConfig = struct();
-        fprintf('\n  Creating new config file: %s\n', configFilePath);
+        fprintf('  Preset status: "%s" already exists in:\n', templateKey);
+        for idx = 1:numel(matchingPresets)
+            fprintf('    - %s\n', matchingPresets{idx});
+        end
     end
 
-    % ---- Merge the new entry ----
-    existingConfig.(templateKey) = configEntry;
-
-    % ---- Fix single-element arrays lost during jsondecode round-trip ----
-    existingConfig = fixJsonArrayFields(existingConfig);
-
-    % ---- Write with readable formatting ----
-    jsonText = jsonencode(existingConfig, PrettyPrint=true);
-    [outputDir, ~, ~] = fileparts(configFilePath);
-
-    if ~isfolder(outputDir)
-        mkdir(outputDir);
-    end
-
-    fileID = fopen(configFilePath, 'w');
-    if fileID == -1
-        error('bevRegisterTemplate:WriteError', ...
-            'Cannot write to %s', configFilePath);
-    end
-
-    cleanupFile = onCleanup(@() fclose(fileID));
-    fprintf(fileID, '%s', jsonText);
-
-    fprintf('  Written: %s\n', configFilePath);
-    fprintf('  Template "%s" added to config.\n', templateKey);
+    fprintf('\n');
 end
 
 
-function closeModelIfOpened(mdlName, openedByUs)
-% CLOSEMODELIFOPENED Close the model only if we opened it.
+function closeIfOpened(mdlName, openedByUs)
+% CLOSEIFOPENED Close the model only if we opened it.
     if openedByUs
         try
             close_system(mdlName, 0);
         catch
         end
-    end
-end
-
-
-function cfg = fixJsonArrayFields(cfg)
-% FIXJSONARRAYFIELDS Ensure Instances/Models/SystemParameter stay as arrays.
-%   jsondecode converts single-element JSON arrays to scalar strings.
-%   This restores them to cell arrays so jsonencode produces valid arrays.
-
-    templateNames = fieldnames(cfg);
-
-    for tIdx = 1:numel(templateNames)
-        tmpl = cfg.(templateNames{tIdx});
-
-        if ~isstruct(tmpl)
-            continue;
-        end
-
-        % ---- Fix Components section ----
-        if isfield(tmpl, 'Components') && isstruct(tmpl.Components)
-            compNames = fieldnames(tmpl.Components);
-            for cIdx = 1:numel(compNames)
-                comp = tmpl.Components.(compNames{cIdx});
-                if isfield(comp, 'Instances')
-                    comp.Instances = ensureCellArray(comp.Instances);
-                end
-                if isfield(comp, 'Models')
-                    comp.Models = ensureCellArray(comp.Models);
-                end
-                tmpl.Components.(compNames{cIdx}) = comp;
-            end
-        end
-
-        % ---- Fix Controls section ----
-        if isfield(tmpl, 'Controls') && isstruct(tmpl.Controls)
-            if isfield(tmpl.Controls, 'Instances')
-                tmpl.Controls.Instances = ensureCellArray(tmpl.Controls.Instances);
-            end
-            if isfield(tmpl.Controls, 'Models')
-                tmpl.Controls.Models = ensureCellArray(tmpl.Controls.Models);
-            end
-        end
-
-        % ---- Fix SystemParameter ----
-        if isfield(tmpl, 'SystemParameter')
-            tmpl.SystemParameter = ensureCellArray(tmpl.SystemParameter);
-        end
-
-        cfg.(templateNames{tIdx}) = tmpl;
-    end
-end
-
-
-function val = ensureCellArray(val)
-% ENSURECELLARRAY Convert scalar char/string to a cell array.
-    if ischar(val)
-        val = {val};
-    elseif isstring(val) && isscalar(val)
-        val = cellstr(val);
     end
 end
