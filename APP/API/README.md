@@ -6,12 +6,24 @@ Supporting functions for `BEVapp.mlapp`, organized into responsibility-based sub
 
 | Folder | Role | Files |
 |--------|------|-------|
+| `Author/` | Template authoring — register templates, add fidelities, sync configs | 6 |
 | `Catalog/` | What's valid — config validation, template resolution, component entries | 3 |
-| `Detect/` | What exists — model scanning, SSR detection, platform/controls detection | 5 |
+| `Detect/` | What exists — model scanning, SSR detection, platform/controls detection | 6 |
 | `State/` | What's selected — flat setup state build, save/load, session cache | 4 |
 | `Export/` | Artifact generation — setup scripts, param scripts, param link validation, build snapshot | 5 |
 | `UI/` | Presentation — dropdowns, descriptions, panels, preview, selection apply | 23 |
 | `Util/` | Generic helpers — project root, path resolution, file listing, param namespace | 10 |
+
+## Author
+
+| Function | Purpose |
+|----------|---------|
+| `bevRegisterTemplate` | Scan a vehicle template `.slx` and write its component structure to a config file |
+| `bevAddFidelity` | Add or modify a fidelity entry for a component in a config file |
+| `bevUpdateTemplate` | Rescan a template and sync all config files that reference it |
+| `bevConfigRead` | Read a JSON config file and return a MATLAB struct |
+| `bevConfigWrite` | Write a MATLAB struct to a JSON config file |
+| `buildComponentModelLookup` | Build a component-to-model lookup table from `Components/` folders |
 
 ## Catalog
 
@@ -30,6 +42,7 @@ Supporting functions for `BEVapp.mlapp`, organized into responsibility-based sub
 | `detectSSRFromBEVModel` | Scan BEV model for Subsystem Reference blocks matching a candidate list |
 | `platformDetectFromBEVModel` | Detect vehicle platform SSR in the base model |
 | `scanComponentAvailability` | Scan component folders and report which SLX fidelities exist on disk |
+| `scanForSSRBlocks` | Scan a loaded model for Subsystem Reference blocks (fast then fallback) |
 
 ## State
 
@@ -135,6 +148,15 @@ flowchart TD
     K --> W[Save Setup]
     W --> X["buildSetupState (flat)"]
     X --> Y["saveSetupToFile (wraps → APP/Config/User)"]
+
+    Z[Author CLI] --> Z1[bevRegisterTemplate]
+    Z1 --> Z2[scanForSSRBlocks]
+    Z1 --> Z3[buildComponentModelLookup]
+    Z --> Z4[bevAddFidelity]
+    Z --> Z5[bevUpdateTemplate]
+    Z5 --> Z1
+    Z4 --> Z6[bevConfigRead / bevConfigWrite]
+    Z5 --> Z6
 ```
 
 Copyright 2026 The MathWorks, Inc.

@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>bevRegisterTemplate</title>
+  <style>
+    :root {
+      --mw-blue: #0072bd;
+      --mw-blue-dark: #005f9e;
+      --mw-link: #006699;
+      --mw-link-hover: #004b73;
+      --mw-orange: #d95319;
+      --mw-border: #cfcfcf;
+      --mw-border-light: #e6e6e6;
+      --mw-text: #1a1a1a;
+      --mw-muted: #666666;
+      --mw-bg: #ffffff;
+      --mw-page: #f5f5f5;
+      --mw-code: #f7f7f7;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--mw-text);
+      background: var(--mw-page);
+      line-height: 1.6;
+    }
+
+    a { color: var(--mw-link); text-decoration: none; }
+    a:hover { color: var(--mw-link-hover); text-decoration: underline; }
+
+    .page {
+      max-width: 1440px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 240px minmax(0, 1fr);
+      gap: 32px;
+      padding: 24px;
+      align-items: start;
+      background: var(--mw-bg);
+    }
+
+    /* ---- Sidebar ---- */
+    .sidebar {
+      position: sticky;
+      top: 12px;
+      font-size: 14px;
+    }
+    .sidebar-title {
+      font-size: 13px;
+      font-weight: 700;
+      padding: 0 0 8px 0;
+      color: #000;
+    }
+    .sidebar ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .sidebar li { margin: 2px 0; }
+    .sidebar a {
+      display: block;
+      padding: 5px 8px;
+      margin-left: -8px;
+      border-left: 2px solid transparent;
+      color: #000;
+      transition: background-color 0.15s ease, border-color 0.15s ease;
+    }
+    .sidebar a:hover {
+      color: #000;
+      text-decoration: none;
+      background: #f2f2f2;
+    }
+    .sidebar a.active {
+      color: #000;
+      background: #f3f3f3;
+      border-left-color: var(--mw-orange);
+      font-weight: 700;
+    }
+
+    /* ---- Content ---- */
+    .content { min-width: 0; }
+
+    .article-header {
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--mw-border-light);
+      padding-bottom: 16px;
+    }
+    .article-header h1 {
+      margin: 0 0 6px 0;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--mw-orange);
+    }
+    .article-header .tagline {
+      margin: 0;
+      font-size: 16px;
+      color: var(--mw-muted);
+    }
+
+    section { margin-bottom: 34px; }
+
+    h2 {
+      font-size: 24px;
+      font-weight: 700;
+      margin: 28px 0 10px 0;
+      padding-top: 10px;
+      border-top: 1px solid var(--mw-border-light);
+      color: var(--mw-orange);
+    }
+    h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 20px 0 8px 0;
+      color: #1a1a1a;
+    }
+
+    p { margin: 10px 0; }
+    ul, ol { margin: 10px 0 10px 22px; }
+    li { margin: 4px 0; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--mw-border);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: #f3f3f3;
+      font-weight: 700;
+    }
+
+    pre {
+      background: var(--mw-code);
+      border: 1px solid var(--mw-border);
+      border-left: 4px solid var(--mw-blue);
+      padding: 14px;
+      overflow-x: auto;
+      font-size: 13px;
+      line-height: 1.5;
+      margin: 12px 0 16px 0;
+    }
+    code {
+      font-family: Consolas, "Courier New", monospace;
+    }
+    p code, li code, td code {
+      background: var(--mw-code);
+      padding: 1px 5px;
+      border: 1px solid var(--mw-border-light);
+      font-size: 13px;
+    }
+
+    .note {
+      border-left: 4px solid var(--mw-orange);
+      padding: 10px 14px;
+      background: #fff7f2;
+      margin: 14px 0;
+    }
+
+    .arg-name {
+      font-family: Consolas, "Courier New", monospace;
+      font-weight: 700;
+      color: var(--mw-blue-dark);
+    }
+    .arg-block {
+      margin: 16px 0;
+      padding: 12px 16px;
+      border: 1px solid var(--mw-border-light);
+      background: #fafafa;
+    }
+    .arg-block p { margin: 4px 0; }
+
+    .data-type {
+      font-size: 13px;
+      color: var(--mw-muted);
+    }
+
+    /* ---- Collapsible Examples ---- */
+    .examples-controls {
+      text-align: right;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+    .examples-controls a {
+      cursor: pointer;
+      margin-left: 12px;
+    }
+
+    details.example-block {
+      border: 1px solid var(--mw-border-light);
+      margin-bottom: 12px;
+    }
+    details.example-block summary {
+      display: flex;
+      align-items: center;
+      padding: 10px 14px;
+      background: #f8f8f8;
+      border-bottom: 1px solid transparent;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--mw-text);
+      list-style: none;
+      user-select: none;
+    }
+    details.example-block summary::-webkit-details-marker { display: none; }
+    details.example-block summary::before {
+      content: "\25B6";
+      font-size: 10px;
+      margin-right: 10px;
+      color: var(--mw-muted);
+      transition: transform 0.15s ease;
+    }
+    details.example-block[open] summary::before {
+      transform: rotate(90deg);
+    }
+    details.example-block[open] summary {
+      border-bottom-color: var(--mw-border-light);
+    }
+    details.example-block .example-content {
+      padding: 14px 18px;
+    }
+    details.example-block .example-content p:first-child {
+      margin-top: 0;
+    }
+
+    .footer {
+      margin-top: 40px;
+      padding-top: 12px;
+      border-top: 1px dotted var(--mw-border);
+      font-size: 12px;
+      color: var(--mw-muted);
+    }
+
+    @media (max-width: 980px) {
+      .page { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ---- Sidebar ---- -->
+  <nav class="sidebar">
+    <div class="sidebar-title">On This Page</div>
+    <ul>
+      <li><a href="#syntax">Syntax</a></li>
+      <li><a href="#description">Description</a></li>
+      <li><a href="#examples">Examples</a></li>
+      <li><a href="#input-arguments">Input Arguments</a></li>
+      <li><a href="#output-arguments">Output Arguments</a></li>
+      <li><a href="#tips">Tips</a></li>
+      <li><a href="#see-also">See Also</a></li>
+    </ul>
+    <div class="sidebar-title" style="margin-top: 24px;">Authoring CLI</div>
+    <ul>
+      <li><a href="bevRegisterTemplate.html">bevRegisterTemplate</a></li>
+      <li><a href="bevAddFidelity.html">bevAddFidelity</a></li>
+      <li><a href="bevUpdateTemplate.html">bevUpdateTemplate</a></li>
+    </ul>
+  </nav>
+
+  <!-- ---- Content ---- -->
+  <div class="content">
+
+    <div class="article-header">
+      <h1>bevRegisterTemplate</h1>
+      <p class="tagline">Register a vehicle template by scanning its model</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <section id="syntax">
+      <h2>Syntax</h2>
+<pre><code>configEntry = bevRegisterTemplate(templatePath)
+configEntry = bevRegisterTemplate(templatePath, Name=Value)
+bevRegisterTemplate(___)</code></pre>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="description">
+      <h2>Description</h2>
+
+      <p><code>configEntry = bevRegisterTemplate(templatePath)</code>
+      scans the vehicle template <code>.slx</code> file for subsystem reference (SSR) blocks,
+      maps each referenced model to a component folder under <code>Components/</code>,
+      groups instances by component type, and returns a config struct compatible with
+      <code>VehicleTemplateConfig.json</code>. By default, this is a dry run &mdash; no file is written.</p>
+
+      <p><code>configEntry = bevRegisterTemplate(templatePath, Name=Value)</code>
+      specifies additional options using one or more name-value arguments.
+      Use <code>ConfigFile</code> and <code>DryRun=false</code> to write the entry to a JSON config file.</p>
+
+      <p>The config key is always the <code>.slx</code> model basename.
+      For example, <code>VehicleThreeWheel.slx</code> registers as <code>"VehicleThreeWheel"</code>.
+      Different fidelity presets for the same template go in separate config JSON files.</p>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="examples">
+      <h2>Examples</h2>
+      <div class="examples-controls">
+        <a onclick="toggleAllExamples(true)">expand all</a>
+        <a onclick="toggleAllExamples(false)">collapse all</a>
+      </div>
+
+      <!-- Example 1 -->
+      <details class="example-block" open>
+        <summary>Dry Run &mdash; Preview Config Entry</summary>
+        <div class="example-content">
+          <p>Scan a template and display the config summary without writing any file.</p>
+<pre><code>entry = bevRegisterTemplate("Model/VehicleTemplate/VehicleThreeWheel.slx")</code></pre>
+          <p>The function prints preset status (which config files already contain this template),
+          the SSR block scan results, and a component/instance/model summary table.</p>
+        </div>
+      </details>
+
+      <!-- Example 2 -->
+      <details class="example-block">
+        <summary>Register to a New Config File</summary>
+        <div class="example-content">
+          <p>Scan the template and write the entry to a new JSON file in <code>APP/Config/Preset/</code>.</p>
+<pre><code>bevRegisterTemplate("Model/VehicleTemplate/VehicleThreeWheel.slx", ...
+    Description     = "Three-wheel electric vehicle", ...
+    ConfigFile      = "ThreeWheelConfig.json", ...
+    SystemParameter = "NA", ...
+    DryRun          = false)</code></pre>
+          <p>The config key <code>"VehicleThreeWheel"</code> is derived from the
+          <code>.slx</code> filename automatically.</p>
+        </div>
+      </details>
+
+      <!-- Example 3 -->
+      <details class="example-block">
+        <summary>Register to an Existing Config File</summary>
+        <div class="example-content">
+          <p>Add the template entry alongside existing templates.
+          If the template already exists in the file, you are prompted to confirm overwrite.</p>
+<pre><code>bevRegisterTemplate("Model/VehicleTemplate/VehicleThreeWheel.slx", ...
+    ConfigFile = "VehicleTemplateConfig.json", ...
+    DryRun     = false)</code></pre>
+        </div>
+      </details>
+
+      <!-- Example 4 -->
+      <details class="example-block">
+        <summary>Create Multiple Fidelity Presets</summary>
+        <div class="example-content">
+          <p>Register the same template into separate config files to create
+          different fidelity presets. The app's Config dropdown lets users switch
+          between them.</p>
+<pre><code>% Default fidelity preset
+bevRegisterTemplate("Model/VehicleTemplate/VehicleElectric.slx", ...
+    Description = "Standard fidelity", ...
+    ConfigFile  = "VehicleTemplateConfig.json", ...
+    DryRun      = false)
+
+% High-fidelity thermal preset
+bevRegisterTemplate("Model/VehicleTemplate/VehicleElectric.slx", ...
+    Description     = "Thermal fidelity preset", ...
+    ConfigFile      = "VehicleThermalConfig.json", ...
+    SystemParameter = "BEVThermalParams", ...
+    DryRun          = false)</code></pre>
+          <p>Then use <a href="bevAddFidelity.html">bevAddFidelity</a> to
+          customize the models in each preset.</p>
+        </div>
+      </details>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="input-arguments">
+      <h2>Input Arguments</h2>
+
+      <div class="arg-block">
+        <p><span class="arg-name">templatePath</span> &mdash; Path to vehicle template</p>
+        <p>Path to the vehicle template <code>.slx</code> file, specified as a string scalar.
+        Can be an absolute path or a path relative to the project root.</p>
+        <p>The model basename becomes the config key (e.g., <code>"VehicleThreeWheel.slx"</code>
+        &rarr; config key <code>"VehicleThreeWheel"</code>).</p>
+        <p class="data-type">Data Types: <code>string</code></p>
+      </div>
+
+      <h3>Name-Value Arguments</h3>
+      <p>Specify optional pairs of arguments as <code>Name=Value</code>.</p>
+
+      <div class="arg-block">
+        <p><span class="arg-name">Description</span> &mdash; Short description string</p>
+        <p>One-line description stored in the config entry.
+        Appears in the app UI and generated README files.</p>
+        <p>Default: <code>""</code> (no description)</p>
+        <p class="data-type">Data Types: <code>string</code></p>
+      </div>
+
+      <div class="arg-block">
+        <p><span class="arg-name">ConfigFile</span> &mdash; JSON config filename</p>
+        <p>Name of the JSON file to write to. A bare filename (no path separator)
+        resolves to <code>APP/Config/Preset/</code>.
+        A path is used as-is or resolved relative to the project root.</p>
+        <p>Default: <code>""</code> (no file &mdash; dry run only)</p>
+        <p class="data-type">Data Types: <code>string</code></p>
+      </div>
+
+      <div class="arg-block">
+        <p><span class="arg-name">DryRun</span> &mdash; Preview mode</p>
+        <p>If <code>true</code>, prints a summary but does not write any file.
+        If <code>false</code> and <code>ConfigFile</code> is specified, writes the config.
+        If <code>false</code> and <code>ConfigFile</code> is empty, prints a hint showing
+        the required syntax.</p>
+        <p>Default: <code>true</code></p>
+        <p class="data-type">Data Types: <code>logical</code></p>
+      </div>
+
+      <div class="arg-block">
+        <p><span class="arg-name">SystemParameter</span> &mdash; System-level parameter files</p>
+        <p>Names of system-level parameter files required by this template
+        (e.g., <code>"BEVThermalParams"</code>). Use <code>"NA"</code> if none.</p>
+        <p>Default: <code>"NA"</code></p>
+        <p class="data-type">Data Types: <code>string</code> array</p>
+      </div>
+
+      <div class="arg-block">
+        <p><span class="arg-name">ProjectRoot</span> &mdash; Project root folder</p>
+        <p>Override the project root instead of auto-detecting via
+        <code>matlab.project.rootProject()</code>.</p>
+        <p>Default: <code>""</code> (auto-detect)</p>
+        <p class="data-type">Data Types: <code>string</code></p>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="output-arguments">
+      <h2>Output Arguments</h2>
+
+      <div class="arg-block">
+        <p><span class="arg-name">configEntry</span> &mdash; Config struct for the template</p>
+        <p>Struct matching the <code>VehicleTemplateConfig.json</code> schema with fields:</p>
+        <table>
+          <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+          <tr><td><code>Description</code></td><td>char</td><td>Short description (if provided)</td></tr>
+          <tr><td><code>Components</code></td><td>struct</td><td>Component types, each with <code>Instances</code> and <code>Models</code></td></tr>
+          <tr><td><code>Controls</code></td><td>struct</td><td>Controller instances and models (if detected)</td></tr>
+          <tr><td><code>SystemParameter</code></td><td>cell</td><td>System parameter file names</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="tips">
+      <h2>Tips</h2>
+      <ul>
+        <li>The function checks all <code>*.json</code> files in <code>APP/Config/Preset/</code>
+        and reports which ones already contain the template before scanning.</li>
+        <li>SSR blocks that reference models outside <code>Components/</code> are reported
+        as unmapped but do not cause an error.</li>
+        <li>Controller components (under <code>Components/Controller/</code>) are
+        automatically placed in the <code>Controls</code> section, not <code>Components</code>.</li>
+        <li>The config is validated with <code>validateVehicleConfig</code> before writing.
+        If validation fails, no file is written.</li>
+        <li>To create multiple fidelity presets for the same template,
+        register into separate config files. The app's Config dropdown lets users switch between them.</li>
+      </ul>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="see-also">
+      <h2>See Also</h2>
+      <ul>
+        <li><a href="bevAddFidelity.html">bevAddFidelity</a></li>
+        <li><a href="bevUpdateTemplate.html">bevUpdateTemplate</a></li>
+        <li><a href="authoringWorkflow.html">Add Templates and Fidelities to the BEV App</a></li>
+        <li><a href="helpAppDetail.html">Configure a BEV Model Using the BEV App</a></li>
+      </ul>
+    </section>
+
+    <p class="footer">Copyright 2026 The MathWorks, Inc.</p>
+  </div>
+</div>
+
+<!-- ---- Collapsible examples + scroll-based active sidebar ---- -->
+<script>
+function toggleAllExamples(open) {
+  document.querySelectorAll('details.example-block').forEach(function (d) {
+    d.open = open;
+  });
+}
+
+(function () {
+  var links = document.querySelectorAll('.sidebar a[href^="#"]');
+  var sections = [];
+  links.forEach(function (a) {
+    var s = document.querySelector(a.getAttribute('href'));
+    if (s) sections.push({ link: a, top: 0, el: s });
+  });
+  function measure() {
+    sections.forEach(function (s) { s.top = s.el.getBoundingClientRect().top + window.scrollY - 80; });
+  }
+  function update() {
+    var y = window.scrollY;
+    var active = sections[0];
+    for (var i = 0; i < sections.length; i++) {
+      if (sections[i].top <= y) active = sections[i];
+    }
+    links.forEach(function (a) { a.classList.remove('active'); });
+    if (active) active.link.classList.add('active');
+  }
+  measure();
+  window.addEventListener('scroll', update);
+  window.addEventListener('resize', measure);
+  update();
+})();
+</script>
+</body>
+</html>

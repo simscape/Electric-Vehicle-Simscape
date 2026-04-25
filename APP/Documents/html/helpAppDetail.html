@@ -480,6 +480,7 @@
               </ul>
             </li>
             <li><a href="#export">Save, Export, Model Setup</a></li>
+            <li><a href="#authoring">Template Authoring</a></li>
             <li><a href="#related-links">See Also</a></li>
           </ul>
         </div>
@@ -865,6 +866,26 @@
         </p>
       </section>
 
+      <!-- Template Authoring -->
+      <section id="authoring">
+        <h2>Template Authoring</h2>
+        <p>
+          To add your own vehicle templates, components, or model fidelities to the app,
+          use the command-line authoring tools. These let you register new content and
+          manage config presets without editing JSON files by hand.
+        </p>
+        <table>
+          <tr><th>Command</th><th>Purpose</th></tr>
+          <tr><td><a href="bevRegisterTemplate.html"><code>bevRegisterTemplate</code></a></td><td>Scan a template <code>.slx</code> and register it to a config file</td></tr>
+          <tr><td><a href="bevAddFidelity.html"><code>bevAddFidelity</code></a></td><td>Add or modify model fidelities for a component</td></tr>
+          <tr><td><a href="bevUpdateTemplate.html"><code>bevUpdateTemplate</code></a></td><td>Rescan a template and sync all configs that reference it</td></tr>
+        </table>
+        <p>
+          See <a href="authoringWorkflow.html">Add Templates and Fidelities to the BEV App</a>
+          for a step-by-step workflow guide.
+        </p>
+      </section>
+
       <!-- See Also -->
       <section id="related-links">
         <h2>See Also</h2>
@@ -872,7 +893,7 @@
           <li><a href="../../../Overview/html/BatteryElectricVehicleModelOverview.html">BEV Model Overview</a></li>
           <li><a href="../../../Overview/html/ElectricVehicleComponentOverview.html">Component Models Reference</a></li>
           <li><a href="../../../Overview/html/ElectricVehicleDesignOverview.html">Electric Vehicle Design Overview</a></li>
-          <li><a href="../../../Overview/html/ElectricVehicleComponentOverview.html">Component Overview</a></li>
+          <li><a href="authoringWorkflow.html">Add Templates and Fidelities to the BEV App</a></li>
         </ul>
       </section>
     </main>

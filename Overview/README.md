@@ -7,7 +7,7 @@ Single-page reference for how the BEV Simscape repository is organized, where tr
 | Folder | Responsibility |
 |--------|---------------|
 | [`APP/`](../APP/README.md) | BEV Setup App — GUI, API back-end, config presets, user-saved setups |
-| [`APP/API/`](../APP/API/README.md) | 50 functions in 6 domain subfolders (Catalog, Detect, State, Export, UI, Util) |
+| [`APP/API/`](../APP/API/README.md) | 57 functions in 7 domain subfolders (Author, Catalog, Detect, State, Export, UI, Util) |
 | [`APP/Config/`](../APP/Config/README.md) | Shipped JSON configs (Preset) and user-saved configs (User, gitignored) |
 | [`Components/`](../Components/README.md) | 12 self-contained component packages with models, params, tests, docs |
 | [`Model/`](../Model/README.md) | System-level Simulink model (`BEVsystemModel.slx`) — authored assets only |
@@ -35,7 +35,7 @@ Each concern has one canonical source. Everything else derives from it.
 | Vehicle template structure | `Model/VehicleTemplate/*.slx` | App template dropdown, export SSR targets |
 | Component documentation | `Components/*/Documentation/*.m` (source) | Published to `html/` via MATLAB `publish()` |
 | Overview documentation | `Overview/*.m` (source) | Published to `Overview/html/` via MATLAB `publish()` |
-| App help pages | `APP/Documents/html/*.html` | App help button, doc links |
+| App help pages | `APP/Documents/html/*.html` | App help button, doc links, template authoring guides |
 | App internal state | `setupState` struct (built by `buildSetupState()`) | All API functions that read/write app state |
 | User-saved configurations | `APP/Config/User/*.json` | Config dropdown, load/replay |
 | Generated setup scripts | `Script_Data/Setup/User/` (timestamped folders) | User runs outside app to replay a configuration |
@@ -132,8 +132,9 @@ All fidelities within the same component type share a common Simulink port inter
 | Layer | Location | Responsibility |
 |-------|----------|---------------|
 | GUI | `APP/BEVapp.mlapp` | App Designer UI — thin callbacks only |
+| Author | `APP/API/Author/` (6) | Template registration, fidelity management, config sync CLIs |
 | Catalog | `APP/API/Catalog/` (3) | Config parsing, template resolution, validation |
-| Detect | `APP/API/Detect/` (5) | Runtime model scanning — SSR detection, platform/controls ID |
+| Detect | `APP/API/Detect/` (6) | Runtime model scanning — SSR detection, platform/controls ID |
 | State | `APP/API/State/` (4) | `setupState` struct build, save, cache |
 | Export | `APP/API/Export/` (5) | Script generation, param export, link validation |
 | UI | `APP/API/UI/` (23) | Dropdown population, descriptions, panels, preview |
@@ -223,7 +224,7 @@ Workflows live under `Workflow/<Domain>/<WorkflowName>/`. Each expects the syste
 | `Test/VehicleWorkflowTests.m` | Vehicle workflow smoke tests | 1 |
 | `Test/CheckProject/` | MATLAB Project integrity checks | Varies |
 | `Components/*/TestCase/*PassTests.m` | Component-level unit tests (all 12) | 12 |
-| `APP/Test/` | App config, preset, fidelity, and hyperlink validation tests | 7 |
+| `APP/Test/` | App config, preset, fidelity, hyperlink, and template authoring tests | 9 |
 
 ## Known Drift Points
 
@@ -235,7 +236,7 @@ These are areas where sources can fall out of sync. Check after any structural c
 | Template `.slx` vs JSON | A template exists on disk but is not in any config | Compare `Model/VehicleTemplate/*.slx` against JSON keys |
 | Param script vs model | Model renamed but param script not updated | Check `<Fidelity>Params.m` exists for every `<Fidelity>.slx` |
 | Doc source vs published HTML | Source `.m` edited but HTML not republished | Compare timestamps: `Documentation/*.m` vs `Documentation/html/*.html` |
-| App function count vs README | Functions added/removed but README counts stale | Count files in `APP/API/*/` vs documented counts |
+| App function count vs README | Functions added/removed but README counts stale | Count files in `APP/API/*/` vs documented counts (currently 57 in 7 folders) |
 | Component inventory vs overview | Component added/removed but overview page not updated | Compare `Components/*/` folders against overview table |
 
 ## Extension Guides
@@ -244,24 +245,26 @@ These are areas where sources can fall out of sync. Check after any structural c
 
 1. Create `<FidelityName>.slx` and `<FidelityName>Params.m` in `Components/<Type>/Model/`
 2. Match the port interface of existing fidelities in that component
-3. Add the fidelity name to relevant template entries in `APP/Config/Preset/*.json`
+3. Register with the app: `bevAddFidelity("ConfigFile.json", "Template", "Component", "Model", DryRun=false)`
 4. Create `<FidelityName>Description.m` in `Documentation/`, publish to `html/`
 5. Update test coverage in `TestCase/` if needed
 
 ### Add a new vehicle template
 
 1. Create `<TemplateName>.slx` in `Model/VehicleTemplate/` with subsystem references
-2. Add a new top-level key in `APP/Config/Preset/VehicleTemplateConfig.json` with component/fidelity mapping
-3. Update `Overview/ElectricVehicleComponentOverview.m` template table
-4. Republish overview HTML
+2. Register with the app: `bevRegisterTemplate("Model/VehicleTemplate/<Name>.slx", ConfigFile="Config.json", DryRun=false)`
+3. Add fidelities: `bevAddFidelity("Config.json", "<Name>", "<Component>", "<Model>", DryRun=false)`
+4. Update `Overview/ElectricVehicleComponentOverview.m` template table, republish overview HTML
 
 ### Add a new component type
 
 1. Create `Components/<ComponentName>/` with standard subfolder layout (see Component Architecture)
 2. Add `Model/`, `Documentation/`, `TestCase/` at minimum
-3. Add component entries to relevant templates in `APP/Config/Preset/*.json`
-4. Update `Components/README.md` and `Overview/ElectricVehicleComponentOverview.m`
-5. The App picks up new component types automatically from the JSON config
+3. Add the component as a subsystem reference in the template `.slx`, then sync: `bevUpdateTemplate("Model/VehicleTemplate/<Name>.slx", DryRun=false)`
+4. Add extra fidelities: `bevAddFidelity("ConfigFile.json", "Template", "Component", "Model", DryRun=false)`
+5. Update `Components/README.md` and `Overview/ElectricVehicleComponentOverview.m`
+
+See [Template Authoring Workflow](../APP/Documents/html/authoringWorkflow.html) for the full guide.
 
 ### Add a new workflow
 
