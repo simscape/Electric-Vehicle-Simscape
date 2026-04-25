@@ -12,7 +12,16 @@ BEVSystemModelParams; % Load model parameters
 driveCycle='NEDC'; % drive cycle type, choose from drive cycle source block in model
 SimulationTime='1180'; % drive simulation time, put as per the drive cycle selection
 speedBlock=find_system('BEVsystemModel','MatchFilter',@Simulink.match.allVariants,'Name','Drive Cycle Source'); % Get the block handle
-set(getSimulinkBlockHandle(speedBlock),'cycleVar',driveCycle); % set the block to the drive cycle of choice
+% Select drive cycle if available, fall back to FTP75
+try
+    set(getSimulinkBlockHandle(speedBlock),'cycleVar',driveCycle);
+catch
+    disp('Plese Install desired test cycle using Drive Cycle Source block in the slx model');
+    driveCycle = 'FTP75';
+    SimulationTime = '2474';
+    disp('Running available Default cycle FTP75');
+    set(getSimulinkBlockHandle(speedBlock),'cycleVar',driveCycle);
+end
 
 % Ambient setting
 vehicleThermal.ambient=25 +273.15; % [K] Ambient temperature 
