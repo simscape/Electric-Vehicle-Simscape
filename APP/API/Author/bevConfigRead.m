@@ -99,10 +99,17 @@ end
 
 
 function fieldValue = ensureCellArray(fieldValue)
-% ENSURECELLARRAY Convert scalar char/string to a cell array.
+% ENSURECELLARRAY Convert scalar char/string to a cell array, force row orientation.
+%   jsondecode returns multi-element arrays as column cells (Nx1).
+%   Force row (1xN) to match the programmatic convention used everywhere.
+
     if ischar(fieldValue)
         fieldValue = {fieldValue};
     elseif isstring(fieldValue) && isscalar(fieldValue)
         fieldValue = cellstr(fieldValue);
+    end
+
+    if iscell(fieldValue)
+        fieldValue = fieldValue(:)';
     end
 end

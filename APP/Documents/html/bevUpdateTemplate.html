@@ -268,6 +268,7 @@
       <li><a href="bevRegisterTemplate.html">bevRegisterTemplate</a></li>
       <li><a href="bevAddFidelity.html">bevAddFidelity</a></li>
       <li><a href="bevUpdateTemplate.html">bevUpdateTemplate</a></li>
+      <li><a href="bevCleanConfig.html">bevCleanConfig</a></li>
     </ul>
   </nav>
 
@@ -410,8 +411,8 @@ bevUpdateTemplate(templatePath, Name=Value)</code></pre>
           <td>Instances updated from template. Selections for removed instances cleaned up.</td>
         </tr>
         <tr>
-          <td>Component in config and template, new SSR model</td>
-          <td>SSR model added to the models list. Existing fidelities kept.</td>
+          <td>Component in config and template, new referenced model</td>
+          <td>Referenced model added to the models list. Existing fidelities kept.</td>
         </tr>
         <tr>
           <td>Component in config but not in template</td>
@@ -419,7 +420,7 @@ bevUpdateTemplate(templatePath, Name=Value)</code></pre>
         </tr>
         <tr>
           <td>Component in template but not in config</td>
-          <td>Added with instances and SSR model only</td>
+          <td>Added with instances and referenced model only</td>
         </tr>
       </table>
     </section>
@@ -433,7 +434,7 @@ bevUpdateTemplate(templatePath, Name=Value)</code></pre>
         <li>The function searches all <code>*.json</code> files in
         <code>APP/Config/Preset/</code>. If the template is not found in any config,
         use <a href="bevRegisterTemplate.html"><code>bevRegisterTemplate</code></a> first.</li>
-        <li>New components are added with only the SSR-linked model. Use
+        <li>New components are added with only the referenced model. Use
         <a href="bevAddFidelity.html"><code>bevAddFidelity</code></a> to add
         extra fidelities and parameter links afterwards.</li>
         <li>Description, SystemParameter, and other metadata fields are not touched
@@ -448,6 +449,7 @@ bevUpdateTemplate(templatePath, Name=Value)</code></pre>
       <ul>
         <li><a href="bevRegisterTemplate.html">bevRegisterTemplate</a></li>
         <li><a href="bevAddFidelity.html">bevAddFidelity</a></li>
+        <li><a href="bevCleanConfig.html">bevCleanConfig</a></li>
         <li><a href="authoringWorkflow.html">Add Templates and Fidelities to the BEV App</a></li>
         <li><a href="helpAppDetail.html">Configure a BEV Model Using the BEV App</a></li>
       </ul>

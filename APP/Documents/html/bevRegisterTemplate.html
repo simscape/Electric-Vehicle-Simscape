@@ -268,6 +268,7 @@
       <li><a href="bevRegisterTemplate.html">bevRegisterTemplate</a></li>
       <li><a href="bevAddFidelity.html">bevAddFidelity</a></li>
       <li><a href="bevUpdateTemplate.html">bevUpdateTemplate</a></li>
+      <li><a href="bevCleanConfig.html">bevCleanConfig</a></li>
     </ul>
   </nav>
 
@@ -292,7 +293,7 @@ bevRegisterTemplate(___)</code></pre>
       <h2>Description</h2>
 
       <p><code>configEntry = bevRegisterTemplate(templatePath)</code>
-      scans the vehicle template <code>.slx</code> file for subsystem reference (SSR) blocks,
+      scans the vehicle template <code>.slx</code> file for subsystem reference blocks,
       maps each referenced model to a component folder under <code>Components/</code>,
       groups instances by component type, and returns a config struct compatible with
       <code>VehicleTemplateConfig.json</code>. By default, this is a dry run &mdash; no file is written.</p>
@@ -321,7 +322,7 @@ bevRegisterTemplate(___)</code></pre>
           <p>Scan a template and display the config summary without writing any file.</p>
 <pre><code>entry = bevRegisterTemplate("Model/VehicleTemplate/VehicleThreeWheel.slx")</code></pre>
           <p>The function prints preset status (which config files already contain this template),
-          the SSR block scan results, and a component/instance/model summary table.</p>
+          the scan results, and a component/instance/model summary table.</p>
         </div>
       </details>
 
@@ -345,9 +346,15 @@ bevRegisterTemplate(___)</code></pre>
         <summary>Register to an Existing Config File</summary>
         <div class="example-content">
           <p>Add the template entry alongside existing templates.
-          If the template already exists in the file, you are prompted to confirm overwrite.</p>
+          If the template already exists in the file, an error is thrown with a hint
+          to use <code>Overwrite=true</code>.</p>
 <pre><code>bevRegisterTemplate("Model/VehicleTemplate/VehicleThreeWheel.slx", ...
     ConfigFile = "VehicleTemplateConfig.json", ...
+    DryRun     = false)</code></pre>
+          <p>To replace an existing entry:</p>
+<pre><code>bevRegisterTemplate("Model/VehicleTemplate/VehicleThreeWheel.slx", ...
+    ConfigFile = "VehicleTemplateConfig.json", ...
+    Overwrite  = true, ...
     DryRun     = false)</code></pre>
         </div>
       </details>
@@ -421,6 +428,26 @@ bevRegisterTemplate("Model/VehicleTemplate/VehicleElectric.slx", ...
       </div>
 
       <div class="arg-block">
+        <p><span class="arg-name">Overwrite</span> &mdash; Replace existing template entry</p>
+        <p>If <code>true</code>, an existing template entry in the config is replaced
+        without error. If <code>false</code> and the template already exists, an error
+        is thrown with a message showing the required syntax to overwrite.</p>
+        <p>Default: <code>false</code></p>
+        <p class="data-type">Data Types: <code>logical</code></p>
+      </div>
+
+      <div class="arg-block">
+        <p><span class="arg-name">AllowUnmapped</span> &mdash; Skip unmapped subsystem reference blocks</p>
+        <p>If <code>true</code>, subsystem reference blocks that reference models not found in any
+        <code>Components/*/Model/</code> folder are skipped silently (not included in
+        the config). If <code>false</code> and unmapped blocks are found, an error
+        is thrown in write mode (<code>DryRun=false</code>). In dry-run mode, unmapped
+        blocks are always reported as warnings regardless of this setting.</p>
+        <p>Default: <code>false</code></p>
+        <p class="data-type">Data Types: <code>logical</code></p>
+      </div>
+
+      <div class="arg-block">
         <p><span class="arg-name">SystemParameter</span> &mdash; System-level parameter files</p>
         <p>Names of system-level parameter files required by this template
         (e.g., <code>"BEVThermalParams"</code>). Use <code>"NA"</code> if none.</p>
@@ -460,8 +487,9 @@ bevRegisterTemplate("Model/VehicleTemplate/VehicleElectric.slx", ...
       <ul>
         <li>The function checks all <code>*.json</code> files in <code>APP/Config/Preset/</code>
         and reports which ones already contain the template before scanning.</li>
-        <li>SSR blocks that reference models outside <code>Components/</code> are reported
-        as unmapped but do not cause an error.</li>
+        <li>Subsystem reference blocks that reference models outside <code>Components/</code> are reported
+        as unmapped. In write mode (<code>DryRun=false</code>), this is an error unless
+        <code>AllowUnmapped=true</code>.</li>
         <li>Controller components (under <code>Components/Controller/</code>) are
         automatically placed in the <code>Controls</code> section, not <code>Components</code>.</li>
         <li>The config is validated with <code>validateVehicleConfig</code> before writing.
@@ -477,6 +505,7 @@ bevRegisterTemplate("Model/VehicleTemplate/VehicleElectric.slx", ...
       <ul>
         <li><a href="bevAddFidelity.html">bevAddFidelity</a></li>
         <li><a href="bevUpdateTemplate.html">bevUpdateTemplate</a></li>
+        <li><a href="bevCleanConfig.html">bevCleanConfig</a></li>
         <li><a href="authoringWorkflow.html">Add Templates and Fidelities to the BEV App</a></li>
         <li><a href="helpAppDetail.html">Configure a BEV Model Using the BEV App</a></li>
       </ul>

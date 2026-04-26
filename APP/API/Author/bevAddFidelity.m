@@ -113,8 +113,14 @@ function bevAddFidelity(configFile, templateName, componentName, modelName, opti
     lookupKey = lower(char(modelName));
 
     if ~isKey(componentLookup, lookupKey)
+        if ~options.DryRun
+            error('bevAddFidelity:MissingModel', ...
+                ['Model "%s" not found in any Components/*/Model/ folder.\n' ...
+                 '  Place the model .slx file in the correct folder before adding it to config.'], ...
+                modelName);
+        end
         fprintf('\n  WARNING: Model "%s" not found in any Components/ folder.\n', modelName);
-        fprintf('  It will be added to the config but may not resolve at runtime.\n\n');
+        fprintf('  This would block write mode.\n\n');
     end
 
     % ---- Add or reorder model in list ----
@@ -132,7 +138,7 @@ function bevAddFidelity(configFile, templateName, componentName, modelName, opti
     % ---- Build Selections if ParamFile specified ----
     if options.ParamFile ~= ""
         comp = buildSelections(comp, modelName, options.ParamFile);
-        validateParamFile(options.ParamFile, lookupKey, componentLookup);
+        validateParamFile(options.ParamFile, lookupKey, componentLookup, options.DryRun);
     end
 
     % ---- Update config struct ----
@@ -189,8 +195,8 @@ function comp = buildSelections(comp, modelName, paramFile)
 end
 
 
-function validateParamFile(paramFile, lookupKey, componentLookup)
-% VALIDATEPARAMFILE Warn if the specified param file is not found on disk.
+function validateParamFile(paramFile, lookupKey, componentLookup, isDryRun)
+% VALIDATEPARAMFILE Error or warn if the specified param file is not found on disk.
 
     if ~isKey(componentLookup, lookupKey)
         return;
@@ -200,9 +206,16 @@ function validateParamFile(paramFile, lookupKey, componentLookup)
     candidatePath = fullfile(char(compInfo.ComponentFolder), char(paramFile));
 
     if ~isfile(candidatePath)
-        fprintf('  NOTE: Param file "%s" not found at:\n', paramFile);
+        if ~isDryRun
+            error('bevAddFidelity:MissingParamFile', ...
+                ['Param file "%s" not found at:\n' ...
+                 '  %s\n' ...
+                 '  Create the file before adding it to config.'], ...
+                paramFile, candidatePath);
+        end
+        fprintf('  WARNING: Param file "%s" not found at:\n', paramFile);
         fprintf('    %s\n', candidatePath);
-        fprintf('  Make sure the file exists before using this config.\n\n');
+        fprintf('  This would block write mode.\n\n');
     end
 end
 

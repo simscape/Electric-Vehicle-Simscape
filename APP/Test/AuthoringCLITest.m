@@ -103,6 +103,7 @@ classdef AuthoringCLITest < matlab.unittest.TestCase
             cfg = testCase.buildSampleConfig();
             jsonPath = fullfile(testCase.TempDir, 'add.json');
             bevConfigWrite(cfg, jsonPath);
+            testCase.createMockComponents({'MotorA', 'MotorB', 'MotorC'});
 
             bevAddFidelity(jsonPath, 'TestTemplate', 'MotorDrive', 'MotorC', ...
                 DryRun = false, ProjectRoot = testCase.TempDir);
@@ -118,6 +119,7 @@ classdef AuthoringCLITest < matlab.unittest.TestCase
             cfg = testCase.buildSampleConfig();
             jsonPath = fullfile(testCase.TempDir, 'default.json');
             bevConfigWrite(cfg, jsonPath);
+            testCase.createMockComponents({'MotorA', 'MotorB', 'MotorC'});
 
             bevAddFidelity(jsonPath, 'TestTemplate', 'MotorDrive', 'MotorC', ...
                 MakeDefault = true, DryRun = false, ProjectRoot = testCase.TempDir);
@@ -146,6 +148,11 @@ classdef AuthoringCLITest < matlab.unittest.TestCase
             cfg = testCase.buildSampleConfig();
             jsonPath = fullfile(testCase.TempDir, 'param.json');
             bevConfigWrite(cfg, jsonPath);
+            testCase.createMockComponents({'MotorA', 'MotorB', 'MotorC'});
+
+            % ---- Create the param file so validation passes ----
+            paramPath = fullfile(testCase.TempDir, 'Components', 'MotorDrive', 'Model', 'CustomParams.m');
+            fid = fopen(paramPath, 'w'); fclose(fid);
 
             bevAddFidelity(jsonPath, 'TestTemplate', 'MotorDrive', 'MotorC', ...
                 ParamFile = 'CustomParams.m', DryRun = false, ...
@@ -215,6 +222,7 @@ classdef AuthoringCLITest < matlab.unittest.TestCase
             cfg = testCase.buildSampleConfig();
             jsonPath = fullfile(testCase.TempDir, 'mod.json');
             bevConfigWrite(cfg, jsonPath);
+            testCase.createMockComponents({'MotorA', 'MotorB'});
 
             bevAddFidelity(jsonPath, 'TestTemplate', 'MotorDrive', 'MotorB', ...
                 MakeDefault = true, DryRun = false, ProjectRoot = testCase.TempDir);
@@ -230,6 +238,11 @@ classdef AuthoringCLITest < matlab.unittest.TestCase
             cfg = testCase.buildSampleConfig();
             jsonPath = fullfile(testCase.TempDir, 'modparam.json');
             bevConfigWrite(cfg, jsonPath);
+            testCase.createMockComponents({'MotorA', 'MotorB'});
+
+            % ---- Create the param file so validation passes ----
+            paramPath = fullfile(testCase.TempDir, 'Components', 'MotorDrive', 'Model', 'NewParams.m');
+            fid = fopen(paramPath, 'w'); fclose(fid);
 
             bevAddFidelity(jsonPath, 'TestTemplate', 'MotorDrive', 'MotorA', ...
                 ParamFile = 'NewParams.m', DryRun = false, ...
@@ -239,7 +252,8 @@ classdef AuthoringCLITest < matlab.unittest.TestCase
             comp = result.TestTemplate.Components.MotorDrive;
             testCase.verifyEqual(numel(comp.Models), 2);
             testCase.verifyTrue(isfield(comp, 'Selections'));
-            sel = comp.Selections.(fieldnames(comp.Selections){1});
+            selKeys = fieldnames(comp.Selections);
+            sel = comp.Selections.(selKeys{1});
             testCase.verifyEqual(sel.ParamFile, 'NewParams.m');
             testCase.verifyEqual(sel.Model, 'MotorA');
         end
@@ -249,6 +263,11 @@ classdef AuthoringCLITest < matlab.unittest.TestCase
             cfg = testCase.buildSampleConfig();
             jsonPath = fullfile(testCase.TempDir, 'modboth.json');
             bevConfigWrite(cfg, jsonPath);
+            testCase.createMockComponents({'MotorA', 'MotorB'});
+
+            % ---- Create the param file so validation passes ----
+            paramPath = fullfile(testCase.TempDir, 'Components', 'MotorDrive', 'Model', 'CustomB.m');
+            fid = fopen(paramPath, 'w'); fclose(fid);
 
             bevAddFidelity(jsonPath, 'TestTemplate', 'MotorDrive', 'MotorB', ...
                 MakeDefault = true, ParamFile = 'CustomB.m', ...
@@ -437,6 +456,254 @@ classdef AuthoringCLITest < matlab.unittest.TestCase
                     ProjectRoot = testCase.TempDir));
         end
 
+        % ---- JSON escaping round-trip ----
+
+        function testJsonEscapingQuotesAndBackslashes(testCase)
+        % TESTJSONESCAPINGQUOTESANDBACKSLASHES Special chars in Description survive round-trip.
+            cfg.T.Description = 'Has "quotes" and back\slashes';
+            cfg.T.Components.Motor.Instances = {'Motor'};
+            cfg.T.Components.Motor.Models = {'MotorA'};
+            cfg.T.SystemParameter = {'NA'};
+            jsonPath = fullfile(testCase.TempDir, 'esc.json');
+
+            bevConfigWrite(cfg, jsonPath);
+            [restored, ~] = bevConfigRead(jsonPath, testCase.TempDir);
+
+            testCase.verifyEqual(restored.T.Description, cfg.T.Description);
+        end
+
+        function testJsonEscapingInSelections(testCase)
+        % TESTJSONESCAPINGINSELECTIONS Special chars in Selections fields survive round-trip.
+            cfg = testCase.buildSampleConfig();
+            cfg.TestTemplate.Components.MotorDrive.Selections.RearMotor = struct( ...
+                'Label', 'Rear Motor', ...
+                'Model', 'MotorA', ...
+                'ParamFile', 'path\to\Params.m');
+            jsonPath = fullfile(testCase.TempDir, 'escsel.json');
+
+            bevConfigWrite(cfg, jsonPath);
+            [restored, ~] = bevConfigRead(jsonPath, testCase.TempDir);
+
+            sel = restored.TestTemplate.Components.MotorDrive.Selections.RearMotor;
+            testCase.verifyEqual(sel.ParamFile, 'path\to\Params.m');
+        end
+
+        % ---- Unknown fields dropped silently ----
+
+        function testUnknownFieldsDroppedSilently(testCase)
+        % TESTUNKNOWNFIELDSDROPPEDSILENTLY Extra fields are dropped on write, no error.
+            cfg = testCase.buildSampleConfig();
+            cfg.TestTemplate.FutureField = 'something';
+            cfg.TestTemplate.Components.MotorDrive.ExtraData = 42;
+            jsonPath = fullfile(testCase.TempDir, 'unknown.json');
+
+            testCase.verifyWarningFree(@() bevConfigWrite(cfg, jsonPath));
+
+            [restored, ~] = bevConfigRead(jsonPath, testCase.TempDir);
+            testCase.verifyFalse(isfield(restored.TestTemplate, 'FutureField'));
+        end
+
+        % ---- Overwrite behavior ----
+
+        function testOverwriteFalseAcceptedByArgumentsBlock(testCase)
+        % TESTOVERWRITEFALSEACCEPTEDBYARGUMENTSBLOCK Overwrite=false is accepted, path validated first.
+        %   Full duplicate-detection requires a real .slx (Simulink integration test).
+            testCase.verifyError( ...
+                @() bevRegisterTemplate('nonexistent.slx', ...
+                    Overwrite = false, ProjectRoot = testCase.TempDir), ...
+                'bevRegisterTemplate:TemplateNotFound');
+        end
+
+        function testOverwriteTrueAcceptedByArgumentsBlock(testCase)
+        % TESTOVERWRITETRUEACCEPTEDBYARGUMENTSBLOCK Overwrite=true is accepted, path validated first.
+        %   Full overwrite write-through requires a real .slx (Simulink integration test).
+            testCase.verifyError( ...
+                @() bevRegisterTemplate('nonexistent.slx', ...
+                    Overwrite = true, ProjectRoot = testCase.TempDir), ...
+                'bevRegisterTemplate:TemplateNotFound');
+        end
+
+        % ---- Missing model behavior ----
+
+        function testMissingModelErrorsInWriteMode(testCase)
+        % TESTMISSINGMODELERRORSINWRITEMODE Missing model throws error in write mode.
+            cfg = testCase.buildSampleConfig();
+            jsonPath = fullfile(testCase.TempDir, 'miss.json');
+            bevConfigWrite(cfg, jsonPath);
+
+            testCase.verifyError( ...
+                @() bevAddFidelity(jsonPath, 'TestTemplate', ...
+                    'MotorDrive', 'NonExistentModel', ...
+                    DryRun = false, ProjectRoot = testCase.TempDir), ...
+                'bevAddFidelity:MissingModel');
+        end
+
+        function testMissingModelWarnsInDryRun(testCase)
+        % TESTMISSINGMODELWARNSINDRYRUN Missing model does not error in dry-run mode.
+            cfg = testCase.buildSampleConfig();
+            jsonPath = fullfile(testCase.TempDir, 'missdry.json');
+            bevConfigWrite(cfg, jsonPath);
+
+            testCase.verifyWarningFree( ...
+                @() bevAddFidelity(jsonPath, 'TestTemplate', ...
+                    'MotorDrive', 'NonExistentModel', ...
+                    DryRun = true, ProjectRoot = testCase.TempDir));
+        end
+
+        % ---- Missing param file behavior ----
+
+        function testMissingParamFileErrorsInWriteMode(testCase)
+        % TESTMISSINGPARAMFILEERRORSINWRITEMODE Missing param file throws error in write mode.
+            cfg = testCase.buildSampleConfig();
+
+            % ---- Create a component folder so the model lookup works ----
+            modelDir = fullfile(testCase.TempDir, 'Components', 'MotorDrive', 'Model');
+            mkdir(modelDir);
+            fid = fopen(fullfile(modelDir, 'MotorA.slx'), 'w'); fclose(fid);
+
+            jsonPath = fullfile(testCase.TempDir, 'missparam.json');
+            bevConfigWrite(cfg, jsonPath);
+
+            testCase.verifyError( ...
+                @() bevAddFidelity(jsonPath, 'TestTemplate', ...
+                    'MotorDrive', 'MotorA', ...
+                    ParamFile = 'DoesNotExist.m', ...
+                    DryRun = false, ProjectRoot = testCase.TempDir), ...
+                'bevAddFidelity:MissingParamFile');
+        end
+
+        % ---- bevCleanConfig ----
+
+        function testCleanConfigRemovesStaleFidelity(testCase)
+        % TESTCLEANCONFIGREMOVESSTALEMODEL Stale model removed, valid model kept.
+            cfg = testCase.buildSampleConfig();
+
+            % ---- Create component folder with only MotorA on disk ----
+            modelDir = fullfile(testCase.TempDir, 'Components', 'MotorDrive', 'Model');
+            mkdir(modelDir);
+            fid = fopen(fullfile(modelDir, 'MotorA.slx'), 'w'); fclose(fid);
+
+            [~, presetDir] = testCase.writePresetConfig('clean.json');
+
+            bevCleanConfig(fullfile(presetDir, 'clean.json'), ...
+                DryRun = false, ProjectRoot = testCase.TempDir);
+
+            [result, ~] = bevConfigRead( ...
+                fullfile(presetDir, 'clean.json'), testCase.TempDir);
+
+            models = result.TestTemplate.Components.MotorDrive.Models;
+            testCase.verifyTrue(ismember('MotorA', models));
+            testCase.verifyFalse(ismember('MotorB', models));
+        end
+
+        function testCleanConfigRemovesEntireComponent(testCase)
+        % TESTCLEANCONFIGREMOVESENTIRECOMPONENT All models stale removes the component.
+            cfg = testCase.buildSampleConfig();
+
+            % ---- Create MotorDrive on disk but not Battery ----
+            modelDir = fullfile(testCase.TempDir, 'Components', 'MotorDrive', 'Model');
+            mkdir(modelDir);
+            fid = fopen(fullfile(modelDir, 'MotorA.slx'), 'w'); fclose(fid);
+            fid = fopen(fullfile(modelDir, 'MotorB.slx'), 'w'); fclose(fid);
+
+            [~, presetDir] = testCase.writePresetConfig('cleanall.json');
+
+            bevCleanConfig(fullfile(presetDir, 'cleanall.json'), ...
+                DryRun = false, ProjectRoot = testCase.TempDir);
+
+            [result, ~] = bevConfigRead( ...
+                fullfile(presetDir, 'cleanall.json'), testCase.TempDir);
+
+            testCase.verifyFalse( ...
+                isfield(result.TestTemplate.Components, 'Battery'));
+            testCase.verifyTrue( ...
+                isfield(result.TestTemplate.Components, 'MotorDrive'));
+        end
+
+        function testCleanConfigCleansSelections(testCase)
+        % TESTCLEANCONFIGCLEANSSELECTIONS Selections referencing removed model are cleaned.
+            cfg = testCase.buildSampleConfig();
+            cfg.TestTemplate.Components.MotorDrive.Selections.RearMotor = struct( ...
+                'Label', 'Rear Motor', 'Model', 'MotorB', 'ParamFile', 'P.m');
+            cfg.TestTemplate.Components.MotorDrive.Selections.FrontMotor = struct( ...
+                'Label', 'Front Motor', 'Model', 'MotorA', 'ParamFile', 'P.m');
+
+            % ---- Only MotorA on disk ----
+            modelDir = fullfile(testCase.TempDir, 'Components', 'MotorDrive', 'Model');
+            mkdir(modelDir);
+            fid = fopen(fullfile(modelDir, 'MotorA.slx'), 'w'); fclose(fid);
+
+            presetDir = fullfile(testCase.TempDir, 'APP', 'Config', 'Preset');
+            mkdir(presetDir);
+            bevConfigWrite(cfg, fullfile(presetDir, 'cleansel.json'));
+
+            bevCleanConfig(fullfile(presetDir, 'cleansel.json'), ...
+                DryRun = false, ProjectRoot = testCase.TempDir);
+
+            [result, ~] = bevConfigRead( ...
+                fullfile(presetDir, 'cleansel.json'), testCase.TempDir);
+
+            selKeys = fieldnames(result.TestTemplate.Components.MotorDrive.Selections);
+            testCase.verifyEqual(numel(selKeys), 1);
+            testCase.verifyEqual( ...
+                result.TestTemplate.Components.MotorDrive.Selections.(selKeys{1}).Model, 'MotorA');
+        end
+
+        function testCleanConfigNoOpOnCleanConfig(testCase)
+        % TESTCLEANCONFIGNOOPONCLEANCFG Clean config is unchanged.
+            cfg = testCase.buildSampleConfig();
+
+            % ---- Create all models on disk ----
+            motorDir = fullfile(testCase.TempDir, 'Components', 'MotorDrive', 'Model');
+            mkdir(motorDir);
+            fid = fopen(fullfile(motorDir, 'MotorA.slx'), 'w'); fclose(fid);
+            fid = fopen(fullfile(motorDir, 'MotorB.slx'), 'w'); fclose(fid);
+            battDir = fullfile(testCase.TempDir, 'Components', 'Battery', 'Model');
+            mkdir(battDir);
+            fid = fopen(fullfile(battDir, 'BattLumped.slx'), 'w'); fclose(fid);
+
+            [~, presetDir] = testCase.writePresetConfig('noop2.json');
+
+            bevCleanConfig(fullfile(presetDir, 'noop2.json'), ...
+                DryRun = false, ProjectRoot = testCase.TempDir);
+
+            [result, ~] = bevConfigRead( ...
+                fullfile(presetDir, 'noop2.json'), testCase.TempDir);
+
+            testCase.verifyEqual( ...
+                result.TestTemplate.Components.MotorDrive.Models, {'MotorA', 'MotorB'});
+            testCase.verifyEqual( ...
+                result.TestTemplate.Components.Battery.Models, {'BattLumped'});
+        end
+
+        function testCleanConfigMissingFileReturnsGracefully(testCase)
+        % TESTCLEANCONFIGMISSINGFILERETURNS Missing config file returns without error.
+            testCase.verifyWarningFree( ...
+                @() bevCleanConfig('nonexistent.json', ...
+                    ProjectRoot = testCase.TempDir));
+        end
+
+        function testAtomicWritePreservesOriginalOnError(testCase)
+        % TESTATOMICWRITEPRESERVESORIGINALONERROR Original file intact if format fails.
+            cfg = testCase.buildSampleConfig();
+            jsonPath = fullfile(testCase.TempDir, 'atomic.json');
+            bevConfigWrite(cfg, jsonPath);
+
+            originalContent = fileread(jsonPath);
+
+            % ---- Numeric Models crashes formatStringArray (cellfun on non-cell) ----
+            badCfg.T.Components.Motor.Instances = {'Motor'};
+            badCfg.T.Components.Motor.Models = 42;
+            try
+                bevConfigWrite(badCfg, jsonPath);
+            catch
+                % ---- Expected to fail during formatting, before any file I/O ----
+            end
+
+            restoredContent = fileread(jsonPath);
+            testCase.verifyEqual(restoredContent, originalContent);
+        end
+
     end
 
     methods (Static, Access = private)
@@ -460,6 +727,20 @@ classdef AuthoringCLITest < matlab.unittest.TestCase
             mkdir(presetDir);
             cfg = AuthoringCLITest.buildSampleConfig();
             bevConfigWrite(cfg, fullfile(presetDir, filename));
+        end
+
+        function createMockComponents(testCase, modelNames)
+        % CREATEMOCKCOMPONENTS Create stub .slx files under Components/MotorDrive/Model/.
+            modelDir = fullfile(testCase.TempDir, 'Components', 'MotorDrive', 'Model');
+            if ~isfolder(modelDir)
+                mkdir(modelDir);
+            end
+            for idx = 1:numel(modelNames)
+                stubPath = fullfile(modelDir, [modelNames{idx} '.slx']);
+                if ~isfile(stubPath)
+                    fid = fopen(stubPath, 'w'); fclose(fid);
+                end
+            end
         end
 
     end

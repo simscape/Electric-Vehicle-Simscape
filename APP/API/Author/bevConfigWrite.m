@@ -19,13 +19,28 @@ function bevConfigWrite(cfg, configFilePath)
         mkdir(outputDir);
     end
 
-    fileID = fopen(configFilePath, 'w');
+    % ---- Atomic write: temp file first, then move to target ----
+    tempFile = [char(configFilePath) '.tmp'];
+    fileID = fopen(tempFile, 'w');
     if fileID == -1
-        error('bevConfigWrite:WriteError', 'Cannot write to %s', configFilePath);
+        error('bevConfigWrite:WriteError', 'Cannot write to %s', tempFile);
     end
 
-    cleanupFile = onCleanup(@() fclose(fileID));
-    fprintf(fileID, '%s', jsonText);
+    try
+        fprintf(fileID, '%s', jsonText);
+        fclose(fileID);
+    catch writeErr
+        fclose(fileID);
+        delete(tempFile);
+        rethrow(writeErr);
+    end
+
+    [status, msg] = movefile(tempFile, configFilePath, 'f');
+    if ~status
+        delete(tempFile);
+        error('bevConfigWrite:WriteError', ...
+            'Failed to move temp file to %s: %s', configFilePath, msg);
+    end
 end
 
 
@@ -47,7 +62,7 @@ function jsonText = formatConfigJson(cfg)
 
         % ---- Description ----
         if isfield(tmpl, 'Description') && ~isempty(tmpl.Description)
-            lines{end+1} = sprintf('        "Description": "%s",', tmpl.Description);
+            lines{end+1} = sprintf('        "Description": "%s",', escapeJsonString(tmpl.Description));
         end
 
         % ---- Components ----
@@ -139,13 +154,13 @@ function lines = appendSelectionsBlock(lines, selections)
         % ---- Build key-value pairs for this instance ----
         selParts = {};
         if isfield(sel, 'Label')
-            selParts{end+1} = sprintf('"Label": "%s"', sel.Label);
+            selParts{end+1} = sprintf('"Label": "%s"', escapeJsonString(sel.Label));
         end
         if isfield(sel, 'Model')
-            selParts{end+1} = sprintf('"Model": "%s"', sel.Model);
+            selParts{end+1} = sprintf('"Model": "%s"', escapeJsonString(sel.Model));
         end
         if isfield(sel, 'ParamFile')
-            selParts{end+1} = sprintf('"ParamFile": "%s"', sel.ParamFile);
+            selParts{end+1} = sprintf('"ParamFile": "%s"', escapeJsonString(sel.ParamFile));
         end
 
         selTrailingComma = '';
@@ -171,6 +186,19 @@ function jsonArrayStr = formatStringArray(values)
         values = cellstr(values);
     end
 
-    quoted = cellfun(@(s) sprintf('"%s"', s), values, 'UniformOutput', false);
+    quoted = cellfun(@(s) sprintf('"%s"', escapeJsonString(s)), values, 'UniformOutput', false);
     jsonArrayStr = sprintf('[%s]', strjoin(quoted, ', '));
+end
+
+
+function escaped = escapeJsonString(str)
+% ESCAPEJSONSTRING Escape special characters for safe JSON string output.
+
+    str = char(str);
+    str = strrep(str, '\', '\\');
+    str = strrep(str, '"', '\"');
+    str = strrep(str, sprintf('\n'), '\n');
+    str = strrep(str, sprintf('\t'), '\t');
+    str = strrep(str, sprintf('\r'), '\r');
+    escaped = str;
 end

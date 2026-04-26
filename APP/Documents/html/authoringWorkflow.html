@@ -192,6 +192,7 @@
       <li><a href="#register">Register a Template</a></li>
       <li><a href="#add-fidelity">Add Fidelities</a></li>
       <li><a href="#add-component">Add a Component</a></li>
+      <li><a href="#clean-config">Config Cleanup</a></li>
       <li><a href="#presets">Multiple Presets</a></li>
       <li><a href="#see-also">See Also</a></li>
     </ul>
@@ -200,6 +201,7 @@
       <li><a href="bevRegisterTemplate.html">bevRegisterTemplate</a></li>
       <li><a href="bevAddFidelity.html">bevAddFidelity</a></li>
       <li><a href="bevUpdateTemplate.html">bevUpdateTemplate</a></li>
+      <li><a href="bevCleanConfig.html">bevCleanConfig</a></li>
     </ul>
   </nav>
 
@@ -260,7 +262,8 @@
     DryRun      = false)</code></pre>
 
       <p>The config key is derived from the <code>.slx</code> filename automatically.
-      If the template already exists in the target file, you are prompted before overwriting.</p>
+      If the template already exists in the target file, an error is thrown.
+      Use <code>Overwrite=true</code> to replace the existing entry.</p>
 
       <h3>3. Verify in the App</h3>
       <p>Open the BEV App, select your config from the Config dropdown, and confirm
@@ -333,7 +336,7 @@ bevAddFidelity("ThreeWheelConfig.json", "VehicleThreeWheel", "MotorDrive")</code
 <pre><code>bevUpdateTemplate("Model/VehicleTemplate/VehicleElectric.slx", ...
     DryRun = false)</code></pre>
 
-      <p>New components are added with the SSR-linked model only. Existing fidelities
+      <p>New components are added with the referenced model only. Existing fidelities
       and Selections in other components are preserved. Use
       <a href="bevAddFidelity.html"><code>bevAddFidelity</code></a> afterwards to
       add extra fidelities for the new component.</p>
@@ -341,6 +344,29 @@ bevAddFidelity("ThreeWheelConfig.json", "VehicleThreeWheel", "MotorDrive")</code
       <h3>4. Verify in the App</h3>
       <p>Open the BEV App, select the template, and confirm the new component
       dropdown appears.</p>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="clean-config">
+      <h2>Config Cleanup</h2>
+
+      <p>Over time, model <code>.slx</code> files may be renamed or deleted from
+      <code>Components/*/Model/</code>. Use
+      <a href="bevCleanConfig.html"><code>bevCleanConfig</code></a> to remove stale
+      entries from a config file.</p>
+
+      <h3>1. Preview Stale Entries</h3>
+<pre><code>bevCleanConfig("VehicleTemplateConfig.json")</code></pre>
+
+      <p>The function checks every model in the config against what exists on disk
+      and prints a per-template report.</p>
+
+      <h3>2. Remove Stale Entries</h3>
+<pre><code>bevCleanConfig("VehicleTemplateConfig.json", DryRun = false)</code></pre>
+
+      <p>Models whose <code>.slx</code> files are missing are removed. If all models
+      for a component are stale, the entire component is removed. Selections
+      referencing removed models are cleaned up automatically.</p>
     </section>
 
     <!-- ============================================================ -->
@@ -372,6 +398,7 @@ bevAddFidelity("ThermalConfig.json", "VehicleElectric", ...
         <li><a href="bevRegisterTemplate.html">bevRegisterTemplate</a></li>
         <li><a href="bevAddFidelity.html">bevAddFidelity</a></li>
         <li><a href="bevUpdateTemplate.html">bevUpdateTemplate</a></li>
+        <li><a href="bevCleanConfig.html">bevCleanConfig</a></li>
         <li><a href="helpAppDetail.html">Configure a BEV Model Using the BEV App</a></li>
       </ul>
     </section>

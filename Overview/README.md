@@ -7,7 +7,7 @@ Single-page reference for how the BEV Simscape repository is organized, where tr
 | Folder | Responsibility |
 |--------|---------------|
 | [`APP/`](../APP/README.md) | BEV Setup App — GUI, API back-end, config presets, user-saved setups |
-| [`APP/API/`](../APP/API/README.md) | 57 functions in 7 domain subfolders (Author, Catalog, Detect, State, Export, UI, Util) |
+| [`APP/API/`](../APP/API/README.md) | 58 functions in 7 domain subfolders (Author, Catalog, Detect, State, Export, UI, Util) |
 | [`APP/Config/`](../APP/Config/README.md) | Shipped JSON configs (Preset) and user-saved configs (User, gitignored) |
 | [`Components/`](../Components/README.md) | 12 self-contained component packages with models, params, tests, docs |
 | [`Model/`](../Model/README.md) | System-level Simulink model (`BEVsystemModel.slx`) — authored assets only |
@@ -32,7 +32,7 @@ Each concern has one canonical source. Everything else derives from it.
 | Component fidelity availability | `Components/*/Model/*.slx` (files on disk) | `scanComponentAvailability()` at runtime |
 | Parameter values | `Components/*/Model/*Params.m` | Export scripts, test harnesses, system setup |
 | System-level model wiring | `BEVsystemModel.slx` (subsystem references) | `detectSSRFromBEVModel()` at runtime |
-| Vehicle template structure | `Model/VehicleTemplate/*.slx` | App template dropdown, export SSR targets |
+| Vehicle template structure | `Model/VehicleTemplate/*.slx` | App template dropdown, export subsystem reference targets |
 | Component documentation | `Components/*/Documentation/*.m` (source) | Published to `html/` via MATLAB `publish()` |
 | Overview documentation | `Overview/*.m` (source) | Published to `Overview/html/` via MATLAB `publish()` |
 | App help pages | `APP/Documents/html/*.html` | App help button, doc links, template authoring guides |
@@ -132,9 +132,9 @@ All fidelities within the same component type share a common Simulink port inter
 | Layer | Location | Responsibility |
 |-------|----------|---------------|
 | GUI | `APP/BEVapp.mlapp` | App Designer UI — thin callbacks only |
-| Author | `APP/API/Author/` (6) | Template registration, fidelity management, config sync CLIs |
+| Author | `APP/API/Author/` (7) | Template registration, fidelity management, config sync, cleanup CLIs |
 | Catalog | `APP/API/Catalog/` (3) | Config parsing, template resolution, validation |
-| Detect | `APP/API/Detect/` (6) | Runtime model scanning — SSR detection, platform/controls ID |
+| Detect | `APP/API/Detect/` (6) | Runtime model scanning — subsystem reference detection, platform/controls ID |
 | State | `APP/API/State/` (4) | `setupState` struct build, save, cache |
 | Export | `APP/API/Export/` (5) | Script generation, param export, link validation |
 | UI | `APP/API/UI/` (23) | Dropdown population, descriptions, panels, preview |
@@ -144,7 +144,7 @@ All fidelities within the same component type share a common Simulink port inter
 
 1. **Startup** — `initAppDropdowns()` → `getBEVAppPaths()` → `populateConfigDropDown()` → `createComponentDropdowns()`
 2. **Template selection** — `buildComponentEntries()` reads JSON config → `scanComponentAvailability()` checks disk → UI dropdowns populated
-3. **Export** — `buildSetupState()` captures current selections → `exportSetupScript()` writes SSR setup → `exportParamScript()` writes param setup
+3. **Export** — `buildSetupState()` captures current selections → `exportSetupScript()` writes subsystem reference setup → `exportParamScript()` writes param setup
 4. **Save/Load** — `saveSetupToFile()` writes JSON to `APP/Config/User/` → `populateConfigDropDown()` refreshes dropdown
 
 ### setupState contract
@@ -157,7 +157,7 @@ All fidelities within the same component type share a common Simulink port inter
 
 | What | Where | Tracked |
 |------|-------|---------|
-| SSR setup scripts | `Script_Data/Setup/User/<model>_<timestamp>/` | No (gitignored) |
+| Subsystem reference setup scripts | `Script_Data/Setup/User/<model>_<timestamp>/` | No (gitignored) |
 | Param setup scripts | Same timestamped folder | No (gitignored) |
 | Build snapshot README | Same timestamped folder | No (gitignored) |
 | User-saved JSON configs | `APP/Config/User/` | No (gitignored) |
@@ -168,7 +168,7 @@ All fidelities within the same component type share a common Simulink port inter
 
 ### Generated script content
 
-**SSR setup script** (`setupModelReferences.m`): Opens the system model, issues `set_param()` calls to change each subsystem reference to the selected fidelity, configures drive cycle, saves model.
+**Subsystem reference setup script** (`setupModelReferences.m`): Opens the system model, issues `set_param()` calls to change each subsystem reference to the selected fidelity, configures drive cycle, saves model.
 
 **Param setup script** (`setupModelParameters.m`): Sets environment variables, adds component `Model/` folders to path, calls each component's `*Params.m` in sequence, calls system-level param scripts.
 
@@ -224,7 +224,7 @@ Workflows live under `Workflow/<Domain>/<WorkflowName>/`. Each expects the syste
 | `Test/VehicleWorkflowTests.m` | Vehicle workflow smoke tests | 1 |
 | `Test/CheckProject/` | MATLAB Project integrity checks | Varies |
 | `Components/*/TestCase/*PassTests.m` | Component-level unit tests (all 12) | 12 |
-| `APP/Test/` | App config, preset, fidelity, hyperlink, and template authoring tests | 9 |
+| `APP/Test/` | App config, preset, fidelity, hyperlink, and template authoring tests | 10 |
 
 ## Known Drift Points
 
@@ -232,11 +232,11 @@ These are areas where sources can fall out of sync. Check after any structural c
 
 | Drift Risk | What Can Go Wrong | How to Check |
 |-----------|-------------------|-------------|
-| JSON config vs disk | Config declares a fidelity that does not exist as `.slx` | `scanComponentAvailability()` reports missing models |
+| JSON config vs disk | Config declares a fidelity that does not exist as `.slx` | `bevCleanConfig("ConfigFile.json")` reports and removes stale entries |
 | Template `.slx` vs JSON | A template exists on disk but is not in any config | Compare `Model/VehicleTemplate/*.slx` against JSON keys |
 | Param script vs model | Model renamed but param script not updated | Check `<Fidelity>Params.m` exists for every `<Fidelity>.slx` |
 | Doc source vs published HTML | Source `.m` edited but HTML not republished | Compare timestamps: `Documentation/*.m` vs `Documentation/html/*.html` |
-| App function count vs README | Functions added/removed but README counts stale | Count files in `APP/API/*/` vs documented counts (currently 57 in 7 folders) |
+| App function count vs README | Functions added/removed but README counts stale | Count files in `APP/API/*/` vs documented counts (currently 58 in 7 folders) |
 | Component inventory vs overview | Component added/removed but overview page not updated | Compare `Components/*/` folders against overview table |
 
 ## Extension Guides
@@ -263,6 +263,8 @@ These are areas where sources can fall out of sync. Check after any structural c
 3. Add the component as a subsystem reference in the template `.slx`, then sync: `bevUpdateTemplate("Model/VehicleTemplate/<Name>.slx", DryRun=false)`
 4. Add extra fidelities: `bevAddFidelity("ConfigFile.json", "Template", "Component", "Model", DryRun=false)`
 5. Update `Components/README.md` and `Overview/ElectricVehicleComponentOverview.m`
+
+To remove stale fidelities after deleting model files: `bevCleanConfig("ConfigFile.json", DryRun=false)`
 
 See [Template Authoring Workflow](../APP/Documents/html/authoringWorkflow.html) for the full guide.
 

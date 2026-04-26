@@ -6,9 +6,9 @@ Supporting functions for `BEVapp.mlapp`, organized into responsibility-based sub
 
 | Folder | Role | Files |
 |--------|------|-------|
-| `Author/` | Template authoring — register templates, add fidelities, sync configs | 6 |
+| `Author/` | Template authoring — register templates, add fidelities, sync configs, cleanup | 7 |
 | `Catalog/` | What's valid — config validation, template resolution, component entries | 3 |
-| `Detect/` | What exists — model scanning, SSR detection, platform/controls detection | 6 |
+| `Detect/` | What exists — model scanning, subsystem reference detection, platform/controls detection | 6 |
 | `State/` | What's selected — flat setup state build, save/load, session cache | 4 |
 | `Export/` | Artifact generation — setup scripts, param scripts, param link validation, build snapshot | 5 |
 | `UI/` | Presentation — dropdowns, descriptions, panels, preview, selection apply | 23 |
@@ -21,6 +21,7 @@ Supporting functions for `BEVapp.mlapp`, organized into responsibility-based sub
 | `bevRegisterTemplate` | Scan a vehicle template `.slx` and write its component structure to a config file |
 | `bevAddFidelity` | Add or modify a fidelity entry for a component in a config file |
 | `bevUpdateTemplate` | Rescan a template and sync all config files that reference it |
+| `bevCleanConfig` | Remove stale fidelities from a config file by checking models on disk |
 | `bevConfigRead` | Read a JSON config file and return a MATLAB struct |
 | `bevConfigWrite` | Write a MATLAB struct to a JSON config file |
 | `buildComponentModelLookup` | Build a component-to-model lookup table from `Components/` folders |
@@ -37,10 +38,10 @@ Supporting functions for `BEVapp.mlapp`, organized into responsibility-based sub
 
 | Function | Purpose |
 |----------|---------|
-| `checkTemplateSubsystemRefs` | Verify that all SSR blocks in a template model point to valid SLX files |
-| `controlsDetectFromBEVModel` | Detect controller SSR in the base model |
+| `checkTemplateSubsystemRefs` | Verify that all subsystem reference blocks in a template model point to valid SLX files |
+| `controlsDetectFromBEVModel` | Detect controller subsystem references in the base model |
 | `detectSSRFromBEVModel` | Scan BEV model for Subsystem Reference blocks matching a candidate list |
-| `platformDetectFromBEVModel` | Detect vehicle platform SSR in the base model |
+| `platformDetectFromBEVModel` | Detect vehicle platform subsystem references in the base model |
 | `scanComponentAvailability` | Scan component folders and report which SLX fidelities exist on disk |
 | `scanForSSRBlocks` | Scan a loaded model for Subsystem Reference blocks (fast then fallback) |
 
@@ -154,9 +155,12 @@ flowchart TD
     Z1 --> Z3[buildComponentModelLookup]
     Z --> Z4[bevAddFidelity]
     Z --> Z5[bevUpdateTemplate]
+    Z --> Z7[bevCleanConfig]
     Z5 --> Z1
     Z4 --> Z6[bevConfigRead / bevConfigWrite]
     Z5 --> Z6
+    Z7 --> Z3
+    Z7 --> Z6
 ```
 
 Copyright 2026 The MathWorks, Inc.

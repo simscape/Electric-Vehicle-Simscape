@@ -11,6 +11,7 @@ Validation tests for the BEV Setup App. All tests use the MATLAB Unit Testing Fr
 | `BEVHyperlinkTest.m` | Validates all hyperlinks and image references across project HTML files |
 | `BEVMLXLinkTest.m` | Validates all hyperlinks inside project MLX (Live Script) files |
 | `BEVPresetTest.m` | Parameterized test — clears workspace, applies each discovered preset, and compile-checks the model |
+| `AuthoringCLITest.m` | Unit tests for authoring CLI — round-trip, bevAddFidelity, bevUpdateTemplate, bevCleanConfig, safety/error handling (40 tests) |
 | `BuildComponentEntriesTest.m` | Unit test for `buildComponentEntries` — verifies struct array output from parsed JSON config |
 
 ## Report Runners

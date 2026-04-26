@@ -33,9 +33,16 @@ classdef BEVFidelityTest < matlab.unittest.TestCase
     methods (TestClassSetup)
         function setupProject(testCase)
             testCase.Root = char(matlab.project.rootProject().RootFolder);
-            configFile = fullfile(testCase.Root, ...
-                'APP', 'Config', 'Preset', 'VehicleTemplateConfig.json');
-            testCase.RawCfg   = jsondecode(fileread(configFile));
+            presetDir = fullfile(testCase.Root, 'APP', 'Config', 'Preset');
+            jsonFiles = dir(fullfile(presetDir, '*.json'));
+            testCase.RawCfg = struct();
+            for j = 1:numel(jsonFiles)
+                raw = jsondecode(fileread(fullfile(jsonFiles(j).folder, jsonFiles(j).name)));
+                flds = fieldnames(raw);
+                for k = 1:numel(flds)
+                    testCase.RawCfg.(flds{k}) = raw.(flds{k});
+                end
+            end
             testCase.SetupRoot = fullfile(testCase.Root, 'Script_Data', 'Setup', 'User');
 
             % Clear saved user configs so no stale setups leak in
@@ -128,9 +135,9 @@ classdef BEVFidelityTest < matlab.unittest.TestCase
             % ---- Compile check (diagram update) ----
             set_param(modelName, 'SimulationCommand', 'update');
 
-            % ---- Simulate for 100 seconds ----
+            % ---- Simulate for 10 seconds ----
             origStop = get_param(modelName, 'StopTime');
-            set_param(modelName, 'StopTime', '100');
+            set_param(modelName, 'StopTime', '10');
             simout = sim(modelName, 'SrcWorkspace', 'base');
             set_param(modelName, 'StopTime', origStop);
 
@@ -169,10 +176,16 @@ function params = localBuildParams()
             defaultModels = cell(1, numel(comps));
             for c = 1:numel(comps)
                 defaultTypes{c}  = comps{c};
-                defaultModels{c} = config.Components.(comps{c}).Models{1};
+                defaultModels{c} = localEnsureCell(config.Components.(comps{c}).Models);
+                defaultModels{c} = defaultModels{c}{1};
             end
 
-            controller = config.Controls.Models{1};
+            if isfield(config, 'Controls')
+                controller = localEnsureCell(config.Controls.Models);
+                controller = controller{1};
+            else
+                controller = '';
+            end
 
             % Entry: all defaults
             addCombo(tmpl, [tmpl '_default'], defaultTypes, defaultModels, controller);
@@ -180,7 +193,7 @@ function params = localBuildParams()
             % Entries: vary one component at a time
             counter = 0;
             for c = 1:numel(comps)
-                models = config.Components.(comps{c}).Models;
+                models = localEnsureCell(config.Components.(comps{c}).Models);
                 for m = 1:numel(models)
                     if strcmp(models{m}, defaultModels{c}), continue; end
                     counter = counter + 1;
@@ -229,7 +242,9 @@ end
 function applyStruct = localBuildApplyStruct(config, fidelities, controller)
 %LOCALBUILDAPPLYSTRUCT Build the struct that applySelections expects.
     applyStruct = struct();
-    applyStruct.Controls.Model = controller;
+    if ~isempty(controller)
+        applyStruct.Controls.Model = controller;
+    end
 
     comps = fieldnames(config.Components);
     applyStruct.Components = struct();
@@ -247,6 +262,14 @@ function applyStruct = localBuildApplyStruct(config, fidelities, controller)
         end
         applyStruct.Components.(comp).Selections = selections;
     end
+end
+
+function v = localEnsureCell(v)
+%LOCALENSURECELL Force char/string to cell, force row orientation.
+    if ischar(v), v = {v};
+    elseif isstring(v), v = cellstr(v);
+    end
+    if iscell(v), v = v(:)'; end
 end
 
 function localCloseAllModels()

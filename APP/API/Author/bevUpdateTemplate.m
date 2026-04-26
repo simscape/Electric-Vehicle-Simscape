@@ -7,10 +7,10 @@ function bevUpdateTemplate(templatePath, options)
 %   config files in APP/Config/Preset/ that contain this template, and
 %   updates each to match the current template structure.
 %
-%   Components, instances, and SSR-linked models are synced:
+%   Components, instances, and referenced models are synced:
 %     - Unchanged components: preserved (fidelities, Selections kept)
 %     - Modified instances: updated from template
-%     - New components: added with SSR model only
+%     - New components: added with referenced model only
 %     - Removed components: deleted from config
 %
 %   User-added fidelities and Selections are never removed.

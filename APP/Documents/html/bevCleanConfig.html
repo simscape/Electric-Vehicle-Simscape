@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>bevAddFidelity</title>
+  <title>bevCleanConfig</title>
   <style>
     :root {
       --mw-blue: #0072bd;
@@ -272,6 +272,7 @@
       <li><a href="#description">Description</a></li>
       <li><a href="#examples">Examples</a></li>
       <li><a href="#input-arguments">Input Arguments</a></li>
+      <li><a href="#cleanup-rules">Cleanup Rules</a></li>
       <li><a href="#tips">Tips</a></li>
       <li><a href="#see-also">See Also</a></li>
     </ul>
@@ -288,40 +289,34 @@
   <div class="content">
 
     <div class="article-header">
-      <h1>bevAddFidelity</h1>
-      <p class="tagline">Add a model fidelity to an existing template config</p>
+      <h1>bevCleanConfig</h1>
+      <p class="tagline">Remove stale fidelities from a config file</p>
     </div>
 
     <!-- ============================================================ -->
     <section id="syntax">
       <h2>Syntax</h2>
-<pre><code>bevAddFidelity(configFile, templateName)
-bevAddFidelity(configFile, templateName, componentName)
-bevAddFidelity(configFile, templateName, componentName, modelName)
-bevAddFidelity(___, Name=Value)</code></pre>
+<pre><code>bevCleanConfig(configFile)
+bevCleanConfig(configFile, Name=Value)</code></pre>
     </section>
 
     <!-- ============================================================ -->
     <section id="description">
       <h2>Description</h2>
 
-      <p><code>bevAddFidelity(configFile, templateName)</code>
-      lists all components in the specified template, showing instances and current models for each.
-      No changes are made.</p>
+      <p><code>bevCleanConfig(configFile)</code>
+      scans a config JSON and checks each model in every <code>Models</code> list against
+      the <code>Components/*/Model/</code> folders on disk. Models whose <code>.slx</code>
+      files no longer exist are flagged as stale. By default this is a dry run &mdash;
+      stale entries are listed but the file is not modified.</p>
 
-      <p><code>bevAddFidelity(configFile, templateName, componentName)</code>
-      lists all models available on disk for the specified component,
-      marking which are already in the config and which can be added.</p>
+      <p><code>bevCleanConfig(configFile, DryRun=false)</code>
+      removes stale models from the config and writes the cleaned file. If all models
+      for a component are stale, the entire component entry is removed. Selections
+      referencing removed models are cleaned up automatically.</p>
 
-      <p><code>bevAddFidelity(configFile, templateName, componentName, modelName)</code>
-      adds the model to the component's <code>Models</code> list.
-      By default this is a dry run. Use <code>DryRun=false</code> to write.</p>
-
-      <p><code>bevAddFidelity(___, Name=Value)</code>
-      specifies additional options. Use <code>ParamFile</code> to link a non-convention
-      parameter file by creating a <code>Selections</code> section (same structure the app
-      uses in saved user setups). Use <code>MakeDefault=true</code> to place the model
-      first in the list (the app default).</p>
+      <p>Use this after deleting or renaming model <code>.slx</code> files to keep configs
+      in sync with what actually exists on disk.</p>
     </section>
 
     <!-- ============================================================ -->
@@ -334,114 +329,91 @@ bevAddFidelity(___, Name=Value)</code></pre>
 
       <!-- Example 1 -->
       <details class="example-block" open>
-        <summary>List Components in a Template</summary>
+        <summary>Preview Stale Entries</summary>
         <div class="example-content">
-          <p>See what components a template contains before deciding which to modify.</p>
-<pre><code>bevAddFidelity("VehicleTemplateConfig.json", "VehicleElectric")</code></pre>
+          <p>Scan a config and see which models are stale without writing anything.</p>
+<pre><code>bevCleanConfig("VehicleTemplateConfig.json")</code></pre>
           <div class="console-output">
-  Components in VehicleElectric:
-  Component            Instances                           Models
-  -------------------- ----------------------------------- -----------------------------
-  BatteryHV            Battery                             [BatteryLumped]
-  MotorDrive           Rear Motor (EM2), Front Motor (EM1) [MotorDriveGear]
-  Charger              Charger                             [Charger, ChargerDummy]
-  Driveline            Driveline                           [Driveline, DrivelineWithBraking]
+  Template: VehicleElectric
+    - Charger.ChargerOld  (not found on disk)
 
-  Tip: bevAddFidelity(configFile, "VehicleElectric", "&lt;ComponentName&gt;")
-       to see available models for a component.</div>
+  Template: VehicleElecAux
+    (no stale entries)
+
+  ============================================
+  Cleanup Summary
+  ============================================
+  Config:  APP/Config/Preset/VehicleTemplateConfig.json
+  Removed: 1 stale model(s)
+
+  VehicleElectric:
+    BatteryHV            [BatteryLumped]
+    Charger              [Charger, ChargerDummy]
+    MotorDrive           [MotorDriveGear]
+
+  DryRun = true. No file written.</div>
         </div>
       </details>
 
       <!-- Example 2 -->
       <details class="example-block">
-        <summary>List Available Models for a Component</summary>
+        <summary>Remove Stale Entries</summary>
         <div class="example-content">
-          <p>See which fidelities exist on disk for a component and which are already registered.</p>
-<pre><code>bevAddFidelity("VehicleTemplateConfig.json", "VehicleElectric", "MotorDrive")</code></pre>
-          <div class="console-output">
-  MotorDrive in VehicleElectric:
-    Instances:      Rear Motor (EM2), Front Motor (EM1)
-    Current Models: [MotorDriveGear]
-
-    Available on disk (Components/MotorDrive/Model/):
-      MotorDriveGear                  in config
-      MotorDriveGearTh                can add
-      MotorDriveLube                  can add
-
-  Tip: bevAddFidelity(configFile, "VehicleElectric", "MotorDrive", "&lt;ModelName&gt;")
-       to add a model fidelity.</div>
+          <p>Apply the cleanup after reviewing the preview.</p>
+<pre><code>bevCleanConfig("VehicleTemplateConfig.json", DryRun = false)</code></pre>
+          <p>The config is validated before writing. The original file is preserved
+          if validation fails.</p>
         </div>
       </details>
 
       <!-- Example 3 -->
       <details class="example-block">
-        <summary>Add a Fidelity (Dry Run)</summary>
+        <summary>Component Fully Removed</summary>
         <div class="example-content">
-          <p>Preview what the addition looks like before committing to disk.
-          By default <code>DryRun</code> is <code>true</code>.</p>
-<pre><code>bevAddFidelity("VehicleTemplateConfig.json", ...
-    "VehicleElectric", "MotorDrive", "MotorDriveGearTh")</code></pre>
+          <p>When all models for a component are stale, the entire component is removed.</p>
+          <div class="console-output">
+  Template: VehicleElectric
+    - HeatPump.HeatPumpOld  (not found on disk)
+    * HeatPump removed entirely (no models left)</div>
         </div>
       </details>
 
       <!-- Example 4 -->
       <details class="example-block">
-        <summary>Add with Custom Param File</summary>
+        <summary>Selections Cleaned Up</summary>
         <div class="example-content">
-          <p>When the default <code>&lt;ModelName&gt;Params.m</code> convention does not apply
-          (e.g., reusing a 4-wheel model in a 3-wheel template with different parameters),
-          specify <code>ParamFile</code> to create a <code>Selections</code> section linking
-          the param file for all instances.</p>
-<pre><code>bevAddFidelity("VehicleTemplateConfig.json", ...
-    "VehicleElectric", "MotorDrive", "MotorDriveGearTh", ...
-    ParamFile   = "ThreeWheelMotorParams.m", ...
-    MakeDefault = true, ...
-    DryRun      = false)</code></pre>
-          <p>This produces a component entry with <code>Selections</code>:</p>
-<pre><code>"MotorDrive": {
-    "Instances": ["Rear Motor (EM2)", "Front Motor (EM1)"],
-    "Models": ["MotorDriveGearTh", "MotorDriveGear"],
-    "Selections": {
-        "RearMotor_EM2_": {"Label": "Rear Motor (EM2)", "Model": "MotorDriveGearTh", "ParamFile": "ThreeWheelMotorParams.m"},
-        "FrontMotor_EM1_": {"Label": "Front Motor (EM1)", "Model": "MotorDriveGearTh", "ParamFile": "ThreeWheelMotorParams.m"}
-    }
-}</code></pre>
+          <p>Selections referencing a removed model are cleaned automatically.
+          Selections for surviving models are kept intact.</p>
+          <div class="console-output">
+  Template: VehicleElectric
+    - MotorDrive.MotorDriveOld  (not found on disk)
+      Selections.RearMotor cleaned (model MotorDriveOld removed)
+
+  ============================================
+  Cleanup Summary
+  ============================================
+  Config:  APP/Config/Preset/VehicleTemplateConfig.json
+  Removed: 1 stale model(s)
+
+  VehicleElectric:
+    MotorDrive           [MotorDriveGear, MotorDriveGearTh]</div>
         </div>
       </details>
 
       <!-- Example 5 -->
       <details class="example-block">
-        <summary>Make a Fidelity the Default</summary>
+        <summary>Clean Config &mdash; No Changes</summary>
         <div class="example-content">
-          <p>Use <code>MakeDefault=true</code> to place the model first in the
-          <code>Models</code> array. The app selects the first valid model as the
-          dropdown default.</p>
-<pre><code>bevAddFidelity("VehicleTemplateConfig.json", ...
-    "VehicleElectric", "Charger", "ChargerThermal", ...
-    MakeDefault = true, ...
-    DryRun      = false)</code></pre>
-        </div>
-      </details>
+          <p>If all models exist on disk, the function reports a clean config.</p>
+<pre><code>bevCleanConfig("VehicleTemplateConfig.json")</code></pre>
+          <div class="console-output">
+  Template: VehicleElectric
+    (no stale entries)
 
-      <!-- Example 6 -->
-      <details class="example-block">
-        <summary>Modify an Existing Fidelity</summary>
-        <div class="example-content">
-          <p>If a model is already in the config, you can still modify it.
-          Specify <code>ParamFile</code> to link a different parameter file,
-          or <code>MakeDefault=true</code> to move it to the default position.
-          The model is not duplicated.</p>
-<pre><code>% Link a new param file to an existing fidelity
-bevAddFidelity("VehicleTemplateConfig.json", ...
-    "VehicleElectric", "MotorDrive", "MotorDriveGear", ...
-    ParamFile = "ThreeWheelMotorParams.m", ...
-    DryRun    = false)
+  Template: VehicleElecAux
+    (no stale entries)
 
-% Move an existing fidelity to the default position
-bevAddFidelity("VehicleTemplateConfig.json", ...
-    "VehicleElectric", "Charger", "ChargerDummy", ...
-    MakeDefault = true, ...
-    DryRun      = false)</code></pre>
+  Config is clean. No stale models found.</div>
         </div>
       </details>
     </section>
@@ -453,60 +425,17 @@ bevAddFidelity("VehicleTemplateConfig.json", ...
       <div class="arg-block">
         <p><span class="arg-name">configFile</span> &mdash; JSON config filename</p>
         <p>Name of the JSON config file, specified as a string scalar. A bare filename
-        (no path separator) resolves to <code>APP/Config/Preset/</code>.</p>
-        <p class="data-type">Data Types: <code>string</code></p>
-      </div>
-
-      <div class="arg-block">
-        <p><span class="arg-name">templateName</span> &mdash; Template key in config</p>
-        <p>Top-level key in the JSON config that identifies the template
-        (e.g., <code>"VehicleElectric"</code>). Must match the <code>.slx</code> model basename.</p>
-        <p class="data-type">Data Types: <code>string</code></p>
-      </div>
-
-      <div class="arg-block">
-        <p><span class="arg-name">componentName</span> &mdash; Component type</p>
-        <p>Name of the component type within the template
-        (e.g., <code>"MotorDrive"</code>, <code>"BatteryHV"</code>).
-        Omit to list all components (Level 1 discovery).</p>
-        <p>Default: <code>""</code></p>
-        <p class="data-type">Data Types: <code>string</code></p>
-      </div>
-
-      <div class="arg-block">
-        <p><span class="arg-name">modelName</span> &mdash; Model basename to add</p>
-        <p>Basename of the <code>.slx</code> model file to add to the component's
-        <code>Models</code> list. Omit to list available models on disk (Level 2 discovery).</p>
-        <p>Default: <code>""</code></p>
+        (no path separator) resolves to <code>APP/Config/Preset/</code>.
+        A full or relative path is used as-is.</p>
         <p class="data-type">Data Types: <code>string</code></p>
       </div>
 
       <h3>Name-Value Arguments</h3>
 
       <div class="arg-block">
-        <p><span class="arg-name">ParamFile</span> &mdash; Parameter file to link</p>
-        <p>Filename of the parameter script to link to this fidelity.
-        When specified, a <code>Selections</code> section is created for all instances
-        of the component, using the same structure as app-saved user setups.
-        The app's <code>applySelections</code> function handles this directly on preset load.</p>
-        <p>If omitted, the app uses convention-based resolution
-        (<code>&lt;ModelName&gt;Params.m</code>).</p>
-        <p>Default: <code>""</code></p>
-        <p class="data-type">Data Types: <code>string</code></p>
-      </div>
-
-      <div class="arg-block">
-        <p><span class="arg-name">MakeDefault</span> &mdash; Set as default fidelity</p>
-        <p>If <code>true</code>, the model is placed first in the <code>Models</code> array.
-        The app selects the first valid model as the default in the dropdown.</p>
-        <p>Default: <code>false</code></p>
-        <p class="data-type">Data Types: <code>logical</code></p>
-      </div>
-
-      <div class="arg-block">
         <p><span class="arg-name">DryRun</span> &mdash; Preview mode</p>
-        <p>If <code>true</code>, prints a summary without writing. If <code>false</code>,
-        writes the modified config to disk after validation.</p>
+        <p>If <code>true</code>, prints a report of stale entries without modifying the file.
+        If <code>false</code>, removes stale entries and writes the cleaned config.</p>
         <p>Default: <code>true</code></p>
         <p class="data-type">Data Types: <code>logical</code></p>
       </div>
@@ -520,28 +449,55 @@ bevAddFidelity("VehicleTemplateConfig.json", ...
     </section>
 
     <!-- ============================================================ -->
+    <section id="cleanup-rules">
+      <h2>Cleanup Rules</h2>
+
+      <p>Each model in <code>Models</code> is checked against the <code>Components/*/Model/</code>
+      folders on disk using the same lookup as
+      <a href="bevAddFidelity.html"><code>bevAddFidelity</code></a>.</p>
+
+      <h3>Cleanup behavior</h3>
+      <table>
+        <tr><th>Situation</th><th>Action</th></tr>
+        <tr>
+          <td>Model <code>.slx</code> exists on disk</td>
+          <td>Kept in config</td>
+        </tr>
+        <tr>
+          <td>Model <code>.slx</code> not found on disk</td>
+          <td>Removed from <code>Models</code> list</td>
+        </tr>
+        <tr>
+          <td>All models for a component are stale</td>
+          <td>Entire component entry removed</td>
+        </tr>
+        <tr>
+          <td>Selection references a removed model</td>
+          <td>Selection entry removed</td>
+        </tr>
+        <tr>
+          <td>Controls models stale</td>
+          <td>Stale models removed; Controls section removed if empty</td>
+        </tr>
+      </table>
+    </section>
+
+    <!-- ============================================================ -->
     <section id="tips">
       <h2>Tips</h2>
       <ul>
-        <li>Use progressive discovery: start with just <code>configFile</code> and
-        <code>templateName</code>, then narrow down by adding <code>componentName</code>,
-        then <code>modelName</code>. Each level shows a hint for the next call.</li>
-        <li>The <code>Selections</code> section uses <code>matlab.lang.makeValidName</code>
-        for instance keys, matching the app's convention in <code>buildSetupState</code>.</li>
-        <li>A duplicate model (already in the <code>Models</code> list) is detected
-        and skipped with a message. No error is thrown.</li>
-        <li>The config is validated with <code>validateVehicleConfig</code> before writing.
-        If the modified config is structurally invalid, no file is written.</li>
-        <li>To create a different fidelity preset for the same template,
-        register the template into a separate config file with
-        <a href="bevRegisterTemplate.html">bevRegisterTemplate</a>,
-        then use this function to customize it.</li>
-        <li>The model <code>.slx</code> is checked against <code>Components/*/Model/</code> folders on disk.
-        In write mode (<code>DryRun=false</code>), a missing model throws an error.
-        In dry-run mode, a warning is printed.</li>
-        <li>When <code>ParamFile</code> is specified, the file is checked in the component's
-        <code>Model/</code> folder. In write mode, a missing param file throws an error.
-        In dry-run mode, a warning is printed.</li>
+        <li>Always preview with a dry run first. The per-template report shows
+        exactly which models and Selections would be removed.</li>
+        <li>The cleanup summary includes the cleaned state after removal, so you can
+        verify the remaining config is correct before writing.</li>
+        <li>If the config file is not found or empty, the function returns gracefully
+        with a message.</li>
+        <li>The cleaned config is validated with <code>validateVehicleConfig</code>
+        before writing. If validation fails, no file is written.</li>
+        <li>Use this after removing <code>.slx</code> files from
+        <code>Components/*/Model/</code>. The function is the inverse of
+        <a href="bevAddFidelity.html"><code>bevAddFidelity</code></a> &mdash; it removes
+        what no longer exists instead of adding what is new.</li>
       </ul>
     </section>
 
@@ -549,9 +505,9 @@ bevAddFidelity("VehicleTemplateConfig.json", ...
     <section id="see-also">
       <h2>See Also</h2>
       <ul>
-        <li><a href="bevRegisterTemplate.html">bevRegisterTemplate</a></li>
+        <li><a href="bevAddFidelity.html">bevAddFidelity</a></li>
         <li><a href="bevUpdateTemplate.html">bevUpdateTemplate</a></li>
-        <li><a href="bevCleanConfig.html">bevCleanConfig</a></li>
+        <li><a href="bevRegisterTemplate.html">bevRegisterTemplate</a></li>
         <li><a href="authoringWorkflow.html">Add Templates and Fidelities to the BEV App</a></li>
         <li><a href="helpAppDetail.html">Configure a BEV Model Using the BEV App</a></li>
       </ul>

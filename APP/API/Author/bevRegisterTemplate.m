@@ -3,7 +3,7 @@ function configEntry = bevRegisterTemplate(templatePath, options)
 %   configEntry = bevRegisterTemplate(templatePath)
 %   configEntry = bevRegisterTemplate(templatePath, Name=Value)
 %
-%   Scans the template .slx for subsystem reference (SSR) blocks, maps
+%   Scans the template .slx for subsystem reference blocks, maps
 %   each referenced model to a component folder under Components/, groups
 %   instances by component type, and builds a config JSON entry compatible
 %   with VehicleTemplateConfig.json.
@@ -19,6 +19,8 @@ function configEntry = bevRegisterTemplate(templatePath, options)
 %     Description     — short description string (default: "")
 %     ConfigFile      — JSON filename or path to write to (default: dry run)
 %     DryRun          — if true, print summary but do not write (default: true)
+%     Overwrite       — if true, replace existing template entry (default: false)
+%     AllowUnmapped   — if true, skip unmapped blocks instead of erroring (default: false)
 %     SystemParameter — system-level param file names (default: "NA")
 %     ProjectRoot     — project root (default: auto-detect via MATLAB project)
 %
@@ -42,6 +44,8 @@ function configEntry = bevRegisterTemplate(templatePath, options)
         options.Description       (1,1) string  = ""
         options.ConfigFile        (1,1) string  = ""
         options.DryRun            (1,1) logical = true
+        options.Overwrite         (1,1) logical = false
+        options.AllowUnmapped     (1,1) logical = false
         options.SystemParameter   (1,:) string  = "NA"
         options.ProjectRoot       (1,1) string  = ""
     end
@@ -71,7 +75,7 @@ function configEntry = bevRegisterTemplate(templatePath, options)
         return;
     end
 
-    fprintf('  Found %d SSR blocks.\n', numel(ssrBlocks.Names));
+    fprintf('  Found %d subsystem reference blocks.\n', numel(ssrBlocks.Names));
 
     % ---- Map SSR blocks to component folders ----
     componentLookup = buildComponentModelLookup(projectRoot);
@@ -80,12 +84,22 @@ function configEntry = bevRegisterTemplate(templatePath, options)
 
     % ---- Report unmapped blocks ----
     if ~isempty(unmappedBlocks)
-        fprintf('\n  Skipped %d SSR blocks (not in Components/):\n', ...
+        fprintf('\n  %d block(s) not found in Components/*/Model/:\n', ...
             numel(unmappedBlocks));
         for idx = 1:numel(unmappedBlocks)
             fprintf('    - %s  [ref: %s]\n', ...
                 unmappedBlocks(idx).BlockName, ...
                 unmappedBlocks(idx).ReferencedModel);
+        end
+
+        if ~options.DryRun && ~options.AllowUnmapped
+            error('bevRegisterTemplate:UnmappedBlocks', ...
+                ['%d block(s) reference models not in Components/*/Model/.\n' ...
+                 '  Place the model .slx in the correct Components/<Name>/Model/ folder,\n' ...
+                 '  or set AllowUnmapped = true to skip them.'], ...
+                numel(unmappedBlocks));
+        elseif options.AllowUnmapped
+            fprintf('  AllowUnmapped = true. These blocks are skipped in config.\n');
         end
     end
 
@@ -104,13 +118,15 @@ function configEntry = bevRegisterTemplate(templatePath, options)
 
         templateKey = char(templateName);
         if isfield(existingConfig, templateKey)
-            fprintf('\n  WARNING: Template "%s" already exists in config.\n', ...
-                templateKey);
-            response = input('  Overwrite? (y/n): ', 's');
-            if ~strcmpi(response, 'y')
-                fprintf('  Aborted.\n');
-                return;
+            if ~options.Overwrite
+                error('bevRegisterTemplate:DuplicateTemplate', ...
+                    ['Template "%s" already exists in config.\n' ...
+                     '  To overwrite, set Overwrite = true:\n' ...
+                     '    bevRegisterTemplate("%s", ConfigFile = "%s", ' ...
+                     'Overwrite = true, DryRun = false)'], ...
+                    templateKey, templatePath, options.ConfigFile);
             end
+            fprintf('\n  Overwriting existing template "%s".\n', templateKey);
         end
 
         existingConfig.(templateKey) = configEntry;
