@@ -1,8 +1,8 @@
 %% WLTC range calculation workflow
 % BEV model is run with WLTC cycle
 % Four scenarios are run
-% 1. -20 degC ambient with AC ON
-% 2. -20 degC ambient with AC OFF
+% 1. -10 degC ambient with AC ON
+% 2. -10 degC ambient with AC OFF
 % 3. 35 degC ambient with AC ON
 % 4. 35 degC ambient with AC OFF
 % To see the effect of ambient temperature and cooling on range
@@ -55,11 +55,11 @@ runScenario = @(vehicleThermal) sim( baseIn.setVariable('vehicleThermal', vehicl
 
 extractWLTC = @(simoutPack) localExtractWLTC(simoutPack);
 
-%% Scenario 1: -20C, AC ON
-vehicleThermal.ambient          = -20 + 273.15;
-vehicleThermal.coolant_T_init   = -20 + 273.15;
+%% Scenario 1: -10C, AC ON
+vehicleThermal.ambient          = -10 + 273.15;
+vehicleThermal.coolant_T_init   = -10 + 273.15;
 vehicleThermal.CabinSpTp        =  20 + 273.15;
-vehicleThermal.cabin_T_init     = -20 + 273.15;
+vehicleThermal.cabin_T_init     = -10 + 273.15;
 vehicleThermal.AConoff          = 1;
 
 simoutPack = runScenario(vehicleThermal);
@@ -67,7 +67,7 @@ simoutPack = runScenario(vehicleThermal);
 WLTCloTpACdata = simoutPack.logsout;
 WLTCloTpAC     = extractWLTC(simoutPack);
 
-%% Scenario 2: -20C, AC OFF
+%% Scenario 2: -10C, AC OFF
 vehicleThermal.AConoff = 0;
 
 simoutPack = runScenario(vehicleThermal);
