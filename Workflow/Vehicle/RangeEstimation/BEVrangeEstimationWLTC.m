@@ -24,11 +24,15 @@ speedBlock = find_system(mdl, ...
     'MatchFilter', @Simulink.match.allVariants, ...
     'Name', 'Drive Cycle Source'); % Get the block handle
 
-% Select drive cycle if available
+% Select drive cycle if available, fall back to FTP75
 try
     set(getSimulinkBlockHandle(speedBlock),'cycleVar',driveCycle);
 catch
-    error('To run this simulation, install the Powertrain Blockset Drive Profile Data');
+    disp('Plese Install desired test cycle using Drive Cycle Source block in the slx model');
+    driveCycle = 'FTP75';
+    SimulationTime = "2474";
+    disp('Running available Default cycle FTP75');
+    set(getSimulinkBlockHandle(speedBlock),'cycleVar',driveCycle);
 end
 
 % Battery setting
