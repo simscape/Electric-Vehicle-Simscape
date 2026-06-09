@@ -110,8 +110,13 @@ as well as the overall system.
 
 ## 🛠️ Prerequisites  
 
+* Requires MATLAB&reg; release R2024b or newer.
+* Simscape™, Simscape Battery, Simscape Driveline, Simscape Fluids and Simscape Electrical toolboxes 
 ---
 
 ## 🚀 Setup  
 
-Download the repository and run the ElectricVehicleSimscape PRJ file (in project root) to set up the MATLAB project and all relevant file path.
+* Clone the project repository.
+* Open ElectricVehicleSimscape.prj to get started with the project. 
+* Requires MATLAB&reg; release R2024b or newer.
+
