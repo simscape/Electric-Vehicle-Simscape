@@ -81,9 +81,10 @@ jobs:
             Signal_Processing_Toolbox
             Predictive_Maintenance_Toolbox
             Deep_Learning_Toolbox
-            Statistics_and_Machine_Learning_Toolbox 
+            Statistics_and_Machine_Learning_Toolbox
             System_Identification_Toolbox
             MATLAB_Coder
+            Embedded_Coder
       - name: Run tests
         uses: matlab-actions/run-command@v3
         with:
