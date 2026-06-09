@@ -1,342 +1,445 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<!--
-This HTML was auto-generated from MATLAB code.
-To make changes, update the MATLAB code and republish this document.
-      -->
-<title>Electric Vehicle Design with Simscape&trade;</title>
-<meta name="generator" content="MATLAB 26.1">
-<link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2026-04-22">
-<meta name="DC.source" content="ElectricVehicleDesignOverview.m">
-<style type="text/css">
-html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+    <meta charset="utf-8">
+    <title>Electric Vehicle Design with Simscape</title>
+    <!--
+    ============================================================
+    DOCUMENTATION TEMPLATE - MathWorks Style
+    ============================================================
+    Enhanced: Card grids preserve original size on browser resize.
+    A page-level horizontal scrollbar appears when the viewport
+    is too narrow to fit the content at its natural width.
+    Changes from original:
+      - .card-grid and .example-grid use fixed-width columns (no shrinking)
+      - .content has a min-width so the entire page scrolls horizontally
+      - Cards stay readable at all browser widths
+    ============================================================
+    -->
+    <style>
+        body { margin: 0; font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #212121; }
+        a { color: #0076a8; text-decoration: none; }
+        a:hover { color: #004c6d; text-decoration: underline; }
 
-html { min-height:100%; margin-bottom:1px; }
-html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
-html body td { vertical-align:top; text-align:left; }
+        /* Fixed title bar */
+        .page-title {
+            position: fixed; top: 0; left: 0; right: 0;
+            background: #fff; border-bottom: 1px solid #e0e0e0;
+            margin: 0; z-index: 200;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .page-title .title-text {
+            font-size: 28px; font-weight: 400; color: #c04c0b;
+            padding: 14px 20px;
+        }
+        .page-title .title-logo {
+            padding: 6px 20px;
+        }
+        .page-title .title-logo img {
+            height: 50px; width: auto;
+        }
 
-h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
-h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
-h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+        /* Left sidebar */
+        .sidebar {
+            position: fixed; top: 60px; left: 0;
+            width: 160px; height: calc(100vh - 60px);
+            background: #f7f7f7; border-right: 1px solid #e0e0e0;
+            padding: 20px 12px; overflow-y: auto;
+        }
+        .sidebar ul { list-style: none; padding: 0; margin: 0; }
+        .sidebar li { margin: 6px 0; }
+        .sidebar li.sub { padding-left: 14px; }
 
-a { color:#005fce; text-decoration:none; }
-a:hover { color:#005fce; text-decoration:underline; }
-a:visited { color:#004aa0; text-decoration:none; }
+        /* Right content area - min-width prevents shrinking below card grid width */
+        .content {
+            margin-left: 160px;
+            padding: 90px 40px 30px;
+            max-width: 800px;
+            min-width: 760px;
+        }
 
-p { padding:0px; margin:0px 0px 20px; }
-img { padding:0px; margin:0px 0px 20px; border:none; }
-p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+        h1 { font-size: 20px; font-weight: 700; color: #c04c0b; margin: 30px 0 8px; scroll-margin-top: 90px;
+             border-bottom: 1px solid #e0e0e0; padding-bottom: 8px; }
+        h2 { font-size: 16px; font-weight: 700; color: #212121; margin: 22px 0 6px; scroll-margin-top: 90px; }
+        p { margin: 8px 0; line-height: 1.6; color: #212121; }
 
-ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
-ul li { padding:0px; margin:0px 0px 7px 0px; }
-ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
-ul li ol li { list-style:decimal; }
-ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
-ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
-ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
-ol li ol li { list-style-type:lower-alpha; }
-ol li ul { padding-top:7px; }
-ol li ul li { list-style:square; }
-
-.content { font-size:1.2em; line-height:140%; padding: 20px; }
-
-pre, code { font-size:12px; }
-tt { font-size: 1.2em; }
-pre { margin:0px 0px 20px; }
-pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
-pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
-pre.error { color:red; }
-
-@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
-
-span.keyword { color:#0000FF }
-span.comment { color:#228B22 }
-span.string { color:#A020F0 }
-span.untermstring { color:#B20000 }
-span.syscmd { color:#B28C00 }
-span.typesection { color:#A0522D }
-
-.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
-.footer p { margin:0px; }
-.footer a { color:#878787; }
-.footer a:hover { color:#878787; text-decoration:underline; }
-.footer a:visited { color:#878787; }
-
-table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
-table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
-
-
-
+        .code {
+            background: #f5f5f5; border-left: 3px solid #0076a8;
+            padding: 10px 14px; margin: 10px 0 20px;
+            font-family: 'Courier New', monospace; font-size: 12px; color: #212121;
+        }
 
 
-  </style>
+        /* Collapsible sub-headings */
+        .collapsible {
+            cursor: pointer; display: flex; align-items: center; user-select: none;
+        }
+        .collapsible::before {
+            content: '\25B6'; font-size: 10px; color: #0076a8;
+            margin-right: 8px; transition: transform 0.2s;
+        }
+        .collapsible.open::before { transform: rotate(90deg); }
+        .collapse-body { display: none; padding-left: 18px; }
+        .collapse-body.open { display: block; }
+
+        /* Example cards - 3 column grid with fixed-width cards */
+        .example-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 200px);
+            gap: 16px;
+            min-width: max-content;
+        }
+        .example-card {
+            border: 1px solid #e0e0e0; border-radius: 3px;
+            padding: 12px; background: #fff;
+            width: 200px;
+        }
+        .example-card:hover { box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+        .example-card .thumb {
+            display: block; width: 100%; height: 80px; margin-bottom: 8px;
+            border: 1px solid #d0e4ef; object-fit: cover;
+        }
+        .example-card .card-title { font-size: 12px; font-weight: 600; margin-bottom: 4px; }
+        .example-card .card-title a { color: #0076a8; }
+        .example-card .card-desc { font-size: 11px; color: #555; line-height: 1.5; }
+
+        /* Model cards (workflow cards) - fixed-width cards */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 220px);
+            gap: 1.5rem;
+            min-width: max-content;
+        }
+        .model-card {
+            background: #fff; border: 1px solid #0076a8;
+            border-radius: 4px; overflow: hidden;
+            transition: box-shadow 0.2s, transform 0.15s;
+            width: 220px;
+        }
+        .model-card:hover {
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            transform: translateY(-1px);
+        }
+        .card-header-bar {
+            height: 3px; background: #0076a8;
+        }
+        .card-image {
+            width: 100%; height: 100px; object-fit: contain;
+            background: #f0f4f8; border-bottom: 1px solid #e0e0e0; padding: 6px;
+            box-sizing: border-box;
+        }
+        .card-content {
+            padding: 0.8rem;
+        }
+        .card-content h3 {
+            margin: 0 0 0.3rem 0; font-size: 12px; font-weight: 600;
+            color: #212121; line-height: 1.4;
+        }
+        .card-content p {
+            margin: 0 0 0.6rem 0; font-size: 11px;
+            color: #555; line-height: 1.5;
+        }
+        .card-actions {
+            display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.8rem;
+        }
+        .btn-load {
+            padding: 6px 12px; border: none; border-radius: 4px;
+            font-size: 11px; font-weight: 500; cursor: pointer;
+            transition: background 0.2s; text-decoration: none;
+            display: inline-block; white-space: nowrap;
+        }
+        .btn-load.btn-primary {
+            background: #0076a8; color: #fff;
+        }
+        .btn-load.btn-primary:hover {
+            background: #005a7c; text-decoration: none; color: #fff;
+        }
+        .btn-load.btn-secondary {
+            background: #f5f5f5; color: #0076a8; border: 1px solid #e0e0e0;
+        }
+        .btn-load.btn-secondary:hover {
+            background: #e8f4f8;
+        }
+        .card-code {
+            margin-top: 0.5rem; padding: 0.4rem 0.6rem;
+            background: #f5f5f5; border: 1px solid #e0e0e0;
+            border-radius: 4px; font-family: 'Courier New', monospace;
+            font-size: 11px; color: #212121;
+            word-wrap: break-word; overflow-wrap: break-word; white-space: pre-wrap;
+        }
+    </style>
 </head>
 <body>
-<div class="content">
-<h1>Electric Vehicle Design with Simscape&trade;</h1>
-<!--introduction-->
-<p>This repository contains model and code to help engineers design battery electric vehicle (BEV), including range estimation and battery sizing workflows.</p>
-<!--/introduction-->
-<h2>Contents</h2>
-<div>
-<ul>
-<li>
-<a href="#1">Overview</a>
-</li>
-<li>
-<a href="#2">Getting Started</a>
-</li>
-<li>
-<a href="#3">Design Workflows</a>
-</li>
-<li>
-<a href="#4">Documentation</a>
-</li>
-<li>
-<a href="#5">Models</a>
-</li>
-<li>
-<a href="#7">Acronyms</a>
-</li>
-</ul>
+
+<!-- ============================================================
+     TITLE: Edit text below
+     ============================================================ -->
+<div class="page-title">
+    <span class="title-text">Electric Vehicle Design with Simscape</span>
+    <span class="title-logo"><img src="../Image/MATLAB_VERSION.png" alt="MATLAB Version"></span>
 </div>
-<h2 id="1">Overview</h2>
-<p>Battery electric vehicles (BEV) are gaining popularity as the prices of battery cells fall and the consumer demand for a clean mobility solution increases. The key challenges in their adoption lie in addressing the vehicle range anxiety, safety, and the total ownership cost for the consumer. Li-ion based batteries and electric drivetrains with permanent magnet synchronous motors (PMSM) and/or induction motors power modern BEV systems. Modeling and simulation helps you design vehicles that meet the desired range on the road and perform under all environmental conditions. Virtual design of a BEV platform requires a coupled electro-thermal system model for performance evaluation. In this example repository, you <b>learn how to simulate a BEV AWD/FWD model to estimate its on-road range</b>. You also <b>learn how to size your HV battery pack</b> to achieve your desired range with the vehicle.</p>
-<p>
-<img vspace="5" hspace="5" src="../Image/BatteryElectricVehicleModelOverview_01.png" alt="BEV System Model" width="100%">
-</p>
-<h2 id="2">Getting Started</h2>
-<p>Before running the engineering workflows, you configure a vehicle model setup &mdash; selecting a template, choosing component fidelities, and setting initial design parameters. The diagram below shows the overall flow from model setup to workflow execution.</p>
-<p>
-<img src="../Image/BEVWorkflow.png" alt="BEV Design Workflow" width="100%">
-</p>
-<p>The project supports two ways to configure and load the vehicle model. Choose the one that fits your workflow.</p>
-<p>
-<table border="1" cellpadding="8" cellspacing="0" style="border-collapse:collapse; width:100%;">
-<tr>
-  <th>Getting Started</th>
-  <th>What It Does</th>
-  <th>When to Use</th>
-</tr>
-<tr>
-  <td><strong>Preferred way</strong> (Preset)</td>
-  <td>Use the <a href="matlab:run('OpenPresetPicker')">Preset Picker</a> to browse and apply a shipped vehicle configuration. Three defaults are available: <em>VehicleElectric</em>, <em>VehicleElecAux</em>, and <em>VehicleElectroThermal</em>. Each preset configures the model references, loads the correct parameters, and opens the model ready to simulate.</td>
-  <td>Quick start with a known-good setup. No manual configuration needed.</td>
-</tr>
-<tr>
-  <td><strong>Custom configuration</strong></td>
-  <td>Launch the <a href="matlab:loadAppShortcut">BEV Setup App</a> to select a template, choose component fidelities, link parameter files, and configure environment, HVAC, and driver settings.</td>
-  <td>When you need specific fidelities, custom environment settings, or non-default operating modes.</td>
-</tr>
-</table>
-</p>
-<p>The configured model is then used as the starting point for the design workflows below. For a detailed overview of the reusable component packages, see the <a href="matlab:web('ElectricVehicleComponentOverview.html')">Component Overview</a>.</p>
-<h2 id="3">Design Workflows</h2>
-<p>
-<h3 style="margin:16px 0 6px 0;">System-Level Workflows</h3>
-<ul style="list-style:disc; padding-left:20px;">
-<li><a href="matlab:open('BEVRangeEstimationMain.mlx')"><b>Range Estimation Workflow</b></a> :<br>
-Estimate vehicle range over <b>NEDC</b>, <b>WLTC</b>, and <b>EPA</b> drive cycles. The actual
-range depends on <b>ambient temperature</b>, <b>HVAC load</b>, and <b>driver profile</b>.
-Evaluate subsystem losses under hot and cold conditions.</li>
-<li><a href="matlab:open('BEVBatterySizingMain.mlx')"><b>Battery Sizing Workflow</b></a> :<br>
-Size the HV battery pack to achieve a target driving range. Compare
-different <b>cell capacities</b> and <b>pack weights</b> over the NEDC cycle with HVAC
-on to find the right trade-off between range and vehicle mass.</li>
-</ul>
-<h3 style="margin:20px 0 6px 0;">Component-Level Workflows</h3>
-<ul style="list-style:disc; padding-left:20px;">
-<li><a href="matlab:open('generateDULossMap.mlx')"><b>Motor Inverter Loss Map Workflow</b></a> :<br>
-Generate <b>copper</b>, <b>iron</b>, <b>IGBT</b>, and <b>diode</b> loss maps by sweeping the
-FOC-controlled PMSM across speed, torque, and temperature points.</li>
-<li><a href="matlab:open('minimumRequiredGearRatio.mlx')"><b>Gear Ratio Selection Workflow</b></a> :<br>
-Sweep candidate gear ratios over EUDC and US06 cycles on the thermal test
-bench and compare <b>magnet</b> and <b>winding temperatures</b> to find the best ratio.</li>
-<li><a href="matlab:open('inverterPowerModuleLife.mlx')"><b>Inverter Power Module Life Workflow</b></a> :<br>
-Capture IGBT and diode <b>junction temperatures</b> from drive-cycle simulations,
-apply <b>rainflow cycle counting</b>, and estimate semiconductor lifetime.</li>
-<li><a href="matlab:open('DUThermalDurability.mlx')"><b>Motor Thermal Durability Workflow</b></a> :<br>
-Run the thermal test bench over extended duty cycles at multiple <b>coolant
-sump temperatures</b> to assess winding and magnet thermal margins.</li>
-<li><a href="matlab:open('VirtualSensorNeuralNetModel.mlx')"><b>Battery Virtual Sensor Workflow</b></a> :<br>
-Train a <b>neural network</b> to predict battery cell temperature from current,
-voltage, and SOC inputs. A pre-trained model is included for verification.</li>
-<li><a href="matlab:open('MotorDriveThermalTestBenchDescription.mlx')"><b>Motor Thermal Test Bench Workflow</b></a> :<br>
-Shared test bench model used by the gear-ratio, inverter-life, and
-thermal-durability workflows. Set up parameters and thermal fidelity.</li>
-</ul>
-</p>
-<h2 id="4">Documentation</h2>
-<div>
-<ul>
-<li>
-<a href="matlab:web('BatteryElectricVehicleModelOverview.html','-new')">Battery Electric Vehicle Model</a>
-</li>
-<li>
-<a href="matlab:web('ElectricVehicleComponentOverview.html','-new')">Component Overview</a>
-</li>
-<li>
-<a href="matlab:web('helpAppDetail.html','-new')">BEV Setup App</a>
-</li>
-<li>
-<a href="matlab:open('MotorDriveThermalTestBenchDescription.mlx')">PMSM Thermal Model</a>
-</li>
-</ul>
-</div>
-<h2 id="5">Models</h2>
-<div>
-<ul>
-<li>
-<a href="matlab:open_system('BEVsystemModel.slx')">Battery Electric Vehicle</a>
-</li>
-</ul>
-</div>
-<h2 id="7">Acronyms</h2>
-<div>
-<ul>
-<li>BEV : Battery Electric Vehicle</li>
-<li>PMSM : Permanent Magnet Synchronous Motor</li>
-<li>AWD : All Wheel Drive</li>
-<li>FWD : Forward Wheel Drive</li>
-</ul>
-</div>
-<p class="footer">Copyright 2022 - 2026 The MathWorks, Inc.<br>
-<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2026a</a>
-<br>
-</p>
-</div>
-<!--
-##### SOURCE BEGIN #####
-%% Electric Vehicle Design with Simscape(TM)
-% 
-% This repository contains model and code to help engineers design battery electric
-% vehicle (BEV), including range estimation and battery sizing workflows.
-%
-% Copyright 2022 - 2026 The MathWorks, Inc.
 
+<!-- ============================================================
+     SIDEBAR: Add/remove <li> entries to match your content sections.
+     Use class="sub" for indented sub-section links.
+     ============================================================ -->
+<nav class="sidebar">
+    <ul>
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#get-started">Get Started</a></li>
+        <li><a href="#Workflow">Workflow</a></li>
+        <li class="sub"><a href="#app-ConfigureVehicle">Configure Vehicle</a></li>
+        <li class="sub"><a href="#app-DesignBatteries">Design Batteries</a></li>
+        <li class="sub"><a href="#app-DesignElectricDrive">Design Electric Drive</a></li>
+        <li class="sub"><a href="#app-DesignTransmission">Design Transmission</a></li>
+        <li class="sub"><a href="#app-AnalyzeVehicle">Analyze Vehicle</a></li>
+        <li><a href="#components">Components</a></li>
+        <li><a href="#test">Testing</a></li>
+        <li><a href="#requirements">Requirements</a></li>
+    </ul>
+</nav>
 
+<!-- ============================================================
+     CONTENT: Main scrollable area. Edit sections below.
+     ============================================================ -->
+<main class="content">
 
-%% Overview
-%
-% Battery electric vehicles (BEV) are gaining popularity as the prices of
-% battery cells fall and the consumer demand for a clean mobility solution
-% increases. The key challenges in their adoption lie in addressing the
-% vehicle range anxiety, safety, and the total ownership cost for the
-% consumer. Li-ion based batteries and electric drivetrains with permanent
-% magnet synchronous motors (PMSM) and/or induction motors power modern BEV
-% systems. Modeling and simulation helps you design vehicles that meet the
-% desired range on the road and perform under all environmental conditions.
-% Virtual design of a BEV platform requires a coupled electro-thermal
-% system model for performance evaluation. In this example repository, you
-% *learn how to simulate a BEV AWD/FWD model to estimate its on-road range*.
-% You also *learn how to size your HV battery pack* to achieve your desired
-% range with the vehicle.
-%
-% <html>
-% <img vspace="5" hspace="5" src="../Image/BatteryElectricVehicleModelOverview_01.png" alt="BEV System Model" width="100%">
-% </html>
+    <!-- Section: Overview -->
+    <h1 id="overview">Overview</h1>
+    <p>
+        Electric Vehicles, EV, have the potential to reduce overall carbon 
+        emissions. The key challenges in their adoption lie in addressing 
+        the vehicle range anxiety, safety, and the total ownership cost for 
+        the consumer. Most modern EV are powered by Li-ion based battery 
+        chemistry and electric drivetrains with permanent magnet synchronous 
+        motors (PMSM) and/or induction motors. Modeling and simulation 
+        helps you design vehicles that meet the desired range on the road 
+        and perform under all environmental conditions. This project 
+        contains Simscape&trade; based workflows and utilities that 
+        help you create different vehicle platforms and analyze their 
+        components as well as the overall system.
+    </p>
 
-%% Getting Started
-%
-% Before running the engineering workflows, you configure a vehicle model
-% setup — selecting a template, choosing component fidelities, and setting
-% initial design parameters. The diagram below shows the overall flow from
-% model setup to workflow execution.
-%
-% <html>
-% <img src="../Image/BEVWorkflow.png" alt="BEV Design Workflow" width="100%">
-% </html>
-%
-% The project supports two ways to configure and load the vehicle model.
-% Choose the one that fits your workflow.
-%
-% <html>
-% <table border="1" cellpadding="8" cellspacing="0" style="border-collapse:collapse; width:100%;">
-% <tr>
-%   <th>Getting Started</th>
-%   <th>What It Does</th>
-%   <th>When to Use</th>
-% </tr>
-% <tr>
-%   <td><strong>Preferred way</strong> (Preset)</td>
-%   <td>Use the <a href="matlab:run('OpenPresetPicker')">Preset Picker</a> to browse and apply a shipped vehicle configuration. Three defaults are available: <em>VehicleElectric</em>, <em>VehicleElecAux</em>, and <em>VehicleElectroThermal</em>. Each preset configures the model references, loads the correct parameters, and opens the model ready to simulate.</td>
-%   <td>Quick start with a known-good setup. No manual configuration needed.</td>
-% </tr>
-% <tr>
-%   <td><strong>Custom configuration</strong></td>
-%   <td>Launch the <a href="matlab:loadAppShortcut">BEV Setup App</a> to select a template, choose component fidelities, link parameter files, and configure environment, HVAC, and driver settings.</td>
-%   <td>When you need specific fidelities, custom environment settings, or non-default operating modes.</td>
-% </tr>
-% </table>
-% </html>
-%
-% The configured model is then used as the starting point for the design
-% workflows below. For a detailed overview of the reusable component
-% packages, see the
-% <matlab:web('ElectricVehicleComponentOverview.html') Component Overview>.
+    <!-- Section: Get Started -->
+    <h1 id="get-started">Get Started</h1>
+    <p style="margin-left: 20px;">
+        (a) Double-click on the <a href="matlab:openProject('ElectricVehicleSimscape.prj')">
+        ElectricVehicleSimscape PRJ</a> file (in the root folder) to setup the
+        project and get started.<br>
+        (b) To visualize Simscape vehicle models based on pre-saved templates, 
+        see <a href="matlab:run('OpenPresetPicker')">Pre-set Vehicle Templates</a>.<br>
+        (c) To learn more about the models available in Pre-set Vehicle Templates, 
+        see <a href="matlab:web('BatteryElectricVehicleModelOverview.html')">Documentation for Vehicle Model</a>.<br>
+    </p>
 
-%% Design Workflows
-%
-% <html>
-% <h3 style="margin:16px 0 6px 0;">System-Level Workflows</h3>
-% <ul style="list-style:disc; padding-left:20px;">
-% <li><a href="matlab:open('BEVRangeEstimationMain.mlx')"><b>Range Estimation Workflow</b></a> :<br>
-% Estimate vehicle range over <b>NEDC</b>, <b>WLTC</b>, and <b>EPA</b> drive cycles. The actual
-% range depends on <b>ambient temperature</b>, <b>HVAC load</b>, and <b>driver profile</b>.
-% Evaluate subsystem losses under hot and cold conditions.</li>
-% <li><a href="matlab:open('BEVBatterySizingMain.mlx')"><b>Battery Sizing Workflow</b></a> :<br>
-% Size the HV battery pack to achieve a target driving range. Compare
-% different <b>cell capacities</b> and <b>pack weights</b> over the NEDC cycle with HVAC
-% on to find the right trade-off between range and vehicle mass.</li>
-% </ul>
-% <h3 style="margin:20px 0 6px 0;">Component-Level Workflows</h3>
-% <ul style="list-style:disc; padding-left:20px;">
-% <li><a href="matlab:open('generateDULossMap.mlx')"><b>Motor Inverter Loss Map Workflow</b></a> :<br>
-% Generate <b>copper</b>, <b>iron</b>, <b>IGBT</b>, and <b>diode</b> loss maps by sweeping the
-% FOC-controlled PMSM across speed, torque, and temperature points.</li>
-% <li><a href="matlab:open('minimumRequiredGearRatio.mlx')"><b>Gear Ratio Selection Workflow</b></a> :<br>
-% Sweep candidate gear ratios over EUDC and US06 cycles on the thermal test
-% bench and compare <b>magnet</b> and <b>winding temperatures</b> to find the best ratio.</li>
-% <li><a href="matlab:open('inverterPowerModuleLife.mlx')"><b>Inverter Power Module Life Workflow</b></a> :<br>
-% Capture IGBT and diode <b>junction temperatures</b> from drive-cycle simulations,
-% apply <b>rainflow cycle counting</b>, and estimate semiconductor lifetime.</li>
-% <li><a href="matlab:open('DUThermalDurability.mlx')"><b>Motor Thermal Durability Workflow</b></a> :<br>
-% Run the thermal test bench over extended duty cycles at multiple <b>coolant
-% sump temperatures</b> to assess winding and magnet thermal margins.</li>
-% <li><a href="matlab:open('VirtualSensorNeuralNetModel.mlx')"><b>Battery Virtual Sensor Workflow</b></a> :<br>
-% Train a <b>neural network</b> to predict battery cell temperature from current,
-% voltage, and SOC inputs. A pre-trained model is included for verification.</li>
-% <li><a href="matlab:open('MotorDriveThermalTestBenchDescription.mlx')"><b>Motor Thermal Test Bench Workflow</b></a> :<br>
-% Shared test bench model used by the gear-ratio, inverter-life, and
-% thermal-durability workflows. Set up parameters and thermal fidelity.</li>
-% </ul>
-% </html>
-%
+    <!-- Section: Workflow (parent for collapsible sub-sections) -->
+    <h1 id="Workflow">Workflow</h1>
+    
+    <p>
+        Click on the hyperlinks to navigate to the application workflows or
+        live-scripts.
+    </p>
 
-%% Documentation
-%
-% * <matlab:web('BatteryElectricVehicleModelOverview.html','-new') Battery Electric Vehicle Model>
-% * <matlab:web('ElectricVehicleComponentOverview.html','-new') Component Overview>
-% * <matlab:web('helpAppDetail.html','-new') BEV Setup App>
-% * <matlab:open('MotorDriveThermalTestBenchDescription.mlx') PMSM Thermal Model>
-% 
+    <!-- Sub-section: ConfigureVehicle (collapsible, with example grid) -->
+    <h2 id="app-ConfigureVehicle" class="collapsible" onclick="toggle(this)">Configure Vehicle</h2>
+    <div class="collapse-body">
+        <div class="card-grid">
+            <div class="model-card">
+                <div class="card-header-bar"></div>
+                <img class="card-image" src="../Image/BEVappICON.png" alt="BEV App ICON">
+                <div class="card-content">
+                    <h3>Launch App to Configure Vehicle</h3>
+                    <p>Launch the App to configure a vehicle for your requirements — select 
+                        a template, choose component fidelities, and set initial design parameters.</p>
+                    <div class="card-actions">
+                        <a href="matlab:loadAppShortcut" class="btn-load btn-primary">Open App</a>
+                        <button class="btn-load btn-secondary" onclick="copyCommand(this, &quot;loadAppShortcut&quot;)">Copy Command</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-%% Models
-%
-% * <matlab:open_system('BEVsystemModel.slx') Battery Electric Vehicle>
+    <!-- Sub-section: DesignBatteries (collapsible, with example grid) -->
+    <h2 id="app-DesignBatteries" class="collapsible" onclick="toggle(this)">Design Batteries</h2>
+    <div class="collapse-body">
+        <div class="card-grid">
+            <div class="model-card">
+                <div class="card-header-bar"></div>
+                <img class="card-image" src="../Image/BEVplantModelbatterysSubs.png" alt="Batteries">
+                <div class="card-content">
+                    <h3>Size Battery for Electric Vehicle</h3>
+                    <p>Size the HV battery pack to achieve a target driving range. 
+                        Compare different cell capacities and pack weights over the NEDC 
+                        cycle with HVAC on to find the right trade-off between range and vehicle mass.</p>
+                    <div class="card-actions">
+                        <a href="matlab:edit('BEVBatterySizingMain.mlx')" class="btn-load btn-primary">Open Live Script</a>
+                        <button class="btn-load btn-secondary" onclick="copyCommand(this, &quot;edit('BEVBatterySizingMain.mlx')&quot;)">Copy Command</button>
+                    </div>
+                </div>
+            </div>
+            <div class="model-card">
+                <div class="card-header-bar"></div>
+                <img class="card-image" src="../Image/BatteryNeuralNetResults.png" alt="Sensor">
+                <div class="card-content">
+                    <h3>Build Virtual Sensor for BMS</h3>
+                    <p>Train a neural network to predict battery cell temperature from current, 
+                        voltage, and SOC inputs. A pre-trained model is included for verification.</p>
+                    <div class="card-actions">
+                        <a href="matlab:edit('VirtualSensorNeuralNetModel.mlx')" class="btn-load btn-primary">Open Live Script</a>
+                        <button class="btn-load btn-secondary" onclick="copyCommand(this, &quot;edit('VirtualSensorNeuralNetModel.mlx')&quot;)">Copy Command</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-%%
+    <!-- Sub-section: DesignElectricDrive (collapsible, with example grid) -->
+    <h2 id="app-DesignElectricDrive" class="collapsible" onclick="toggle(this)">Design Electric Drive</h2>
+    <div class="collapse-body">
+        <div class="card-grid">
+            <div class="model-card">
+                <div class="card-header-bar"></div>
+                <img class="card-image" src="../Image/PMSMlossMapGen.PNG" alt="Motor Loss Map">
+                <div class="card-content">
+                    <h3>Motor Inverter Loss Map Generation</h3>
+                    <p>Generate copper, iron, IGBT, and diode loss maps by sweeping the 
+                        FOC-controlled PMSM across speed, torque, and temperature points.</p>
+                    <div class="card-actions">
+                        <a href="matlab:edit('generateDULossMap.mlx')" class="btn-load btn-primary">Open Live Script</a>
+                        <button class="btn-load btn-secondary" onclick="copyCommand(this, &quot;edit('generateDULossMap.mlx')&quot;)">Copy Command</button>
+                    </div>
+                </div>
+            </div>
+            <div class="model-card">
+                <div class="card-header-bar"></div>
+                <img class="card-image" src="../Image/PMSMThermalTestInverterResult.png" alt="Inverter Life">
+                <div class="card-content">
+                    <h3>Estimate Inverter Power Module End of Life</h3>
+                    <p>Capture IGBT and diode junction temperatures from drive-cycle simulations, 
+                        apply rainflow cycle counting, and estimate semiconductor lifetime.</p>
+                    <div class="card-actions">
+                        <a href="matlab:edit('inverterPowerModuleLife.mlx')" class="btn-load btn-primary">Open Live Script</a>
+                        <button class="btn-load btn-secondary" onclick="copyCommand(this, &quot;edit('inverterPowerModuleLife.mlx')&quot;)">Copy Command</button>
+                    </div>
+                </div>
+            </div>
+            <div class="model-card">
+                <div class="card-header-bar"></div>
+                <img class="card-image" src="../Image/BatteryElectricVehicleModelOverviewThermalDiagram.png" alt="Thermal Durability">
+                <div class="card-content">
+                    <h3>Analyze Thermal Durability for PMSM</h3>
+                    <p>Run the thermal test bench over extended duty cycles at multiple coolant 
+                        sump temperatures to assess winding and magnet thermal margins.</p>
+                    <div class="card-actions">
+                        <a href="matlab:edit('DUThermalDurability.mlx')" class="btn-load btn-primary">Open Live Script</a>
+                        <button class="btn-load btn-secondary" onclick="copyCommand(this, &quot;edit('DUThermalDurability.mlx')&quot;)">Copy Command</button>
+                    </div>
+                </div>
+            </div>
+            <div class="model-card">
+                <div class="card-header-bar"></div>
+                <img class="card-image" src="../Image/BatteryElectricVehicleModelOverviewThermalDiagram.png" alt="Model">
+                <div class="card-content">
+                    <h3>Test Bench for PMSM Drive Unit</h3>
+                    <p>Model creation to set up test bench for electric drive unit based workflows.</p>
+                    <div class="card-actions">
+                        <a href="matlab:edit('MotorDriveThermalTestBenchDescription.mlx')" class="btn-load btn-primary">Open Live Script</a>
+                        <button class="btn-load btn-secondary" onclick="copyCommand(this, &quot;edit('MotorDriveThermalTestBenchDescription.mlx')&quot;)">Copy Command</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-%% Acronyms
-% * BEV   : Battery Electric Vehicle
-% * PMSM : Permanent Magnet Synchronous Motor
-% * AWD   : All Wheel Drive
-% * FWD   : Forward Wheel Drive
+    <!-- Sub-section: DesignTransmission (collapsible, with example grid) -->
+    <h2 id="app-DesignTransmission" class="collapsible" onclick="toggle(this)">Design Transmission</h2>
+    <div class="collapse-body">
+        <div class="card-grid">
+            <div class="model-card">
+                <div class="card-header-bar"></div>
+                <img class="card-image" src="../Image/PMSMThermalTestGearResult.png" alt="Gear Ratio">
+                <div class="card-content">
+                    <h3>Select Gear Ratio for Electric Vehicle</h3>
+                    <p>Sweep candidate gear ratios over EUDC and US06 cycles on the thermal 
+                        test bench and compare magnet and winding temperatures to find the best ratio.</p>
+                    <div class="card-actions">
+                        <a href="matlab:edit('minimumRequiredGearRatio.mlx')" class="btn-load btn-primary">Open Live Script</a>
+                        <button class="btn-load btn-secondary" onclick="copyCommand(this, &quot;edit('minimumRequiredGearRatio.mlx')&quot;)">Copy Command</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-##### SOURCE END #####
--->
+    <!-- Sub-section: AnalyzeVehicle (collapsible, with example grid) -->
+    <h2 id="app-AnalyzeVehicle" class="collapsible" onclick="toggle(this)">Analyze Vehicle</h2>
+    <div class="collapse-body">
+        <div class="card-grid">
+            <div class="model-card">
+                <div class="card-header-bar"></div>
+                <img class="card-image" src="../Image/BatteryElectricVehicleModelOverview_02.png" alt="BEV">
+                <div class="card-content">
+                    <h3>Range Estimation for Electric Vehicle</h3>
+                    <p>Estimate vehicle range over NEDC, WLTC, and EPA drive cycles. 
+                        The actual range depends on ambient temperature, HVAC load, and 
+                        driver profile. Evaluate subsystem losses under hot and cold conditions.</p>
+                    <div class="card-actions">
+                        <a href="matlab:edit('BEVRangeEstimationMain.mlx')" class="btn-load btn-primary">Open Live Script</a>
+                        <button class="btn-load btn-secondary" onclick="copyCommand(this, &quot;edit('BEVRangeEstimationMain.mlx')&quot;)">Copy Command</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section: Components -->
+    <h1 id="components">Components</h1>
+    <!-- Sub-section: Data Center Related Components (collapsible, with example grid) -->
+    <p>
+        To learn more about the components used in this project, see <a href="matlab:web('ElectricVehicleComponentOverview.html')">Component Overview</a>
+    </p>
+
+    <!-- Section: Testing -->
+    <h1 id="test">Testing</h1>
+    <p>
+        You can run tests in this project by running the test runner BEVProjectTests.
+    </p>
+
+    <!-- Section: Requirements -->
+    <h1 id="requirements">Requirements</h1>
+    <p>This project requires:</p>
+    <p style="margin-left: 20px;">
+        MATLAB&reg;, Simulink&reg;, Simscape&trade;, Simscape Battery&trade;, 
+        Simscape Driveline&trade;, Simscape Electrical&trade;, Simscape Fluids&trade;, 
+        Stateflow&trade;, MATLAB Coder&trade;, MATLAB Test&trade;, Simulink Test&trade;, 
+        System Identification Toolbox&trade;, Deep Learning Toolbox&trade;, 
+        Statistics and Machine Learning Toolbox&trade;, Powertrain Blockset&trade;, 
+        Predictive Maintenance Toolbox&trade;, Signal Processing Toolbox&trade;
+    </p>
+
+    <p>
+        <br> <br>
+        <i>Copyright 2023 - 2026 The MathWorks, Inc.</i>
+    </p>
+
+</main>
+
+<!-- Toggle script for collapsible sub-headings (do not remove) -->
+<script>
+function toggle(el) {
+    el.classList.toggle('open');
+    el.nextElementSibling.classList.toggle('open');
+}
+
+function copyCommand(btn, cmd) {
+    navigator.clipboard.writeText(cmd).then(function() {
+        var original = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(function() { btn.textContent = original; }, 1500);
+    });
+}
+</script>
+
 </body>
 </html>
