@@ -80,7 +80,6 @@ jobs:
             Simscape_Battery
             Signal_Processing_Toolbox
             Predictive_Maintenance_Toolbox
-            Deep_Learning_Toolbox
             Statistics_and_Machine_Learning_Toolbox
             System_Identification_Toolbox
             MATLAB_Coder
