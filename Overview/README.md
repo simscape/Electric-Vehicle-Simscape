@@ -18,7 +18,7 @@ Single-page reference for how the BEV Simscape repository is organized, where tr
 | `Script_Data/Setup/User/` | Generated setup/param scripts from app export (gitignored) |
 | [`Workflow/`](../Workflow/README.md) | Engineering workflows — Battery, MotorDrive, Vehicle (range estimation) |
 | `Overview/` | Published MATLAB overview pages (`.m` source → `html/` output) |
-| `Overview/Image/` | Images referenced by overview documentation |
+| `Overview/html/Image/` | Images referenced by overview documentation |
 | [`Test/`](../Test/README.md) | Project-level test suite — system model, workflow, and project checks |
 | `utils/` | Shared utilities — signal designer, cell characterization methods |
 
@@ -85,7 +85,7 @@ Every component under `Components/` follows this structure:
 | `TestCase/` | Yes | MATLAB unit tests (`*PassTests.m`) |
 | `Documentation/` | Yes | Source `.m` description files |
 | `Documentation/html/` | Yes | Published HTML from source |
-| `Documentation/images/` | Yes | Screenshots and figures |
+| `Documentation/html/images/` | Yes | Screenshots and figures |
 | `Utilities/` | Some | Plot functions and helper scripts |
 | `Library/` | Few | Shared Simulink library blocks (BatteryHV, HVAC, MotorDrive) |
 | `README.md` | Yes | Component-level summary |
@@ -195,7 +195,7 @@ Ready-to-use preset configurations are shipped in `Script_Data/Setup/Preset/`. E
 ### Rules
 
 - Source `.m` files are the canonical copy. Never patch generated HTML directly.
-- Images generated during publish go to `Documentation/images/`. HTML `src=` attributes reference `../images/`.
+- Images generated during publish go to `Documentation/html/images/`. HTML `src=` attributes reference `images/` (same-folder subfolder).
 - Cross-links between published pages use relative paths (same-folder links use just the filename).
 - The App loads component HTML via `ComponentDescription()`, which searches `Components/**/Documentation/html/` by fidelity name.
 
