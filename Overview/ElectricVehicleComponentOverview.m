@@ -18,7 +18,7 @@
 % <tr><td><code>TestBench/</code></td><td>Standalone test harness with boundary conditions</td></tr>
 % <tr><td><code>TestCase/</code></td><td>MATLAB unit tests (<code>*PassTests.m</code>)</td></tr>
 % <tr><td><code>Documentation/html/</code></td><td>Published HTML documentation pages</td></tr>
-% <tr><td><code>Documentation/images/</code></td><td>Screenshots and figures</td></tr>
+% <tr><td><code>Documentation/html/images/</code></td><td>Screenshots and figures</td></tr>
 % <tr><td><code>Utilities/</code></td><td>Plot functions and helper scripts</td></tr>
 % <tr><td><code>Library/</code></td><td>Shared Simulink library blocks (select components only)</td></tr>
 % <tr><td><code>README.md</code></td><td>Component-level summary and usage notes</td></tr>
@@ -182,7 +182,7 @@
 %
 % <html>
 % <p align="center">
-%   <img src="../Image/BEVplantModelVehicle.png" alt="BEV Vehicle Template Structure" width="700">
+%   <img src="Image/BEVplantModelVehicle.png" alt="BEV Vehicle Template Structure" width="700">
 % </p>
 % </html>
 %
@@ -212,7 +212,7 @@
 %
 % <html>
 % <p align="center">
-%   <img src="../../Components/BatteryHV/Documentation/images/BatteryTestHarnessDescription_01.png" alt="BatteryLumpedThermal model" width="650">
+%   <img src="Image/BatteryTestHarnessDescription_01.png" alt="BatteryLumpedThermal model" width="650">
 % </p>
 % </html>
 %
@@ -246,7 +246,7 @@
 %
 % <html>
 % <p align="center">
-%   <img src="../../APP/Documents/images/BEVappWindow.png" alt="BEV Setup App" width="650">
+%   <img src="Image/BEVappWindow.png" alt="BEV Setup App" width="650">
 % </p>
 % </html>
 %

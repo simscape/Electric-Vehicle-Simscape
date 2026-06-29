@@ -120,14 +120,14 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 HVACTestHarnessParams;
 open_system(model)
 </pre>
-<img vspace="5" hspace="5" src="../images/HVACTestHarnessDescription_01.png" alt=""> <h2 id="3">Run Simulation and Results</h2>
+<img vspace="5" hspace="5" src="images/HVACTestHarnessDescription_01.png" alt=""> <h2 id="3">Run Simulation and Results</h2>
 <pre class="language-matlab">simout = sim(model, <span class="string">'SrcWorkspace'</span>, <span class="string">'current'</span>);
 </pre>
 <pre class="codeoutput">Warning: Remapping selected signal 'Cntrl.acOnOff' to 'Cntrl.CabinHMI.acOnOff'
 in 'HVACTestHarness/HVAC/Bus Element In4' to match the bus hierarchy. Save your
 file to make this change permanent. 
 </pre>
-<img vspace="5" hspace="5" src="../images/HVACTestHarnessDescription_02.png" alt=""> <img vspace="5" hspace="5" src="../images/HVACTestHarnessDescription_03.png" alt=""> <img vspace="5" hspace="5" src="../images/HVACTestHarnessDescription_04.png" alt=""> <img vspace="5" hspace="5" src="../images/HVACTestHarnessDescription_05.png" alt=""> <h2 id="4">Running Unit Tests</h2>
+<img vspace="5" hspace="5" src="images/HVACTestHarnessDescription_02.png" alt=""> <img vspace="5" hspace="5" src="images/HVACTestHarnessDescription_03.png" alt=""> <img vspace="5" hspace="5" src="images/HVACTestHarnessDescription_04.png" alt=""> <img vspace="5" hspace="5" src="images/HVACTestHarnessDescription_05.png" alt=""> <h2 id="4">Running Unit Tests</h2>
 <p>Run the MQC test suite from the command line:</p>
 <pre class="language-matlab">results = runtests(<span class="string">'HVACPassTests'</span>);
 disp(results)

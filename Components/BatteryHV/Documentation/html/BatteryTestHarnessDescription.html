@@ -124,13 +124,13 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 BatteryTestHarnessParams;
 open_system(model)
 </pre>
-<img vspace="5" hspace="5" src="../images/BatteryTestHarnessDescription_01.png" alt=""> <h2 id="3">Run Simulation</h2>
+<img vspace="5" hspace="5" src="images/BatteryTestHarnessDescription_01.png" alt=""> <h2 id="3">Run Simulation</h2>
 <pre class="language-matlab">simout = sim(model, <span class="string">'SrcWorkspace'</span>, <span class="string">'current'</span>);
 logsout = simout.logsout;
 </pre>
 <h2 id="4">Simulation Results</h2>
 <p>The following plots show all logged signals from the harness run.</p>
-<img vspace="5" hspace="5" src="../images/BatteryTestHarnessDescription_02.png" alt=""> <img vspace="5" hspace="5" src="../images/BatteryTestHarnessDescription_03.png" alt=""> <img vspace="5" hspace="5" src="../images/BatteryTestHarnessDescription_04.png" alt=""> <img vspace="5" hspace="5" src="../images/BatteryTestHarnessDescription_05.png" alt=""> <img vspace="5" hspace="5" src="../images/BatteryTestHarnessDescription_06.png" alt=""> <h2 id="5">Running Unit Tests</h2>
+<img vspace="5" hspace="5" src="images/BatteryTestHarnessDescription_02.png" alt=""> <img vspace="5" hspace="5" src="images/BatteryTestHarnessDescription_03.png" alt=""> <img vspace="5" hspace="5" src="images/BatteryTestHarnessDescription_04.png" alt=""> <img vspace="5" hspace="5" src="images/BatteryTestHarnessDescription_05.png" alt=""> <img vspace="5" hspace="5" src="images/BatteryTestHarnessDescription_06.png" alt=""> <h2 id="5">Running Unit Tests</h2>
 <p>Run the MQC test suite from the command line:</p>
 <pre class="language-matlab">results = runtests(<span class="string">'BatteryHVPassTests'</span>);
 disp(results)

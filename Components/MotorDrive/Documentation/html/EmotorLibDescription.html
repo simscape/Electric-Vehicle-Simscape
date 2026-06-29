@@ -120,12 +120,12 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <p>Motor losses are defined by a speed-torque-loss lookup table stored in <tt>MotorLossMap.mat</tt>. Electrical parameters (max torque, max power, time constant) are defined in <tt>MotorDriveGearThParams.m</tt>. Inverter thermal and heatsink properties are defined in <tt>InverterMotorDriveParam.m</tt>.</p>
 <pre class="codeinput">open_system(<span class="string">'EmotorLib'</span>)
 </pre>
-<img vspace="5" hspace="5" src="../images/EmotorLibDescription_01.png" alt=""> <h2 id="2">Emotor (Non-Thermal)</h2>
+<img vspace="5" hspace="5" src="images/EmotorLibDescription_01.png" alt=""> <h2 id="2">Emotor (Non-Thermal)</h2>
 <p>The <b>Emotor</b> block is the non-thermal variant of the motor plant. It models the electrical and mechanical behavior of the motor without any temperature dependence or thermal coupling.</p>
 <pre class="codeinput">open_system(<span class="string">'EmotorLib/Emotor'</span>)
 captureSubsystemImage(<span class="string">'EmotorLib/Emotor'</span>)
 </pre>
-<img vspace="5" hspace="5" src="../images/EmotorLibDescription_02.png" alt=""> <p>The Emotor block contains the following subsystems:</p>
+<img vspace="5" hspace="5" src="images/EmotorLibDescription_02.png" alt=""> <p>The Emotor block contains the following subsystems:</p>
 <div>
 <ul>
 <li>
@@ -166,7 +166,7 @@ captureSubsystemImage(<span class="string">'EmotorLib/Emotor'</span>)
 <pre class="codeinput">open_system(<span class="string">'EmotorLib/Emotor Thermal'</span>)
 captureSubsystemImage(<span class="string">'EmotorLib/Emotor Thermal'</span>)
 </pre>
-<img vspace="5" hspace="5" src="../images/EmotorLibDescription_03.png" alt=""> <p>The Emotor Thermal block adds the following subsystems on top of the base Emotor model:</p>
+<img vspace="5" hspace="5" src="images/EmotorLibDescription_03.png" alt=""> <p>The Emotor Thermal block adds the following subsystems on top of the base Emotor model:</p>
 <div>
 <ul>
 <li>

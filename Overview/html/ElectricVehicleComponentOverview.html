@@ -271,7 +271,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <p>The system model <b>BEVsystemModel.slx</b> assembles components via subsystem references. Pre-configured vehicle templates in <b>Model/VehicleTemplate/</b> provide ready-made assemblies at different fidelity scopes. The <b>Model/Display/</b> folder contains energy-flow visualization subsystems (<b>EnergyElectric</b>, <b>EnergyElectroThermal</b>) used during simulation.</p>
 <p>
 <p align="center">
-  <img src="../Image/BEVplantModelVehicle.png" alt="BEV Vehicle Template Structure" width="700">
+  <img src="Image/BEVplantModelVehicle.png" alt="BEV Vehicle Template Structure" width="700">
 </p>
 </p>
 <p>
@@ -289,7 +289,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <p>Harness parameter scripts (<b>TestHarnessParams.m</b>) in <b>TestBench/</b> call the component param file and layer boundary-condition variables on top, so each harness is self-contained for standalone testing.</p>
 <p>
 <p align="center">
-  <img src="../../Components/BatteryHV/Documentation/images/BatteryTestHarnessDescription_01.png" alt="BatteryLumpedThermal model" width="650">
+  <img src="Image/BatteryTestHarnessDescription_01.png" alt="BatteryLumpedThermal model" width="650">
 </p>
 </p>
 <p>At the system level, the BEV Setup App generates a param setup script that calls all linked component param files in sequence. This populates the full vehicle workspace in one run for the selected model configuration.</p>
@@ -300,7 +300,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <p>The BEV Setup App reads JSON config files from <b>APP/Config/Preset/</b> to populate its component dropdowns. Each config maps a vehicle template to the available fidelities per component. The app scans the component <b>Model/</b> folders to verify that the listed <b>.slx</b> files exist on disk before presenting them as options.</p>
 <p>
 <p align="center">
-  <img src="../../APP/Documents/images/BEVappWindow.png" alt="BEV Setup App" width="650">
+  <img src="Image/BEVappWindow.png" alt="BEV Setup App" width="650">
 </p>
 </p>
 <p>Once a configuration is selected, the app generates setup and parameter scripts that wire the chosen component fidelities into the system model. The configured model is then ready for the engineering workflows elsewhere in the repository.</p>
@@ -520,7 +520,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 %
 % <html>
 % <p align="center">
-%   <img src="../Image/BEVplantModelVehicle.png" alt="BEV Vehicle Template Structure" width="700">
+%   <img src="Image/BEVplantModelVehicle.png" alt="BEV Vehicle Template Structure" width="700">
 % </p>
 % </html>
 %
@@ -550,7 +550,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 %
 % <html>
 % <p align="center">
-%   <img src="../../Components/BatteryHV/Documentation/images/BatteryTestHarnessDescription_01.png" alt="BatteryLumpedThermal model" width="650">
+%   <img src="Image/BatteryTestHarnessDescription_01.png" alt="BatteryLumpedThermal model" width="650">
 % </p>
 % </html>
 %
@@ -584,7 +584,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 %
 % <html>
 % <p align="center">
-%   <img src="../../APP/Documents/images/BEVappWindow.png" alt="BEV Setup App" width="650">
+%   <img src="Image/BEVappWindow.png" alt="BEV Setup App" width="650">
 % </p>
 % </html>
 %
