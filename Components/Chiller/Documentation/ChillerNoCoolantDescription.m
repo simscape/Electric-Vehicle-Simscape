@@ -19,16 +19,26 @@
 open_system('ChillerNoCoolant')
 
 %% Ports
-% *Inputs*
 %
-% * *Battery status* - Pack state signals.
-% * *Chiller bypass control* - Enable command.
-% * *HV bus connection* - Electrical connection for power draw.
-%
-% *Outputs*
-%
-% * *Chiller Current* - Current drawn from the HV bus.
-% * *HV Power* - Electrical power consumed.
+% <html>
+% <h3>Input Bus &mdash; <code>s</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>cmdChillerByp</td><td>Chiller bypass command</td></tr>
+% <tr><td>BatSt</td><td>Battery status signal</td></tr>
+% </table>
+% <h3>Output Bus &mdash; <code>m</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>ChillerCurrent</td><td>Current drawn from the HV bus</td></tr>
+% <tr><td>energy</td><td>Cumulative energy consumed</td></tr>
+% </table>
+% <h3>Physical Ports</h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Port</th><th>Domain</th><th>Description</th></tr>
+% <tr><td>HV</td><td>Electrical</td><td>High-voltage bus connection</td></tr>
+% </table>
+% </html>
 
 %% Workflows
 % The ChillerNoCoolant block is a simplified variant used as a standalone

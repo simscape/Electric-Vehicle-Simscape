@@ -182,7 +182,7 @@ open_system('BEVsystemModel/Vehicle/Driveline');
 open_system('BEVsystemModel/Controller/Vehicle Control')
 
 %% Vehicle Thermal Management
-% The temperature of the components in a vehicle effects both the
+% The temperature of the components in a vehicle affects both the
 % efficiency and the safety of the vehicle. The battery for example, has an
 % optimal range of temperature in which the battery performance is most
 % efficient. Extreme temperatures permanently damage the battery. You
@@ -263,11 +263,6 @@ open_system('VehicleElectroThermal/HVAC/Cabin Plant');
 % To manage the CO2 concentration in cabin, the Cabin Air subsystem vents out a fixed percentage of cabin air, 
 % while maintaining the cabin pressure. 
 % The compressor draws the power required to run the Refrigeration subsystem from the battery pack.
-%
-% <matlab:load_system("VehicleElectroThermalLowTemp");open_system('VehicleElectroThermalLowTemp/HVAC/Cabin%20air%20and%20refrigeration/Cabin%20Air'); Open Cabin Subsystem>
-%
-load_system('VehicleElectroThermalLowTemp.slx')
-open_system('VehicleElectroThermalLowTemp/HVAC/Cabin air and refrigeration/Cabin Air');
 
 
 %% Useful Links

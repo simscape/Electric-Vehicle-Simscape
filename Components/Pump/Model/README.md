@@ -12,27 +12,36 @@ This folder contains the coolant pump Simulink model and its parameter script.
 
 ### Description
 
-Volumetric displacement pump that circulates coolant through the BEV thermal management loop. The pump speed is controlled by the thermal management controller (via the PumpDriver) and determines the coolant flow rate through the battery, motor drive, charger, chiller, heater, and radiator subsystems.
+Volumetric displacement pump for the coolant loop. The controller supplies `cmdPump`; PumpDriver supplies low-voltage electrical power.
 
 ### Workflows
 
 - Part of the **VehicleElectroThermal** template coolant loop.
-- Works in conjunction with the PumpDriver component, which translates thermal controller commands into pump speed.
-- Parameters loaded by `BEVThermalParams.m`.
+- Receives low-voltage power from PumpDriverTh.
+- Parameters are defined in `PumpParams.m`.
 
-### Inputs
-
-| Signal | Description |
-|--------|-------------|
-| Pump speed command | Shaft speed from the PumpDriver |
-| Coolant inlet port | Thermal-liquid inlet from the coolant loop |
-
-### Outputs
+### Input Bus — `s`
 
 | Signal | Description |
 |--------|-------------|
-| Coolant outlet port | Pressurized coolant flow to downstream components |
-| Pump power | Mechanical power consumed |
+| BatSt | Battery status signal |
+| cmdPump | Pump speed command |
+
+### Output Bus — `m`
+
+| Signal | Description |
+|--------|-------------|
+| PumpCurr | Pump current draw |
+| LowVolt | Low-voltage bus measurement |
+| energy | Cumulative energy consumed |
+
+### Physical Ports
+
+| Port | Domain | Description |
+|------|--------|-------------|
+| LV | Electrical | Low-voltage bus connection |
+| A | Thermal liquid | Coolant port |
+| B | Thermal liquid | Coolant port |
 
 ### Key Parameters
 
@@ -52,27 +61,30 @@ Volumetric displacement pump that circulates coolant through the BEV thermal man
 
 ### Description
 
-Minimal pump stub with fixed electrical load on the LV bus. Draws a fixed current proportional to the pump command signal. Unlike PumpDummyTh, this variant has no thermal-liquid ports — it is purely an electrical placeholder.
+Fixed electrical load on the LV bus, with no command input or coolant ports.
 
 ### Workflows
 
 - Placeholder variant in the **VehicleElecAux** template for auxiliary configurations without a coolant loop.
 - Parameters loaded by `PumpDummyParams.m`.
 
-### Inputs
+### Input Bus
+
+No input bus (no inports).
+
+### Output Bus — `m`
 
 | Signal | Description |
 |--------|-------------|
-| Battery status | Pack state signals (terminated internally) |
-| Pump command | Normalized command (0 = off, 1 = full current draw) |
-| LV bus | Low-voltage electrical connection |
+| PumpCurr | Pump current draw |
+| LowVolt | Low-voltage bus measurement |
+| energy | Cumulative energy consumed |
 
-### Outputs
+### Physical Ports
 
-| Signal | Description |
-|--------|-------------|
-| Pump Current | Current drawn from LV bus (I_fixed x PumpCmd) |
-| Low Voltage | Measured LV bus voltage |
+| Port | Domain | Description |
+|------|--------|-------------|
+| LV | Electrical | Low-voltage bus connection |
 
 ### Key Parameters
 
@@ -97,22 +109,28 @@ Minimal pump stub that maintains the same port interface as the full Pump model.
 - Placeholder variant in the **VehicleElectroThermal** template for integration testing or fast simulations.
 - Parameters loaded by `PumpDummyThParams.m`.
 
-### Inputs
+### Input Bus — `s`
 
 | Signal | Description |
 |--------|-------------|
-| Battery status | Pack state signals (terminated internally) |
-| Pump command | Normalized command (0 = off, 1 = full current draw) |
-| LV bus | Low-voltage electrical connection |
-| Coolant port A | Thermal-liquid inlet (pass-through) |
+| BatSt | Battery status (terminated internally) |
+| cmdPump | Pump speed command |
 
-### Outputs
+### Output Bus — `m`
 
 | Signal | Description |
 |--------|-------------|
-| Pump Current | Current drawn from LV bus (I_fixed x PumpCmd) |
-| Low Voltage | Measured LV bus voltage |
-| Coolant port B | Thermal-liquid outlet (pass-through) |
+| PumpCurr | Pump current draw |
+| LowVolt | Low-voltage bus measurement |
+| energy | Cumulative energy consumed |
+
+### Physical Ports
+
+| Port | Domain | Description |
+|------|--------|-------------|
+| LV | Electrical | Low-voltage bus connection |
+| A | Thermal liquid | Coolant port (pass-through) |
+| B | Thermal liquid | Coolant port (pass-through) |
 
 ### Key Parameters
 
@@ -121,4 +139,4 @@ Minimal pump stub that maintains the same port interface as the full Pump model.
 | Max pump current | 10 | A |
 | Coolant pipe diameter | 0.019 | m |
 
-Copyright 2022 - 2025 The MathWorks, Inc.
+Copyright 2022 - 2026 The MathWorks, Inc.

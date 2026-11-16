@@ -24,24 +24,34 @@
 open_system('Heater')
 
 %% Ports
-% *Inputs*
 %
-% * *Battery status* - Pack voltage, current, temperature, and SOC from the BMS.
-% * *Heater control command* - On/off or proportional command from the thermal controller.
-% * *HV bus connection* - Electrical connection to draw heater current.
-%
-% *Outputs*
-%
-% * *Heater Current* - Current drawn from the HV bus.
-% * *HV Power* - Electrical power consumed by the heater.
-% * *Thermal States* - Heater temperature and heat flow to coolant.
+% <html>
+% <h3>Input Bus &mdash; <code>s</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>BatSt</td><td>Battery status (temperature, SOC)</td></tr>
+% <tr><td>cmdHeater</td><td>Heater on/off command from thermal controller</td></tr>
+% </table>
+% <h3>Output Bus &mdash; <code>m</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>HeaterCurrent</td><td>Current drawn from the HV bus</td></tr>
+% <tr><td>energy</td><td>Cumulative energy consumed</td></tr>
+% </table>
+% <h3>Physical Ports</h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Port</th><th>Domain</th><th>Description</th></tr>
+% <tr><td>HV</td><td>Electrical</td><td>High-voltage bus connection</td></tr>
+% <tr><td>A</td><td>Thermal liquid</td><td>Coolant port</td></tr>
+% <tr><td>B</td><td>Thermal liquid</td><td>Coolant port</td></tr>
+% </table>
+% </html>
 
 %% Workflows
 % The Heater block is part of the *VehicleElectroThermal* template used in
-% range estimation and battery sizing workflows. It is referenced by
-% |BEVSystemModelParams.m| which loads |HeaterParams.m|. The heater is
-% active primarily in cold-ambient drive-cycle simulations where battery
-% warm-up is required.
+% range estimation and battery sizing workflows. The heater is active
+% primarily in cold-ambient drive-cycle simulations where battery warm-up
+% is required.
 
 %% Parameters
 %

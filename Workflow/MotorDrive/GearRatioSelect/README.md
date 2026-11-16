@@ -1,13 +1,13 @@
 # Gear Ratio Selection
 
-Determine an efficient fixed gear ratio for the electric drive by sweeping gear ratios across drive cycles and evaluating motor thermal performance.
+Compare candidate fixed gear ratios against winding and magnet thermal limits.
 
 | Item | Detail |
 |------|--------|
 | **Entry point** | `minimumRequiredGearRatio.mlx` |
 | **Template** | Electro-thermal (uses `MotorDriveThermalTestbench`) |
 | **Drive cycles** | EUDC, US06 |
-| **Key outputs** | Motor winding and magnet temperature vs gear ratio, optimal ratio selection |
+| **Key outputs** | Winding and magnet temperatures; thermal Pass/Fail for each ratio and cycle |
 
 ## Files
 

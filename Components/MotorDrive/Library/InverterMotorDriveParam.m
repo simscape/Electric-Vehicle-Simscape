@@ -11,7 +11,7 @@
 %% Inverter Cauer Thermal Model
 electricDrive.PMparams.RthDiode    = [0.017,0.12,0.1,0.038]/6;
 electricDrive.PMparams.RthIGBT    = [0.01,0.07,0.08,0.045]/6;
-electricDrive.PMparams.tauthDiode  = [0.001,0.03,0.25,1.5]*6;
+electricDrive.PMparams.tauthDiode  = [0.01,0.03,0.25,1.5]*6;
 electricDrive.PMparams.tauthIGBT   = [0.001,0.03,0.25,1.5]*6;
 electricDrive.PMparams.TinitDiode  = vehicleThermal.coolant_T_init * ones(1,4);
 electricDrive.PMparams.TinitIGBT   = vehicleThermal.coolant_T_init * ones(1,4);

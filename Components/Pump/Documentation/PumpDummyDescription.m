@@ -21,16 +21,23 @@
 open_system('PumpDummy')
 
 %% Ports
-% *Inputs*
 %
-% * *Battery status* - Pack state signals (terminated internally).
-% * *Pump command* - Normalized command (0 = off, 1 = full current draw).
-% * *LV bus connection* - Low-voltage electrical connection for current draw.
-%
-% *Outputs*
-%
-% * *Pump Current* - Current drawn from the LV bus (I_fixed x PumpCmd).
-% * *Low Voltage* - Measured LV bus voltage.
+% <html>
+% <h3>Input Bus</h3>
+% <p>No input bus (no inports).</p>
+% <h3>Output Bus &mdash; <code>m</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>PumpCurr</td><td>Pump current draw</td></tr>
+% <tr><td>LowVolt</td><td>Low-voltage bus measurement</td></tr>
+% <tr><td>energy</td><td>Cumulative energy consumed</td></tr>
+% </table>
+% <h3>Physical Ports</h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Port</th><th>Domain</th><th>Description</th></tr>
+% <tr><td>LV</td><td>Electrical</td><td>Low-voltage bus connection</td></tr>
+% </table>
+% </html>
 
 %% Workflows
 % The PumpDummy block is a placeholder variant in the *VehicleElecAux*

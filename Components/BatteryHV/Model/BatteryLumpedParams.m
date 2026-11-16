@@ -12,7 +12,7 @@ battery.T_vec=[278 293 313];       % Temperature vector T [K]
 battery.AH=34;                     % [Ah] Cell capacity 
 battery.AH_vec=[0.9*battery.AH battery.AH 0.9*battery.AH]; % Cell capacity vector AH(T) [Ahr]
 battery.SOC_vec=[0, .1, .25, .5, .75, .9, 1]; % Cell state of charge vector SOC [-]
-battery.initialPackSOC=0.75;	     % Pack intial SOC (-)
+battery.initialPackSOC=0.75;	     % Pack initial SOC (-)
 battery.cRate=[0    0    0
                1    2    2
                2    2    3

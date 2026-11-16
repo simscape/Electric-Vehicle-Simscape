@@ -46,7 +46,7 @@ jobs:
       - name: Setup MATLAB
         uses: matlab-actions/setup-matlab@v3
         with:
-          release: R2024b
+          release: R2025b
 
       - name: Run tests
         uses: matlab-actions/run-command@v3
@@ -67,7 +67,7 @@ jobs:
       - name: Setup MATLAB
         uses: matlab-actions/setup-matlab@v3
         with:
-          release: R2024b
+          release: R2025b
           cache: true
           products: |
             Simscape
@@ -84,6 +84,8 @@ jobs:
             System_Identification_Toolbox
             MATLAB_Coder
             Embedded_Coder
+            Optimization_Toolbox
+            Global_Optimization_Toolbox
       - name: Run tests
         uses: matlab-actions/run-command@v3
         with:

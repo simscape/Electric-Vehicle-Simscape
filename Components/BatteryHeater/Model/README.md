@@ -17,24 +17,29 @@ Models the battery pack heater as a controlled current source drawing power from
 ### Workflows
 
 - Part of the **VehicleElectroThermal** template used in range estimation and battery sizing workflows.
-- Activated during cold-ambient simulations (e.g., -20 degC) to keep battery temperature within operating limits.
-- Referenced by `BEVSystemModelParams.m` which loads `HeaterParams.m`.
+- Activated during cold-ambient simulations (e.g., -10 degC in the current range workflows) to keep battery temperature within operating limits.
 
-### Inputs
-
-| Signal | Description |
-|--------|-------------|
-| Battery status | Pack voltage, current, temperature, and SOC from the BMS |
-| Heater control command | On/off or proportional command from the thermal controller |
-| HV bus connection | Electrical connection to draw heater current |
-
-### Outputs
+### Input Bus — `s`
 
 | Signal | Description |
 |--------|-------------|
-| Heater Current | Current drawn from the HV bus |
-| HV Power | Electrical power consumed by the heater |
-| Thermal States | Heater temperature and heat flow to coolant |
+| BatSt | Battery status (temperature, SOC) |
+| cmdHeater | Heater on/off command from thermal controller |
+
+### Output Bus — `m`
+
+| Signal | Description |
+|--------|-------------|
+| HeaterCurrent | Current drawn from the HV bus |
+| energy | Cumulative energy consumed |
+
+### Physical Ports
+
+| Port | Domain | Description |
+|------|--------|-------------|
+| HV | Electrical | High-voltage bus connection |
+| A | Thermal liquid | Coolant port |
+| B | Thermal liquid | Coolant port |
 
 ---
 
@@ -52,22 +57,28 @@ Minimal heater stub with the same port interface as the full Heater model. Inter
 
 - Placeholder variant for integration testing or fast electrical-only studies.
 - Can replace `Heater` in the VehicleElectroThermal template without breaking the coolant loop.
-- Build the model by running `createHeaterDummy.m` from this folder.
 
-### Inputs
-
-| Signal | Description |
-|--------|-------------|
-| Battery status | Pack state signals (terminated internally) |
-| Heater command | 1 = active (draws load), 0 = off (no load) |
-| HV bus connection | Electrical connection for fixed power draw |
-| Coolant port | Thermal-liquid interface (pass-through, no heat exchange) |
-
-### Outputs
+### Input Bus — `s`
 
 | Signal | Description |
 |--------|-------------|
-| Heater Current | Fixed current when active, zero when off |
+| BatSt | Battery status (terminated internally) |
+| cmdHeater | Heater command: 1 = active, 0 = off |
+
+### Output Bus — `m`
+
+| Signal | Description |
+|--------|-------------|
+| HeaterCurrent | Fixed current when active, zero when off |
+| energy | Cumulative energy consumed |
+
+### Physical Ports
+
+| Port | Domain | Description |
+|------|--------|-------------|
+| HV | Electrical | High-voltage bus connection |
+| A | Thermal liquid | Coolant port (pass-through) |
+| B | Thermal liquid | Coolant port (pass-through) |
 
 ---
 
@@ -80,4 +91,4 @@ Minimal heater stub with the same port interface as the full Heater model. Inter
 | Coolant jacket channel diameter | 0.0092 | m |
 | Initial coolant temperature | 298.15 | K |
 
-Copyright 2022 - 2025 The MathWorks, Inc.
+Copyright 2022 - 2026 The MathWorks, Inc.

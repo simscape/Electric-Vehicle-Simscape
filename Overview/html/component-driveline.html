@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Driveline — Electric Vehicle Design</title><link rel="stylesheet" href="assets/styles.css?v=20261028-3"></head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+  <header class="help-header"><div class="help-header-inner"><a class="help-brand" href="ElectricVehicleDesignOverview.html">MATLAB Help Center<small>Electric Vehicle Design with Simscape</small></a></div></header>
+  <div class="doc-shell">
+    <aside class="category-nav"><nav aria-label="Component reference navigation">
+      <ul class="nav-trail"><li><a href="ElectricVehicleDesignOverview.html">Documentation Home</a></li><li><a href="components.html">Components</a></li></ul>
+      <div class="nav-siblings-label">Mechanical</div>
+      <ul class="nav-siblings"><li aria-current="page"><span>Driveline</span></li></ul>
+      <div class="on-page"><div class="on-page-label">On this page</div><ul class="on-page-list"><li><a href="#description">Description</a></li><li><a href="#examples">Examples</a></li><li><a href="#interface">Interface</a></li><li><a href="#testing">Testing</a></li><li><a href="#see-also">See Also</a></li></ul></div>
+    <div class="nav-browse"><div class="on-page-label">Category</div><ul class="nav-browse-list"><li><a href="examples.html">Examples</a></li><li><a href="vehicle-range.html">Vehicle Models</a></li><li><a href="project-builder.html">Apps &amp; Utilities</a></li></ul></div>
+    </nav></aside>
+    <main class="doc-main" id="main-content">
+
+      <header class="product-intro reference-heading"><div><h1>Driveline</h1><p class="tagline">Longitudinal electric-vehicle driveline with optional braking behavior</p><p class="library-path"><strong>Component path:</strong> Components / Driveline</p><div class="action-row"><a class="action" href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','Driveline','Model','Driveline.slx'))">Open Default Model</a><a class="action secondary" href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','Driveline','TestBench','DriveLineTestHarness.slx'))">Open Test Harness</a></div></div><figure class="component-header-image"><img src="Image/DrivelineDescription_01.png" alt="Driveline model canvas"></figure></header>
+
+      <section id="description"><h2>Description</h2>
+    <div class="component-description-layout">
+      <div class="component-lede"><p>Vehicle driveline component for the BEV system model. The driveline transmits torque from the front and rear motor drive units to the wheels through axle connections. It includes tire models with slip dynamics and a vehicle body subsystem for longitudinal response. Two fidelity levels are available depending on whether explicit mechanical braking is needed.</p>
+        <div class="fidelity-decision"><strong>How to choose a fidelity</strong><p>Use <strong>Driveline</strong> for drive-cycle energy and range studies in which regenerative braking supplies the required deceleration abstraction. Select <strong>DrivelineWithBraking</strong> when friction-brake commands, wheel forces, and blended braking are explicit design variables.</p></div>
+      </div>
+
+    </div>
+    <h3 id="models">Fidelity at a glance</h3>
+    <div class="table-scroll"><table><thead><tr><th>Model</th><th>Description</th><th>Use case</th><th>Templates</th><th>Documentation &amp; files</th></tr></thead><tbody>
+<tr><td><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','Driveline','Model','Driveline.slx'))"><strong>Driveline</strong></a></td><td>Front/rear axle torque, tire slip, and vehicle body dynamics.</td><td>Default driveline for all drive-cycle range estimation and battery sizing workflows where mechanical braking is handled by regen only.</td><td>VehicleElectric, VehicleElecAux, VehicleElectroThermal</td><td><a href="matlab:web(fullfile(currentProject().RootFolder,'Components','Driveline','Documentation','html','DrivelineDescription.html'),'-new')">Documentation</a> &middot; <a href="matlab:edit(fullfile(currentProject().RootFolder,'Components','Driveline','Model','DrivelineParams.m'))">Parameters</a></td></tr>
+<tr><td><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','Driveline','Model','DrivelineWithBraking.slx'))"><strong>DrivelineWithBraking</strong></a></td><td>Adds integrated mechanical braking on the rear axle.</td><td>Vehicle studies requiring blended regenerative and friction braking analysis, or braking-specific controller validation.</td><td>VehicleElectric, VehicleElecAux, VehicleElectroThermal</td><td><a href="matlab:web(fullfile(currentProject().RootFolder,'Components','Driveline','Documentation','html','DrivelineWithBrakingDescription.html'),'-new')">Documentation</a> &middot; <a href="matlab:edit(fullfile(currentProject().RootFolder,'Components','Driveline','Model','DrivelineWithBrakingParams.m'))">Parameters</a></td></tr>
+</tbody></table></div>
+    <h3>Where it participates</h3><ul>
+<li><strong>Range Estimation</strong> (<code>Workflow/Vehicle/RangeEstimation/</code>) &mdash; The driveline converts motor torque into vehicle motion and captures road load, tire losses, and vehicle speed for range calculation.</li>
+<li><strong>Battery Sizing</strong> (<code>Workflow/Battery/BatterySizing/</code>) &mdash; Vehicle mass is swept to evaluate the impact of different battery pack sizes on range.</li>
+<li><strong>Gear Ratio Selection</strong> (<code>Workflow/MotorDrive/GearRatioSelect/</code>) &mdash; Vehicle road-load conditions determine the motor duty cycle used to compare gear ratios against thermal limits.</li>
+<li><strong>Driveline NVH</strong> (<code>Workflow/Driveline/DrivelineNVH/</code>) &mdash; Flexible-shaft dynamics support frequency order-map generation and launch gear-ratio optimization.</li>
+</ul></section>
+
+      <section id="examples"><h2>Examples</h2><div class="used-by"><strong>Workflows and models that use this component</strong>The driveline supports vehicle energy studies, transmission selection, torsional-vibration analysis, and launch optimization.</div><div class="component-example-grid"><article class="component-example-card"><div class="card-header-bar"></div><img class="component-example-image" src="Image/DrivelineTestHarnessDescription_01.png" alt="Driveline example model canvas"><div class="component-example-body"><a href="workflow-gear-ratio.html">Select Gear Ratio for Electric Vehicle</a><p><strong>Workflow</strong> &mdash; Evaluates the motor and transmission ratio against vehicle duty cycles.</p></div></article>
+<article class="component-example-card"><div class="card-header-bar"></div><img class="component-example-image" src="Image/DrivelineOrderMap.png" alt="Frequency order map of motor-bearing excitation versus motor speed and order"><div class="component-example-body"><a href="workflow-driveline-order-map.html">Generate Frequency Order Map for BEV Motor Driveline</a><p><strong>NVH workflow</strong> &mdash; Maps motor-bearing excitation force against rotational speed and order.</p></div></article>
+<article class="component-example-card"><div class="card-header-bar"></div><img class="component-example-image" src="Image/VehicleLaunchJerkComparison.png" alt="Optimized and baseline vehicle jerk during launch"><div class="component-example-body"><a href="workflow-vehicle-launch.html">Optimize Gear Ratios for Vehicle Launch</a><p><strong>NVH workflow</strong> &mdash; Balances launch jerk and acceleration across three transmission ratios.</p></div></article>
+<article class="component-example-card"><div class="card-header-bar"></div><img class="component-example-image" src="Image/DrivelineTestHarnessDescription_01.png" alt="Driveline example model canvas"><div class="component-example-body"><a href="workflow-vehicle-range.html">Estimate Electric Vehicle Range</a><p><strong>Vehicle workflow</strong> &mdash; Uses road-load behavior in integrated energy analysis.</p></div></article></div></section>
+
+      <section id="interface"><h2>Interface</h2><p class="section-intro">Both vehicle fidelities provide front and rear axle connections and report vehicle speed. <code>DrivelineWithBraking</code> uses input <code>s</code> for mechanical braking torque; <code>Driveline</code> terminates that input.</p>
+    <div class="table-scroll"><table><thead><tr><th>Port / signal</th><th>Direction</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>FA</code></td><td>Conserving</td><td>Front axle mechanical rotational connection.</td></tr>
+<tr><td><code>RA</code></td><td>Conserving</td><td>Rear axle mechanical rotational connection.</td></tr>
+<tr><td><code>s</code> <em>(DrivelineWithBraking)</em></td><td>Input</td><td>Mechanical braking torque command.</td></tr>
+<tr><td><code>m.VehSpd</code></td><td>Output</td><td>Longitudinal vehicle speed.</td></tr>
+</tbody></table></div></section>
+
+      <section id="testing"><h2>Testing</h2><ul class="link-list"><li><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','Driveline','TestBench','DriveLineTestHarness.slx'))">Open Driveline Test Harness</a> · <a href="matlab:web(fullfile(currentProject().RootFolder,'Components','Driveline','Documentation','html','DrivelineTestHarnessDescription.html'),'-new')">view documentation</a><p>Verify vehicle dynamics, tire response, and braking behavior under controlled inputs.</p></li><li><a href="matlab:runtests(fullfile(currentProject().RootFolder,'Components','Driveline','TestCase','DrivelinePassTests.m'))">Run Driveline Component Tests</a><p>Run the maintained Driveline test case before integration.</p></li></ul></section>
+      <section id="see-also"><h2>See Also</h2><ul><li><a href="component-motor-drive.html">Motor Drive</a></li><li><a href="workflow-gear-ratio.html">Select Gear Ratio</a></li><li><a href="workflow-driveline-order-map.html">Generate Frequency Order Map</a></li><li><a href="workflow-vehicle-launch.html">Optimize Vehicle Launch</a></li><li><a href="workflow-vehicle-range.html">Estimate Vehicle Range</a></li><li><a href="vehicle-range.html#templates">Vehicle Templates</a></li></ul></section>
+    </main>
+  </div>
+  <script src="assets/app.js?v=20260930-6"></script>
+</body></html>

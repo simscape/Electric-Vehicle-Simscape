@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Framework Reference - Test Framework</title>
+    <link rel="stylesheet" href="../styles/mathworks-like-doc.css">
+</head>
+<body>
+
+<div class="page-title">
+    <span class="title-text">Framework Reference</span>
+    <span class="breadcrumb"><a href="../TestFrameworkHome.html">Test Framework</a> &rsaquo; Framework Reference</span>
+</div>
+
+<nav class="sidebar">
+    <ul>
+        <li><a href="../TestFrameworkHome.html">Home</a></li>
+        <li><a href="GettingStarted.html">Getting Started</a></li>
+        <li><a href="ConfigurationGuide.html">Configuration Guide</a></li>
+        <li><a href="TestFrameworkReference.html" class="active">Framework Reference</a></li>
+    </ul>
+</nav>
+
+<main class="content">
+
+    <h1 id="framework-reference">Test Framework Reference</h1>
+    <p class="subtitle">Detailed API reference for all framework classes, functions, and utilities</p>
+
+    <!-- ============================================================ -->
+    <h2 id="test-executor">TestExecutor</h2>
+    <p><code>Test/Framework/TestExecutor.m</code></p>
+    <p>
+        Central orchestrator that coordinates test discovery, execution, and reporting.
+        Reads a configuration struct from any <code>testConfig.m</code> file,
+        discovers targets via <code>TestFileDiscovery</code>, builds parameterized suites,
+        configures the runner with plugins, and executes tests.
+    </p>
+
+    <h3>Static Methods</h3>
+    <table>
+        <thead>
+            <tr><th>Method</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>runAll(config)</code></td>
+                <td>Discovers all test targets (models, workflows, custom tests), bridges <code>config.SuppressedWarnings</code> to the smoke test TestCase, runs the full suite with code coverage, and generates all configured reports. Returns <code>matlab.unittest.TestResult</code> array.</td>
+            </tr>
+            <tr>
+                <td><code>runModelsOnly(config)</code></td>
+                <td>Runs only model simulation tests (TestModelSimulation).</td>
+            </tr>
+            <tr>
+                <td><code>runWorkflowsOnly(config)</code></td>
+                <td>Runs only workflow script tests (TestScriptExecution).</td>
+            </tr>
+            <tr>
+                <td><code>runCustomOnly(config)</code></td>
+                <td>Runs only custom TestCase files and/or directories specified in <code>config.CustomTests</code>.</td>
+            </tr>
+            <tr>
+                <td><code>getCodeAnalyzerPaths()</code></td>
+                <td>Returns output paths (<code>.mat</code> and <code>.sarif</code>) for Code Analyzer results.</td>
+            </tr>
+            <tr>
+                <td><code>dryRun(config)</code></td>
+                <td>Previews which files would be tested without executing any tests.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Syntax</h3>
+    <pre><code>results = TestExecutor.runAll(config);
+results = TestExecutor.runModelsOnly(config);
+results = TestExecutor.runWorkflowsOnly(config);
+results = TestExecutor.runCustomOnly(config);
+paths   = TestExecutor.getCodeAnalyzerPaths();
+TestExecutor.dryRun(config);</code></pre>
+
+    <h3>Input</h3>
+    <dl>
+        <dt>config</dt>
+        <dd>Configuration struct returned by any <code>testConfig()</code> function. Contains fields: <code>Models</code>, <code>Workflows</code>, <code>CodeCoverage</code>, <code>Reports</code>, <code>CustomTests</code>, <code>SuppressedWarnings</code>.</dd>
+    </dl>
+
+    <!-- ============================================================ -->
+    <h2 id="project-smoke-tests">ProjectSmokeTests</h2>
+    <p><code>Test/Framework/ProjectSmokeTests.m</code></p>
+    <p>
+        Parameterized <code>matlab.unittest.TestCase</code> class that provides two smoke test methods.
+        Parameters are injected externally by <code>TestExecutor</code> using <code>Parameter.fromData</code>.
+    </p>
+
+    <h3>TestClassSetup Methods</h3>
+    <table>
+        <thead>
+            <tr><th>Method</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>setupWorkingFolder</code></td>
+                <td>Applies <code>WorkingFolderFixture</code> so each test runs in an isolated temporary directory.</td>
+            </tr>
+            <tr>
+                <td><code>suppressConfiguredWarnings</code></td>
+                <td>Reads warning IDs from <code>config.SuppressedWarnings</code> (via appdata bridge) and applies <code>SuppressedWarningsFixture</code> for all listed IDs.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Test Methods</h3>
+    <table>
+        <thead>
+            <tr><th>Method</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>TestModelSimulation(modelName)</code></td>
+                <td>Loads the specified Simulink model via <code>load_system()</code> and simulates it via <code>sim()</code>. Passes if simulation completes without error.</td>
+            </tr>
+            <tr>
+                <td><code>TestScriptExecution(scriptName)</code></td>
+                <td>Executes the specified script in the base workspace inside <code>verifyWarningFree()</code>. Passes if the script completes without warnings or errors.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Test Parameters</h3>
+    <dl>
+        <dt>modelName</dt>
+        <dd>Cell array of model file names (e.g., <code>{'model1.slx', 'model2.slx'}</code>). Populated externally.</dd>
+        <dt>scriptName</dt>
+        <dd>Cell array of script file names (e.g., <code>{'workflow1.mlx'}</code>). Populated externally.</dd>
+    </dl>
+
+    <p>
+        <strong>Note:</strong> The default value <code>{"__skip__"}</code> is used as a sentinel. Tests use
+        <code>assumeNotEqual</code> to gracefully skip when no targets are parameterized.
+    </p>
+
+    <!-- ============================================================ -->
+    <h2 id="test-file-discovery">TestFileDiscovery</h2>
+    <p><code>Test/Framework/TestFileDiscovery.m</code></p>
+    <p>
+        File discovery engine using a two-phase inclusion/exclusion approach.
+        Called by <code>TestExecutor</code> to locate models, scripts, and coverage source files.
+    </p>
+
+    <h3>Static Methods</h3>
+    <table>
+        <thead>
+            <tr><th>Method</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>find(Name,Value)</code></td>
+                <td>Discovers files matching the given search patterns, file types, and filters. Returns a deduplicated, filtered string array of absolute file paths.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Discovery Pipeline</h3>
+    <ol>
+        <li><strong>Phase 1 (Inclusion):</strong>
+            <ul>
+                <li>Searches each directory in <code>IncludeDirectories</code> recursively for files matching <code>FileTypes</code>.</li>
+                <li>Adds each entry from <code>IncludeFiles</code> (resolved relative to project root).</li>
+                <li>Deduplicates the combined list via <code>unique()</code>.</li>
+            </ul>
+        </li>
+        <li><strong>Phase 2 (Exclusion):</strong>
+            <ul>
+                <li><code>ExcludeFunctionFiles</code>: Removes <code>.m</code> files that define functions.</li>
+                <li><code>ExcludeDirectories</code>: Removes files under specified directories.</li>
+                <li><code>ExcludeFiles</code>: Removes files whose relative path matches the exclude list.</li>
+            </ul>
+        </li>
+    </ol>
+
+    <p>
+        <strong>Warning:</strong> Exclusion always wins over inclusion. A file present in both <code>IncludeFiles</code>
+        and <code>ExcludeFiles</code> will be excluded from the final list.
+    </p>
+
+    <h3>Name-Value Arguments</h3>
+    <table>
+        <thead>
+            <tr><th>Name</th><th>Type</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><code>ProjectRoot</code></td><td>string</td><td>Absolute path to the project root. (Required)</td></tr>
+            <tr><td><code>IncludeDirectories</code></td><td>string array</td><td>Directories relative to the project root to search. Always searched recursively. (Required)</td></tr>
+            <tr><td><code>FileTypes</code></td><td>string array</td><td>File type labels: <code>"M-file"</code>, <code>"SLX-file"</code>, <code>"MDL-file"</code>, <code>"MLX-file"</code>. (Required)</td></tr>
+            <tr><td><code>IncludeFiles</code></td><td>string array</td><td>Specific file paths (relative) to merge into candidate list. Default: <code>string.empty</code></td></tr>
+            <tr><td><code>ExcludeDirectories</code></td><td>string array</td><td>Directory paths relative to project root to exclude. Default: <code>string.empty</code></td></tr>
+            <tr><td><code>ExcludeFiles</code></td><td>string array</td><td>File paths relative to project root to exclude. Default: <code>string.empty</code></td></tr>
+            <tr><td><code>ExcludeFunctionFiles</code></td><td>logical</td><td>Exclude <code>.m</code> function files. Default: <code>false</code>. Set automatically by the framework.</td></tr>
+            <tr><td><code>DisplayList</code></td><td>logical</td><td>Print discovered files to command window. Default: <code>false</code></td></tr>
+        </tbody>
+    </table>
+
+    <!-- ============================================================ -->
+    <h2 id="test-report-builder">TestReportBuilder</h2>
+    <p><code>Test/Framework/TestReportBuilder.m</code></p>
+    <p>
+        Factory class that creates and configures test runner plugins for report generation.
+    </p>
+
+    <h3>Static Methods</h3>
+    <table>
+        <thead>
+            <tr><th>Method</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>addJUnitPlugin(outputFolder, releaseStr)</code></td>
+                <td>Creates an <code>XMLPlugin</code> producing JUnit format.</td>
+            </tr>
+            <tr>
+                <td><code>addHTMLReportPlugin(outputFolder, releaseStr)</code></td>
+                <td>Creates a <code>TestReportPlugin</code> producing interactive HTML.</td>
+            </tr>
+            <tr>
+                <td><code>addCoveragePlugin(fileList, outputFolder, releaseStr)</code></td>
+                <td>Creates a <code>CodeCoveragePlugin</code> measuring coverage on the given source files.</td>
+            </tr>
+            <tr>
+                <td><code>getCodeIssuesPath(outputFolder, releaseStr)</code></td>
+                <td>Returns output paths for Code Analyzer results: <code>[.mat, .sarif]</code></td>
+            </tr>
+            <tr>
+                <td><code>ensureFolder(folderPath)</code></td>
+                <td>Creates the output folder if it does not exist.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- ============================================================ -->
+    <h2 id="exclude-by-directory">excludeByDirectory</h2>
+    <p><code>Test/Framework/Utilities/excludeByDirectory.m</code></p>
+    <p>
+        Removes file paths that reside under specified directories (relative to project root).
+        Used during Phase 2 (Exclusion) of the discovery pipeline.
+    </p>
+
+    <h3>Syntax</h3>
+    <pre><code>filtered = excludeByDirectory(paths, directories, projectRoot);</code></pre>
+
+    <h3>Inputs</h3>
+    <table>
+        <thead>
+            <tr><th>Input</th><th>Type</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><code>paths</code></td><td>string array</td><td>Absolute file paths to filter.</td></tr>
+            <tr><td><code>directories</code></td><td>string array</td><td>Directory paths relative to project root to exclude.</td></tr>
+            <tr><td><code>projectRoot</code></td><td>string</td><td>Absolute path to the project root.</td></tr>
+        </tbody>
+    </table>
+
+    <p>
+        <strong>Note:</strong> Each directory entry is resolved to <code>fullfile(projectRoot, dir)</code>.
+        A file is excluded if its path starts with the resolved directory path.
+    </p>
+
+    <!-- ============================================================ -->
+    <h2 id="is-function-file">isFunctionFile</h2>
+    <p><code>Test/Framework/Utilities/isFunctionFile.m</code></p>
+    <p>
+        Determines if a <code>.m</code> file defines a function by reading the first
+        non-comment, non-blank line. Returns <code>true</code> for functions, <code>false</code>
+        for scripts, classdefs, or unreadable files.
+    </p>
+
+    <h3>Syntax</h3>
+    <pre><code>isFunc = isFunctionFile(file);</code></pre>
+
+    <!-- ============================================================ -->
+    <h2 id="test-configs">testConfig Files</h2>
+    <p>
+        <code>Test/testConfig_&lt;1&gt;.m</code> &nbsp;
+        <code>Test/testConfig_&lt;2&gt;.m</code>
+    </p>
+    <p>
+        Configuration functions that return a struct defining a self-contained test subset.
+        Each file defines what to test, what to ignore, and where to write reports.
+    </p>
+    <p>See <a href="ConfigurationGuide.html">Configuration Guide</a> for full details.</p>
+
+    <hr>
+    <p>
+        <strong>See Also:</strong>
+        <a href="ConfigurationGuide.html">Configuration Guide</a> |
+        <a href="GettingStarted.html">Getting Started</a>
+    </p>
+
+    <div class="footer">
+        <p>Copyright 2026 The MathWorks, Inc.</p>
+    </div>
+</main>
+
+</body>
+</html>

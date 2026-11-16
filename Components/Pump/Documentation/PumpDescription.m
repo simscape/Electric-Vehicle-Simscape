@@ -19,15 +19,29 @@
 open_system('Pump')
 
 %% Ports
-% *Inputs*
 %
-% * *Pump speed command* - Shaft speed from the PumpDriver.
-% * *Coolant inlet port* - Thermal-liquid inlet from the coolant loop.
-%
-% *Outputs*
-%
-% * *Coolant outlet port* - Pressurized coolant flow to downstream components.
-% * *Pump power* - Mechanical power consumed.
+% <html>
+% <h3>Input Bus &mdash; <code>s</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>BatSt</td><td>Battery status signal</td></tr>
+% <tr><td>cmdPump</td><td>Pump speed command</td></tr>
+% </table>
+% <h3>Output Bus &mdash; <code>m</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>PumpCurr</td><td>Pump current draw</td></tr>
+% <tr><td>LowVolt</td><td>Low-voltage bus measurement</td></tr>
+% <tr><td>energy</td><td>Cumulative energy consumed</td></tr>
+% </table>
+% <h3>Physical Ports</h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Port</th><th>Domain</th><th>Description</th></tr>
+% <tr><td>LV</td><td>Electrical</td><td>Low-voltage bus connection</td></tr>
+% <tr><td>A</td><td>Thermal liquid</td><td>Coolant port</td></tr>
+% <tr><td>B</td><td>Thermal liquid</td><td>Coolant port</td></tr>
+% </table>
+% </html>
 
 %% Workflows
 % The Pump block is part of the coolant loop in the *VehicleElectroThermal*

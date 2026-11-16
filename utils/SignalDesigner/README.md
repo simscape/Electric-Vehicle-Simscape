@@ -52,18 +52,11 @@ of `buildTrace` function.
 To use this tool, copy the entire contents of
 `SignalDesigner` folder to the folder of your choice,
 set MATLAB path or Project path to it,
-and open `SignalSourceBlodckLibrary.mdl` in MATLAB.
+and open `SignalSourceBlockLibrary.mdl` in MATLAB.
 
-Another way to use this tool is to
-include the Signal Designer project (`SignalDesigner.prj`)
-in your project as MATLAB referenced project.
-
-If you use Git,
-you can include this tool in your project as
-MATLAB referenced project and Git submodule.
-It allows you to track the updates in
-this tools' git repository and
-lets you use git to update the tool
-in your project repository.
+This repository includes Signal Designer directly. It does not include a
+standalone `SignalDesigner.prj` referenced project. To reuse the tool in
+another project, copy this folder and add it to the MATLAB path or project
+path.
 
 _Copyright 2022-2023 The MathWorks, Inc._

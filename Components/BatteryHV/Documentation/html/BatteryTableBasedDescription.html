@@ -7,9 +7,9 @@ This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
       -->
 <title>BatteryTableBased</title>
-<meta name="generator" content="MATLAB 26.1">
+<meta name="generator" content="MATLAB 25.2">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2026-04-21">
+<meta name="DC.date" content="2026-05-06">
 <meta name="DC.source" content="BatteryTableBasedDescription.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
@@ -114,41 +114,34 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <p>
 <b>Thermal Coupling:</b> Yes (lookup-table-driven, coolant port)</p>
 <h2 id="2">Open Model</h2>
-<pre class="codeinput">open_system(<span class="string">'BatteryTableBased'</span>)
-</pre>
-<img vspace="5" hspace="5" src="images/BatteryTableBasedDescription_01.png" alt=""> <h2 id="3">Ports</h2>
+<img vspace="5" hspace="5" src="images/BatteryTableBasedDescription_01.png" alt=""> <img vspace="5" hspace="5" src="images/BatteryTableBasedDescription_02.png" alt=""> <h2 id="3">Ports</h2>
 <p>
-<b>Inputs</b>
+<h3>Input Bus &mdash; <code>s</code></h3>
+<table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+<tr><th>Signal</th><th>Description</th></tr>
+<tr><td>RelayPos</td><td>Positive relay command</td></tr>
+<tr><td>RelayNeg</td><td>Negative relay command</td></tr>
+</table>
+<h3>Output Bus &mdash; <code>m</code></h3>
+<table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+<tr><th>Signal</th><th>Description</th></tr>
+<tr><td>BattSens.SoC</td><td>State of charge</td></tr>
+<tr><td>BattSens.Current</td><td>Pack current</td></tr>
+<tr><td>BattSens.Cellvolt</td><td>Cell voltage</td></tr>
+<tr><td>BattSens.ParVolt</td><td>Parallel string voltage</td></tr>
+<tr><td>BattSens.temp</td><td>Pack temperature</td></tr>
+<tr><td>CoolTp</td><td>Coolant temperature</td></tr>
+</table>
+<h3>Physical Ports</h3>
+<table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+<tr><th>Port</th><th>Domain</th><th>Description</th></tr>
+<tr><td>HV</td><td>Electrical</td><td>High-voltage bus connection</td></tr>
+<tr><td>A</td><td>Thermal liquid</td><td>Coolant port (inlet)</td></tr>
+<tr><td>B</td><td>Thermal liquid</td><td>Coolant port (outlet)</td></tr>
+</table>
 </p>
-<div>
-<ul>
-<li>
-<b>Positive relay command</b> - HV bus positive connection.</li>
-<li>
-<b>Negative relay command</b> - HV bus negative connection.</li>
-<li>
-<b>Coolant port</b> - Thermal-liquid interface for coolant and heater coupling.</li>
-</ul>
-</div>
-<p>
-<b>Outputs</b>
-</p>
-<div>
-<ul>
-<li>
-<b>Voltage</b> - Pack terminal voltage.</li>
-<li>
-<b>Current</b> - Pack current.</li>
-<li>
-<b>SOC</b> - State of charge.</li>
-<li>
-<b>Cell Voltage</b> - Individual cell voltage.</li>
-<li>
-<b>Temperature</b> - Pack temperature from thermal dynamics.</li>
-</ul>
-</div>
 <h2 id="4">Workflows</h2>
-<p>BatteryTableBased is the <b>default battery fidelity</b> in the assembled BEV system model (<tt>BEVsystemModel.slx</tt>). It is used by <tt>BEVSystemModelParams.m</tt> when running range estimation (NEDC, WLTC, EPA) and battery sizing workflows.</p>
+<p>BatteryTableBased is the <b>default battery fidelity</b> in the assembled BEV system model (<tt>BEVsystemModel.slx</tt>). It is used in range estimation (NEDC, WLTC, EPA) and battery sizing workflows.</p>
 <h2 id="5">Parameters</h2>
 <p>
 <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
@@ -177,7 +170,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 </ul>
 </div>
 <p class="footer">Copyright 2022 - 2026 The MathWorks, Inc.<br>
-<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2026a</a>
+<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2025b</a>
 <br>
 </p>
 </div>
@@ -205,25 +198,37 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 open_system('BatteryTableBased')
 
 %% Ports
-% *Inputs*
 %
-% * *Positive relay command* - HV bus positive connection.
-% * *Negative relay command* - HV bus negative connection.
-% * *Coolant port* - Thermal-liquid interface for coolant and heater coupling.
-%
-% *Outputs*
-%
-% * *Voltage* - Pack terminal voltage.
-% * *Current* - Pack current.
-% * *SOC* - State of charge.
-% * *Cell Voltage* - Individual cell voltage.
-% * *Temperature* - Pack temperature from thermal dynamics.
+% <html>
+% <h3>Input Bus &mdash; <code>s</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>RelayPos</td><td>Positive relay command</td></tr>
+% <tr><td>RelayNeg</td><td>Negative relay command</td></tr>
+% </table>
+% <h3>Output Bus &mdash; <code>m</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>BattSens.SoC</td><td>State of charge</td></tr>
+% <tr><td>BattSens.Current</td><td>Pack current</td></tr>
+% <tr><td>BattSens.Cellvolt</td><td>Cell voltage</td></tr>
+% <tr><td>BattSens.ParVolt</td><td>Parallel string voltage</td></tr>
+% <tr><td>BattSens.temp</td><td>Pack temperature</td></tr>
+% <tr><td>CoolTp</td><td>Coolant temperature</td></tr>
+% </table>
+% <h3>Physical Ports</h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Port</th><th>Domain</th><th>Description</th></tr>
+% <tr><td>HV</td><td>Electrical</td><td>High-voltage bus connection</td></tr>
+% <tr><td>A</td><td>Thermal liquid</td><td>Coolant port (inlet)</td></tr>
+% <tr><td>B</td><td>Thermal liquid</td><td>Coolant port (outlet)</td></tr>
+% </table>
+% </html>
 
 %% Workflows
 % BatteryTableBased is the *default battery fidelity* in the assembled
-% BEV system model (|BEVsystemModel.slx|). It is used by
-% |BEVSystemModelParams.m| when running range estimation (NEDC, WLTC, EPA)
-% and battery sizing workflows.
+% BEV system model (|BEVsystemModel.slx|). It is used in range estimation
+% (NEDC, WLTC, EPA) and battery sizing workflows.
 
 %% Parameters
 %

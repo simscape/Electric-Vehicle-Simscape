@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Optimize Gear Ratios for Vehicle Launch &mdash; Electric Vehicle Design</title>
+  <link rel="stylesheet" href="assets/styles.css?v=20261028-2">
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<header class="help-header"><div class="help-header-inner"><a class="help-brand" href="ElectricVehicleDesignOverview.html">MATLAB Help Center<small>Electric Vehicle Design with Simscape</small></a></div></header>
+<div class="doc-shell">
+  <aside class="category-nav"><nav aria-label="Page navigation">
+    <ul class="nav-trail"><li><a href="ElectricVehicleDesignOverview.html">Documentation Home</a></li><li><a href="examples.html">Examples</a></li></ul>
+    <div class="nav-siblings-label">Driveline Workflows</div>
+    <ul class="nav-siblings"><li><a href="workflow-driveline-order-map.html">Generate Frequency Order Map</a></li><li aria-current="page"><span>Optimize Vehicle Launch</span></li></ul>
+    <div class="on-page"><div class="on-page-label">On this page</div><ul class="on-page-list">
+      <li><a href="#quick-setup">Quick Setup</a></li>
+      <li><a href="#key-models-and-components">Key Models and Components</a></li>
+      <li><a href="#expected-results">Expected Results</a></li>
+      <li><a href="#supporting-files">Supporting Files</a></li>
+      <li><a href="#checks-before-using-results">Checks Before Using Results</a></li>
+      <li><a href="#see-also">See Also</a></li>
+    </ul></div>
+    <div class="nav-browse"><div class="on-page-label">Category</div><ul class="nav-browse-list"><li><a href="components.html">Components</a></li><li><a href="vehicle-range.html">Vehicle Models</a></li><li><a href="project-builder.html">Apps &amp; Utilities</a></li></ul></div>
+  </nav></aside>
+  <main class="doc-main" id="main-content">
+    <article class="quick-workflow-page">
+      <header class="product-intro">
+        <h1>Optimize Gear Ratios for Vehicle Launch</h1>
+        <div class="action-row">
+          <a class="action" href="matlab:open_system(fullfile(currentProject().RootFolder,'Workflow','Driveline','DrivelineNVH','Model','mechanicalDLTorsionOrderMap.slx'))">Open Launch Model</a>
+          <a class="action secondary" href="matlab:edit(fullfile(currentProject().RootFolder,'Workflow','Driveline','DrivelineNVH','optimizeVehicleLaunch.mlx'))">Open Live Script</a>
+        </div>
+        <div class="intro-layout">
+<div class="intro-body">
+            <p class="example-intro">A high launch torque improves acceleration but can amplify flexible-driveline oscillation and vehicle jerk. This workflow selects three transmission ratios that balance launch acceleration with ride comfort.</p>
+            <p class="example-intro">The workflow builds target velocity and acceleration profiles, estimates the required traction force and motor torque, evaluates low, medium, and high torque scenarios, and uses surrogate optimization to minimize a composite jerk-and-acceleration objective.</p>
+          </div>
+        </div>
+      </header>
+
+      <section id="setup">
+        <h2 id="quick-setup">Quick Setup</h2>
+        <ol class="quick-steps quick-steps--cols">
+          <li><div class="step-grid"><div class="step-action"><strong>Open the workflow Live Script</strong><a class="action secondary" href="matlab:edit(fullfile(currentProject().RootFolder,'Workflow','Driveline','DrivelineNVH','optimizeVehicleLaunch.mlx'))">Open Live Script</a></div><p class="step-detail">Open <code>optimizeVehicleLaunch.mlx</code> to configure the launch target, vehicle parameters, ratio bounds, objective weights, and simulation budget.</p></div></li>
+          <li><div class="step-grid"><div class="step-action"><strong>Define launch performance</strong><a class="action secondary" href="matlab:edit(fullfile(currentProject().RootFolder,'Workflow','Driveline','DrivelineNVH','ScriptData','generateVelocityProfile.m'))">Open Velocity-Profile Function</a></div><p class="step-detail">Run <code>generateVelocityProfile</code> to create the target velocity and acceleration and calculate the required traction and motor torque.</p></div></li>
+          <li><div class="step-grid"><div class="step-action"><strong>Prepare motor torque scenarios</strong><a class="action secondary" href="matlab:edit(fullfile(currentProject().RootFolder,'Workflow','Driveline','DrivelineNVH','ScriptData','calculateAndExtendMotorTRQ.m'))">Open Torque-Profile Function</a></div><p class="step-detail">Use <code>extendedVehicleLaunchTorque.mat</code>, or regenerate the torque profiles when the motor or inverter parameters change.</p></div></li>
+          <li><div class="step-grid"><div class="step-action"><strong>Optimize and compare launch response</strong><a class="action secondary" href="matlab:edit(fullfile(currentProject().RootFolder,'Workflow','Driveline','DrivelineNVH','ScriptData','runMultiLevelSurrogateOptimisation.m'))">Open Optimization Function</a></div><p class="step-detail">Optimize the transmission ratios, then use <code>simulateOptlaunch</code> to compare the baseline and optimized launch responses.</p></div></li>
+        </ol>
+      </section>
+
+      <section id="uses">
+        <h2 id="key-models-and-components">Key Models and Components</h2>
+        <div class="table-scroll"><table><thead><tr><th scope="col">Model or component</th><th scope="col">Role</th><th scope="col">Reference</th></tr></thead><tbody>
+          <tr><td>Flexible Driveline</td><td>Calculates vehicle force and launch response for each torque and ratio case.</td><td><a class="action secondary" href="component-driveline.html">View component</a></td></tr>
+          <tr><td>Surrogate Optimization</td><td>Optimizes three transmission ratios using jerk and mean acceleration.</td><td><a class="action secondary" href="matlab:edit(fullfile(currentProject().RootFolder,'Workflow','Driveline','DrivelineNVH','ScriptData','runMultiLevelSurrogateOptimisation.m'))">Open function</a></td></tr>
+        </tbody></table></div>
+      </section>
+
+
+      <section id="results">
+        <h2 id="expected-results">Expected Results</h2>
+        <div class="result-layout">
+          <figure class="result-preview"><img src="Image/VehicleLaunchJerkComparison.png" alt="Baseline and optimized vehicle jerk during launch"><figcaption>Baseline and optimized vehicle jerk during the launch maneuver.</figcaption></figure>
+          <div><p>The workflow produces these result types:</p><ul class="result-types">
+            <li>Required traction force and motor torque scenarios</li>
+            <li>Optimized motor, transmission, and final-drive ratios</li>
+            <li>Baseline and optimized jerk, acceleration, and vehicle-speed comparisons</li>
+          </ul></div>
+        </div>
+      </section>
+
+      <section id="files">
+        <h2 id="supporting-files">Supporting Files</h2>
+        <table><thead><tr><th>Purpose</th><th>Artifact</th><th>Action</th></tr></thead><tbody>
+          <tr><td>Main workflow</td><td><code>optimizeVehicleLaunch.mlx</code></td><td><a class="action secondary" href="matlab:edit(fullfile(currentProject().RootFolder,'Workflow','Driveline','DrivelineNVH','optimizeVehicleLaunch.mlx'))">Open Live Script</a></td></tr>
+          <tr><td>Mechanical launch model</td><td><code>mechanicalDLTorsionOrderMap.slx</code></td><td><a class="action secondary" href="matlab:open_system(fullfile(currentProject().RootFolder,'Workflow','Driveline','DrivelineNVH','Model','mechanicalDLTorsionOrderMap.slx'))">Open Model</a></td></tr>
+          <tr><td>Precomputed launch torque</td><td><code>extendedVehicleLaunchTorque.mat</code></td><td><a class="action secondary" href="matlab:load(fullfile(currentProject().RootFolder,'Workflow','Driveline','DrivelineNVH','ScriptData','extendedVehicleLaunchTorque.mat'))">Load Data</a></td></tr>
+          <tr><td>Velocity and acceleration profiles</td><td><code>generateVelocityProfile.m</code></td><td><a class="action secondary" href="matlab:edit(fullfile(currentProject().RootFolder,'Workflow','Driveline','DrivelineNVH','ScriptData','generateVelocityProfile.m'))">Open File</a></td></tr>
+          <tr><td>Multilevel optimization</td><td><code>runMultiLevelSurrogateOptimisation.m</code></td><td><a class="action secondary" href="matlab:edit(fullfile(currentProject().RootFolder,'Workflow','Driveline','DrivelineNVH','ScriptData','runMultiLevelSurrogateOptimisation.m'))">Open File</a></td></tr>
+          <tr><td>Baseline comparison</td><td><code>simulateOptlaunch.m</code></td><td><a class="action secondary" href="matlab:edit(fullfile(currentProject().RootFolder,'Workflow','Driveline','DrivelineNVH','ScriptData','simulateOptlaunch.m'))">Open File</a></td></tr>
+        </tbody></table>
+      </section>
+
+      <section id="checks">
+        <h2 id="checks-before-using-results">Checks Before Using Results</h2>
+        <ul>
+          <li>Regenerate the torque scenarios after changing the motor, inverter, or launch target.</li>
+          <li>Keep the same torque scenarios, stop time, and solver settings when comparing baseline and optimized ratios.</li>
+          <li>Confirm each lower bound is below its corresponding upper bound and the baseline lies within the bounds.</li>
+          <li>Review the jerk and acceleration terms separately before accepting the composite objective.</li>
+        </ul>
+      </section>
+
+      <section id="see-also"><h2>See Also</h2><ul><li><a href="workflow-driveline-order-map.html">Generate Frequency Order Map for BEV Motor Driveline</a></li><li><a href="component-driveline.html">Driveline</a></li><li><a href="examples.html#driveline-workflows">Driveline Workflows</a></li></ul></section>
+    </article>
+  </main>
+</div>
+<footer class="site-footer"><div class="site-footer-inner"><span>Copyright 2026 The MathWorks, Inc.</span></div></footer>
+<script src="assets/app.js?v=20260930-6"></script>
+</body>
+</html>

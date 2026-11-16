@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="150" height="50" viewBox="0 0 150 50" role="img" aria-label="R2025b">
+  <style>
+    .r,.b{fill:#e8720c;font-weight:700}
+    .y{fill:#6b7176;font-weight:400}
+    text{font-family:Arial,Helvetica,sans-serif;font-size:30px}
+  </style>
+  <text x="150" y="36" text-anchor="end">
+    <tspan class="r">R</tspan><tspan class="y">2025</tspan><tspan class="b">b</tspan>
+  </text>
+</svg>

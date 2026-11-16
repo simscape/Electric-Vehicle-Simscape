@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 820" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif">
+  <!-- Definitions -->
+  <defs>
+    <marker id="mw-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#1a3a5c"/>
+    </marker>
+    <marker id="mw-arrow-int" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+      <polygon points="0 0, 7 2.5, 0 5" fill="#5c7a99"/>
+    </marker>
+  </defs>
+
+  <!-- Full background -->
+  <rect width="1600" height="820" fill="#ffffff" rx="6"/>
+
+  <!-- ================================================================ -->
+  <!-- COLUMN 1: INPUTS                                                  -->
+  <!-- Boxes: y=90,220,350,480  height=110  centers: 145,275,405,535    -->
+  <!-- ================================================================ -->
+  <text x="230" y="55" text-anchor="middle" font-size="28" font-weight="bold" fill="#1a3a5c" letter-spacing="1.5">INPUTS</text>
+
+  <!-- Simulink Models -->
+  <rect x="30" y="90" width="400" height="110" rx="6" fill="#ffffff" stroke="#0076a8" stroke-width="2.2"/>
+  <rect x="30" y="90" width="400" height="32" rx="6" fill="#0076a8"/>
+  <rect x="30" y="116" width="400" height="6" fill="#0076a8"/>
+  <text x="230" y="113" text-anchor="middle" font-size="19" font-weight="bold" fill="#ffffff">Simulink Models</text>
+  <text x="230" y="152" text-anchor="middle" font-size="17" font-weight="600" fill="#333">config.Models.IncludeDirectories</text>
+  <text x="230" y="180" text-anchor="middle" font-size="16" fill="#555">.slx, .mdl files</text>
+
+  <!-- Workflow Scripts -->
+  <rect x="30" y="220" width="400" height="110" rx="6" fill="#ffffff" stroke="#77ac30" stroke-width="2.2"/>
+  <rect x="30" y="220" width="400" height="32" rx="6" fill="#77ac30"/>
+  <rect x="30" y="246" width="400" height="6" fill="#77ac30"/>
+  <text x="230" y="243" text-anchor="middle" font-size="19" font-weight="bold" fill="#ffffff">Workflow Scripts</text>
+  <text x="230" y="282" text-anchor="middle" font-size="17" font-weight="600" fill="#333">config.Workflows.IncludeDirectories</text>
+  <text x="230" y="310" text-anchor="middle" font-size="16" fill="#555">.m, .mlx scripts (functions excluded)</text>
+
+  <!-- Custom Tests -->
+  <rect x="30" y="350" width="400" height="110" rx="6" fill="#ffffff" stroke="#d95319" stroke-width="2.2"/>
+  <rect x="30" y="350" width="400" height="32" rx="6" fill="#d95319"/>
+  <rect x="30" y="376" width="400" height="6" fill="#d95319"/>
+  <text x="230" y="373" text-anchor="middle" font-size="19" font-weight="bold" fill="#ffffff">Custom Tests</text>
+  <text x="230" y="412" text-anchor="middle" font-size="17" font-weight="600" fill="#333">config.CustomTests.Files / Directories</text>
+  <text x="230" y="440" text-anchor="middle" font-size="16" fill="#555">matlab.unittest.TestCase classes</text>
+
+  <!-- Source Code (Coverage) -->
+  <rect x="30" y="480" width="400" height="110" rx="6" fill="#ffffff" stroke="#7e2f8e" stroke-width="2.2"/>
+  <rect x="30" y="480" width="400" height="32" rx="6" fill="#7e2f8e"/>
+  <rect x="30" y="506" width="400" height="6" fill="#7e2f8e"/>
+  <text x="230" y="503" text-anchor="middle" font-size="19" font-weight="bold" fill="#ffffff">Source Code (Coverage)</text>
+  <text x="230" y="542" text-anchor="middle" font-size="17" font-weight="600" fill="#333">config.CodeCoverage.IncludeDirectories</text>
+  <text x="230" y="570" text-anchor="middle" font-size="16" fill="#555">Production .m/.mlx (excl. Test/)</text>
+
+  <!-- ================================================================ -->
+  <!-- CONVERGING ARROW                                                  -->
+  <!-- Stubs from box centers: y=145, 275, 405, 535                     -->
+  <!-- ================================================================ -->
+  <line x1="430" y1="145" x2="470" y2="145" stroke="#1a3a5c" stroke-width="1.8"/>
+  <line x1="430" y1="275" x2="470" y2="275" stroke="#1a3a5c" stroke-width="1.8"/>
+  <line x1="430" y1="405" x2="470" y2="405" stroke="#1a3a5c" stroke-width="1.8"/>
+  <line x1="430" y1="535" x2="470" y2="535" stroke="#1a3a5c" stroke-width="1.8"/>
+
+  <!-- Vertical collector line -->
+  <line x1="470" y1="145" x2="470" y2="535" stroke="#1a3a5c" stroke-width="1.8"/>
+
+  <!-- Single merged arrow into framework box (midpoint y=340) -->
+  <line x1="470" y1="340" x2="555" y2="340" stroke="#1a3a5c" stroke-width="1.8" marker-end="url(#mw-arrow)"/>
+
+  <!-- ================================================================ -->
+  <!-- COLUMN 2: TEST FRAMEWORK BOX                                      -->
+  <!-- Label ABOVE the box                                              -->
+  <!-- ================================================================ -->
+  <text x="800" y="55" text-anchor="middle" font-size="28" font-weight="bold" fill="#1a3a5c" letter-spacing="1.5">TEST FRAMEWORK</text>
+  <rect x="555" y="78" width="490" height="620" rx="8" fill="#f4f7fa" stroke="#1a3a5c" stroke-width="3"/>
+
+  <!-- testConfig.m -->
+  <rect x="580" y="100" width="440" height="80" rx="6" fill="#fff8e1" stroke="#b8860b" stroke-width="2"/>
+  <text x="800" y="137" text-anchor="middle" font-size="22" font-weight="bold" fill="#7a5a00">testConfig.m</text>
+  <text x="800" y="166" text-anchor="middle" font-size="17" font-weight="600" fill="#555">Two-phase discovery: Include → Exclude</text>
+
+  <!-- TestFileDiscovery -->
+  <rect x="595" y="212" width="410" height="60" rx="5" fill="#ffffff" stroke="#5c7a99" stroke-width="1.6"/>
+  <text x="800" y="249" text-anchor="middle" font-size="20" font-weight="600" fill="#1a3a5c">TestFileDiscovery.m</text>
+
+  <!-- TestExecutor -->
+  <rect x="595" y="300" width="410" height="60" rx="5" fill="#ffffff" stroke="#5c7a99" stroke-width="1.6"/>
+  <text x="800" y="337" text-anchor="middle" font-size="20" font-weight="600" fill="#1a3a5c">TestExecutor.m</text>
+
+  <!-- ProjectSmokeTests -->
+  <rect x="595" y="388" width="410" height="60" rx="5" fill="#ffffff" stroke="#5c7a99" stroke-width="1.6"/>
+  <text x="800" y="425" text-anchor="middle" font-size="20" font-weight="600" fill="#1a3a5c">ProjectSmokeTests.m</text>
+
+  <!-- TestReportBuilder -->
+  <rect x="595" y="476" width="410" height="60" rx="5" fill="#ffffff" stroke="#5c7a99" stroke-width="1.6"/>
+  <text x="800" y="513" text-anchor="middle" font-size="20" font-weight="600" fill="#1a3a5c">TestReportBuilder.m</text>
+
+  <!-- Utilities -->
+  <rect x="595" y="564" width="410" height="60" rx="5" fill="#f4f7fa" stroke="#8fa8bf" stroke-width="1.4" stroke-dasharray="6,4"/>
+  <text x="800" y="592" text-anchor="middle" font-size="18" font-weight="600" fill="#5c7a99">Utilities</text>
+  <text x="800" y="615" text-anchor="middle" font-size="15" fill="#8fa8bf">excludeByDirectory, isFunctionFile, resolveProjectPaths</text>
+
+  <!-- Internal vertical arrows -->
+  <line x1="800" y1="180" x2="800" y2="206" stroke="#5c7a99" stroke-width="1.5" marker-end="url(#mw-arrow-int)"/>
+  <line x1="800" y1="272" x2="800" y2="294" stroke="#5c7a99" stroke-width="1.5" marker-end="url(#mw-arrow-int)"/>
+  <line x1="800" y1="360" x2="800" y2="382" stroke="#5c7a99" stroke-width="1.5" marker-end="url(#mw-arrow-int)"/>
+  <line x1="800" y1="448" x2="800" y2="470" stroke="#5c7a99" stroke-width="1.5" marker-end="url(#mw-arrow-int)"/>
+
+  <!-- ================================================================ -->
+  <!-- DIVERGING ARROW                                                   -->
+  <!-- Output boxes: y=130,290,450  height=110  centers: 185,345,505    -->
+  <!-- ================================================================ -->
+  <!-- Single merged arrow out of framework box -->
+  <line x1="1045" y1="345" x2="1130" y2="345" stroke="#1a3a5c" stroke-width="1.8"/>
+
+  <!-- Vertical distributor line -->
+  <line x1="1130" y1="185" x2="1130" y2="505" stroke="#1a3a5c" stroke-width="1.8"/>
+
+  <!-- Horizontal stubs to each output box (aligned to box centers) -->
+  <line x1="1130" y1="185" x2="1170" y2="185" stroke="#1a3a5c" stroke-width="1.8" marker-end="url(#mw-arrow)"/>
+  <line x1="1130" y1="345" x2="1170" y2="345" stroke="#1a3a5c" stroke-width="1.8" marker-end="url(#mw-arrow)"/>
+  <line x1="1130" y1="505" x2="1170" y2="505" stroke="#1a3a5c" stroke-width="1.8" marker-end="url(#mw-arrow)"/>
+
+  <!-- ================================================================ -->
+  <!-- COLUMN 3: OUTPUTS                                                 -->
+  <!-- Boxes: y=130,290,450  height=110  centers: 185,345,505           -->
+  <!-- ================================================================ -->
+  <text x="1370" y="55" text-anchor="middle" font-size="28" font-weight="bold" fill="#1a3a5c" letter-spacing="1.5">OUTPUTS</text>
+
+  <!-- JUnit XML (center=185) -->
+  <rect x="1170" y="130" width="400" height="110" rx="6" fill="#ffffff" stroke="#1a3a5c" stroke-width="2.2"/>
+  <rect x="1170" y="130" width="400" height="32" rx="6" fill="#1a3a5c"/>
+  <rect x="1170" y="156" width="400" height="6" fill="#1a3a5c"/>
+  <text x="1370" y="153" text-anchor="middle" font-size="19" font-weight="bold" fill="#ffffff">JUnit XML</text>
+  <text x="1370" y="192" text-anchor="middle" font-size="17" font-weight="600" fill="#333">CI/CD pipeline results</text>
+  <text x="1370" y="220" text-anchor="middle" font-size="16" fill="#555">Machine-readable test outcomes</text>
+
+  <!-- HTML Test Report (center=345) -->
+  <rect x="1170" y="290" width="400" height="110" rx="6" fill="#ffffff" stroke="#1a3a5c" stroke-width="2.2"/>
+  <rect x="1170" y="290" width="400" height="32" rx="6" fill="#1a3a5c"/>
+  <rect x="1170" y="316" width="400" height="6" fill="#1a3a5c"/>
+  <text x="1370" y="313" text-anchor="middle" font-size="19" font-weight="bold" fill="#ffffff">HTML Test Report</text>
+  <text x="1370" y="352" text-anchor="middle" font-size="17" font-weight="600" fill="#333">Interactive test results</text>
+  <text x="1370" y="380" text-anchor="middle" font-size="16" fill="#555">Pass/fail per test point with details</text>
+
+  <!-- Code Coverage Report (center=505) -->
+  <rect x="1170" y="450" width="400" height="110" rx="6" fill="#ffffff" stroke="#1a3a5c" stroke-width="2.2"/>
+  <rect x="1170" y="450" width="400" height="32" rx="6" fill="#1a3a5c"/>
+  <rect x="1170" y="476" width="400" height="6" fill="#1a3a5c"/>
+  <text x="1370" y="473" text-anchor="middle" font-size="19" font-weight="bold" fill="#ffffff">Code Coverage Report</text>
+  <text x="1370" y="512" text-anchor="middle" font-size="17" font-weight="600" fill="#333">Line-by-line coverage</text>
+  <text x="1370" y="540" text-anchor="middle" font-size="16" fill="#555">HTML report per source file</text>
+
+  <!-- Report folder -->
+  <rect x="1170" y="580" width="400" height="70" rx="6" fill="#f4f7fa" stroke="#8fa8bf" stroke-width="1.4" stroke-dasharray="6,4"/>
+  <text x="1370" y="611" text-anchor="middle" font-size="17" font-weight="600" fill="#5c7a99">ProjectTestReport</text>
+  <text x="1370" y="637" text-anchor="middle" font-size="15" fill="#8fa8bf">One output folder per test subset</text>
+
+  <!-- ================================================================ -->
+  <!-- CI/CD Banner                                                      -->
+  <!-- ================================================================ -->
+  <rect x="30" y="730" width="1540" height="64" rx="6" fill="#f4f7fa" stroke="#1a3a5c" stroke-width="1.8"/>
+  <text x="800" y="759" text-anchor="middle" font-size="20" font-weight="bold" fill="#1a3a5c">CI/CD Integration</text>
+  <text x="800" y="783" text-anchor="middle" font-size="17" fill="#555">buildfile.m  |  CI system</text>
+</svg>

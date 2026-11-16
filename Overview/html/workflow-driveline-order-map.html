@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Generate Frequency Order Map for BEV Motor Driveline &mdash; Electric Vehicle Design</title>
+  <link rel="stylesheet" href="assets/styles.css?v=20261028-2">
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<header class="help-header"><div class="help-header-inner"><a class="help-brand" href="ElectricVehicleDesignOverview.html">MATLAB Help Center<small>Electric Vehicle Design with Simscape</small></a></div></header>
+<div class="doc-shell">
+  <aside class="category-nav"><nav aria-label="Page navigation">
+    <ul class="nav-trail"><li><a href="ElectricVehicleDesignOverview.html">Documentation Home</a></li><li><a href="examples.html">Examples</a></li></ul>
+    <div class="nav-siblings-label">Driveline Workflows</div>
+    <ul class="nav-siblings"><li aria-current="page"><span>Generate Frequency Order Map</span></li><li><a href="workflow-vehicle-launch.html">Optimize Vehicle Launch</a></li></ul>
+    <div class="on-page"><div class="on-page-label">On this page</div><ul class="on-page-list">
+      <li><a href="#quick-setup">Quick Setup</a></li>
+      <li><a href="#key-models-and-components">Key Models and Components</a></li>
+      <li><a href="#expected-results">Expected Results</a></li>
+      <li><a href="#supporting-files">Supporting Files</a></li>
+      <li><a href="#checks-before-using-results">Checks Before Using Results</a></li>
+      <li><a href="#see-also">See Also</a></li>
+    </ul></div>
+    <div class="nav-browse"><div class="on-page-label">Category</div><ul class="nav-browse-list"><li><a href="components.html">Components</a></li><li><a href="vehicle-range.html">Vehicle Models</a></li><li><a href="project-builder.html">Apps &amp; Utilities</a></li></ul></div>
+  </nav></aside>
+  <main class="doc-main" id="main-content">
+    <article class="quick-workflow-page">
+      <header class="product-intro">
+        <h1>Generate Frequency Order Map for BEV Motor Driveline</h1>
+        <div class="action-row">
+          <a class="action" href="matlab:open_system(fullfile(currentProject().RootFolder,'Workflow','Driveline','DrivelineNVH','Model','mechanicalDLTorsionOrderMap.slx'))">Open Torsional Driveline Model</a>
+          <a class="action secondary" href="matlab:edit(fullfile(currentProject().RootFolder,'Workflow','Driveline','DrivelineNVH','generateOrderMap.mlx'))">Open Live Script</a>
+        </div>
+        <div class="intro-layout">
+<div class="intro-body">
+            <p class="example-intro">Motor torque ripple excites the flexible driveline and produces a time-varying radial load at the motor-shaft bearing. The frequency order map identifies excitation orders across motor speed during vehicle launch.</p>
+            <p class="example-intro">The workflow generates torque ripple with a field-oriented-control PMSM model, extends its repeating portion, applies it to the mechanical driveline, calculates bearing excitation force, and maps the force amplitude against rotational speed and order.</p>
+          </div>
+        </div>
+      </header>
+
+      <section id="setup">
+        <h2 id="quick-setup">Quick Setup</h2>
+        <ol class="quick-steps quick-steps--cols">
+          <li><div class="step-grid"><div class="step-action"><strong>Open the workflow Live Script</strong><a class="action secondary" href="matlab:edit(fullfile(currentProject().RootFolder,'Workflow','Driveline','DrivelineNVH','generateOrderMap.mlx'))">Open Live Script</a></div><p class="step-detail">Open <code>generateOrderMap.mlx</code> to configure the torque-ripple, driveline, sampling, and order-map calculations.</p></div></li>
+          <li><div class="step-grid"><div class="step-action"><strong>Generate motor torque ripple</strong><a class="action secondary" href="matlab:open_system(fullfile(currentProject().RootFolder,'Workflow','Driveline','DrivelineNVH','Model','motorDrivelineElectricalTRQControl.slx'))">Open Electrical Model</a></div><p class="step-detail">Set the electrical operating conditions and simulate the vehicle launch to record motor torque.</p></div></li>
+          <li><div class="step-grid"><div class="step-action"><strong>Extend torque and simulate the driveline</strong><a class="action secondary" href="matlab:open_system(fullfile(currentProject().RootFolder,'Workflow','Driveline','DrivelineNVH','Model','mechanicalDLTorsionOrderMap.slx'))">Open Mechanical Model</a></div><p class="step-detail">Run <code>extendMotorTorque</code>, then simulate the flexible driveline to record shaft speed, drive torque, and bearing force.</p></div></li>
+          <li><div class="step-grid"><div class="step-action"><strong>Calculate and review the order map</strong><a class="action secondary" href="matlab:edit(fullfile(currentProject().RootFolder,'Workflow','Driveline','DrivelineNVH','ScriptData','calculateBearingForce.m'))">Open Bearing-Force Calculation</a></div><p class="step-detail">Set the rotor and sampling parameters, then review bearing-force amplitude versus motor speed and order.</p></div></li>
+        </ol>
+      </section>
+
+      <section id="uses">
+        <h2 id="key-models-and-components">Key Models and Components</h2>
+        <div class="table-scroll"><table><thead><tr><th scope="col">Model or component</th><th scope="col">Role</th><th scope="col">Reference</th></tr></thead><tbody>
+          <tr><td>FOC PMSM Torque Model</td><td>Generates the switching-related motor torque ripple used as mechanical excitation.</td><td><a class="action secondary" href="matlab:open_system(fullfile(currentProject().RootFolder,'Workflow','Driveline','DrivelineNVH','Model','motorDrivelineElectricalTRQControl.slx'))">Open model</a></td></tr>
+          <tr><td>Flexible Driveline</td><td>Calculates shaft speed and bearing force from the applied motor torque.</td><td><a class="action secondary" href="component-driveline.html">View component</a></td></tr>
+        </tbody></table></div>
+      </section>
+
+
+      <section id="results">
+        <h2 id="expected-results">Expected Results</h2>
+        <div class="result-layout">
+          <figure class="result-preview"><img src="Image/DrivelineOrderMap.png" alt="Frequency order map of motor-bearing excitation versus motor speed and order"><figcaption>Frequency order map of motor-bearing excitation versus motor speed and order.</figcaption></figure>
+          <div><p>The workflow produces these result types:</p><ul class="result-types">
+            <li>Simulated and extended motor torque waveforms</li>
+            <li>Motor-shaft speed and bearing excitation force</li>
+            <li>Peak-amplitude frequency order map versus motor speed</li>
+          </ul></div>
+        </div>
+      </section>
+
+      <section id="files">
+        <h2 id="supporting-files">Supporting Files</h2>
+        <table><thead><tr><th>Purpose</th><th>Artifact</th><th>Action</th></tr></thead><tbody>
+          <tr><td>Main workflow</td><td><code>generateOrderMap.mlx</code></td><td><a class="action secondary" href="matlab:edit(fullfile(currentProject().RootFolder,'Workflow','Driveline','DrivelineNVH','generateOrderMap.mlx'))">Open Live Script</a></td></tr>
+          <tr><td>Electrical torque-ripple model</td><td><code>motorDrivelineElectricalTRQControl.slx</code></td><td><a class="action secondary" href="matlab:open_system(fullfile(currentProject().RootFolder,'Workflow','Driveline','DrivelineNVH','Model','motorDrivelineElectricalTRQControl.slx'))">Open Model</a></td></tr>
+          <tr><td>Mechanical torsional model</td><td><code>mechanicalDLTorsionOrderMap.slx</code></td><td><a class="action secondary" href="matlab:open_system(fullfile(currentProject().RootFolder,'Workflow','Driveline','DrivelineNVH','Model','mechanicalDLTorsionOrderMap.slx'))">Open Model</a></td></tr>
+          <tr><td>Torque extension</td><td><code>extendMotorTorque.m</code></td><td><a class="action secondary" href="matlab:edit(fullfile(currentProject().RootFolder,'Workflow','Driveline','DrivelineNVH','ScriptData','extendMotorTorque.m'))">Open File</a></td></tr>
+          <tr><td>Bearing-force calculation</td><td><code>calculateBearingForce.m</code></td><td><a class="action secondary" href="matlab:edit(fullfile(currentProject().RootFolder,'Workflow','Driveline','DrivelineNVH','ScriptData','calculateBearingForce.m'))">Open File</a></td></tr>
+        </tbody></table>
+      </section>
+
+      <section id="checks">
+        <h2 id="checks-before-using-results">Checks Before Using Results</h2>
+        <ul>
+          <li>Confirm the repeated torque segment is in steady operation before extending it.</li>
+          <li>Keep the simulation fixed step consistent with the bearing-force sample frequency.</li>
+          <li>Verify the final-drive ratio and rotating-mass assumptions match the driveline under study.</li>
+          <li>Check that the selected maximum order and overlap resolve the excitation bands of interest.</li>
+        </ul>
+      </section>
+
+      <section id="see-also"><h2>See Also</h2><ul><li><a href="workflow-vehicle-launch.html">Optimize Gear Ratios for Vehicle Launch</a></li><li><a href="component-driveline.html">Driveline</a></li><li><a href="examples.html#driveline-workflows">Driveline Workflows</a></li></ul></section>
+    </article>
+  </main>
+</div>
+<footer class="site-footer"><div class="site-footer-inner"><span>Copyright 2026 The MathWorks, Inc.</span></div></footer>
+<script src="assets/app.js?v=20260930-6"></script>
+</body>
+</html>

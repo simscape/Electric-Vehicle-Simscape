@@ -192,12 +192,11 @@
 % <tr><td><strong>VehicleElectric</strong></td><td>Minimal electrical powertrain &mdash; battery, motor, charger, driveline</td><td style="text-align:center;">No</td><td style="text-align:center;">No</td></tr>
 % <tr><td><strong>VehicleElecAux</strong></td><td>Electrical powertrain with HVAC, pump, DCDC, and auxiliary loads</td><td style="text-align:center;">No</td><td style="text-align:center;">Yes</td></tr>
 % <tr><td><strong>VehicleElectroThermal</strong></td><td>Full electro-thermal vehicle with coolant loop, chiller, heater, radiator</td><td style="text-align:center;">Yes</td><td style="text-align:center;">Yes</td></tr>
-% <tr><td><strong>VehicleElectroThermalLowTemp</strong></td><td>Electro-thermal configured for cold-climate studies</td><td style="text-align:center;">Yes</td><td style="text-align:center;">Yes</td></tr>
 % </table>
 % </html>
 %
 % Fidelity-to-template mapping is defined in JSON config files under
-% *APP/Config/Preset/*.
+% *utils/APP/Config/Preset/*.
 
 %% Parameters and Default Model Setup
 %
@@ -238,7 +237,7 @@
 
 %% How This Connects to the BEV Setup App
 %
-% The BEV Setup App reads JSON config files from *APP/Config/Preset/* to
+% The BEV Setup App reads JSON config files from *utils/APP/Config/Preset/* to
 % populate its component dropdowns. Each config maps a vehicle template to
 % the available fidelities per component. The app scans the component
 % *Model/* folders to verify that the listed *.slx* files exist on disk
@@ -263,7 +262,7 @@
 % folder. Use an existing fidelity in that component as a reference for
 % the port interface.
 % # Add the new fidelity name to the relevant template entries in the JSON
-% config under *APP/Config/Preset/*.
+% config under *utils/APP/Config/Preset/*.
 % # Add a documentation description file and publish HTML to
 % *Documentation/html/*.
 % # Update or create harness and test coverage in *TestBench/* and

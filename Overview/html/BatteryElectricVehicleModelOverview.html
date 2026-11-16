@@ -207,7 +207,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <a href="matlab:open_system(%22BEVsystemModel%22);open_system('BEVsystemModel/Controller/Vehicle%20Control');">Open Vehicle Control Subsystem</a>
 </p>
 <img vspace="5" hspace="5" src="Image/BatteryElectricVehicleModelOverview_09.png" alt=""> <h2 id="13">Vehicle Thermal Management</h2>
-<p>The temperature of the components in a vehicle effects both the efficiency and the safety of the vehicle. The battery for example, has an optimal range of temperature in which the battery performance is most efficient. Extreme temperatures permanently damage the battery. You design a thermal coolant circuit to extract the extra heat from these critical components . Ethylene glycol is the coolant fluid circulating through the component. The thermal circuit has two pumps, one for battery cooling and one for Emotor cooling. Valves control the direction of flow in the coolant loop. Air comes through the front grill over the radiator because of vehicle motion and assisted by a fan, it dumps the heat absorbed from the components to the environment. There are two modes for the coolant flow:</p>
+<p>The temperature of the components in a vehicle affects both the efficiency and the safety of the vehicle. The battery for example, has an optimal range of temperature in which the battery performance is most efficient. Extreme temperatures permanently damage the battery. You design a thermal coolant circuit to extract the extra heat from these critical components . Ethylene glycol is the coolant fluid circulating through the component. The thermal circuit has two pumps, one for battery cooling and one for Emotor cooling. Valves control the direction of flow in the coolant loop. Air comes through the front grill over the radiator because of vehicle motion and assisted by a fan, it dumps the heat absorbed from the components to the environment. There are two modes for the coolant flow:</p>
 <div>
 <ul>
 <li>
@@ -240,9 +240,6 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <p>The Scenarios subsystem sets the cabin setpoint temperature and the AC on/off control. The HVAC controller modulates the air flow in the cabin through the vent. The heater and cooler draw the required power from the main battery high voltage bus.</p>
 <p><h3>Lumped Thermal Refrigeration</h3></p>
 <p>When the cabin setpoint temperature is lower than the environmental temperature, the lumped thermal refrigeration subsystem handles the cabin latent and sensible heat loads. To manage the CO2 concentration in cabin, the Cabin Air subsystem vents out a fixed percentage of cabin air, while maintaining the cabin pressure. The compressor draws the power required to run the Refrigeration subsystem from the battery pack.</p>
-<p>
-<a href="matlab:load_system(%22VehicleElectroThermalLowTemp%22);open_system('VehicleElectroThermalLowTemp/HVAC/Cabin%20air%20and%20refrigeration/Cabin%20Air');">Open Cabin Subsystem</a>
-</p>
 <img vspace="5" hspace="5" src="Image/BatteryElectricVehicleModelOverview_14.png" alt=""> <h2 id="19">Useful Links</h2>
 <p>
 <a href="matlab:web('ElectricVehicleDesignOverview.html');">Electric Vehicle Design with Simscape</a>
@@ -438,7 +435,7 @@ open_system('BEVsystemModel/Vehicle/Driveline');
 open_system('BEVsystemModel/Controller/Vehicle Control')
 
 %% Vehicle Thermal Management
-% The temperature of the components in a vehicle effects both the
+% The temperature of the components in a vehicle affects both the
 % efficiency and the safety of the vehicle. The battery for example, has an
 % optimal range of temperature in which the battery performance is most
 % efficient. Extreme temperatures permanently damage the battery. You
@@ -519,11 +516,6 @@ open_system('VehicleElectroThermal/HVAC/Cabin Plant');
 % To manage the CO2 concentration in cabin, the Cabin Air subsystem vents out a fixed percentage of cabin air, 
 % while maintaining the cabin pressure. 
 % The compressor draws the power required to run the Refrigeration subsystem from the battery pack.
-%
-% <matlab:load_system("VehicleElectroThermalLowTemp");open_system('VehicleElectroThermalLowTemp/HVAC/Cabin%20air%20and%20refrigeration/Cabin%20Air'); Open Cabin Subsystem>
-%
-load_system('VehicleElectroThermalLowTemp.slx')
-open_system('VehicleElectroThermalLowTemp/HVAC/Cabin air and refrigeration/Cabin Air');
 
 
 %% Useful Links

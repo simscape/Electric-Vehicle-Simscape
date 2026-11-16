@@ -13,7 +13,7 @@ vehicleThermal.coolant_channel_D = 0.0092; % [m] Coolant jacket channel diameter
 vehicleThermal.coolant_valve_displacement = 0.0063; % [m] Max spool displacement
 vehicleThermal.coolant_valve_offset = 0.001;        % [m] Orifice opening offset when spool is neutral
 vehicleThermal.coolant_valve_D_ratio_max = 0.95;    % Max orifice diameter to pipe diameter ratio
-vehicleThermal.coolant_valve_D_ratio_min = 1e-3;    % Leakage orifice diameter to pipe diameter ratio
+vehicleThermal.coolant_valve_D_ratio_min = 0.05;    % Leakage orifice diameter to pipe diameter ratio
 
 %% Coolant Tank
 vehicleThermal.coolant_tank_volume = 2.5 / 2; % [l] Volume of each coolant tank

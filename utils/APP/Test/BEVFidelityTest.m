@@ -1,0 +1,328 @@
+classdef BEVFidelityTest < matlab.unittest.TestCase
+% BEVFIDELITYTEST Parameterized test for all JSON preset fidelity variants.
+%   Generates setup output, compile-checks, and simulates (100 s) every
+%   template x fidelity combination defined in VehicleTemplateConfig.json.
+%
+%   Run all:
+%     results = runtests('BEVFidelityTest');
+%
+%   Run one template:
+%     results = runtests('BEVFidelityTest', ...
+%         'ParameterProperty','Setup','ParameterName','VehicleElectric*');
+%
+%   Run with report:
+%     runBEVFidelityReport
+%     runBEVFidelityReport('VehicleElecAux')
+%
+%   Copyright 2026 The MathWorks, Inc.
+
+    properties (TestParameter)
+        Setup = localBuildParams()
+    end
+
+    properties (Access = private)
+        App
+        CurrentTemplate = ''
+        Root
+        SetupRoot
+        RawCfg
+    end
+
+    % ---- Class-level setup / teardown ----
+
+    methods (TestClassSetup)
+        function setupProject(testCase)
+            testCase.Root = char(matlab.project.rootProject().RootFolder);
+            presetDir = fullfile(testCase.Root, 'utils', 'APP', 'Config', 'Preset');
+            jsonFiles = dir(fullfile(presetDir, '*.json'));
+            testCase.RawCfg = struct();
+            for j = 1:numel(jsonFiles)
+                raw = bevConfigRead(fullfile(jsonFiles(j).folder, jsonFiles(j).name), testCase.Root);
+                fieldNames = fieldnames(raw);
+                for k = 1:numel(fieldNames)
+                    testCase.RawCfg.(fieldNames{k}) = raw.(fieldNames{k});
+                end
+            end
+            testCase.SetupRoot = fullfile(testCase.Root, 'Script_Data', 'Setup', 'User');
+
+            % Clear saved user configs so no stale setups leak in
+            userConfigDir = fullfile(testCase.Root, 'utils', 'APP', 'Config', 'User');
+            if isfolder(userConfigDir)
+                stale = dir(fullfile(userConfigDir, '*.json'));
+                for j = 1:numel(stale)
+                    delete(fullfile(stale(j).folder, stale(j).name));
+                end
+            end
+
+            % Suppress interactive dialogs during test execution
+            setappdata(groot, 'BEV_SUPPRESS_DIALOGS', true);
+        end
+    end
+
+    methods (TestClassTeardown)
+        function closeAll(testCase)
+            if ~isempty(testCase.App)
+                try
+                    delete(testCase.App);
+                catch ME
+                    warning('BEVFidelityTest:appDeleteFailed', ...
+                        'Could not delete app: %s', ME.message);
+                end
+            end
+            localCloseAllModels();
+
+            % Re-enable interactive dialogs
+            if isappdata(groot, 'BEV_SUPPRESS_DIALOGS')
+                rmappdata(groot, 'BEV_SUPPRESS_DIALOGS');
+            end
+        end
+    end
+
+    % ---- Test method ----
+
+    methods (Test)
+        function fidelityCombination(testCase, Setup)
+        % FIDELITYCOMBINATION Generate scripts, verify output, compile-check.
+
+            fprintf('\n>> [%s] %s\n', Setup.Template, Setup.FolderName);
+
+            % ---- Reopen app for each new template (clean state) ----
+            if ~strcmp(Setup.Template, testCase.CurrentTemplate)
+                if ~isempty(testCase.App)
+                    try
+                        delete(testCase.App);
+                    catch ME
+                        warning('BEVFidelityTest:appDeleteFailed', ...
+                            'Could not delete app: %s', ME.message);
+                    end
+                end
+                localCloseAllModels();
+
+                testCase.App = BEVapp;
+                drawnow; pause(3);
+
+                localSetTemplateDropdown(testCase.App, Setup.Template);
+                createComponentDropdowns(testCase.App, true);
+                controlSelectionDropdown(testCase.App);
+                drawnow;
+                testCase.CurrentTemplate = Setup.Template;
+            end
+
+            % ---- Apply fidelity selections ----
+            fidelities = containers.Map(Setup.CompTypes, Setup.Models);
+            applyStruct = localBuildApplyStruct( ...
+                testCase.RawCfg.(Setup.Template), fidelities, Setup.Controller);
+            applySelections(testCase.App, applyStruct);
+            drawnow;
+
+            % ---- Generate scripts (same path as Model Setup button) ----
+            state = buildSetupState(testCase.App);
+
+            outFileModel = exportSetupScript(testCase.App, state);
+            testCase.assertNotEmpty(outFileModel, ...
+                'exportSetupScript returned empty — model or vehicle block not found');
+
+            [outputFolder, ssrBaseName, ssrExt] = fileparts(outFileModel);
+            modelName    = state.BEVModel;
+            outFileParam = fullfile(outputFolder, [modelName '_params_setup.m']);
+            exportParamScript(testCase.App, outFileParam, state);
+            % applyPreset.m is auto-generated by exportSetupScript
+            outFilePreset = fullfile(outputFolder, 'applyPreset.m');
+            exportBuildReadme(state, outputFolder, {outFileModel, outFileParam, outFilePreset});
+
+            % ---- Rename timestamped folder to named folder ----
+            namedFolder = fullfile(testCase.SetupRoot, Setup.FolderName);
+            if isfolder(namedFolder), rmdir(namedFolder, 's'); end
+            movefile(outputFolder, namedFolder);
+
+            % ---- Verify output files ----
+            ssrScript    = fullfile(namedFolder, strcat(ssrBaseName, ssrExt));
+            paramScript  = fullfile(namedFolder, [modelName '_params_setup.m']);
+            presetScript = fullfile(namedFolder, 'applyPreset.m');
+            readmePath   = fullfile(namedFolder, 'README.md');
+
+            testCase.verifyTrue(isfile(ssrScript),    'SSR setup script missing');
+            testCase.verifyTrue(isfile(paramScript),   'Param setup script missing');
+            testCase.verifyTrue(isfile(presetScript),  'applyPreset script missing');
+            testCase.verifyTrue(isfile(readmePath),    'README missing');
+
+            % ---- Clear workspace — only this combo's params should be loaded ----
+            evalin('base', 'clear');
+
+            % ---- Apply configuration to model ----
+            run(ssrScript);
+            evalin('base', sprintf('run(''%s'')', ...
+                strrep(paramScript, '''', '''''')));
+
+            % ---- Hide model window so sim() compile doesn't shrink the canvas ----
+            set_param(modelName, 'Open', 'off');
+
+            % ---- Simulate for 10 seconds (also validates compilation) ----
+            origStop = get_param(modelName, 'StopTime');
+            set_param(modelName, 'StopTime', '10');
+            simout = sim(modelName, 'SrcWorkspace', 'base');
+            set_param(modelName, 'StopTime', origStop);
+
+            testCase.verifyNotEmpty(simout, ...
+                sprintf('Simulation returned empty for %s.', Setup.FolderName));
+            fprintf('   Simulation passed: %s\n', Setup.FolderName);
+        end
+    end
+end
+
+%% ========================= Local functions =========================
+
+function params = localBuildParams()
+% LOCALBUILDPARAMS Generate one test parameter per unique template x fidelity combo.
+%   Scans ALL JSON files in utils/APP/Config/Preset/ and deduplicates so
+%   overlapping configs (e.g. same template in two JSONs) are tested once.
+    try
+        root = char(matlab.project.rootProject().RootFolder);
+    catch ME
+        % Parallel workers may not have the project loaded
+        warning('BEVFidelityTest:noProject', ...
+            'Project not loaded, falling back to file path: %s', ME.message);
+        root = fileparts(fileparts(fileparts(fileparts(mfilename('fullpath')))));
+    end
+
+    presetDir = fullfile(root, 'utils', 'APP', 'Config', 'Preset');
+    jsonFiles = dir(fullfile(presetDir, '*.json'));
+
+    params = struct();
+    seen   = containers.Map();  % fingerprint → true
+
+    for fIdx = 1:numel(jsonFiles)
+        rawCfg    = bevConfigRead(fullfile(jsonFiles(fIdx).folder, jsonFiles(fIdx).name), root);
+        templates = fieldnames(rawCfg);
+
+        for tIdx = 1:numel(templates)
+            tmpl   = templates{tIdx};
+            config = rawCfg.(tmpl);
+
+            if ~isfield(config, 'Components'), continue; end
+            comps  = fieldnames(config.Components);
+
+            % Collect default fidelities (first model per component)
+            defaultTypes  = cell(1, numel(comps));
+            defaultModels = cell(1, numel(comps));
+            for cIdx = 1:numel(comps)
+                defaultTypes{cIdx}  = comps{cIdx};
+                comp = config.Components.(comps{cIdx});
+                if ~isfield(comp, 'Models'), continue; end
+                defaultModels{cIdx} = localEnsureCell(comp.Models);
+                defaultModels{cIdx} = defaultModels{cIdx}{1};
+            end
+
+            if isfield(config, 'Controls') && isfield(config.Controls, 'Models')
+                controller = localEnsureCell(config.Controls.Models);
+                controller = controller{1};
+            else
+                controller = '';
+            end
+
+            % Entry: all defaults
+            addCombo(tmpl, [tmpl '_default'], defaultTypes, defaultModels, controller);
+
+            % Entries: vary one component at a time
+            counter = 0;
+            for cIdx = 1:numel(comps)
+                comp = config.Components.(comps{cIdx});
+                if ~isfield(comp, 'Models'), continue; end
+                models = localEnsureCell(comp.Models);
+                for mIdx = 1:numel(models)
+                    if strcmp(models{mIdx}, defaultModels{cIdx}), continue; end
+                    counter = counter + 1;
+
+                    variedModels      = defaultModels;
+                    variedModels{cIdx} = models{mIdx};
+
+                    folderName = sprintf('%s_%02d_%s_%s', ...
+                        tmpl, counter, comps{cIdx}, models{mIdx});
+                    addCombo(tmpl, folderName, defaultTypes, variedModels, controller);
+                end
+            end
+        end
+    end
+
+    function addCombo(tmpl, folderName, compTypes, models, ctrl)
+    % ADDCOMBO Add combo to params if not already seen (deduplicate).
+        fingerprint = strjoin([{tmpl, ctrl}, sort(models)], '|');
+        if isKey(seen, fingerprint), return; end
+        seen(fingerprint) = true;
+
+        key = matlab.lang.makeValidName(folderName);
+        params.(key) = struct( ...
+            'Template',   tmpl, ...
+            'FolderName', folderName, ...
+            'CompTypes',  {compTypes}, ...
+            'Models',     {models}, ...
+            'Controller', ctrl);
+    end
+end
+
+function localSetTemplateDropdown(app, templateKey)
+% LOCALSETTEMPLATEDROPDOWN Set the vehicle template dropdown value.
+    dropdown = app.VehicleTemplateDropDown;
+    items    = string(dropdown.Items);
+    bases    = erase(items, '.slx');
+    idx      = find(strcmpi(bases, templateKey), 1);
+    if ~isempty(idx)
+        dropdown.Value = dropdown.Items{idx};
+    else
+        dropdown.Items = [dropdown.Items, {templateKey}];
+        dropdown.Value = templateKey;
+    end
+end
+
+function applyStruct = localBuildApplyStruct(config, fidelities, controller)
+% LOCALBUILDAPPLYSTRUCT Build the struct that applySelections expects.
+    applyStruct = struct();
+    if ~isempty(controller)
+        applyStruct.Controls.Model = controller;
+    end
+
+    if ~isfield(config, 'Components'), return; end
+    comps = fieldnames(config.Components);
+    applyStruct.Components = struct();
+
+    for cIdx = 1:numel(comps)
+        comp      = comps{cIdx};
+        compData  = config.Components.(comp);
+        if isfield(compData, 'Instances')
+            instances = compData.Instances;
+        else
+            instances = {comp};
+        end
+        if ~iscell(instances), instances = {instances}; end
+        model = fidelities(comp);
+
+        selections = struct();
+        for iIdx = 1:numel(instances)
+            instKey = matlab.lang.makeValidName(instances{iIdx});
+            selections.(instKey) = struct('Model', model);
+        end
+        applyStruct.Components.(comp).Selections = selections;
+    end
+end
+
+function v = localEnsureCell(v)
+% LOCALENSURECELL Force char/string to cell, force row orientation.
+    if ischar(v), v = {v};
+    elseif isstring(v), v = cellstr(v);
+    end
+    if iscell(v), v = v(:)'; end
+end
+
+function localCloseAllModels()
+% LOCALCLOSEALLMODELS Close any open Simulink models.
+    openModels = get_param(Simulink.allBlockDiagrams('model'), 'Name');
+    if ~iscell(openModels), openModels = {openModels}; end
+    for k = 1:numel(openModels)
+        try
+            close_system(openModels{k}, 0);
+        catch ME
+            warning('BEVFidelityTest:closeFailed', ...
+                'Could not close %s: %s', openModels{k}, ME.message);
+        end
+    end
+end

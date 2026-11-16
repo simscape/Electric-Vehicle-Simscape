@@ -20,17 +20,25 @@
 open_system('DrivelineWithBraking')
 
 %% Ports
-% *Inputs*
 %
-% * *Front axle torque (FA)* - Torque from the front motor.
-% * *Rear axle torque (RA)* - Torque from the rear motor.
-% * *Brake command* - Mechanical braking torque request.
-%
-% *Outputs*
-%
-% * *Vehicle Speed* - Longitudinal vehicle speed.
-% * *Wheel Dynamics* - Wheel speeds, slip, and traction forces.
-% * *Braking Response* - Braking force and deceleration.
+% <html>
+% <h3>Input Bus &mdash; <code>s</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>BrkCmd</td><td>Mechanical braking force command</td></tr>
+% </table>
+% <h3>Output Bus &mdash; <code>m</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>VehSpd</td><td>Vehicle speed</td></tr>
+% </table>
+% <h3>Physical Ports</h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Port</th><th>Domain</th><th>Description</th></tr>
+% <tr><td>FA</td><td>Mechanical rotational</td><td>Front axle connection</td></tr>
+% <tr><td>RA</td><td>Mechanical rotational</td><td>Rear axle connection</td></tr>
+% </table>
+% </html>
 
 %% Workflows
 % The DrivelineWithBraking block is used in vehicle configurations that

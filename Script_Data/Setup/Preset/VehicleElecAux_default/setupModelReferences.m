@@ -18,7 +18,6 @@ vehBlk    = 'BEVsystemModel/Vehicle';
 controlBlk = 'BEVsystemModel/Controller';
 vehTarget = 'VehicleElecAux';
 setRef(vehBlk, vehTarget);
-saveAll(topModelName);
 
 % ---- Apply component references ----
 setRef('BEVsystemModel/Vehicle/Battery', 'BatteryLumped');
@@ -32,7 +31,7 @@ alignMaskFields('BEVsystemModel/Vehicle/Charger', {'MaxVolt','Kp','Ki','Kaw','CC
 setRef('BEVsystemModel/Vehicle/HVAC', 'HVACsimpleTh');
 alignMaskFields('BEVsystemModel/Vehicle/HVAC', {'cabin_duct_area','cabin_duct_volume'}, {'HVAC','HVAC'});
 setRef('BEVsystemModel/Vehicle/Driveline', 'Driveline');
-alignMaskFields('BEVsystemModel/Vehicle/Driveline', {'tireRollingRadius_cm','vehMass_kg','MaxSpeed','BrakeFactor'}, {'driveline','driveline','driveline','vehicle'});
+alignMaskFields('BEVsystemModel/Vehicle/Driveline', {'tireRollingRadius_cm','vehMass_kg','MaxSpeed','BrakeFactor'}, {'drivetrain','drivetrain','drivetrain','controller'});
 setRef('BEVsystemModel/Vehicle/Battery Pump', 'PumpDummy');
 alignMaskFields('BEVsystemModel/Vehicle/Battery Pump', {'pumpMaxCurrent'}, {'pump'});
 setRef('BEVsystemModel/Vehicle/Motor Pump', 'PumpDummy');
@@ -40,19 +39,14 @@ alignMaskFields('BEVsystemModel/Vehicle/Motor Pump', {'pumpMaxCurrent'}, {'pump'
 setRef('BEVsystemModel/Vehicle/DCDC', 'PumpDriver');
 alignMaskFields('BEVsystemModel/Vehicle/DCDC', {'outputVoltage','outputPower'}, {'pumpDriver','pumpDriver'});
 setRef('BEVsystemModel/Controller', 'ControllerHVAC');
-set_param('BEVsystemModel/Drive Cycle Source','cycleVar','FTP72');
-saveAll(topModelName);
-disp('Setup complete and saved.');
+set_param('BEVsystemModel/HMI/AWD', 'Value', '1');
+set_param('BEVsystemModel/HMI/BatCmd Input', 'Value', '3');
+set_param('BEVsystemModel/Drive Cycle Source','cycleVar','FTP75');
+disp('Setup complete.');
 
 % ================= Helpers =================
 function setRef(blockPath, refTarget)
     set_param(blockPath, 'ReferencedSubsystem', refTarget);
-end
-
-function saveAll(mdl)
-    try save_system(mdl, 'SaveDirtyReferencedModels', 'on');
-    catch, save_system(mdl);
-    end
 end
 
 function alignMaskFields(blockPath, targetFields, targetNs)

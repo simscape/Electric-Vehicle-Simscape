@@ -21,17 +21,24 @@
 open_system('Radiator')
 
 %% Ports
-% *Inputs*
 %
-% * *Coolant inlet* - Hot coolant from the thermal management loop.
-% * *Ambient temperature* - External air temperature.
-% * *Fan airflow* - Forced-air flow driven by radiator fans.
-% * *Vehicle speed* - Ram-air contribution to airflow at higher speeds.
-%
-% *Outputs*
-%
-% * *Coolant outlet* - Cooled coolant returned to the loop.
-% * *Heat dissipation rate* - Thermal power rejected to ambient.
+% <html>
+% <h3>Input Bus &mdash; <code>s</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>Env</td><td>Environment conditions sub-bus (Tenv, Penv, RHenv, CO2env)</td></tr>
+% <tr><td>VehSpd</td><td>Vehicle speed (ram air effect)</td></tr>
+% <tr><td>cmdFan</td><td>Fan speed command</td></tr>
+% </table>
+% <h3>Output Bus</h3>
+% <p>No output bus. Operates via physical ports only.</p>
+% <h3>Physical Ports</h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Port</th><th>Domain</th><th>Description</th></tr>
+% <tr><td>A</td><td>Thermal liquid</td><td>Coolant port (inlet)</td></tr>
+% <tr><td>B</td><td>Thermal liquid</td><td>Coolant port (outlet)</td></tr>
+% </table>
+% </html>
 
 %% Workflows
 % The Radiator is a critical part of the *VehicleElectroThermal* template

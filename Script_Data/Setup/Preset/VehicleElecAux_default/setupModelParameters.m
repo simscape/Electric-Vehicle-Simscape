@@ -40,3 +40,6 @@ PumpDriverParams;
 %% Controller params
 ControllerParams;
 
+%% Scenario operating modes
+controller.Regen     = 1;        % Regen on/off, On==1, Off==0
+

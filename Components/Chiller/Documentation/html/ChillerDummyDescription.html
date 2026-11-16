@@ -7,9 +7,9 @@ This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
       -->
 <title>ChillerDummy</title>
-<meta name="generator" content="MATLAB 26.1">
+<meta name="generator" content="MATLAB 25.2">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2026-04-21">
+<meta name="DC.date" content="2026-05-06">
 <meta name="DC.source" content="ChillerDummyDescription.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
@@ -115,33 +115,28 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <p>
 <b>Thermal Coupling:</b> No (coolant pass-through, no heat exchange)</p>
 <h2 id="2">Open Model</h2>
-<pre class="codeinput">open_system(<span class="string">'ChillerDummy'</span>)
-</pre>
 <img vspace="5" hspace="5" src="images/ChillerDummyDescription_01.png" alt=""> <h2 id="3">Ports</h2>
 <p>
-<b>Inputs</b>
+<h3>Input Bus &mdash; <code>s</code></h3>
+<table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+<tr><th>Signal</th><th>Description</th></tr>
+<tr><td>cmdChillerByp</td><td>Chiller bypass command (0 = active, 1 = bypass)</td></tr>
+<tr><td>Batt.BatSt</td><td>Battery status signal</td></tr>
+</table>
+<h3>Output Bus &mdash; <code>m</code></h3>
+<table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+<tr><th>Signal</th><th>Description</th></tr>
+<tr><td>ChillerCurrent</td><td>Fixed current when active, zero when bypassed</td></tr>
+<tr><td>energy</td><td>Cumulative energy consumed</td></tr>
+</table>
+<h3>Physical Ports</h3>
+<table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+<tr><th>Port</th><th>Domain</th><th>Description</th></tr>
+<tr><td>HV</td><td>Electrical</td><td>High-voltage bus connection</td></tr>
+<tr><td>A</td><td>Thermal liquid</td><td>Coolant port (pass-through)</td></tr>
+<tr><td>B</td><td>Thermal liquid</td><td>Coolant port (pass-through)</td></tr>
+</table>
 </p>
-<div>
-<ul>
-<li>
-<b>Battery status</b> - Pack state signals (terminated internally).</li>
-<li>
-<b>Chiller bypass control</b> - 0 = active (draws load), 1 = bypassed (no load).</li>
-<li>
-<b>HV bus connection</b> - Electrical connection for fixed power draw.</li>
-<li>
-<b>Coolant port</b> - Thermal-liquid interface (pass-through, no heat exchange).</li>
-</ul>
-</div>
-<p>
-<b>Outputs</b>
-</p>
-<div>
-<ul>
-<li>
-<b>Chiller Current</b> - Fixed current when active, zero when bypassed.</li>
-</ul>
-</div>
 <h2 id="4">Workflows</h2>
 <p>The ChillerDummy block is a placeholder variant for integration testing or fast simulations. It can replace the full Chiller in the <b>VehicleElectroThermal</b> template without breaking the coolant loop. Parameters are loaded by <tt>ChillerDummyParams.m</tt>.</p>
 <h2 id="5">Parameters</h2>
@@ -170,7 +165,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 </ul>
 </div>
 <p class="footer">Copyright 2022 - 2026 The MathWorks, Inc.<br>
-<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2026a</a>
+<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2025b</a>
 <br>
 </p>
 </div>
@@ -201,16 +196,28 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 open_system('ChillerDummy')
 
 %% Ports
-% *Inputs*
 %
-% * *Battery status* - Pack state signals (terminated internally).
-% * *Chiller bypass control* - 0 = active (draws load), 1 = bypassed (no load).
-% * *HV bus connection* - Electrical connection for fixed power draw.
-% * *Coolant port* - Thermal-liquid interface (pass-through, no heat exchange).
-%
-% *Outputs*
-%
-% * *Chiller Current* - Fixed current when active, zero when bypassed.
+% <html>
+% <h3>Input Bus &mdash; <code>s</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>cmdChillerByp</td><td>Chiller bypass command (0 = active, 1 = bypass)</td></tr>
+% <tr><td>Batt.BatSt</td><td>Battery status signal</td></tr>
+% </table>
+% <h3>Output Bus &mdash; <code>m</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>ChillerCurrent</td><td>Fixed current when active, zero when bypassed</td></tr>
+% <tr><td>energy</td><td>Cumulative energy consumed</td></tr>
+% </table>
+% <h3>Physical Ports</h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Port</th><th>Domain</th><th>Description</th></tr>
+% <tr><td>HV</td><td>Electrical</td><td>High-voltage bus connection</td></tr>
+% <tr><td>A</td><td>Thermal liquid</td><td>Coolant port (pass-through)</td></tr>
+% <tr><td>B</td><td>Thermal liquid</td><td>Coolant port (pass-through)</td></tr>
+% </table>
+% </html>
 
 %% Workflows
 % The ChillerDummy block is a placeholder variant for integration testing

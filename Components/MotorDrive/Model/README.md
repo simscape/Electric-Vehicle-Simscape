@@ -20,22 +20,27 @@ Electric motor with lumped electrical and mechanical dynamics and a fixed gear f
 - Listed in the **VehicleElectric** and **VehicleElecAux** templates in `VehicleTemplateConfig.json` as an available motor variant.
 - Used when fast simulation is needed without thermal effects.
 
-### Inputs
+### Input Bus — `s`
 
 | Signal | Description |
 |--------|-------------|
-| Torque command | Requested motor torque from the controller |
-| Control signals | Enable, mode, and limit signals |
-| Battery signals | HV bus voltage and current availability |
+| EMtrq | Motor torque command |
+| Batt | Battery status sub-bus (Relay.RelayDchg, BattSensor.BatVolt) |
 
-### Outputs
+### Output Bus — `m`
 
 | Signal | Description |
 |--------|-------------|
-| Motor Torque | Delivered mechanical torque |
-| Motor Speed | Rotor speed |
-| Electrical Power | Power drawn from the HV bus |
-| Energy | Cumulative energy consumption |
+| EM | Motor measurement sub-bus |
+| energy | Cumulative energy consumed |
+| CoolTp | Coolant temperature (fixed constant) |
+
+### Physical Ports
+
+| Port | Domain | Description |
+|------|--------|-------------|
+| HV | Electrical | High-voltage bus connection |
+| Ax | Mechanical rotational | Axle output shaft |
 
 ---
 
@@ -52,37 +57,42 @@ Electric motor drive with fixed gear including full thermal coupling. The motor 
 
 ### Workflows
 
-- **Default motor fidelity** loaded by `BEVSystemModelParams.m` (via `MotorDriveGearThParams.m`).
+- **Default motor fidelity** for the VehicleElectroThermal template.
 - Used in all electro-thermal range estimation runs (NEDC, WLTC, EPA).
 - Motor losses contribute to EM1 and EM2 energy tracking in range results.
 - Inverter thermal output feeds the inverter life prediction workflow.
 - Validated through `MotorTestHarness.slx`.
 
-### Inputs
+### Input Bus — `s`
 
 | Signal | Description |
 |--------|-------------|
-| Torque command | Requested motor torque |
-| Control signals | Enable, mode, and limit signals |
-| Battery signals | HV bus voltage and current |
-| Coolant port | Thermal-liquid interface for motor and inverter cooling |
+| EMtrq | Motor torque command |
+| Batt | Battery status sub-bus (Relay.RelayDchg, BattSensor.BatVolt) |
+| EMrpm | Motor speed feedback |
 
-### Outputs
+### Output Bus — `m`
 
 | Signal | Description |
 |--------|-------------|
-| Motor Torque | Delivered mechanical torque |
-| Motor Speed | Rotor speed |
-| Electrical Power | Power drawn from the HV bus |
-| Thermal States | Motor winding temperature, inverter junction temperature |
-| Energy | Cumulative energy consumption |
+| EM | Motor measurement sub-bus |
+| energy | Cumulative energy consumed |
+
+### Physical Ports
+
+| Port | Domain | Description |
+|------|--------|-------------|
+| HV | Electrical | High-voltage bus connection |
+| Ax | Mechanical rotational | Axle output shaft |
+| A | Thermal liquid | Coolant port |
+| B | Thermal liquid | Coolant port |
 
 ---
 
 ## MotorDriveLube
 
 **File:** `MotorDriveLube.slx`
-**Parameter File:** `MotorDriveGearParams.m`, `MotorDriveGearThParams.m`
+**Parameter File:** `MotorDriveLubeParams.m`
 **Thermal Coupling:** Yes
 **System Mask:** Yes -- 5 top-level params (same as MotorDriveGearTh). All thermal and lubrication sub-parameters are loaded by the param file into the workspace, not exposed on the mask.
 
@@ -95,24 +105,30 @@ Motor drive with fixed gear including thermal coupling and gearbox lubrication l
 - Used in high-fidelity powertrain studies where gearbox efficiency and thermal behavior matter.
 - Suitable for evaluating the effect of lubricant viscosity and gear losses on vehicle range.
 
-### Inputs
+### Input Bus — `s`
 
 | Signal | Description |
 |--------|-------------|
-| Torque command | Requested motor torque |
-| Control signals | Enable, mode, and limit signals |
-| Battery signals | HV bus voltage and current |
-| Coolant port | Thermal-liquid interface for motor, inverter, and gearbox cooling |
+| EMtrq | Motor torque command |
+| Batt | Battery status sub-bus (Relay.RelayDchg, BattSensor.BatVolt) |
+| EMrpm | Motor speed feedback |
 
-### Outputs
+### Output Bus — `m`
 
 | Signal | Description |
 |--------|-------------|
-| Motor Torque | Delivered mechanical torque |
-| Motor Speed | Rotor speed |
-| Electrical Power | Power drawn from the HV bus |
-| Thermal States | Motor, inverter, and gearbox temperatures |
-| Energy | Cumulative energy consumption |
+| EM | Motor measurement sub-bus |
+| energy | Cumulative energy consumed |
+| CoolTp | Coolant temperature (from sensor) |
+
+### Physical Ports
+
+| Port | Domain | Description |
+|------|--------|-------------|
+| HV | Electrical | High-voltage bus connection |
+| Ax | Mechanical rotational | Axle output shaft |
+| A | Thermal liquid | Coolant port |
+| B | Thermal liquid | Coolant port |
 
 ---
 
@@ -126,4 +142,4 @@ Motor drive with fixed gear including thermal coupling and gearbox lubrication l
 | Initial coolant temperature | 298.15 | K |
 | Motor loss map | Loaded from `MotorLossMap.mat` | - |
 
-Copyright 2022 - 2025 The MathWorks, Inc.
+Copyright 2022 - 2026 The MathWorks, Inc.

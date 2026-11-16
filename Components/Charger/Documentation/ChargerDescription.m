@@ -20,16 +20,22 @@
 open_system('Charger')
 
 %% Ports
-% *Inputs*
 %
-% * *Relay command* - Enables charger connection to the HV bus.
-% * *Battery cell voltage* - Feedback for CC-CV transition.
-% * *Charging state* - Charge enable and mode signal from the BMS.
-%
-% *Outputs*
-%
-% * *Charging Current* - Current delivered to the battery pack.
-% * *HV Power* - Electrical power drawn from the grid.
+% <html>
+% <h3>Input Bus &mdash; <code>s</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>Batt.Relay.RelayChg</td><td>Charge relay command</td></tr>
+% <tr><td>Batt.BattSensor.CellVoltMax</td><td>Maximum cell voltage for CC-CV transition</td></tr>
+% </table>
+% <h3>Output Bus</h3>
+% <p>No output bus. Operates via physical HV port only.</p>
+% <h3>Physical Ports</h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Port</th><th>Domain</th><th>Description</th></tr>
+% <tr><td>HV</td><td>Electrical</td><td>High-voltage bus connection</td></tr>
+% </table>
+% </html>
 
 %% Workflows
 % The Charger block is listed in the *VehicleElectric* and *VehicleElecAux*

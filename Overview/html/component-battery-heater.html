@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Battery Heater — Electric Vehicle Design</title><link rel="stylesheet" href="assets/styles.css?v=20261028-3"></head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+  <header class="help-header"><div class="help-header-inner"><a class="help-brand" href="ElectricVehicleDesignOverview.html">MATLAB Help Center<small>Electric Vehicle Design with Simscape</small></a></div></header>
+  <div class="doc-shell">
+    <aside class="category-nav"><nav aria-label="Component reference navigation">
+      <ul class="nav-trail"><li><a href="ElectricVehicleDesignOverview.html">Documentation Home</a></li><li><a href="components.html">Components</a></li></ul>
+      <div class="nav-siblings-label">Thermal and Fluid</div>
+      <ul class="nav-siblings"><li aria-current="page"><span>Battery Heater</span></li><li><a href="component-chiller.html">Chiller</a></li><li><a href="component-hvac.html">HVAC</a></li><li><a href="component-pump.html">Pump</a></li><li><a href="component-radiator.html">Radiator</a></li></ul>
+      <div class="on-page"><div class="on-page-label">On this page</div><ul class="on-page-list"><li><a href="#description">Description</a></li><li><a href="#examples">Examples</a></li><li><a href="#interface">Interface</a></li><li><a href="#testing">Testing</a></li><li><a href="#see-also">See Also</a></li></ul></div>
+    <div class="nav-browse"><div class="on-page-label">Category</div><ul class="nav-browse-list"><li><a href="examples.html">Examples</a></li><li><a href="vehicle-range.html">Vehicle Models</a></li><li><a href="project-builder.html">Apps &amp; Utilities</a></li></ul></div>
+    </nav></aside>
+    <main class="doc-main" id="main-content">
+
+      <header class="product-intro reference-heading"><div><h1>Battery Heater</h1><p class="tagline">Heat battery coolant during low-temperature operation</p><p class="library-path"><strong>Component path:</strong> Components / BatteryHeater</p><div class="action-row"><a class="action" href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','BatteryHeater','Model','Heater.slx'))">Open Default Model</a><a class="action secondary" href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','BatteryHeater','TestBench','HeaterTestHarness.slx'))">Open Test Harness</a></div></div><figure class="component-header-image"><img src="Image/HeaterDescription_01.png" alt="Heater model canvas"></figure></header>
+
+      <section id="description"><h2>Description</h2>
+    <div class="component-description-layout">
+      <div class="component-lede"><p>Battery heater component for the BEV thermal management system. The heater draws power from the HV bus to warm the battery pack in cold ambient conditions, ensuring the cells operate within their optimal temperature window. Two fidelity levels are available.</p>
+        <div class="fidelity-decision"><strong>How to choose a fidelity</strong><p>Use <strong>Heater</strong> when cold-start energy, heater thermal mass, and coolant heat transfer affect the result. Use <strong>HeaterDummy</strong> only to preserve the electrical and coolant interfaces while validating system integration quickly.</p></div>
+      </div>
+
+    </div>
+    <h3 id="models">Fidelity at a glance</h3>
+    <div class="table-scroll"><table><thead><tr><th>Model</th><th>Description</th><th>Use case</th><th>Templates</th><th>Documentation &amp; files</th></tr></thead><tbody>
+<tr><td><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','BatteryHeater','Model','Heater.slx'))"><strong>Heater</strong></a></td><td>Controlled current source with thermal mass and coolant coupling.</td><td>Cold-climate range estimation, thermal management strategy evaluation, and auxiliary power consumption studies.</td><td>VehicleElectroThermal</td><td><a href="matlab:web(fullfile(currentProject().RootFolder,'Components','BatteryHeater','Documentation','html','HeaterDescription.html'),'-new')">Documentation</a> &middot; <a href="matlab:edit(fullfile(currentProject().RootFolder,'Components','BatteryHeater','Model','HeaterParams.m'))">Parameters</a></td></tr>
+<tr><td><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','BatteryHeater','Model','HeaterDummy.slx'))"><strong>HeaterDummy</strong></a></td><td>Fixed load with coolant pass-through and no heat exchange.</td><td>Integration testing or fast simulations where heater behavior is not under study but the model needs a connected heater block.</td><td>VehicleElectroThermal</td><td><a href="matlab:web(fullfile(currentProject().RootFolder,'Components','BatteryHeater','Documentation','html','HeaterDummyDescription.html'),'-new')">Documentation</a> &middot; <a href="matlab:edit(fullfile(currentProject().RootFolder,'Components','BatteryHeater','Model','HeaterDummyParams.m'))">Parameters</a></td></tr>
+</tbody></table></div>
+    <h3>Where it participates</h3><ul>
+<li><strong>Range Estimation</strong> (<code>Workflow/Vehicle/RangeEstimation/</code>) &mdash; The heater activates during cold-ambient drive cycles to keep the battery pack at an operable temperature. Its energy consumption directly impacts the vehicle range in low-temperature scenarios.</li>
+<li><strong>Electro-Thermal Vehicle Studies</strong> &mdash; The heater is part of the full thermal plant used in the VehicleElectroThermal template.</li>
+</ul></section>
+
+      <section id="examples"><h2>Examples</h2><div class="used-by"><strong>Workflows and models that use this component</strong>The battery heater is used by electrothermal and low-temperature vehicle configurations to condition the pack during cold-ambient simulations.</div><div class="component-example-grid"><article class="component-example-card"><div class="card-header-bar"></div><img class="component-example-image" src="Image/HeaterTestHarnessDescription_01.png" alt="BatteryHeater example model canvas"><div class="component-example-body"><a href="workflow-vehicle-range.html">Estimate Range in Cold Ambient Conditions</a><p><strong>Vehicle workflow</strong> &mdash; Accounts for battery-conditioning energy in range calculations.</p></div></article>
+</div></section>
+
+      <section id="interface"><h2>Interface</h2><p class="section-intro">Both fidelities share the same HV-bus and control-command boundary. Heater includes active thermal coupling; HeaterDummy passes coolant through without heat exchange.</p>
+    <div class="table-scroll"><table><thead><tr><th>Port / signal</th><th>Direction</th><th>Description</th></tr></thead><tbody>
+<tr><td>Battery status</td><td>Input</td><td>Pack voltage, current, temperature, and SOC from the BMS.</td></tr>
+<tr><td>Heater control command</td><td>Input</td><td>On/off or proportional command from the thermal controller.</td></tr>
+<tr><td>HV bus connection</td><td>Input</td><td>Electrical connection to draw heater current.</td></tr>
+<tr><td>Coolant port <em>(both fidelities)</em></td><td>Conserving</td><td>Thermal-liquid interface for coolant loop heat exchange (active in Heater, pass-through in HeaterDummy).</td></tr>
+<tr><td>Heater Current</td><td>Output</td><td>Current drawn from the HV bus.</td></tr>
+<tr><td>HV Power <em>(Heater)</em></td><td>Output</td><td>Electrical power consumed by the heater.</td></tr>
+<tr><td>Thermal States <em>(Heater)</em></td><td>Output</td><td>Heater temperature and heat flow to coolant.</td></tr>
+</tbody></table></div></section>
+
+      <section id="testing"><h2>Testing</h2><ul class="link-list"><li><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','BatteryHeater','TestBench','HeaterTestHarness.slx'))">Open Heater Test Harness</a> · <a href="matlab:web(fullfile(currentProject().RootFolder,'Components','BatteryHeater','Documentation','html','HeaterTestHarnessDescription.html'),'-new')">view documentation</a><p>Verify heater thermal mass, electrical draw, and coolant heat transfer under controlled inputs.</p></li><li><a href="matlab:runtests(fullfile(currentProject().RootFolder,'Components','BatteryHeater','TestCase','BatteryHeaterPassTests.m'))">Run BatteryHeater Component Tests</a><p>Run the maintained BatteryHeater test case before integration.</p></li></ul></section>
+      <section id="see-also"><h2>See Also</h2><p class="see-also-links"><a href="component-battery.html">High-Voltage Battery</a> | <a href="component-hvac.html">HVAC</a> | <a href="component-chiller.html">Chiller</a></p><h3>Topics</h3><ul><li><a href="vehicle-range.html#templates">VehicleElectroThermal</a></li><li><a href="workflow-vehicle-range.html">Estimate Vehicle Range</a></li></ul></section>
+    </main>
+  </div>
+  <script src="assets/app.js?v=20260930-6"></script>
+</body></html>

@@ -1,6 +1,6 @@
 # BMS Models
 
-This folder contains the battery management system Simulink models, SOC estimation variants, and the shared parameter script.
+BMS component, internal SOC algorithms, and shared parameters.
 
 ---
 
@@ -12,26 +12,18 @@ This folder contains the battery management system Simulink models, SOC estimati
 
 ### Description
 
-Battery management system controller that monitors cell voltages, currents, and temperatures against configurable safety limits. The BMS issues positive and negative relay commands, provides SOC estimation, and raises fault flags when operating limits are exceeded. Thermal monitoring includes coolant switch-on/off temperature thresholds.
+Monitors battery limits and controls relays. Uses `BMSSoCDirect` by default.
 
-### Inputs
+### Interface
 
-| Signal | Description |
-|--------|-------------|
-| Cell voltage | Measured cell terminal voltage |
-| Pack current | Measured pack current |
-| Cell temperature | Measured cell temperature |
-| Charge command | Requested charge/discharge mode |
-
-### Outputs
-
-| Signal | Description |
-|--------|-------------|
-| Positive relay command | Connects battery positive terminal |
-| Negative relay command | Connects battery negative terminal |
-| SOC estimate | Estimated state of charge |
-| Fault flags | Over-voltage, under-voltage, over-current, over-temperature |
-| Coolant command | Thermal management enable based on temperature thresholds |
+| Port | Direction | Description |
+|------|-----------|-------------|
+| `s` | Input | Battery measurements |
+| `Cmd` | Input | Charge/discharge command |
+| `ToBat` | Output | Relay commands |
+| `info` | Output | SOC and battery status |
+| `ToTh` | Output | Thermal management commands |
+| `Fault` | Output | Fault flags |
 
 ---
 
@@ -39,15 +31,14 @@ Battery management system controller that monitors cell voltages, currents, and 
 
 **File:** `SOC/BMSSoCDirect.slx`
 **Parameter File:** `BMSParams.m`
-**Thermal Coupling:** Yes
 
 ### Description
 
-BMS variant using direct (coulomb-counting) SOC estimation. SOC is computed by integrating pack current over time from a known initial condition. Simple and computationally inexpensive but subject to drift over long simulations without periodic recalibration.
+Internal BMS algorithm that reads cell SOC values and reports their minimum and maximum.
 
 ### Inputs / Outputs
 
-Same interface as [BMS](#bms). The SOC output is computed via coulomb counting.
+Input: `BatSensor`. Output: `SoC`.
 
 ---
 
@@ -55,15 +46,14 @@ Same interface as [BMS](#bms). The SOC output is computed via coulomb counting.
 
 **File:** `SOC/BMSSoCEKF.slx`
 **Parameter File:** `BMSParams.m`
-**Thermal Coupling:** Yes
 
 ### Description
 
-BMS variant using an extended Kalman filter (EKF) for SOC estimation. Combines a battery equivalent-circuit model with noisy voltage and current measurements to produce a filtered SOC estimate with improved accuracy compared to direct coulomb counting.
+Internal BMS algorithm using an extended Kalman filter (EKF) to estimate SOC.
 
 ### Inputs / Outputs
 
-Same interface as [BMS](#bms). The SOC output is computed via EKF observer.
+Input: `BatSensor`. Output: `SoC`.
 
 ---
 
@@ -76,7 +66,7 @@ Same interface as [BMS](#bms). The SOC output is computed via EKF observer.
 | Max charging current | 100 | A |
 | Max discharging current | 120 | A |
 | Charger CC value | 50 | A |
-| Min thermal limit | 263.15 (10 degC) | K |
+| Min thermal limit | 243.15 (-30 degC) | K |
 | Max thermal limit | 333.15 (60 degC) | K |
 | Series strings | 110 | - |
 | Parallel cells per string | 3 | - |

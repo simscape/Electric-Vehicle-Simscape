@@ -1,14 +1,28 @@
 # BMS
 
-Battery management system component for the BEV high-voltage battery. The BMS monitors cell voltages, currents, and temperatures against configurable safety limits, issues relay commands, provides SOC estimation, and raises fault flags when operating limits are exceeded.
+Battery management system (BMS) for battery protection, relay control, and state-of-charge (SOC) reporting.
 
 ## Model Fidelities
 
 | Model | Description | Thermal | Use Case |
 |-------|-------------|:-------:|----------|
-| [BMS](Model/README.md#bms) | Battery management system with voltage, current, and thermal fault monitoring. Issues relay commands and provides SOC estimation. | Yes | All vehicle configurations requiring battery protection, relay management, and SOC reporting. |
-| [BMSSoCDirect](Model/README.md#bmssocdirect) | BMS with direct (coulomb-counting) SOC estimation. Simple integrator-based SOC tracking. | Yes | Simulations where SOC estimation accuracy is secondary or as a baseline for comparison. |
-| [BMSSoCEKF](Model/README.md#bmssocekf) | BMS with extended Kalman filter (EKF) SOC estimation. Provides improved SOC accuracy under noisy measurements. | Yes | Studies focused on SOC estimation performance, observer tuning, or BMS algorithm development. |
+| [BMS](Model/README.md#bms) | Battery protection, relay control, and SOC reporting. | Yes | Vehicle integration. |
+
+## SOC Algorithms
+
+Internal BMS blocks; `BMSSoCDirect` is the default.
+
+| Model | Method |
+|-------|--------|
+| [BMSSoCDirect](Model/README.md#bmssocdirect) | Reads cell SOC values. |
+| [BMSSoCEKF](Model/README.md#bmssocekf) | Extended Kalman filter (EKF) SOC estimation. |
+
+## Component Interface
+
+| Model | Inputs | Outputs |
+|-------|--------|---------|
+| BMS | `s`, `Cmd` | `ToBat`, `info`, `ToTh`, `Fault` |
+| SOC algorithms | `BatSensor` | `SoC` |
 
 ## Folder Structure
 

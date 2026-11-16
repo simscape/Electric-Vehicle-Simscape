@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Examples — Electric Vehicle Design</title><link rel="stylesheet" href="assets/styles.css?v=20261028-1"></head><body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<header class="help-header"><div class="help-header-inner"><a class="help-brand" href="ElectricVehicleDesignOverview.html">MATLAB Help Center<small>Electric Vehicle Design with Simscape</small></a></div></header>
+<div class="doc-shell"><aside class="category-nav"><nav aria-label="Page navigation">
+     <ul class="nav-trail"><li><a href="ElectricVehicleDesignOverview.html">Documentation Home</a></li></ul>
+     <div class="nav-current">Examples</div>
+     <div class="on-page"><div class="on-page-label">On this page</div><ul class="on-page-list"><li><a href="#battery-workflows">Battery Workflows</a></li><li><a href="#motor-drive-workflows">Motor Drive Workflows</a></li><li><a href="#driveline-workflows">Driveline Workflows</a></li><li><a href="#vehicle-workflows">Vehicle Workflows</a></li></ul></div>
+   <div class="nav-browse"><div class="on-page-label">Category</div><ul class="nav-browse-list"><li><a href="components.html">Components</a></li><li><a href="vehicle-range.html">Vehicle Models</a></li><li><a href="project-builder.html">Apps &amp; Utilities</a></li></ul></div>
+    </nav></aside><main class="doc-main" id="main-content"><header class="product-intro"><h1>Examples</h1><p>Each example opens a quick-setup page with the exact preset or test bench, model selection, Live Script, inputs, and expected result types. Component and vehicle-model pages provide the reusable detail behind each one.</p></header>
+  <section id="battery">
+    <h2 id="battery-workflows">Battery Workflows</h2>
+    <div class="component-example-grid">
+      <article class="component-example-card">
+        <div class="card-header-bar"></div>
+        <img class="component-example-image" src="Image/BEVplantModelbatterysSubs.png" alt="Size Battery Pack for Electric Vehicle">
+        <div class="component-example-body">
+          <a href="workflow-battery-sizing.html">Size Battery Pack for Electric Vehicle</a>
+          <p>The battery is one of the most critical and expensive components on a BEV — it powers propulsion, HVAC, coolant pumps and heaters, and lighting. A larger pack improves range but adds weight, volume, cost, and packaging and safety constraints, and the extra mass itself eats into the range gain.</p>
+          <div class="component-example-actions">
+            <a href="matlab:edit('BEVBatterySizingMain.mlx')" class="component-example-action primary">Open Live Script</a>
+            <a href="workflow-battery-sizing.html" class="component-example-action secondary">Quick Setup</a>
+          </div>
+        </div>
+      </article>
+      <article class="component-example-card">
+        <div class="card-header-bar"></div>
+        <img class="component-example-image" src="Image/BatteryNeuralNetResults.png" alt="Build Virtual Sensor for Battery Management System">
+        <div class="component-example-body">
+          <a href="workflow-battery-virtual-sensor.html">Build Virtual Sensor for Battery Management System</a>
+          <p>In a battery pack, voltage, current, and temperature sensors feed the battery management system (BMS). Physical temperature sensors are costly and hard to install throughout a large pack, so a numerical estimate of cell temperature can replace or back them up if one fails.</p>
+          <div class="component-example-actions">
+            <a href="matlab:edit('VirtualSensorNeuralNetModel.mlx')" class="component-example-action primary">Open Live Script</a>
+            <a href="workflow-battery-virtual-sensor.html" class="component-example-action secondary">Quick Setup</a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section id="motor">
+    <h2 id="motor-drive-workflows">Motor Drive Workflows</h2>
+    <div class="component-example-grid">
+      <article class="component-example-card">
+        <div class="card-header-bar"></div>
+        <img class="component-example-image" src="Image/PMSMlossMapGen.PNG" alt="Generate Motor and Inverter Loss Maps">
+        <div class="component-example-body">
+          <a href="workflow-loss-map.html">Generate Motor and Inverter Loss Maps</a>
+          <p>To model a permanent magnet synchronous motor (PMSM) inside a fast system-level thermal simulation, you replace the detailed machine with a loss map. This workflow generates that map from an FEM-characterized PMSM under field-oriented control.</p>
+          <div class="component-example-actions">
+            <a href="matlab:edit('generateDULossMap.mlx')" class="component-example-action primary">Open Live Script</a>
+            <a href="workflow-loss-map.html" class="component-example-action secondary">Quick Setup</a>
+          </div>
+        </div>
+      </article>
+      <article class="component-example-card">
+        <div class="card-header-bar"></div>
+        <img class="component-example-image" src="Image/BatteryElectricVehicleModelOverviewThermalDiagram.png" alt="Analyze Motor Drive Thermal Durability">
+        <div class="component-example-body">
+          <a href="workflow-motor-thermal.html">Analyze Motor Drive Thermal Durability</a>
+          <p>Drive-unit thermal management is critical for durability and life estimation — validating a design under extreme loading early reduces the risk of failure late in hardware development.</p>
+          <div class="component-example-actions">
+            <a href="matlab:edit('DUThermalDurability.mlx')" class="component-example-action primary">Open Live Script</a>
+            <a href="workflow-motor-thermal.html" class="component-example-action secondary">Quick Setup</a>
+          </div>
+        </div>
+      </article>
+      <article class="component-example-card">
+        <div class="card-header-bar"></div>
+        <img class="component-example-image" src="Image/PMSMThermalTestInverterResult.png" alt="Estimate Inverter Power Module End of Life">
+        <div class="component-example-body">
+          <a href="workflow-inverter-life.html">Estimate Inverter Power Module End of Life</a>
+          <p>Inverter life is governed by thermal fatigue of the power-module solder joints and wire bonds, seen as a rise in thermal resistance beyond a degradation limit. Suppliers quote cycles-to-failure only for a standard test cycle (for example 1 s on, 1 s off), so translating that to a real driving scenario is difficult.</p>
+          <div class="component-example-actions">
+            <a href="matlab:edit('inverterPowerModuleLife.mlx')" class="component-example-action primary">Open Live Script</a>
+            <a href="workflow-inverter-life.html" class="component-example-action secondary">Quick Setup</a>
+          </div>
+        </div>
+      </article>
+      <article class="component-example-card">
+        <div class="card-header-bar"></div>
+        <img class="component-example-image" src="Image/PMSMThermalTestGearResult.png" alt="Select Gear Ratio for Electric Vehicle">
+        <div class="component-example-body">
+          <a href="workflow-gear-ratio.html">Select Gear Ratio for Electric Vehicle</a>
+          <p>A fixed gear ratio is usually the most cost-effective drive-unit choice for a BEV, but the ratio must let the motor meet the duty cycle without overheating.</p>
+          <div class="component-example-actions">
+            <a href="matlab:edit('minimumRequiredGearRatio.mlx')" class="component-example-action primary">Open Live Script</a>
+            <a href="workflow-gear-ratio.html" class="component-example-action secondary">Quick Setup</a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section id="driveline">
+    <h2 id="driveline-workflows">Driveline Workflows</h2>
+    <div class="component-example-grid">
+      <article class="component-example-card">
+        <div class="card-header-bar"></div>
+        <img class="component-example-image" src="Image/DrivelineOrderMap.png" alt="Frequency order map of motor-bearing excitation versus motor speed and order">
+        <div class="component-example-body">
+          <a href="workflow-driveline-order-map.html">Generate Frequency Order Map for BEV Motor Driveline</a>
+          <p>Generate motor torque ripple, apply it to a flexible driveline, calculate motor-bearing excitation force, and map force amplitude against rotational speed and order.</p>
+          <div class="component-example-actions">
+            <a href="matlab:edit(fullfile(currentProject().RootFolder,'Workflow','Driveline','DrivelineNVH','generateOrderMap.mlx'))" class="component-example-action primary">Open Live Script</a>
+            <a href="workflow-driveline-order-map.html" class="component-example-action secondary">Quick Setup</a>
+          </div>
+        </div>
+      </article>
+      <article class="component-example-card">
+        <div class="card-header-bar"></div>
+        <img class="component-example-image" src="Image/VehicleLaunchJerkComparison.png" alt="Optimized and baseline vehicle jerk during launch">
+        <div class="component-example-body">
+          <a href="workflow-vehicle-launch.html">Optimize Gear Ratios for Vehicle Launch</a>
+          <p>Optimize three transmission ratios across multiple launch torque levels to reduce driveline jerk while preserving vehicle acceleration.</p>
+          <div class="component-example-actions">
+            <a href="matlab:edit(fullfile(currentProject().RootFolder,'Workflow','Driveline','DrivelineNVH','optimizeVehicleLaunch.mlx'))" class="component-example-action primary">Open Live Script</a>
+            <a href="workflow-vehicle-launch.html" class="component-example-action secondary">Quick Setup</a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section id="vehicle">
+    <h2 id="vehicle-workflows">Vehicle Workflows</h2>
+    <div class="component-example-grid">
+      <article class="component-example-card">
+        <div class="card-header-bar"></div>
+        <img class="component-example-image" src="Image/BatteryElectricVehicleModelOverview_02.png" alt="Estimate Electric Vehicle Range">
+        <div class="component-example-body">
+          <a href="workflow-vehicle-range.html">Estimate Electric Vehicle Range</a>
+          <p>Range anxiety, cost, and safety are the central challenges in BEV adoption. Real-world range depends heavily on conditions: hot versus sub-zero ambient temperatures, HVAC load, and whether the driver profile is aggressive or relaxed.</p>
+          <div class="component-example-actions">
+            <a href="matlab:edit('BEVRangeEstimationMain.mlx')" class="component-example-action primary">Open Live Script</a>
+            <a href="workflow-vehicle-range.html" class="component-example-action secondary">Quick Setup</a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+</main></div>
+<script src="assets/app.js?v=20260930-6"></script></body></html>

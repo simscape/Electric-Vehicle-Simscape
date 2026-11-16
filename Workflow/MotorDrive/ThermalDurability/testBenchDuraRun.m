@@ -1,4 +1,4 @@
-%% Function for running Motor thermal test bench for continous thermal test at constant load  
+%% Function for running Motor thermal test bench for continuous thermal test at constant load
 % The script runs MotorDriveThermalTestbench.slx in batch mode based on user input 
 
 % Copyright 2022 - 2025 The MathWorks, Inc.
@@ -27,7 +27,7 @@ function DUdurabilityTable = testBenchDuraRun(sumpT,testcycle)
     
    % Loop through each test cycle
    for tst = 1:numel(testcycle)
-        % Set the road inclination to 0.16 for UDDS driving cycle, otherwise set to 0
+        % Set road inclination to 0.248 for the first cycle and 0.025 for subsequent cycles.
         if tst == 1
              set_param([thermalTB,'/Test Env N Controls/Motor speed N test environment/Test Environment/Setting/Road Inclination'],'Value','0.248')
         else

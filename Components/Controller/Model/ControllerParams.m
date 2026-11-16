@@ -11,5 +11,6 @@ controller.tireRollingRadius_cm = 30;
 controller.BrakeFactor = 0.4;
 controller.MaxSpeed = 140/0.06; % [m/min] max speed for controller 140 km/h
 controller.motorDriveTrqMax = 360;
+controller.Regen = 1;
 
 BMSParams;

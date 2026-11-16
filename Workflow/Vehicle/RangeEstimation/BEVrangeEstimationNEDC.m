@@ -28,7 +28,7 @@ speedBlock = find_system(mdl, ...
 try
     set(getSimulinkBlockHandle(speedBlock),'cycleVar',driveCycle);
 catch
-    disp('Plese Install desired test cycle using Drive Cycle Source block in the slx model');
+    disp('Please Install desired test cycle using Drive Cycle Source block in the slx model');
     driveCycle = 'FTP75';
     SimulationTime = "2474";
     disp('Running available Default cycle FTP75');
@@ -41,7 +41,7 @@ battery.T_vec=[278 293 313];                 % Temperature vector T [K]
 battery.AH=34;                               % Cell capacity [Ahr]
 battery.AH_vec=[0.9*battery.AH battery.AH 0.9*battery.AH];    % Cell capacity vector AH(T) [Ahr]
 battery.SOC_vec=[0, .1, .25, .5, .75, .9, 1]; % Cell state of charge vector SOC [-]
-battery.initialPackSOC=0.75;                 % Pack intial SOC (-)
+battery.initialPackSOC=0.75;                 % Pack initial SOC (-)
 
 % Run parameter file for battery
 batt_BatteryManagementSystem_param;
@@ -60,7 +60,7 @@ runScenario = @(vehicleThermal) sim( baseIn.setVariable('vehicleThermal', vehicl
 
 extractNEDC = @(simoutPack) localExtractNEDC(simoutPack);
 
-%% Scenario 1: -10C, AC ON
+%% Scenario 1: -10 C, AC ON
 vehicleThermal.ambient          = -10 + 273.15;
 vehicleThermal.coolant_T_init   = -10 + 273.15;
 vehicleThermal.CabinSpTp        =  20 + 273.15;
@@ -72,7 +72,7 @@ simoutPack = runScenario(vehicleThermal);
 NEDCloTpACdata = simoutPack.logsout;
 NEDCloTpAC     = extractNEDC(simoutPack);
 
-%% Scenario 2: -10C, AC OFF
+%% Scenario 2: -10 C, AC OFF
 vehicleThermal.AConoff = 0;
 
 simoutPack = runScenario(vehicleThermal);
@@ -80,7 +80,7 @@ simoutPack = runScenario(vehicleThermal);
 NEDCloTpNoACdata = simoutPack.logsout;
 NEDCloTpNoAC     = extractNEDC(simoutPack);
 
-%% Scenario 3: 35C, AC ON
+%% Scenario 3: 35 C, AC ON
 vehicleThermal.ambient          = 35 + 273.15;
 vehicleThermal.coolant_T_init   = 35 + 273.15;
 vehicleThermal.CabinSpTp        = 20 + 273.15;
@@ -92,7 +92,7 @@ simoutPack = runScenario(vehicleThermal);
 NEDChiTpACdata = simoutPack.logsout;
 NEDChiTpAC     = extractNEDC(simoutPack);
 
-%% Scenario 4: 35C, AC OFF
+%% Scenario 4: 35 C, AC OFF
 vehicleThermal.AConoff = 0;
 
 simoutPack = runScenario(vehicleThermal);
@@ -110,14 +110,5 @@ save(proj.RootFolder + "\Workflow\Vehicle\RangeEstimation\NEDCrangeData.mat", ..
 
 %% -------- Local function --------
 function out = localExtractNEDC(simoutPack)
-    lo = simoutPack.logsout;
-
-    Vals = getValuesFromLogsout(lo.get("EnergyCons"));  out.EnergyCons  = Vals.Data(end);
-    Vals = getValuesFromLogsout(lo.get("EM1energy"));   out.EM1energy   = Vals.Data(end);
-    Vals = getValuesFromLogsout(lo.get("EM2energy"));   out.EM2energy   = Vals.Data(end);
-    Vals = getValuesFromLogsout(lo.get("HVACenergy"));  out.HVACenergy  = Vals.Data(end);
-    Vals = getValuesFromLogsout(lo.get("AuxEnergy"));   out.AuxEnergy   = Vals.Data(end);
-    Vals = getValuesFromLogsout(lo.get("Distance"));    out.Distance    = Vals.Data(end);
-    Vals = getValuesFromLogsout(lo.get("RangeRating")); out.RangeRating = Vals.Data(end);
-    Vals = getValuesFromLogsout(lo.get("Energy"));      out.Energy      = Vals.Data(end);
+    out = extractEnergyBreakdown(simoutPack.logsout);
 end

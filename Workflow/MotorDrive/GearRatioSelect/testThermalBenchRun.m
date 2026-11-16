@@ -14,7 +14,7 @@ function tstResultTable = testThermalBenchRun(gearRatio,testcycle,testduration)
        set_param([thermalTB,'/Drive Cycle Source'],'cycleVar',testcycle(1))
    catch
        % Display an error message if the test cycle is not found
-       disp("Plese Install desired test cycle using Drive Cycle Source block in the slx model")
+       disp("Please Install desired test cycle using Drive Cycle Source block in the slx model")
        % Set the test cycle to a default cycle (FTP75)
        disp("Running available Default cycle FTP75 - selected gear ratios may fail for originally intended test cycles")
        testcycle = ["FTP75"];

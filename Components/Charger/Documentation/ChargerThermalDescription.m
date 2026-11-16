@@ -19,24 +19,29 @@
 open_system('ChargerThermal')
 
 %% Ports
-% *Inputs*
 %
-% * *Relay command* - Charger enable.
-% * *Battery cell voltage* - CC-CV transition feedback.
-% * *Charging status* - Charge mode from BMS.
-% * *Coolant port* - Thermal-liquid interface for converter cooling.
-%
-% *Outputs*
-%
-% * *Charging Current* - Current delivered to the battery.
-% * *HV Power* - Electrical power consumed.
-% * *Converter Thermal States* - Converter temperature and heat flow to coolant.
+% <html>
+% <h3>Input Bus &mdash; <code>s</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>Batt.Relay.RelayChg</td><td>Charge relay command</td></tr>
+% <tr><td>BattSensor.CellVoltMax</td><td>Maximum cell voltage for CC-CV transition</td></tr>
+% </table>
+% <h3>Output Bus</h3>
+% <p>No output bus.</p>
+% <h3>Physical Ports</h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Port</th><th>Domain</th><th>Description</th></tr>
+% <tr><td>HV</td><td>Electrical</td><td>High-voltage bus connection</td></tr>
+% <tr><td>A</td><td>Thermal liquid</td><td>Coolant port</td></tr>
+% <tr><td>B</td><td>Thermal liquid</td><td>Coolant port</td></tr>
+% </table>
+% </html>
 
 %% Workflows
 % The ChargerThermal block is used in the *VehicleElectroThermal* template
-% for full-thermal charging studies. Parameters are loaded by
-% |BEVSystemModelParams.m| via |ChargerThermalParams.m|. It is referenced
-% by the charger test harness (|ChargerTestHarness.slx|).
+% for full-thermal charging studies. It is validated through
+% |ChargerTestHarness.slx|.
 
 %% Parameters
 %

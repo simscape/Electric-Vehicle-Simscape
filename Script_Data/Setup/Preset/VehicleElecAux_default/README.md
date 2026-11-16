@@ -15,7 +15,7 @@ Electric powertrain with auxiliary systems including HVAC, coolant pumps, and pu
 | Field | Value |
 |-------|-------|
 | Template | VehicleElecAux |
-| Config Source | APP/Config/Preset/VehicleTemplateConfig.json |
+| Config Source | utils/APP/Config/Preset/VehicleTemplateConfig.json |
 | Description | Electric Vehicle with Auxiliary (HVAC, pumps) and without Thermal |
 
 ## Model Configuration

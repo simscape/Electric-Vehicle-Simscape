@@ -25,25 +25,35 @@
 open_system('MotorDriveGearTh')
 
 %% Ports
-% *Inputs*
 %
-% * *Torque command* - Requested motor torque.
-% * *Control signals* - Enable, mode, and limit signals.
-% * *Battery signals* - HV bus voltage and current.
-% * *Coolant port* - Thermal-liquid interface for motor and inverter cooling.
-%
-% *Outputs*
-%
-% * *Motor Torque* - Delivered mechanical torque.
-% * *Motor Speed* - Rotor speed.
-% * *Electrical Power* - Power drawn from the HV bus.
-% * *Thermal States* - Motor winding temperature, inverter junction temperature.
-% * *Energy* - Cumulative energy consumption.
+% <html>
+% <h3>Input Bus &mdash; <code>s</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>EMtrq</td><td>Motor torque command</td></tr>
+% <tr><td>Batt</td><td>Battery status sub-bus (Relay.RelayDchg, BattSensor.BatVolt)</td></tr>
+% <tr><td>EMrpm</td><td>Motor speed feedback</td></tr>
+% </table>
+% <h3>Output Bus &mdash; <code>m</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>EM</td><td>Motor measurement sub-bus</td></tr>
+% <tr><td>energy</td><td>Cumulative energy consumed</td></tr>
+% </table>
+% <h3>Physical Ports</h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Port</th><th>Domain</th><th>Description</th></tr>
+% <tr><td>HV</td><td>Electrical</td><td>High-voltage bus connection</td></tr>
+% <tr><td>Ax</td><td>Mechanical rotational</td><td>Axle output shaft</td></tr>
+% <tr><td>A</td><td>Thermal liquid</td><td>Coolant port</td></tr>
+% <tr><td>B</td><td>Thermal liquid</td><td>Coolant port</td></tr>
+% </table>
+% </html>
 
 %% Workflows
-% MotorDriveGearTh is the *default motor fidelity* loaded by
-% |BEVSystemModelParams.m| via |MotorDriveGearThParams.m|. It is used in
-% all electro-thermal range estimation runs (NEDC, WLTC, EPA). Motor
+% MotorDriveGearTh is the *default motor fidelity* for the
+% *VehicleElectroThermal* template. It is used in all electro-thermal
+% range estimation runs (NEDC, WLTC, EPA). Motor
 % losses contribute to EM1 and EM2 energy tracking in range results.
 % Inverter thermal output feeds the inverter life prediction workflow.
 % The model is validated through |MotorTestHarness.slx|.

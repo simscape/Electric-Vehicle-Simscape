@@ -23,24 +23,33 @@
 open_system('Chiller')
 
 %% Ports
-% *Inputs*
 %
-% * *Battery status* - Pack temperature and thermal state from the BMS.
-% * *Chiller bypass control* - On/off or bypass command from the thermal controller.
-% * *HV bus connection* - Electrical connection for chiller power draw.
-% * *Coolant port* - Thermal-liquid interface for coolant loop heat exchange.
-%
-% *Outputs*
-%
-% * *Chiller Current* - Current drawn from the HV bus.
-% * *HV Power* - Electrical power consumed.
-% * *Thermal States* - Chiller temperature and heat flow to coolant.
+% <html>
+% <h3>Input Bus &mdash; <code>s</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>cmdChillerByp</td><td>Chiller bypass command (0 = active, 1 = bypass)</td></tr>
+% <tr><td>BatSt</td><td>Battery status signal</td></tr>
+% </table>
+% <h3>Output Bus &mdash; <code>m</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>ChillerCurrent</td><td>Current drawn from the HV bus</td></tr>
+% <tr><td>energy</td><td>Cumulative energy consumed</td></tr>
+% </table>
+% <h3>Physical Ports</h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Port</th><th>Domain</th><th>Description</th></tr>
+% <tr><td>HV</td><td>Electrical</td><td>High-voltage bus connection</td></tr>
+% <tr><td>A</td><td>Thermal liquid</td><td>Coolant port</td></tr>
+% <tr><td>B</td><td>Thermal liquid</td><td>Coolant port</td></tr>
+% </table>
+% </html>
 
 %% Workflows
 % The Chiller block is part of the *VehicleElectroThermal* template for
 % full-thermal vehicle simulations. It is active during hot-ambient range
-% estimation runs. Parameters are loaded by |BEVSystemModelParams.m| via
-% |ChillerParams.m|. The model is validated through |ChillerTestHarness.slx|.
+% estimation runs. The model is validated through |ChillerTestHarness.slx|.
 
 %% Parameters
 %

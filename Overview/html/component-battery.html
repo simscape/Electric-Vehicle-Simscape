@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>High-Voltage Battery — Electric Vehicle Design</title><link rel="stylesheet" href="assets/styles.css?v=20261028-3"></head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+  <header class="help-header"><div class="help-header-inner"><a class="help-brand" href="ElectricVehicleDesignOverview.html">MATLAB Help Center<small>Electric Vehicle Design with Simscape</small></a></div></header>
+  <div class="doc-shell">
+    <aside class="category-nav"><nav aria-label="Component reference navigation">
+      <ul class="nav-trail"><li><a href="ElectricVehicleDesignOverview.html">Documentation Home</a></li><li><a href="components.html">Components</a></li></ul>
+      <div class="nav-siblings-label">Electrical and Energy Storage</div>
+      <ul class="nav-siblings"><li aria-current="page"><span>High-Voltage Battery</span></li><li><a href="component-charger.html">Charger</a></li><li><a href="component-motor-drive.html">Motor Drive</a></li><li><a href="component-pump-driver.html">Pump Driver</a></li></ul>
+      <div class="on-page"><div class="on-page-label">On this page</div><ul class="on-page-list"><li><a href="#description">Description</a></li><li><a href="#examples">Examples</a></li><li><a href="#interface">Interface</a></li><li><a href="#testing">Testing</a></li><li><a href="#see-also">See Also</a></li></ul></div>
+    <div class="nav-browse"><div class="on-page-label">Category</div><ul class="nav-browse-list"><li><a href="examples.html">Examples</a></li><li><a href="vehicle-range.html">Vehicle Models</a></li><li><a href="project-builder.html">Apps &amp; Utilities</a></li></ul></div>
+    </nav></aside>
+    <main class="doc-main" id="main-content">
+
+      <header class="product-intro reference-heading"><div><h1>High-Voltage Battery</h1><p class="tagline">Reusable high-voltage battery pack with electrical and electrothermal fidelities</p><p class="library-path"><strong>Component path:</strong> Components / BatteryHV</p><div class="action-row"><a class="action" href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','BatteryHV','Model','BatteryLumped.slx'))">Open Default Model</a><a class="action secondary" href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','BatteryHV','TestBench','BatteryTestHarness.slx'))">Open Test Harness</a></div></div><figure class="component-header-image"><img src="Image/BatteryLumpedDescription_01.png" alt="BatteryLumped model canvas"></figure></header>
+
+      <section id="description"><h2>Description</h2>
+    <div class="component-description-layout">
+      <div class="component-lede"><p>High-voltage battery pack component for the BEV system model. This component represents the main energy storage device and provides electrical power to the drivetrain, HVAC, and auxiliary loads. Multiple fidelity levels are available to trade off simulation speed against thermal and electrical detail.</p>
+        <div class="fidelity-decision"><strong>How to choose a fidelity</strong><p>Use <strong>BatteryEq</strong> for early integration without relay control, <strong>BatteryLumped</strong> for fast electrical studies, <strong>BatteryLumpedThermal</strong> when one pack temperature is sufficient, and <strong>BatteryTableBased</strong> when SOC- and temperature-dependent electrical behavior must participate in the coolant loop. <strong>BatteryEq</strong> is not selectable in the shipped template configuration.</p></div>
+      </div>
+
+    </div>
+    <h3 id="models">Fidelity at a glance</h3>
+    <div class="table-scroll"><table><thead><tr><th>Model</th><th>Description</th><th>Use case</th><th>Templates</th><th>Documentation &amp; files</th></tr></thead><tbody>
+<tr><td><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','BatteryHV','Model','BatteryLumped.slx'))"><strong>BatteryLumped</strong></a></td><td>Lumped equivalent-circuit pack at fixed temperature.</td><td>Fast vehicle-level simulations where thermal dynamics are not required, such as quick range sweeps or controller tuning.</td><td>VehicleElectric, VehicleElecAux</td><td><a href="matlab:web(fullfile(currentProject().RootFolder,'Components','BatteryHV','Documentation','html','BatteryLumpedDescription.html'),'-new')">Documentation</a> &middot; <a href="matlab:edit(fullfile(currentProject().RootFolder,'Components','BatteryHV','Model','BatteryLumpedParams.m'))">Parameters</a></td></tr>
+<tr><td><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','BatteryHV','Model','BatteryEq.slx'))"><strong>BatteryEq</strong></a></td><td>Simplified equivalent-circuit battery without relay logic; not selectable in the shipped configuration.</td><td>Rapid prototyping and early integration where relay control is not yet required. The input bus is terminated in this fidelity.</td><td>Not in shipped config</td><td><a href="matlab:edit(fullfile(currentProject().RootFolder,'Components','BatteryHV','Model','BatteryEqParams.m'))">Parameters</a></td></tr>
+<tr><td><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','BatteryHV','Model','BatteryLumpedThermal.slx'))"><strong>BatteryLumpedThermal</strong></a></td><td>Single thermal-mass node with a coolant port.</td><td>System-level studies where battery temperature response matters but detailed cell-level dynamics are not needed.</td><td>VehicleElectroThermal</td><td><a href="matlab:web(fullfile(currentProject().RootFolder,'Components','BatteryHV','Documentation','html','BatteryLumpedThermalDescription.html'),'-new')">Documentation</a> &middot; <a href="matlab:edit(fullfile(currentProject().RootFolder,'Components','BatteryHV','Model','BatteryLumpedThermalParams.m'))">Parameters</a></td></tr>
+<tr><td><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','BatteryHV','Model','BatteryTableBased.slx'))"><strong>BatteryTableBased</strong></a></td><td>SOC/temperature lookup tables with coolant and heater coupling.</td><td>High-fidelity drive-cycle simulations, thermal management studies, and battery sizing where accurate electrical and thermal behavior is required. Default in the system model.</td><td>VehicleElectroThermal</td><td><a href="matlab:web(fullfile(currentProject().RootFolder,'Components','BatteryHV','Documentation','html','BatteryTableBasedDescription.html'),'-new')">Documentation</a> &middot; <a href="matlab:edit(fullfile(currentProject().RootFolder,'Components','BatteryHV','Model','BatteryTableBasedParams.m'))">Parameters</a></td></tr>
+</tbody></table></div>
+    <h3>Where it participates</h3><ul>
+<li><strong>Range Estimation</strong> (<code>Workflow/Vehicle/RangeEstimation/</code>) &mdash; Uses BatteryTableBased in the full electro-thermal vehicle model to estimate driving range under NEDC, WLTC, and EPA cycles.</li>
+<li><strong>Battery Sizing</strong> (<code>Workflow/Battery/BatterySizing/</code>) &mdash; Sweeps cell capacity and vehicle mass to size the HV pack for a target range.</li>
+<li><strong>Virtual Sensor Neural Network</strong> (<code>Workflow/Battery/VirtualSensorNeuralNetModel/</code>) &mdash; Trains a neural network to predict battery temperature from voltage and current measurements.</li>
+</ul></section>
+
+      <section id="examples"><h2>Examples</h2><div class="used-by"><strong>Workflows and models that use this component</strong>The high-voltage battery is used by the battery sizing, virtual sensor, and vehicle range workflows, and by all shipped vehicle configurations.</div><div class="component-example-grid"><article class="component-example-card"><div class="card-header-bar"></div><img class="component-example-image" src="Image/BatteryTestHarnessDescription_01.png" alt="BatteryHV example model canvas"><div class="component-example-body"><a href="workflow-battery-sizing.html">Size Battery Pack for Electric Vehicle</a><p><strong>Workflow</strong> — Uses BatteryHV behavior to compare capacity, pack mass, and vehicle range.</p></div></article>
+<article class="component-example-card"><div class="card-header-bar"></div><img class="component-example-image" src="Image/BatteryTestHarnessDescription_01.png" alt="BatteryHV example model canvas"><div class="component-example-body"><a href="workflow-battery-virtual-sensor.html">Build Virtual Sensor for Battery Management System</a><p><strong>Workflow</strong> — Uses the battery test bench and logged electrical/thermal signals.</p></div></article>
+<article class="component-example-card"><div class="card-header-bar"></div><img class="component-example-image" src="Image/BatteryTestHarnessDescription_01.png" alt="BatteryHV example model canvas"><div class="component-example-body"><a href="workflow-vehicle-range.html">Estimate Electric Vehicle Range</a><p><strong>Vehicle workflow</strong> — Uses BatteryHV with the shared motor-drive, driveline, and thermal components.</p></div></article></div></section>
+
+      <section id="interface"><h2>Interface</h2><p class="section-intro">All fidelities share the high-voltage and output boundaries. The configured fidelities use relay commands from input bus <code>s</code>; BatteryEq currently terminates that input bus. Thermal-capable fidelities (BatteryLumpedThermal, BatteryTableBased) add the coolant port noted below.</p>
+    <div class="table-scroll"><table><thead><tr><th>Port / signal</th><th>Direction</th><th>Description</th></tr></thead><tbody>
+<tr><td>Positive relay command</td><td>Input</td><td>Connects the battery positive terminal to the HV bus in configured fidelities; ignored by BatteryEq.</td></tr>
+<tr><td>Negative relay command</td><td>Input</td><td>Connects the battery negative terminal to the HV bus in configured fidelities; ignored by BatteryEq.</td></tr>
+<tr><td>Coolant port <em>(thermal fidelities)</em></td><td>Conserving</td><td>Thermal-liquid interface for coolant-loop and heater heat exchange.</td></tr>
+<tr><td>Voltage</td><td>Output</td><td>Pack terminal voltage.</td></tr>
+<tr><td>Current</td><td>Output</td><td>Pack current.</td></tr>
+<tr><td>SOC</td><td>Output</td><td>State of charge.</td></tr>
+<tr><td>Temperature</td><td>Output</td><td>Estimated by BatteryEq, fixed or externally supplied by BatteryLumped, or computed from thermal dynamics by thermal fidelities.</td></tr>
+<tr><td>Cell Voltage</td><td>Output</td><td>Individual cell voltage estimate.</td></tr>
+</tbody></table></div></section>
+
+      <section id="testing"><h2>Testing</h2><ul class="link-list"><li><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','BatteryHV','TestBench','BatteryTestHarness.slx'))">Open Battery Test Harness</a> · <a href="matlab:web(fullfile(currentProject().RootFolder,'Components','BatteryHV','Documentation','html','BatteryTestHarnessDescription.html'),'-new')">view documentation</a><p>Verify component behavior under controlled electrical and thermal boundaries.</p></li><li><a href="matlab:runtests(fullfile(currentProject().RootFolder,'Components','BatteryHV','TestCase','BatteryHVPassTests.m'))">Run BatteryHV Component Tests</a><p>Run the maintained BatteryHV test case before integration.</p></li></ul></section>
+      <section id="see-also"><h2>See Also</h2><p class="see-also-links"><a href="component-bms.html">Battery Management System</a> | <a href="component-battery-heater.html">Battery Heater</a> | <a href="workflow-battery-sizing.html">Size Battery Pack</a></p><h3>Topics</h3><ul><li><a href="workflow-battery-virtual-sensor.html">Build Virtual Sensor for BMS</a></li><li><a href="vehicle-range.html#templates">Vehicle Templates</a></li></ul></section>
+    </main>
+  </div>
+  <script src="assets/app.js?v=20260930-6"></script>
+</body></html>

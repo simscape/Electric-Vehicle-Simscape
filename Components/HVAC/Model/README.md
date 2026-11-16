@@ -17,24 +17,35 @@ Empirical-based HVAC model with cabin and refrigeration subsystems. Cabin blower
 ### Workflows
 
 - Listed in the **VehicleElecAux** and **VehicleElectroThermal** templates in `VehicleTemplateConfig.json`.
+- Default fidelity in the HVAC test harness.
 - Suitable for cabin comfort studies and HVAC energy-demand evaluation without modeling the refrigerant loop.
 
-### Inputs
+### Input Bus — `s`
 
 | Signal | Description |
 |--------|-------------|
-| Environment temperature | Ambient air temperature |
-| Blower command | Blower speed or enable signal |
-| PTC command | Cabin heater power command |
-| Compressor command | AC compressor enable |
+| Env.Tenv | Environment temperature |
+| Env | Environment bus (full struct: Tenv, Penv, RHenv, CO2env) |
+| Batt.BatSt | Battery status |
+| Batt | Battery bus (voltage) |
+| Cntrl.CmdBlower | Blower speed command |
+| Cntrl.CmdPTC | PTC heater command |
+| Cntrl.acOnOff | AC on/off command |
 
-### Outputs
+### Output Bus — `m`
 
 | Signal | Description |
 |--------|-------------|
-| Cabin Temperature | Simulated cabin air temperature |
-| HVAC Energy | Cumulative HVAC energy consumption |
-| Blower/Cooler/PTC States | Operating states of HVAC actuators |
+| energy | Cumulative HVAC energy consumption |
+| Tcabin | Cabin air temperature |
+| TacVent | AC vent temperature |
+| Tptc | PTC heater temperature |
+
+### Physical Ports
+
+| Port | Domain | Description |
+|------|--------|-------------|
+| HV | Electrical | High-voltage bus connection |
 
 ---
 
@@ -50,26 +61,35 @@ HVAC model with a cabin thermal plant. The cabin air volume is linked with cabin
 
 ### Workflows
 
-- **Default HVAC fidelity** loaded by `BEVSystemModelParams.m` (via `HVACsimpleThParams.m`).
+- **Default HVAC fidelity** for the VehicleElectroThermal template.
 - Used in range estimation workflows for hot and cold ambient scenarios.
 - Validated through `HVACTestHarness.slx`.
 
-### Inputs
+### Input Bus — `s`
 
 | Signal | Description |
 |--------|-------------|
-| Environment temperature | Ambient air temperature |
-| Blower command | Blower speed or enable signal |
-| PTC command | Cabin heater power command |
-| Compressor command | AC compressor enable |
+| Env.Tenv | Environment temperature |
+| Batt.BatSt | Battery status |
+| Batt | Battery bus (voltage) |
+| Cntrl.CmdBlower | Blower speed command |
+| Cntrl.CmdPTC | PTC heater command |
+| Cntrl.CmdCool | Cooler/compressor command |
 
-### Outputs
+### Output Bus — `m`
 
 | Signal | Description |
 |--------|-------------|
-| Cabin Temperature | Cabin air temperature from thermal dynamics |
-| HVAC Energy | Cumulative HVAC energy consumption |
-| Blower/Cooler/PTC Thermal States | Thermal operating states of HVAC actuators |
+| energy | Cumulative HVAC energy consumption |
+| Tcabin | Cabin air temperature |
+| TacVent | AC vent temperature |
+| Tptc | PTC heater temperature |
+
+### Physical Ports
+
+| Port | Domain | Description |
+|------|--------|-------------|
+| HV | Electrical | High-voltage bus connection |
 
 ---
 
@@ -85,4 +105,4 @@ HVAC model with a cabin thermal plant. The cabin air volume is linked with cabin
 | Number of passengers | 1 | - |
 | Per-person heat transfer | 70 | W |
 
-Copyright 2022 - 2025 The MathWorks, Inc.
+Copyright 2022 - 2026 The MathWorks, Inc.

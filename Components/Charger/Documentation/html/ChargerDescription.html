@@ -7,9 +7,9 @@ This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
       -->
 <title>Charger</title>
-<meta name="generator" content="MATLAB 26.1">
+<meta name="generator" content="MATLAB 25.2">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2026-04-21">
+<meta name="DC.date" content="2026-05-06">
 <meta name="DC.source" content="ChargerDescription.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
@@ -114,33 +114,22 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <p>
 <b>Thermal Coupling:</b> None</p>
 <h2 id="2">Open Model</h2>
-<pre class="codeinput">open_system(<span class="string">'Charger'</span>)
-</pre>
 <img vspace="5" hspace="5" src="images/ChargerDescription_01.png" alt=""> <h2 id="3">Ports</h2>
 <p>
-<b>Inputs</b>
+<h3>Input Bus &mdash; <code>s</code></h3>
+<table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+<tr><th>Signal</th><th>Description</th></tr>
+<tr><td>Batt.Relay.RelayChg</td><td>Charge relay command</td></tr>
+<tr><td>Batt.BattSensor.CellVoltMax</td><td>Maximum cell voltage for CC-CV transition</td></tr>
+</table>
+<h3>Output Bus</h3>
+<p>No output bus. Operates via physical HV port only.</p>
+<h3>Physical Ports</h3>
+<table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+<tr><th>Port</th><th>Domain</th><th>Description</th></tr>
+<tr><td>HV</td><td>Electrical</td><td>High-voltage bus connection</td></tr>
+</table>
 </p>
-<div>
-<ul>
-<li>
-<b>Relay command</b> - Enables charger connection to the HV bus.</li>
-<li>
-<b>Battery cell voltage</b> - Feedback for CC-CV transition.</li>
-<li>
-<b>Charging state</b> - Charge enable and mode signal from the BMS.</li>
-</ul>
-</div>
-<p>
-<b>Outputs</b>
-</p>
-<div>
-<ul>
-<li>
-<b>Charging Current</b> - Current delivered to the battery pack.</li>
-<li>
-<b>HV Power</b> - Electrical power drawn from the grid.</li>
-</ul>
-</div>
 <h2 id="4">Workflows</h2>
 <p>The Charger block is listed in the <b>VehicleElectric</b> and <b>VehicleElecAux</b> templates in <tt>VehicleTemplateConfig.json</tt>. It is suitable for electrical-only charging studies without thermal management.</p>
 <h2 id="5">Parameters</h2>
@@ -172,7 +161,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 </ul>
 </div>
 <p class="footer">Copyright 2022 - 2026 The MathWorks, Inc.<br>
-<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2026a</a>
+<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2025b</a>
 <br>
 </p>
 </div>
@@ -200,16 +189,22 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 open_system('Charger')
 
 %% Ports
-% *Inputs*
 %
-% * *Relay command* - Enables charger connection to the HV bus.
-% * *Battery cell voltage* - Feedback for CC-CV transition.
-% * *Charging state* - Charge enable and mode signal from the BMS.
-%
-% *Outputs*
-%
-% * *Charging Current* - Current delivered to the battery pack.
-% * *HV Power* - Electrical power drawn from the grid.
+% <html>
+% <h3>Input Bus &mdash; <code>s</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>Batt.Relay.RelayChg</td><td>Charge relay command</td></tr>
+% <tr><td>Batt.BattSensor.CellVoltMax</td><td>Maximum cell voltage for CC-CV transition</td></tr>
+% </table>
+% <h3>Output Bus</h3>
+% <p>No output bus. Operates via physical HV port only.</p>
+% <h3>Physical Ports</h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Port</th><th>Domain</th><th>Description</th></tr>
+% <tr><td>HV</td><td>Electrical</td><td>High-voltage bus connection</td></tr>
+% </table>
+% </html>
 
 %% Workflows
 % The Charger block is listed in the *VehicleElectric* and *VehicleElecAux*

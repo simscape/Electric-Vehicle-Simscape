@@ -15,7 +15,7 @@ Full electro-thermal vehicle model with thermal-aware battery, motor-drives, cha
 | Field | Value |
 |-------|-------|
 | Template | VehicleElectroThermal |
-| Config Source | APP/Config/Preset/VehicleTemplateConfig.json |
+| Config Source | utils/APP/Config/Preset/VehicleTemplateConfig.json |
 | Description | Electric Vehicle with Full Thermal |
 
 ## Model Configuration

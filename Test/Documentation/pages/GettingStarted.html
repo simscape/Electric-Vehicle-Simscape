@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Getting Started - Test Framework</title>
+    <link rel="stylesheet" href="../styles/mathworks-like-doc.css">
+</head>
+<body>
+
+<div class="page-title">
+    <span class="title-text">Getting Started</span>
+    <span class="breadcrumb"><a href="../TestFrameworkHome.html">Test Framework</a> &rsaquo; Getting Started</span>
+</div>
+
+<nav class="sidebar">
+    <ul>
+        <li><a href="../TestFrameworkHome.html">Home</a></li>
+        <li><a href="GettingStarted.html" class="active">Getting Started</a></li>
+        <li><a href="ConfigurationGuide.html">Configuration Guide</a></li>
+        <li><a href="TestFrameworkReference.html">Framework Reference</a></li>
+    </ul>
+</nav>
+
+<main class="content">
+
+    <h1 id="getting-started">Getting Started</h1>
+    <p class="subtitle">Set up and run your first tests</p>
+
+    <h2 id="prerequisites">Prerequisites</h2>
+    <ul>
+        <li>MATLAB R2023b or later (R2024b+ recommended for full feature support)</li>
+        <li>Simulink (for model simulation tests)</li>
+        <li>The <code>Test/Framework</code> folder (and subfolders) added to the MATLAB path</li>
+    </ul>
+    <p>
+        <strong>Note:</strong> The framework uses <code>matlab.unittest</code>, <code>CodeCoveragePlugin</code>,
+        <code>XMLPlugin</code>, and <code>TestReportPlugin</code>,
+        all of which are included with MATLAB (no additional toolboxes required for core functionality).
+    </p>
+
+    <h2 id="installation">Setup</h2>
+    <ol>
+        <li>Copy the entire <code>Test/</code> folder into your project root directory.</li>
+        <li>Add the <code>Test/Framework</code> folder (and subfolders) to the MATLAB path. This can be done via a MATLAB Project, <code>addpath</code>, or your startup script.</li>
+        <li>Verify by running: <code>which TestExecutor</code> &mdash; it should return the path to <code>Test/Framework/TestExecutor.m</code>.</li>
+    </ol>
+
+    <h2 id="quick-start">Quick Start</h2>
+    <p>The fastest way to verify the framework is working:</p>
+    <pre><code><span class="comment">% Load a test configuration</span>
+config = testConfig();
+
+<span class="comment">% Preview what will be tested (no tests are run)</span>
+TestExecutor.dryRun(config);</code></pre>
+
+    <h2 id="dry-run">Dry Run</h2>
+    <p>
+        The dry run previews which files the framework will discover and test, without
+        actually executing any simulations or scripts. This is useful for validating
+        your configuration before committing to a full test run.
+    </p>
+    <pre><code><span class="comment">% Dry run shows discovered models, workflows, custom tests, and coverage files</span>
+TestExecutor.dryRun(testConfig());
+
+<span class="comment">% Example output:</span>
+<span class="comment">% ===== DRY RUN: Test File Discovery =====</span>
+<span class="comment">%</span>
+<span class="comment">% --- Models (TestModelSimulation) ---</span>
+<span class="comment">% [TestFileDiscovery] Found 3 file(s):</span>
+<span class="comment">%   C:\project\Components\HarnessModels\model1.slx</span>
+<span class="comment">%   ...</span>
+<span class="comment">%</span>
+<span class="comment">% ===== Summary =====</span>
+<span class="comment">%   Models:              3</span>
+<span class="comment">%   Workflows:           2</span>
+<span class="comment">%   Custom Tests:        0</span>
+<span class="comment">%   Coverage:            15 source files</span>
+<span class="comment">%   Total test points:   5</span>
+<span class="comment">% ==================================</span></code></pre>
+
+    <h2 id="running-tests">Running Tests</h2>
+    <p>Once you are satisfied with the dry run output, execute the full test suite:</p>
+
+    <h3>Run All Tests</h3>
+    <pre><code>config = testConfig();
+results = TestExecutor.runAll(config);</code></pre>
+
+    <h3>Run Only Models</h3>
+    <pre><code>config = testConfig();
+results = TestExecutor.runModelsOnly(config);</code></pre>
+
+    <h3>Run Only Workflows</h3>
+    <pre><code>config = testConfig();
+results = TestExecutor.runWorkflowsOnly(config);</code></pre>
+
+    <h3>Run Only Custom Tests</h3>
+    <pre><code>config = testConfig();
+results = TestExecutor.runCustomOnly(config);</code></pre>
+
+    <p>
+        <strong>Tip:</strong> Set <code>config.Reports.OpenInBrowser = true</code> for interactive use. The coverage
+        report will open automatically in your default browser after the test run completes.
+    </p>
+
+    <h2 id="viewing-reports">Viewing Reports</h2>
+    <p>After running tests, reports are generated in:</p>
+    <pre><code>Test/ProjectTestReport/&lt;FolderName&gt;/
+├── TestResults_&lt;version&gt;.xml          <span class="comment">% JUnit XML (for CI)</span>
+├── TestReport_&lt;version&gt;.html          <span class="comment">% Interactive HTML report</span>
+└── CodeCoverage_&lt;version&gt;/            <span class="comment">% Code coverage HTML report</span>
+    └── CoverageReport_&lt;version&gt;.html</code></pre>
+    <p>Open the HTML files in any browser to review results interactively.</p>
+
+    <h2 id="assumptions">Framework Assumptions</h2>
+    <p>The test framework makes the following assumptions about your project setup. Ensure these are met before running tests.</p>
+
+    <h3>Project Structure</h3>
+    <ul>
+        <li><code>config.ProjectRoot</code> must point to a valid directory. The framework does <strong>not</strong> require a MATLAB Project (<code>.prj</code> file) &mdash; any directory structure works.</li>
+        <li>The <code>Test/</code> folder is located <strong>directly at the project root level</strong> (i.e., <code>&lt;ProjectRoot&gt;/Test/</code>).</li>
+        <li>The internal folder structure <code>Test/Framework/</code> must remain intact. The framework expects <code>ProjectSmokeTests.m</code> at <code>Test/Framework/ProjectSmokeTests.m</code>.</li>
+        <li>Report output is written to <code>Test/ProjectTestReport/&lt;FolderName&gt;/</code>, which is auto-created if it does not exist.</li>
+    </ul>
+
+    <h3>MATLAB Path</h3>
+    <ul>
+        <li>All <strong>models</strong> referenced in the configuration must be on the MATLAB path. The framework calls <code>load_system(modelName)</code> by file name only (no full path).</li>
+        <li>All <strong>scripts and workflows</strong> referenced in the configuration must be on the MATLAB path or resolvable by <code>run()</code>.</li>
+        <li>The <code>Test/Framework</code> folder and its subfolders must be on the MATLAB path so that <code>TestExecutor</code>, <code>ProjectSmokeTests</code>, and utility functions are accessible.</li>
+        <li>Custom test files (<code>CustomTests.Files</code>) and directories (<code>CustomTests.Directories</code>) are resolved <strong>relative to <code>config.ProjectRoot</code></strong>, not the current working directory.</li>
+    </ul>
+
+    <h3>Test Execution</h3>
+    <ul>
+        <li><strong>Model simulation tests</strong> call <code>sim(modelName)</code> with no additional parameters. Models must have valid solver settings and all required parameters in the base workspace or loaded via callbacks.</li>
+        <li><strong>Workflow script tests</strong> execute scripts inside <code>verifyWarningFree()</code>. Any warning issued during script execution will cause the test to <strong>fail</strong>.</li>
+        <li>Scripts are executed in the <strong>base workspace</strong> via <code>evalin('base', ...)</code>. Variables created by scripts persist in the base workspace.</li>
+        <li>Tests run inside a <strong>temporary working folder</strong> (via <code>WorkingFolderFixture</code>). Scripts that rely on the current directory being the project root may fail.</li>
+        <li>All <strong>Simulink models and figures</strong> opened during a test are automatically closed in teardown. Do not rely on models remaining open between tests.</li>
+        <li>The <code>MATLAB:hg:AutoSoftwareOpenGL</code> graphics warning is suppressed by default during test execution.</li>
+    </ul>
+
+    <h3>Configuration</h3>
+    <ul>
+        <li><code>config.ProjectRoot</code> is <strong>required</strong> and must be an absolute path to an existing directory.</li>
+        <li>All other paths in <code>testConfig</code> fields are <strong>relative to <code>config.ProjectRoot</code></strong>.</li>
+        <li><code>IncludeDirectories</code> must be a <strong>string array</strong>. Each entry is a directory relative to the project root that is searched recursively.</li>
+        <li><code>FileTypes</code> must use the exact labels: <code>"M-file"</code>, <code>"SLX-file"</code>, <code>"MDL-file"</code>, <code>"MLX-file"</code>.</li>
+        <li><code>Reports.FolderName</code> must be non-empty and must not contain characters invalid in file system paths.</li>
+        <li>Custom test files must be <code>matlab.unittest.TestCase</code> subclasses.</li>
+    </ul>
+
+    <h3>Report Generation</h3>
+    <ul>
+        <li>Reports are named using the MATLAB release string (e.g., <code>TestResults_R2025b.xml</code>).</li>
+        <li>If <code>config.Reports.OpenInBrowser = true</code>, the coverage report is opened using MATLAB's <code>web()</code> function.</li>
+        <li>Code coverage is only generated if <code>GenerateCodeCoverage = true</code> <strong>and</strong> at least one coverage source file is discovered.</li>
+    </ul>
+
+    <hr>
+    <p>
+        <strong>See Also:</strong>
+        <a href="TestFrameworkReference.html">Framework Reference</a> |
+        <a href="ConfigurationGuide.html">Configuration Guide</a>
+    </p>
+
+    <div class="footer">
+        <p>Copyright 2026 The MathWorks, Inc.</p>
+    </div>
+</main>
+
+</body>
+</html>

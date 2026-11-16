@@ -1,0 +1,109 @@
+/* Test Framework Documentation Stylesheet */
+/* Matching Overview/projectDocumentationPage.html design */
+
+body { margin: 0; font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #212121; }
+a { color: #0076a8; text-decoration: none; }
+a:hover { color: #004c6d; text-decoration: underline; }
+
+/* Fixed title bar */
+.page-title {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: #fff; border-bottom: 1px solid #e0e0e0;
+    margin: 0; z-index: 200;
+    display: flex; align-items: center; justify-content: space-between;
+}
+.page-title .title-text {
+    font-size: 28px; font-weight: 400; color: #c04c0b;
+    padding: 14px 20px;
+}
+.page-title .breadcrumb {
+    font-size: 11px; color: #666;
+    padding: 0 20px;
+}
+.page-title .breadcrumb a {
+    color: #0076a8;
+}
+
+/* Left sidebar */
+.sidebar {
+    position: fixed; top: 60px; left: 0;
+    width: 160px; height: calc(100vh - 60px);
+    background: #f7f7f7; border-right: 1px solid #e0e0e0;
+    padding: 20px 12px; overflow-y: auto;
+}
+.sidebar ul { list-style: none; padding: 0; margin: 0; }
+.sidebar li { margin: 6px 0; }
+.sidebar li.sub { padding-left: 14px; }
+.sidebar a.active { font-weight: 700; color: #212121; }
+
+/* Right content area */
+.content {
+    margin-left: 160px;
+    padding: 90px 40px 30px;
+    max-width: 800px;
+}
+
+h1 { font-size: 20px; font-weight: 700; color: #c04c0b; margin: 30px 0 8px; scroll-margin-top: 90px;
+     border-bottom: 1px solid #e0e0e0; padding-bottom: 8px; }
+h2 { font-size: 16px; font-weight: 700; color: #212121; margin: 22px 0 6px; scroll-margin-top: 90px; }
+h3 { font-size: 14px; font-weight: 700; color: #212121; margin: 18px 0 6px; scroll-margin-top: 90px; }
+p { margin: 8px 0; line-height: 1.6; color: #212121; }
+
+.subtitle {
+    font-size: 13px; color: #666; margin: -4px 0 18px;
+}
+
+/* Code blocks */
+code {
+    font-family: 'Courier New', monospace; font-size: 12px;
+    background: #f5f5f5; padding: 1px 4px; border-radius: 2px;
+}
+pre {
+    background: #f5f5f5; border-left: 3px solid #0076a8;
+    padding: 10px 14px; margin: 10px 0 20px;
+    font-family: 'Courier New', monospace; font-size: 12px; color: #212121;
+    overflow-x: auto; line-height: 1.5;
+}
+pre code {
+    background: none; padding: 0;
+}
+
+/* MATLAB syntax highlighting */
+.keyword { color: #0000FF; font-weight: bold; }
+.comment { color: #228B22; }
+.string { color: #A020F0; }
+.number { color: #666666; }
+
+/* Tables */
+table {
+    width: 100%; border-collapse: collapse;
+    margin: 12px 0 18px; font-size: 12px;
+}
+th {
+    background: #0076a8; color: #fff;
+    text-align: left; padding: 8px 10px; font-weight: 600;
+}
+td {
+    padding: 7px 10px; border-bottom: 1px solid #e0e0e0; vertical-align: top;
+}
+tr:nth-child(even) { background: #f5f5f5; }
+tr:hover { background: #e8f4f8; }
+
+/* Lists */
+ul, ol { margin: 8px 0 14px; padding-left: 22px; }
+li { margin: 4px 0; line-height: 1.6; }
+
+/* Definition lists */
+dl { margin: 10px 0; }
+dt {
+    font-family: 'Courier New', monospace; font-weight: 600;
+    color: #212121; margin-top: 10px; font-size: 12px;
+}
+dd { margin: 4px 0 0 18px; color: #666; }
+
+/* Footer */
+.footer {
+    margin-top: 30px; padding: 12px 0;
+    border-top: 1px solid #e0e0e0;
+    color: #666; font-size: 11px;
+}

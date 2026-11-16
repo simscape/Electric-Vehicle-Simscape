@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Configuration Guide - Test Framework</title>
+    <link rel="stylesheet" href="../styles/mathworks-like-doc.css">
+</head>
+<body>
+
+<div class="page-title">
+    <span class="title-text">Configuration Guide</span>
+    <span class="breadcrumb"><a href="../TestFrameworkHome.html">Test Framework</a> &rsaquo; Configuration Guide</span>
+</div>
+
+<nav class="sidebar">
+    <ul>
+        <li><a href="../TestFrameworkHome.html">Home</a></li>
+        <li><a href="GettingStarted.html">Getting Started</a></li>
+        <li><a href="ConfigurationGuide.html" class="active">Configuration Guide</a></li>
+        <li><a href="TestFrameworkReference.html">Framework Reference</a></li>
+    </ul>
+</nav>
+
+<main class="content">
+
+    <h1 id="configuration-guide">Configuration Guide</h1>
+    <p class="subtitle">Complete reference for creating, customizing, and understanding testConfig.m files</p>
+
+    <!-- ==================== OVERVIEW ==================== -->
+    <h2 id="overview">Overview</h2>
+    <p>
+        The test framework is driven entirely by configuration files. Each file named
+        <code>testConfig_&lt;Name&gt;.m</code> in the <code>Test/</code> folder defines
+        a <strong>test subset</strong> &mdash; an independent, self-contained collection of
+        Simulink models, workflow scripts, custom tests, and coverage targets that are
+        tested together and produce their own reports.
+    </p>
+    <p>
+        The configuration function returns a single struct <code>config</code> with a required
+        <code>ProjectRoot</code> field and five top-level sections:
+    </p>
+    <table>
+        <thead>
+            <tr><th>Section</th><th>Purpose</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><code>config.ProjectRoot</code></td><td>Absolute path to the project root directory (required)</td></tr>
+            <tr><td><code>config.Models</code></td><td>Which Simulink models to load and simulate (smoke test)</td></tr>
+            <tr><td><code>config.Workflows</code></td><td>Which MATLAB scripts to execute and verify run warning-free</td></tr>
+            <tr><td><code>config.CustomTests</code></td><td>Additional <code>matlab.unittest.TestCase</code> classes to include</td></tr>
+            <tr><td><code>config.CodeCoverage</code></td><td>Which production source files to measure code coverage on</td></tr>
+            <tr><td><code>config.Reports</code></td><td>What report artifacts to generate and where to store them</td></tr>
+            <tr><td><code>config.SuppressedWarnings</code></td><td>Warning IDs to suppress during smoke test execution</td></tr>
+        </tbody>
+    </table>
+    <p>
+        You can have as many test subsets as you need. The framework treats each config
+        file independently.
+    </p>
+
+    <!-- ==================== ANATOMY ==================== -->
+    <h2 id="anatomy">Anatomy of a Config File</h2>
+    <p>A minimal config file looks like this:</p>
+    <pre><code><span class="keyword">function</span> config = testConfig()
+<span class="comment">% testConfig - Test configuration</span>
+
+    <span class="comment">%% Project Root</span>
+    config.ProjectRoot = <span class="string">"C:/absolute/path/to/project-root"</span>;
+
+    <span class="comment">%% Model Discovery</span>
+    config.Models.IncludeDirectories = <span class="string">"Models"</span>;
+    config.Models.IncludeFiles = string.empty;
+    config.Models.FileTypes = [<span class="string">"SLX-file"</span>; <span class="string">"MDL-file"</span>];
+    config.Models.ExcludeDirectories = string.empty;
+    config.Models.ExcludeFiles = string.empty;
+
+    <span class="comment">%% Workflow Discovery</span>
+    config.Workflows.IncludeDirectories = <span class="string">"Workflow"</span>;
+    config.Workflows.IncludeFiles = string.empty;
+    config.Workflows.FileTypes = [<span class="string">"MLX-file"</span>; <span class="string">"M-file"</span>];
+    config.Workflows.ExcludeDirectories = string.empty;
+    config.Workflows.ExcludeFiles = string.empty;
+
+    <span class="comment">%% Custom Tests</span>
+    config.CustomTests.Files = string.empty;
+    config.CustomTests.Directories = string.empty;
+
+    <span class="comment">%% Code Coverage</span>
+    config.CodeCoverage.IncludeDirectories = <span class="string">"."</span>;
+    config.CodeCoverage.IncludeFiles = string.empty;
+    config.CodeCoverage.FileTypes = [<span class="string">"M-file"</span>; <span class="string">"MLX-file"</span>];
+    config.CodeCoverage.ExcludeDirectories = <span class="string">"Test"</span>;
+    config.CodeCoverage.ExcludeFiles = <span class="string">"buildfile.m"</span>;
+
+    <span class="comment">%% Reporting</span>
+    config.Reports.FolderName = <span class="string">"MySubset"</span>;
+    config.Reports.GenerateJUnitXML = <span class="keyword">true</span>;
+    config.Reports.GenerateHTMLReport = <span class="keyword">true</span>;
+    config.Reports.GenerateCodeCoverage = <span class="keyword">true</span>;
+    config.Reports.OpenInBrowser = <span class="keyword">false</span>;
+
+    <span class="comment">%% Warning Suppression</span>
+    config.SuppressedWarnings = string.empty;
+
+<span class="keyword">end</span></code></pre>
+
+    <p><strong>Note:</strong> Every field must be assigned. Use <code>string.empty</code> for fields you don't need.</p>
+
+    <!-- ==================== DISCOVERY PIPELINE ==================== -->
+    <h2 id="discovery-pipeline">Two-Phase Discovery Pipeline</h2>
+    <p>
+        The <code>Models</code>, <code>Workflows</code>, and <code>CodeCoverage</code> sections
+        all use the same two-phase file discovery pipeline, implemented in
+        <code>TestFileDiscovery.find()</code>. Understanding this pipeline is essential for
+        writing effective configurations.
+    </p>
+
+    <h3>Phase 1: Inclusion (Building the Candidate List)</h3>
+    <p>Two sources contribute files to a single unified candidate list:</p>
+    <ol>
+        <li>
+            <strong>Recursive directory search (<code>IncludeDirectories</code>)</strong> &mdash;
+            Each entry is a directory path relative to the project root. The framework
+            searches that directory and all subfolders recursively for files matching the
+            specified <code>FileTypes</code>.
+            <ul>
+                <li><code>"Models"</code> &mdash; recursively search Models and all its subfolders</li>
+                <li><code>"Components"</code> &mdash; recursively search all subdirectories under Components</li>
+                <li><code>"."</code> &mdash; search the entire project tree</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Explicit file list (<code>IncludeFiles</code>)</strong> &mdash;
+            Each entry is a file path relative to the project root that is added directly
+            to the candidate list.
+            <ul>
+                <li><code>"Scripts/setup.m"</code> &mdash; include a specific file by path</li>
+                <li><code>"Utilities/helper.mlx"</code> &mdash; include a file outside the search directories</li>
+            </ul>
+        </li>
+    </ol>
+    <p>
+        Both sources are merged into one list and deduplicated with <code>unique()</code>.
+    </p>
+
+    <h3>Phase 2: Exclusion (Filtering the Candidate List)</h3>
+    <p>Three filters are applied sequentially to remove unwanted files:</p>
+    <ol>
+        <li>
+            <strong>Function file filtering (<code>ExcludeFunctionFiles</code>)</strong> &mdash;
+            Removes any <code>.m</code> file whose first non-comment, non-blank line is a
+            <code>function</code> declaration. Applied automatically for workflow discovery.
+        </li>
+        <li>
+            <strong>Directory exclusion (<code>ExcludeDirectories</code>)</strong> &mdash;
+            Each entry is a directory path relative to the project root. Any file that
+            resides under that directory (including all subfolders) is removed.
+        </li>
+        <li>
+            <strong>File exclusion (<code>ExcludeFiles</code>)</strong> &mdash;
+            Each entry is a file path relative to the project root. Removes any file
+            whose relative path matches one of the specified entries.
+        </li>
+    </ol>
+
+    <p>
+        <strong>Warning:</strong> Exclusion always wins. If a file appears in both
+        <code>IncludeFiles</code> and <code>ExcludeFiles</code>, it will be excluded.
+        There is no way to "force include" a file past the exclusion filters.
+    </p>
+
+    <h3>Discovery Pipeline Diagram</h3>
+    <div style="overflow-x: auto; margin: 1em 0;">
+        <img src="../images/DiscoveryPipeline.svg" alt="Two-Phase Discovery Pipeline Diagram" style="width:100%; max-width:900px; height:auto;">
+    </div>
+
+    <!-- ==================== MODELS ==================== -->
+    <h2 id="models">Models Section</h2>
+    <p>
+        The Models section tells the framework which Simulink models to <strong>smoke test</strong>.
+        A smoke test loads the model into memory and runs a simulation. If the model fails to
+        load or simulate, the test fails.
+    </p>
+    <table>
+        <thead>
+            <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>IncludeDirectories</code></td><td>string array</td>
+                <td>Directories (relative to project root) to search for model files. Each directory is searched recursively.</td>
+            </tr>
+            <tr>
+                <td><code>IncludeFiles</code></td><td>string array</td>
+                <td>Specific model file paths to include directly.</td>
+            </tr>
+            <tr>
+                <td><code>FileTypes</code></td><td>string array</td>
+                <td>Use <code>"SLX-file"</code> for .slx models and <code>"MDL-file"</code> for legacy .mdl models.</td>
+            </tr>
+            <tr>
+                <td><code>ExcludeDirectories</code></td><td>string array</td>
+                <td>Directory paths relative to the project root to exclude. Any model under these directories is removed.</td>
+            </tr>
+            <tr>
+                <td><code>ExcludeFiles</code></td><td>string array</td>
+                <td>File paths relative to the project root to exclude.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>What constitutes a model smoke test?</h3>
+    <ul>
+        <li>The model is loaded with <code>load_system()</code></li>
+        <li>The model is simulated with <code>sim()</code> using default parameters</li>
+        <li>If either step throws an error, the test point fails</li>
+        <li>Warnings do <strong>not</strong> cause model tests to fail &mdash; only errors do</li>
+    </ul>
+
+    <!-- ==================== WORKFLOWS ==================== -->
+    <h2 id="workflows">Workflows Section</h2>
+    <p>
+        The Workflows section identifies MATLAB scripts that should execute successfully
+        without errors or warnings. The framework verifies
+        that they still work as a form of regression testing.
+    </p>
+    <table>
+        <thead>
+            <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>IncludeDirectories</code></td><td>string array</td>
+                <td>Directories to search for workflow scripts (always recursive).</td>
+            </tr>
+            <tr>
+                <td><code>IncludeFiles</code></td><td>string array</td>
+                <td>Specific script paths to include. Subject to exclusion filters.</td>
+            </tr>
+            <tr>
+                <td><code>FileTypes</code></td><td>string array</td>
+                <td><code>"MLX-file"</code> for Live Scripts, <code>"M-file"</code> for plain MATLAB scripts.</td>
+            </tr>
+            <tr>
+                <td><code>ExcludeDirectories</code></td><td>string array</td>
+                <td>Directory paths relative to project root to exclude from workflow discovery.</td>
+            </tr>
+            <tr>
+                <td><code>ExcludeFiles</code></td><td>string array</td>
+                <td>Script file paths (relative to project root) to exclude.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>What constitutes a workflow test?</h3>
+    <ul>
+        <li>The script is executed with <code>run()</code> in the <strong>base workspace</strong></li>
+        <li>Execution is wrapped inside <code>verifyWarningFree()</code></li>
+        <li>If the script errors or produces warnings, the test point fails</li>
+        <li>Variables created by scripts persist in the base workspace after execution</li>
+        <li>Scripts that require interactive input will hang the test runner &mdash; exclude them</li>
+    </ul>
+
+    <!-- ==================== CUSTOM TESTS ==================== -->
+    <h2 id="custom-tests">Custom Tests Section</h2>
+    <p>
+        Beyond smoke tests, you may have dedicated
+        <code>matlab.unittest.TestCase</code> classes that test specific functionality.
+        The Custom Tests section lets you include these alongside the automated smoke tests.
+    </p>
+    <table>
+        <thead>
+            <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>Files</code></td><td>string array</td>
+                <td>Relative paths to individual <code>TestCase</code> <code>.m</code> files. Each file is loaded via <code>TestSuite.fromFile()</code>.</td>
+            </tr>
+            <tr>
+                <td><code>Directories</code></td><td>string array</td>
+                <td>Relative paths to folders. All <code>TestCase</code> classes found in each folder are discovered via <code>TestSuite.fromFolder()</code>.</td>
+            </tr>
+        </tbody>
+    </table>
+    <p>
+        <strong>Note:</strong> Custom test classes receive no arguments from the framework.
+        They must be fully self-contained.
+    </p>
+
+    <!-- ==================== CODE COVERAGE ==================== -->
+    <h2 id="code-coverage">Code Coverage Section</h2>
+    <p>
+        The Code Coverage section defines which <strong>production source files</strong> should be
+        instrumented for coverage measurement during test execution.
+    </p>
+    <table>
+        <thead>
+            <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>IncludeDirectories</code></td><td>string array</td>
+                <td>Directories to search recursively for source files. Use <code>"."</code> to search the entire project.</td>
+            </tr>
+            <tr>
+                <td><code>IncludeFiles</code></td><td>string array</td>
+                <td>Additional source files to add to coverage measurement.</td>
+            </tr>
+            <tr>
+                <td><code>FileTypes</code></td><td>string array</td>
+                <td><code>"M-file"</code> and <code>"MLX-file"</code> for MATLAB source code.</td>
+            </tr>
+            <tr>
+                <td><code>ExcludeDirectories</code></td><td>string array</td>
+                <td>Directory paths relative to project root to exclude from coverage. Typically <code>"Test"</code>.</td>
+            </tr>
+            <tr>
+                <td><code>ExcludeFiles</code></td><td>string array</td>
+                <td>File paths relative to the project root to exclude from coverage.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>
+        <strong>Warning:</strong> The coverage section defines which files
+        are <em>measured</em>, not which files are <em>tested</em>. A file can appear in coverage
+        results with 0% coverage if no test happens to exercise it.
+    </p>
+
+    <!-- ==================== REPORTS ==================== -->
+    <h2 id="reports">Reports Section</h2>
+    <p>
+        Controls what report artifacts are generated after tests complete, and where they are stored.
+    </p>
+    <table>
+        <thead>
+            <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>FolderName</code></td><td>string</td>
+                <td>Subfolder name under <code>Test/ProjectTestReport/</code>. Reports for this subset are written here.</td>
+            </tr>
+            <tr>
+                <td><code>GenerateJUnitXML</code></td><td>logical</td>
+                <td>Produce a JUnit-format XML results file. Required for CI/CD pipelines.</td>
+            </tr>
+            <tr>
+                <td><code>GenerateHTMLReport</code></td><td>logical</td>
+                <td>Produce an interactive HTML test results report.</td>
+            </tr>
+            <tr>
+                <td><code>GenerateCodeCoverage</code></td><td>logical</td>
+                <td>Produce an HTML code coverage report.</td>
+            </tr>
+            <tr>
+                <td><code>OpenInBrowser</code></td><td>logical</td>
+                <td>Automatically open the coverage report in the system browser after tests complete.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Report output location</h3>
+    <pre><code>Test/ProjectTestReport/&lt;FolderName&gt;/
+├── TestResults_&lt;release&gt;.xml       <span class="comment">% if GenerateJUnitXML = true</span>
+├── TestReport_&lt;release&gt;.html       <span class="comment">% if GenerateHTMLReport = true</span>
+└── CodeCoverage_&lt;release&gt;/         <span class="comment">% if GenerateCodeCoverage = true</span>
+    └── CoverageReport_&lt;release&gt;.html</code></pre>
+
+    <!-- ==================== WARNING SUPPRESSION ==================== -->
+    <h2 id="suppressed-warnings">Warning Suppression</h2>
+    <p>
+        Some models and scripts produce known, benign MATLAB warnings during execution.
+        Since workflow tests use <code>verifyWarningFree()</code>, these warnings cause test
+        failures. The <code>SuppressedWarnings</code> field lets you suppress specific
+        warning IDs during smoke test execution.
+    </p>
+    <table>
+        <thead>
+            <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>SuppressedWarnings</code></td><td>string array</td>
+                <td>MATLAB warning identifiers to suppress during smoke test execution.
+                Use <code>string.empty</code> to suppress nothing.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>How it works</h3>
+    <ul>
+        <li>The framework applies <code>SuppressedWarningsFixture</code> for all listed warning IDs at the start of the smoke tests.</li>
+        <li>Warnings are restored automatically after all smoke tests complete.</li>
+        <li>This affects <strong>model simulation</strong> and <strong>workflow script</strong> tests only.</li>
+        <li><strong>Custom tests are not affected.</strong></li>
+    </ul>
+
+    <h3>Finding warning IDs</h3>
+    <p>
+        To identify a warning ID, run your model or script and observe the
+        warning message. Then use <code>[~, id] = lastwarn</code> to retrieve
+        the warning identifier.
+    </p>
+
+    <h3>Examples</h3>
+    <pre><code><span class="comment">% Suppress a single warning</span>
+config.SuppressedWarnings = <span class="string">"MATLAB:hg:AutoSoftwareOpenGL"</span>;
+
+<span class="comment">% Suppress multiple warnings</span>
+config.SuppressedWarnings = [<span class="string">"MATLAB:hg:AutoSoftwareOpenGL"</span>; ...
+                             <span class="string">"Simulink:Engine:SolverConsistency"</span>; ...
+                             <span class="string">"MATLAB:nearlySingularMatrix"</span>];
+
+<span class="comment">% Suppress nothing (all warnings active)</span>
+config.SuppressedWarnings = string.empty;</code></pre>
+
+    <p>
+        <strong>Warning:</strong> Use sparingly. Suppressing warnings hides potential issues.
+        Only suppress warnings that are genuinely benign and well-understood.
+    </p>
+
+    <!-- ==================== CREATING A SUBSET ==================== -->
+    <h2 id="creating-subset">Creating a New Test Subset</h2>
+    <p>Follow these steps to add a new test subset to your project:</p>
+    <ol>
+        <li><strong>Copy an existing config file</strong> &mdash; Start from a working config to ensure you have all required fields.</li>
+        <li><strong>Rename the file</strong> &mdash; Name it <code>testConfig_&lt;2&gt;.m</code> (or any descriptive name).</li>
+        <li><strong>Update the function name</strong> &mdash; The function name on line 1 must match the file name exactly.</li>
+        <li><strong>Configure directories</strong> &mdash; Point <code>IncludeDirectories</code> at the directories relevant to this subset.</li>
+        <li><strong>Set exclusions</strong> &mdash; Add any models, scripts, or directories that should not be tested.</li>
+        <li><strong>Set the report folder</strong> &mdash; <code>config.Reports.FolderName</code> should match the subset name.</li>
+        <li><strong>Register the build task</strong> (optional) &mdash; If your project uses <code>buildfile.m</code>, the framework automatically discovers new config files.</li>
+        <li>
+            <strong>Verify with a dry run</strong> &mdash;
+            <pre><code>config = testConfig_&lt;2&gt;();
+TestExecutor.dryRun(config);</code></pre>
+        </li>
+    </ol>
+
+    <!-- ==================== BEST PRACTICES ==================== -->
+    <h2 id="best-practices">Best Practices</h2>
+    <ul>
+        <li><strong>Keep subsets focused.</strong> Group by component, layer, or test type.</li>
+        <li><strong>Use narrow directories.</strong> <code>"."</code> searches the entire project tree and is slow on large repos.</li>
+        <li><strong>Exclude test infrastructure from coverage.</strong> Always add <code>"Test"</code> to <code>config.CodeCoverage.ExcludeDirectories</code>.</li>
+        <li><strong>Function files are automatically excluded from workflow tests.</strong></li>
+        <li><strong>Use <code>IncludeFiles</code> sparingly.</strong> Prefer directory-based discovery.</li>
+        <li><strong>Run <code>dryRun()</code> before committing.</strong> Verify the resolved file list matches your expectations.</li>
+        <li><strong>Set <code>OpenInBrowser = false</code> for CI.</strong> Headless CI runners have no browser.</li>
+    </ul>
+
+    <!-- ==================== EXAMPLES ==================== -->
+    <h2 id="examples">Examples</h2>
+
+    <h3>Test only models in a specific component</h3>
+    <pre><code>config.Models.IncludeDirectories = <span class="string">"Components/Thermal"</span>;
+config.Models.FileTypes = [<span class="string">"SLX-file"</span>];
+<span class="comment">% Only .slx files under Components/Thermal/ and its subfolders</span></code></pre>
+
+    <h3>Exclude work-in-progress models</h3>
+    <pre><code>config.Models.ExcludeDirectories = [<span class="string">"Models/wip"</span>; <span class="string">"Models/experimental"</span>];
+config.Models.ExcludeFiles = [<span class="string">"Models/draft_controller.slx"</span>];</code></pre>
+
+    <h3>Include a specific file that lives outside search directories</h3>
+    <pre><code>config.Models.IncludeDirectories = <span class="string">"Components/HarnessModels"</span>;
+config.Models.IncludeFiles = [<span class="string">"Integration/system_level_model.slx"</span>];
+<span class="comment">% Both the HarnessModels folder AND the specific integration model are tested</span></code></pre>
+
+    <h3>Demonstrate that exclusion wins over inclusion</h3>
+    <pre><code>config.Models.IncludeFiles = [<span class="string">"Archive/old_model.slx"</span>];
+config.Models.ExcludeDirectories = <span class="string">"Archive"</span>;
+<span class="comment">% Result: old_model.slx is NOT tested (exclusion wins)</span></code></pre>
+
+    <h3>Workflow subset that excludes interactive scripts</h3>
+    <pre><code>config.Workflows.IncludeDirectories = [<span class="string">"Workflow"</span>; <span class="string">"Scripts"</span>];
+config.Workflows.ExcludeFiles = [<span class="string">"Workflow/interactiveSetup.m"</span>; <span class="string">"Workflow/manualCalibration.mlx"</span>];</code></pre>
+
+    <h3>Coverage on a specific subsystem only</h3>
+    <pre><code>config.CodeCoverage.IncludeDirectories = [<span class="string">"Components/Controller"</span>; <span class="string">"Components/Estimator"</span>];
+config.CodeCoverage.ExcludeDirectories = <span class="string">"Test"</span>;</code></pre>
+
+    <h3>Add custom regression tests</h3>
+    <pre><code>config.CustomTests.Files = [<span class="string">"Test/Regression/ControllerRegression.m"</span>];
+config.CustomTests.Directories = [<span class="string">"Test/Integration"</span>];</code></pre>
+
+    <!-- ==================== TROUBLESHOOTING ==================== -->
+    <h2 id="troubleshooting">Troubleshooting</h2>
+
+    <h3>My file isn't being discovered</h3>
+    <ul>
+        <li>Run <code>TestExecutor.dryRun(config)</code> and check the resolved file list.</li>
+        <li>Verify the file's path matches at least one entry in <code>IncludeDirectories</code> or <code>IncludeFiles</code>.</li>
+        <li>Verify the file's type matches <code>FileTypes</code>.</li>
+        <li>Check that the file isn't excluded by <code>ExcludeDirectories</code> or <code>ExcludeFiles</code>.</li>
+        <li>For workflow discovery, function files are automatically excluded.</li>
+    </ul>
+
+    <h3>A file is being tested that shouldn't be</h3>
+    <ul>
+        <li>Add its directory to <code>ExcludeDirectories</code>, or</li>
+        <li>Add its relative path to <code>ExcludeFiles</code>.</li>
+    </ul>
+
+    <h3>Tests pass locally but fail in CI</h3>
+    <ul>
+        <li>Ensure <code>OpenInBrowser = false</code> in the config used by CI.</li>
+        <li>Verify all required toolboxes are available on the CI runner.</li>
+        <li>Check that model dependencies are on the MATLAB path.</li>
+    </ul>
+
+    <h3>Coverage report shows 0% for a file I know is tested</h3>
+    <ul>
+        <li>The file must appear in <code>config.CodeCoverage</code> resolved list (check with dry run).</li>
+        <li>The file's type must match <code>config.CodeCoverage.FileTypes</code>.</li>
+        <li>Ensure the file isn't excluded by the coverage section's ignore filters.</li>
+    </ul>
+
+    <hr>
+    <p>
+        <strong>See Also:</strong>
+        <a href="TestFrameworkReference.html">Framework Reference</a> |
+        <a href="GettingStarted.html">Getting Started</a>
+    </p>
+
+    <div class="footer">
+        <p>Copyright 2026 The MathWorks, Inc.</p>
+    </div>
+</main>
+
+</body>
+</html>

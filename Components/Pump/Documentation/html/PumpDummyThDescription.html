@@ -7,9 +7,9 @@ This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
       -->
 <title>PumpDummyTh</title>
-<meta name="generator" content="MATLAB 26.1">
+<meta name="generator" content="MATLAB 25.2">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2026-04-21">
+<meta name="DC.date" content="2026-05-06">
 <meta name="DC.source" content="PumpDummyThDescription.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
@@ -115,37 +115,29 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <p>
 <b>Thermal Coupling:</b> No (coolant pass-through, no active pumping)</p>
 <h2 id="2">Open Model</h2>
-<pre class="codeinput">open_system(<span class="string">'PumpDummyTh'</span>)
-</pre>
 <img vspace="5" hspace="5" src="images/PumpDummyThDescription_01.png" alt=""> <h2 id="3">Ports</h2>
 <p>
-<b>Inputs</b>
+<h3>Input Bus &mdash; <code>s</code></h3>
+<table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+<tr><th>Signal</th><th>Description</th></tr>
+<tr><td>BatSt</td><td>Battery status (terminated internally)</td></tr>
+<tr><td>cmdPump</td><td>Pump speed command</td></tr>
+</table>
+<h3>Output Bus &mdash; <code>m</code></h3>
+<table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+<tr><th>Signal</th><th>Description</th></tr>
+<tr><td>PumpCurr</td><td>Pump current draw</td></tr>
+<tr><td>LowVolt</td><td>Low-voltage bus measurement</td></tr>
+<tr><td>energy</td><td>Cumulative energy consumed</td></tr>
+</table>
+<h3>Physical Ports</h3>
+<table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+<tr><th>Port</th><th>Domain</th><th>Description</th></tr>
+<tr><td>LV</td><td>Electrical</td><td>Low-voltage bus connection</td></tr>
+<tr><td>A</td><td>Thermal liquid</td><td>Coolant port (pass-through)</td></tr>
+<tr><td>B</td><td>Thermal liquid</td><td>Coolant port (pass-through)</td></tr>
+</table>
 </p>
-<div>
-<ul>
-<li>
-<b>Battery status</b> - Pack state signals (terminated internally).</li>
-<li>
-<b>Pump command</b> - Normalized command (0 = off, 1 = full current draw).</li>
-<li>
-<b>LV bus connection</b> - Low-voltage electrical connection for current draw.</li>
-<li>
-<b>Coolant port A</b> - Thermal-liquid inlet (pass-through, no active pumping).</li>
-</ul>
-</div>
-<p>
-<b>Outputs</b>
-</p>
-<div>
-<ul>
-<li>
-<b>Pump Current</b> - Current drawn from the LV bus (I_fixed x PumpCmd).</li>
-<li>
-<b>Low Voltage</b> - Measured LV bus voltage.</li>
-<li>
-<b>Coolant port B</b> - Thermal-liquid outlet (pass-through).</li>
-</ul>
-</div>
 <h2 id="4">Workflows</h2>
 <p>The PumpDummyTh block is a placeholder variant for integration testing or fast simulations. It can replace the full Pump in the <b>VehicleElectroThermal</b> template without breaking the coolant loop. Parameters are set via the model mask, with defaults from <tt>PumpDummyThParams.m</tt>.</p>
 <h2 id="5">Mask Parameters</h2>
@@ -171,7 +163,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 </ul>
 </div>
 <p class="footer">Copyright 2022 - 2026 The MathWorks, Inc.<br>
-<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2026a</a>
+<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2025b</a>
 <br>
 </p>
 </div>
@@ -203,18 +195,29 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 open_system('PumpDummyTh')
 
 %% Ports
-% *Inputs*
 %
-% * *Battery status* - Pack state signals (terminated internally).
-% * *Pump command* - Normalized command (0 = off, 1 = full current draw).
-% * *LV bus connection* - Low-voltage electrical connection for current draw.
-% * *Coolant port A* - Thermal-liquid inlet (pass-through, no active pumping).
-%
-% *Outputs*
-%
-% * *Pump Current* - Current drawn from the LV bus (I_fixed x PumpCmd).
-% * *Low Voltage* - Measured LV bus voltage.
-% * *Coolant port B* - Thermal-liquid outlet (pass-through).
+% <html>
+% <h3>Input Bus &mdash; <code>s</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>BatSt</td><td>Battery status (terminated internally)</td></tr>
+% <tr><td>cmdPump</td><td>Pump speed command</td></tr>
+% </table>
+% <h3>Output Bus &mdash; <code>m</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>PumpCurr</td><td>Pump current draw</td></tr>
+% <tr><td>LowVolt</td><td>Low-voltage bus measurement</td></tr>
+% <tr><td>energy</td><td>Cumulative energy consumed</td></tr>
+% </table>
+% <h3>Physical Ports</h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Port</th><th>Domain</th><th>Description</th></tr>
+% <tr><td>LV</td><td>Electrical</td><td>Low-voltage bus connection</td></tr>
+% <tr><td>A</td><td>Thermal liquid</td><td>Coolant port (pass-through)</td></tr>
+% <tr><td>B</td><td>Thermal liquid</td><td>Coolant port (pass-through)</td></tr>
+% </table>
+% </html>
 
 %% Workflows
 % The PumpDummyTh block is a placeholder variant for integration testing

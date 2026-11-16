@@ -55,10 +55,6 @@ battery.Np=3;      % Number of parallel cells per string
 battery.iniT=vehicleThermal.ambient*ones(1,battery.Ns*battery.Np);  % [K] Module-1 Cell-to-Cell initial Temperature variation
 battery.iniSOC=battery.initialPackSOC*ones(1,battery.Ns*battery.Np);        % Module-1 Cell-to-Cell initial SOC variation
 
-%% Module Electrical
-battery.Ns=110;             % Number of series connected strings
-battery.Np=3;             % Number of parallel cells per string
-
 %% Cell Thermal
 battery.MdotCp=100;        % Cell thermal mass (mass times specific heat [J/K])
 battery.CoolantRes=1.2; % Cell level coolant thermal path resistance, K/W
@@ -88,6 +84,6 @@ battery.ChargerCV_V=62;      % Constant voltage charger value (V)
 battery.CurrOffset=20;       % Current offset for immediate fault (A)
 
 % Thermal Fault parameters
-battery.MinThLmt=263.15;    % [K] Min Cell temp for fault in K - 10 deg Celcius
-battery.MaxThLmt=333.15;    % [K] Max Cell temp for fault in K - 60 deg Celcius
+battery.MinThLmt=253.15;    % [K] Min Cell temp for fault in K - 10 deg Celsius
+battery.MaxThLmt=333.15;    % [K] Max Cell temp for fault in K - 60 deg Celsius
 

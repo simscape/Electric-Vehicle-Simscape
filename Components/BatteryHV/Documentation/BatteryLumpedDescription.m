@@ -19,18 +19,30 @@
 open_system('BatteryLumped')
 
 %% Ports
-% *Inputs*
 %
-% * *Positive relay command* - Connects the battery positive terminal to the HV bus.
-% * *Negative relay command* - Connects the battery negative terminal to the HV bus.
-%
-% *Outputs*
-%
-% * *Voltage* - Pack terminal voltage.
-% * *Current* - Pack current.
-% * *SOC* - State of charge.
-% * *Temperature* - Fixed or externally supplied temperature.
-% * *Cell Voltage* - Individual cell voltage estimate.
+% <html>
+% <h3>Input Bus &mdash; <code>s</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>RelayPos</td><td>Positive relay command</td></tr>
+% <tr><td>RelayNeg</td><td>Negative relay command</td></tr>
+% </table>
+% <h3>Output Bus &mdash; <code>m</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>BattSens.SoC</td><td>State of charge</td></tr>
+% <tr><td>BattSens.Current</td><td>Pack current</td></tr>
+% <tr><td>BattSens.Cellvolt</td><td>Cell voltage</td></tr>
+% <tr><td>BattSens.ParVolt</td><td>Parallel string voltage</td></tr>
+% <tr><td>BattSens.temp</td><td>Pack temperature (fixed)</td></tr>
+% <tr><td>CoolTp</td><td>Coolant temperature</td></tr>
+% </table>
+% <h3>Physical Ports</h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Port</th><th>Domain</th><th>Description</th></tr>
+% <tr><td>HV</td><td>Electrical</td><td>High-voltage bus connection</td></tr>
+% </table>
+% </html>
 
 %% Workflows
 % The BatteryLumped block is used in the *VehicleElectric* vehicle template

@@ -34,7 +34,7 @@ properties
   TransformedData table
   Data table
 
-  % For continous data
+  % For continuous data
   XRefined (:,1) double
   YRefined (:,1) double
   InterpolatedData table

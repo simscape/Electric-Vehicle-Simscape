@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pump — Electric Vehicle Design</title><link rel="stylesheet" href="assets/styles.css?v=20261028-3"></head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+  <header class="help-header"><div class="help-header-inner"><a class="help-brand" href="ElectricVehicleDesignOverview.html">MATLAB Help Center<small>Electric Vehicle Design with Simscape</small></a></div></header>
+  <div class="doc-shell">
+    <aside class="category-nav"><nav aria-label="Component reference navigation">
+      <ul class="nav-trail"><li><a href="ElectricVehicleDesignOverview.html">Documentation Home</a></li><li><a href="components.html">Components</a></li></ul>
+      <div class="nav-siblings-label">Thermal and Fluid</div>
+      <ul class="nav-siblings"><li><a href="component-battery-heater.html">Battery Heater</a></li><li><a href="component-chiller.html">Chiller</a></li><li><a href="component-hvac.html">HVAC</a></li><li aria-current="page"><span>Pump</span></li><li><a href="component-radiator.html">Radiator</a></li></ul>
+      <div class="on-page"><div class="on-page-label">On this page</div><ul class="on-page-list"><li><a href="#description">Description</a></li><li><a href="#examples">Examples</a></li><li><a href="#interface">Interface</a></li><li><a href="#testing">Testing</a></li><li><a href="#see-also">See Also</a></li></ul></div>
+    <div class="nav-browse"><div class="on-page-label">Category</div><ul class="nav-browse-list"><li><a href="examples.html">Examples</a></li><li><a href="vehicle-range.html">Vehicle Models</a></li><li><a href="project-builder.html">Apps &amp; Utilities</a></li></ul></div>
+    </nav></aside>
+    <main class="doc-main" id="main-content">
+
+      <header class="product-intro reference-heading"><div><h1>Pump</h1><p class="tagline">Circulate coolant through vehicle thermal loops</p><p class="library-path"><strong>Component path:</strong> Components / Pump</p><div class="action-row"><a class="action" href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','Pump','Model','Pump.slx'))">Open Default Model</a><a class="action secondary" href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','Pump','TestBench','PumpTestHarness.slx'))">Open Test Harness</a></div></div><figure class="component-header-image"><img src="Image/PumpDescription_01.png" alt="Pump model canvas"></figure></header>
+
+      <section id="description"><h2>Description</h2>
+    <div class="component-description-layout">
+      <div class="component-lede"><p>Coolant circulation pump component for the BEV thermal management system. The pump drives coolant through the thermal loop connecting the battery, motor drive, charger, chiller, heater, and radiator. Three fidelity levels cover full volumetric pumping through lightweight auxiliary stubs.</p>
+        <div class="fidelity-decision"><strong>How to choose a fidelity</strong><p>Use <strong>Pump</strong> when coolant flow and hydraulic power are part of the thermal network. Use <strong>PumpDummy</strong> for a non-thermal auxiliary-load representation, or <strong>PumpDummyTh</strong> when the coolant loop must remain connected but active pumping is intentionally abstracted.</p></div>
+      </div>
+
+    </div>
+    <h3 id="models">Fidelity at a glance</h3>
+    <div class="table-scroll"><table><thead><tr><th>Model</th><th>Description</th><th>Use case</th><th>Templates</th><th>Documentation &amp; files</th></tr></thead><tbody>
+<tr><td><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','Pump','Model','Pump.slx'))"><strong>Pump</strong></a></td><td>Displacement pump driven by the PumpDriver for active flow.</td><td>Electro-thermal configurations with a coolant loop requiring active flow.</td><td>VehicleElectroThermal</td><td><a href="matlab:web(fullfile(currentProject().RootFolder,'Components','Pump','Documentation','html','PumpDescription.html'),'-new')">Documentation</a> &middot; <a href="matlab:edit(fullfile(currentProject().RootFolder,'Components','Pump','Model','PumpParams.m'))">Parameters</a></td></tr>
+<tr><td><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','Pump','Model','PumpDummy.slx'))"><strong>PumpDummy</strong></a></td><td>Fixed electrical load on the LV bus with no coolant ports.</td><td>Non-thermal templates or integration testing where no coolant loop is present.</td><td>VehicleElecAux</td><td><a href="matlab:web(fullfile(currentProject().RootFolder,'Components','Pump','Documentation','html','PumpDummyDescription.html'),'-new')">Documentation</a> &middot; <a href="matlab:edit(fullfile(currentProject().RootFolder,'Components','Pump','Model','PumpDummyParams.m'))">Parameters</a></td></tr>
+<tr><td><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','Pump','Model','PumpDummyTh.slx'))"><strong>PumpDummyTh</strong></a></td><td>LV load with pass-through coolant ports, no active pumping.</td><td>Electro-thermal templates where the pump is not the focus but coolant loop must stay closed.</td><td>VehicleElectroThermal</td><td><a href="matlab:web(fullfile(currentProject().RootFolder,'Components','Pump','Documentation','html','PumpDummyThDescription.html'),'-new')">Documentation</a> &middot; <a href="matlab:edit(fullfile(currentProject().RootFolder,'Components','Pump','Model','PumpDummyThParams.m'))">Parameters</a></td></tr>
+</tbody></table></div>
+    <h3>Where it participates</h3><ul>
+<li><strong>Electro-Thermal Vehicle Studies</strong> &mdash; Pump and PumpDummyTh are part of the coolant loop in the VehicleElectroThermal template, circulating coolant between thermal components and the radiator.</li>
+<li><strong>Auxiliary Vehicle Studies</strong> &mdash; PumpDummy is available in the VehicleElecAux template as a non-thermal electrical placeholder.</li>
+</ul></section>
+
+      <section id="examples"><h2>Examples</h2><div class="used-by"><strong>Workflows and models that use this component</strong>The pump is used by electrothermal vehicle configurations to circulate coolant, and by auxiliary configurations as an electrical load placeholder.</div><div class="component-example-grid"><article class="component-example-card"><div class="card-header-bar"></div><img class="component-example-image" src="Image/PumpTestHarnessDescription_01.png" alt="Pump example model canvas"><div class="component-example-body"><a href="workflow-vehicle-range.html">Estimate Vehicle Range with Coolant Pump Loads</a><p><strong>Vehicle workflow</strong> &mdash; Includes pump auxiliary energy in range calculations.</p></div></article>
+</div></section>
+
+      <section id="interface"><h2>Interface</h2><p class="section-intro">Pump provides full thermal-liquid ports. PumpDummy provides only an electrical interface. PumpDummyTh adds pass-through coolant ports to keep the loop closed.</p>
+    <div class="table-scroll"><table><thead><tr><th>Port / signal</th><th>Direction</th><th>Description</th></tr></thead><tbody>
+<tr><td>Pump speed command</td><td>Input</td><td>Shaft speed from the PumpDriver.</td></tr>
+<tr><td>Pump command <em>(PumpDummy, PumpDummyTh)</em></td><td>Input</td><td>Normalized command (0 = off, 1 = full current draw).</td></tr>
+<tr><td>LV bus <em>(PumpDummy, PumpDummyTh)</em></td><td>Input</td><td>Low-voltage electrical connection.</td></tr>
+<tr><td>Coolant inlet port <em>(Pump, PumpDummyTh)</em></td><td>Conserving</td><td>Thermal-liquid inlet from the coolant loop.</td></tr>
+<tr><td>Coolant outlet port <em>(Pump, PumpDummyTh)</em></td><td>Output</td><td>Pressurized coolant flow to downstream components.</td></tr>
+<tr><td>Pump power / Pump Current</td><td>Output</td><td>Mechanical power (Pump) or current drawn from LV bus (Dummy variants).</td></tr>
+</tbody></table></div></section>
+
+      <section id="testing"><h2>Testing</h2><ul class="link-list"><li><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','Pump','TestBench','PumpTestHarness.slx'))">Open Pump Test Harness</a> · <a href="matlab:web(fullfile(currentProject().RootFolder,'Components','Pump','Documentation','html','PumpTestHarnessDescription.html'),'-new')">view documentation</a><p>Verify volumetric flow and hydraulic pressure under controlled speed inputs.</p></li><li><a href="matlab:runtests(fullfile(currentProject().RootFolder,'Components','Pump','TestCase','PumpPassTests.m'))">Run Pump Component Tests</a><p>Run the maintained Pump test case before integration.</p></li></ul></section>
+      <section id="see-also"><h2>See Also</h2><p class="see-also-links"><a href="component-pump-driver.html">Pump Driver</a> | <a href="component-chiller.html">Chiller</a> | <a href="component-radiator.html">Radiator</a></p><h3>Topics</h3><ul><li><a href="vehicle-range.html#templates">Vehicle Templates</a></li></ul></section>
+    </main>
+  </div>
+  <script src="assets/app.js?v=20260930-6"></script>
+</body></html>

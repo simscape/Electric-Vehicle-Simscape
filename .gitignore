@@ -1,9 +1,15 @@
 # List of untracked files to ignore
-APP/.sessionCache/
-APP/Config/User/
+utils/APP/.sessionCache/
+utils/APP/Config/User/
 Script_Data/Setup/User/
 
 # MATLAB build artifacts
 simcache/
 slprj/
 *.slxc
+
+# Local agent instructions, planning, and work records
+/.agents/
+/.plan/
+/.superpowers/
+/docs/

@@ -13,8 +13,8 @@ BMSData.ChargerCV_V=62;      % Constant voltage charger value (V)
 BMSData.CurrOffset=20;       % Current offset for immediate fault (A)
 
 % Thermal Fault parameters
-BMSData.MinThLmt=263.15;    % [K] Min Cell temp for fault in K - 10 deg Celcius
-BMSData.MaxThLmt=333.15;    % [K] Max Cell temp for fault in K - 60 deg Celcius
+BMSData.MinThLmt=243.15;    % [K] Minimum cell fault temperature (-30 degC)
+BMSData.MaxThLmt=333.15;    % [K] Max Cell temp for fault in K - 60 deg Celsius
 
 %% Module Electrical
 BMSData.Ns=110;    % Number of series connected strings

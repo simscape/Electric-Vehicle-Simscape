@@ -15,7 +15,7 @@ Basic electric powertrain with battery, dual motor-drives, charger, and drivelin
 | Field | Value |
 |-------|-------|
 | Template | VehicleElectric |
-| Config Source | APP/Config/Preset/VehicleTemplateConfig.json |
+| Config Source | utils/APP/Config/Preset/VehicleTemplateConfig.json |
 | Description | Electric Vehicle without Thermal and Auxiliary |
 
 ## Model Configuration

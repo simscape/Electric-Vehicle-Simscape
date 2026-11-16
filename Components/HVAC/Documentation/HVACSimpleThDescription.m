@@ -22,24 +22,38 @@
 open_system('HVACsimpleTh')
 
 %% Ports
-% *Inputs*
 %
-% * *Environment temperature* - Ambient air temperature.
-% * *Blower command* - Blower speed or enable signal.
-% * *PTC command* - Cabin heater power command.
-% * *Compressor command* - AC compressor enable.
-%
-% *Outputs*
-%
-% * *Cabin Temperature* - Cabin air temperature from thermal dynamics.
-% * *HVAC Energy* - Cumulative HVAC energy consumption.
-% * *Blower/Cooler/PTC Thermal States* - Thermal operating states of HVAC actuators.
+% <html>
+% <h3>Input Bus &mdash; <code>s</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>Env.Tenv</td><td>Environment temperature</td></tr>
+% <tr><td>Batt.BatSt</td><td>Battery status</td></tr>
+% <tr><td>Batt</td><td>Battery bus (voltage)</td></tr>
+% <tr><td>Cntrl.CmdBlower</td><td>Blower speed command</td></tr>
+% <tr><td>Cntrl.CmdPTC</td><td>PTC heater command</td></tr>
+% <tr><td>Cntrl.CmdCool</td><td>Cooler/compressor command</td></tr>
+% </table>
+% <h3>Output Bus &mdash; <code>m</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>energy</td><td>Cumulative HVAC energy consumption</td></tr>
+% <tr><td>Tcabin</td><td>Cabin air temperature</td></tr>
+% <tr><td>TacVent</td><td>AC vent temperature</td></tr>
+% <tr><td>Tptc</td><td>PTC heater temperature</td></tr>
+% </table>
+% <h3>Physical Ports</h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Port</th><th>Domain</th><th>Description</th></tr>
+% <tr><td>HV</td><td>Electrical</td><td>High-voltage bus connection</td></tr>
+% </table>
+% </html>
 
 %% Workflows
-% HVACsimpleTh is the *default HVAC fidelity* loaded by
-% |BEVSystemModelParams.m| via |HVACsimpleThParams.m|. It is used in range
-% estimation workflows for hot and cold ambient scenarios. The model is
-% validated through |HVACTestHarness.slx|.
+% HVACsimpleTh is the *default HVAC fidelity* for the
+% *VehicleElectroThermal* template. It is used in range estimation
+% workflows for hot and cold ambient scenarios. The model is validated
+% through |HVACTestHarness.slx|.
 
 %% Parameters
 %

@@ -7,9 +7,9 @@ This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
       -->
 <title>HVACsimpleTh</title>
-<meta name="generator" content="MATLAB 26.1">
+<meta name="generator" content="MATLAB 25.2">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2026-04-21">
+<meta name="DC.date" content="2026-05-06">
 <meta name="DC.source" content="HVACSimpleThDescription.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
@@ -114,39 +114,34 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <p>
 <b>Thermal Coupling:</b> Yes (cabin thermal plant)</p>
 <h2 id="2">Open Model</h2>
-<pre class="codeinput">open_system(<span class="string">'HVACsimpleTh'</span>)
-</pre>
 <img vspace="5" hspace="5" src="images/HVACSimpleThDescription_01.png" alt=""> <h2 id="3">Ports</h2>
 <p>
-<b>Inputs</b>
+<h3>Input Bus &mdash; <code>s</code></h3>
+<table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+<tr><th>Signal</th><th>Description</th></tr>
+<tr><td>Env.Tenv</td><td>Environment temperature</td></tr>
+<tr><td>Batt.BatSt</td><td>Battery status</td></tr>
+<tr><td>Batt</td><td>Battery bus (voltage)</td></tr>
+<tr><td>Cntrl.CmdBlower</td><td>Blower speed command</td></tr>
+<tr><td>Cntrl.CmdPTC</td><td>PTC heater command</td></tr>
+<tr><td>Cntrl.CmdCool</td><td>Cooler/compressor command</td></tr>
+</table>
+<h3>Output Bus &mdash; <code>m</code></h3>
+<table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+<tr><th>Signal</th><th>Description</th></tr>
+<tr><td>energy</td><td>Cumulative HVAC energy consumption</td></tr>
+<tr><td>Tcabin</td><td>Cabin air temperature</td></tr>
+<tr><td>TacVent</td><td>AC vent temperature</td></tr>
+<tr><td>Tptc</td><td>PTC heater temperature</td></tr>
+</table>
+<h3>Physical Ports</h3>
+<table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+<tr><th>Port</th><th>Domain</th><th>Description</th></tr>
+<tr><td>HV</td><td>Electrical</td><td>High-voltage bus connection</td></tr>
+</table>
 </p>
-<div>
-<ul>
-<li>
-<b>Environment temperature</b> - Ambient air temperature.</li>
-<li>
-<b>Blower command</b> - Blower speed or enable signal.</li>
-<li>
-<b>PTC command</b> - Cabin heater power command.</li>
-<li>
-<b>Compressor command</b> - AC compressor enable.</li>
-</ul>
-</div>
-<p>
-<b>Outputs</b>
-</p>
-<div>
-<ul>
-<li>
-<b>Cabin Temperature</b> - Cabin air temperature from thermal dynamics.</li>
-<li>
-<b>HVAC Energy</b> - Cumulative HVAC energy consumption.</li>
-<li>
-<b>Blower/Cooler/PTC Thermal States</b> - Thermal operating states of HVAC actuators.</li>
-</ul>
-</div>
 <h2 id="4">Workflows</h2>
-<p>HVACsimpleTh is the <b>default HVAC fidelity</b> loaded by <tt>BEVSystemModelParams.m</tt> via <tt>HVACsimpleThParams.m</tt>. It is used in range estimation workflows for hot and cold ambient scenarios. The model is validated through <tt>HVACTestHarness.slx</tt>.</p>
+<p>HVACsimpleTh is the <b>default HVAC fidelity</b> for the <b>VehicleElectroThermal</b> template. It is used in range estimation workflows for hot and cold ambient scenarios. The model is validated through <tt>HVACTestHarness.slx</tt>.</p>
 <h2 id="5">Parameters</h2>
 <p>
 <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
@@ -173,7 +168,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 </ul>
 </div>
 <p class="footer">Copyright 2022 - 2026 The MathWorks, Inc.<br>
-<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2026a</a>
+<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2025b</a>
 <br>
 </p>
 </div>
@@ -203,24 +198,38 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 open_system('HVACsimpleTh')
 
 %% Ports
-% *Inputs*
 %
-% * *Environment temperature* - Ambient air temperature.
-% * *Blower command* - Blower speed or enable signal.
-% * *PTC command* - Cabin heater power command.
-% * *Compressor command* - AC compressor enable.
-%
-% *Outputs*
-%
-% * *Cabin Temperature* - Cabin air temperature from thermal dynamics.
-% * *HVAC Energy* - Cumulative HVAC energy consumption.
-% * *Blower/Cooler/PTC Thermal States* - Thermal operating states of HVAC actuators.
+% <html>
+% <h3>Input Bus &mdash; <code>s</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>Env.Tenv</td><td>Environment temperature</td></tr>
+% <tr><td>Batt.BatSt</td><td>Battery status</td></tr>
+% <tr><td>Batt</td><td>Battery bus (voltage)</td></tr>
+% <tr><td>Cntrl.CmdBlower</td><td>Blower speed command</td></tr>
+% <tr><td>Cntrl.CmdPTC</td><td>PTC heater command</td></tr>
+% <tr><td>Cntrl.CmdCool</td><td>Cooler/compressor command</td></tr>
+% </table>
+% <h3>Output Bus &mdash; <code>m</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>energy</td><td>Cumulative HVAC energy consumption</td></tr>
+% <tr><td>Tcabin</td><td>Cabin air temperature</td></tr>
+% <tr><td>TacVent</td><td>AC vent temperature</td></tr>
+% <tr><td>Tptc</td><td>PTC heater temperature</td></tr>
+% </table>
+% <h3>Physical Ports</h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Port</th><th>Domain</th><th>Description</th></tr>
+% <tr><td>HV</td><td>Electrical</td><td>High-voltage bus connection</td></tr>
+% </table>
+% </html>
 
 %% Workflows
-% HVACsimpleTh is the *default HVAC fidelity* loaded by
-% |BEVSystemModelParams.m| via |HVACsimpleThParams.m|. It is used in range
-% estimation workflows for hot and cold ambient scenarios. The model is
-% validated through |HVACTestHarness.slx|.
+% HVACsimpleTh is the *default HVAC fidelity* for the
+% *VehicleElectroThermal* template. It is used in range estimation
+% workflows for hot and cold ambient scenarios. The model is validated
+% through |HVACTestHarness.slx|.
 
 %% Parameters
 %

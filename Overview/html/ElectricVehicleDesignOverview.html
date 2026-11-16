@@ -2,46 +2,32 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Electric Vehicle Design with Simscape</title>
-    <!--
-    ============================================================
-    DOCUMENTATION TEMPLATE - MathWorks Style
-    ============================================================
-    Enhanced: Card grids preserve original size on browser resize.
-    A page-level horizontal scrollbar appears when the viewport
-    is too narrow to fit the content at its natural width.
-    Changes from original:
-      - .card-grid and .example-grid use fixed-width columns (no shrinking)
-      - .content has a min-width so the entire page scrolls horizontally
-      - Cards stay readable at all browser widths
-    ============================================================
-    -->
+    <!-- Project landing page with the shared documentation theme. -->
     <style>
         body { margin: 0; font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #212121; }
         a { color: #0076a8; text-decoration: none; }
         a:hover { color: #004c6d; text-decoration: underline; }
+        .skip-link { position: fixed; top: -40px; left: 0; z-index: 999;
+            padding: 8px 16px; background: #0076a8; color: #fff; font-weight: 700; }
+        .skip-link:focus { top: 0; }
 
-        /* Fixed title bar */
         .page-title {
             position: fixed; top: 0; left: 0; right: 0;
+            height: 60px; box-sizing: border-box;
             background: #fff; border-bottom: 1px solid #e0e0e0;
             margin: 0; z-index: 200;
             display: flex; align-items: center; justify-content: space-between;
         }
-        .page-title .title-text {
-            font-size: 28px; font-weight: 400; color: #c04c0b;
-            padding: 14px 20px;
-        }
-        .page-title .title-logo {
-            padding: 6px 20px;
-        }
-        .page-title .title-logo img {
-            height: 50px; width: auto;
-        }
+        /* title never wraps past the 60px bar — scales down, ellipsis as a safety */
+        .page-title .title-text { font-size: clamp(16px, 3.4vw, 28px); font-weight: 400; color: #c04c0b;
+            padding: 0 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .page-title .title-logo { padding: 6px 20px; flex: none; }
+        .page-title .title-logo img { height: 40px; width: auto; }
 
-        /* Left sidebar */
         .sidebar {
-            position: fixed; top: 60px; left: 0;
+            position: fixed; top: 60px; left: 0; z-index: 150;
             width: 160px; height: calc(100vh - 60px);
             background: #f7f7f7; border-right: 1px solid #e0e0e0;
             padding: 20px 12px; overflow-y: auto;
@@ -49,232 +35,144 @@
         .sidebar ul { list-style: none; padding: 0; margin: 0; }
         .sidebar li { margin: 6px 0; }
         .sidebar li.sub { padding-left: 14px; }
-
-        /* Right content area - min-width prevents shrinking below card grid width */
-        .content {
-            margin-left: 160px;
-            padding: 90px 40px 30px;
-            max-width: 800px;
-            min-width: 760px;
-        }
+        .content { margin-left: 160px; padding: 90px 40px 30px; max-width: 800px; min-width: 0; overflow-x: hidden; }
 
         h1 { font-size: 20px; font-weight: 700; color: #c04c0b; margin: 30px 0 8px; scroll-margin-top: 90px;
              border-bottom: 1px solid #e0e0e0; padding-bottom: 8px; }
+        .content > h1:first-child { margin-top: 0; }
         h2 { font-size: 16px; font-weight: 700; color: #212121; margin: 22px 0 6px; scroll-margin-top: 90px; }
         p { margin: 8px 0; line-height: 1.6; color: #212121; }
 
-        .code {
-            background: #f5f5f5; border-left: 3px solid #0076a8;
-            padding: 10px 14px; margin: 10px 0 20px;
-            font-family: 'Courier New', monospace; font-size: 12px; color: #212121;
-        }
-
-
-        /* Collapsible sub-headings */
-        .collapsible {
-            cursor: pointer; display: flex; align-items: center; user-select: none;
-        }
-        .collapsible::before {
-            content: '\25B6'; font-size: 10px; color: #0076a8;
-            margin-right: 8px; transition: transform 0.2s;
-        }
+        .collapsible { cursor: pointer; display: flex; align-items: center; user-select: none; }
+        .collapsible::before { content: '\25B6'; font-size: 10px; color: #0076a8; margin-right: 8px; transition: transform 0.2s; }
         .collapsible.open::before { transform: rotate(90deg); }
         .collapse-body { display: none; padding-left: 18px; }
         .collapse-body.open { display: block; }
 
-        /* Example cards - 3 column grid with fixed-width cards */
-        .example-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 200px);
-            gap: 16px;
-            min-width: max-content;
-        }
-        .example-card {
-            border: 1px solid #e0e0e0; border-radius: 3px;
-            padding: 12px; background: #fff;
-            width: 200px;
-        }
-        .example-card:hover { box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
-        .example-card .thumb {
-            display: block; width: 100%; height: 80px; margin-bottom: 8px;
-            border: 1px solid #d0e4ef; object-fit: cover;
-        }
-        .example-card .card-title { font-size: 12px; font-weight: 600; margin-bottom: 4px; }
-        .example-card .card-title a { color: #0076a8; }
-        .example-card .card-desc { font-size: 11px; color: #555; line-height: 1.5; }
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem; min-width: 0; }
+        .model-card { display: flex; flex-direction: column; background: #fff; border: 1px solid #0076a8; border-radius: 4px; overflow: hidden; transition: box-shadow 0.2s, transform 0.15s; width: auto; }
+        .model-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.08); transform: translateY(-1px); }
+        .card-header-bar { height: 3px; background: #0076a8; }
+        .card-image { width: 100%; height: 100px; object-fit: contain; background: #f0f4f8; border-bottom: 1px solid #e0e0e0; padding: 6px; box-sizing: border-box; }
+        .card-content { display: flex; flex: 1; flex-direction: column; padding: 0.8rem; }
+        .card-content h3 { margin: 0 0 0.3rem 0; font-size: 12px; font-weight: 600; color: #212121; line-height: 1.4; }
+        .card-content p { margin: 0 0 0.6rem 0; font-size: 11px; color: #555; line-height: 1.5; }
+        .card-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: auto; padding-top: 0.8rem; }
+        .btn-load { padding: 6px 12px; border: none; border-radius: 4px; font-size: 11px; font-weight: 500; cursor: pointer; transition: background 0.2s; text-decoration: none; display: inline-block; white-space: nowrap; }
+        .btn-load.btn-primary { background: #0076a8; color: #fff; }
+        .btn-load.btn-primary:hover { background: #005a7c; text-decoration: none; color: #fff; }
+        .btn-load.btn-secondary { background: #f5f5f5; color: #0076a8; border: 1px solid #e0e0e0; }
+        .btn-load.btn-secondary:hover { background: #e8f4f8; }
 
-        /* Model cards (workflow cards) - fixed-width cards */
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 220px);
-            gap: 1.5rem;
-            min-width: max-content;
+        /* sidebar toggle (MathWorks-style) — hidden on desktop */
+        .nav-toggle { display: none; position: fixed; top: 68px; left: 8px; z-index: 210;
+            width: 34px; height: 34px; align-items: center; justify-content: center;
+            background: #fff; color: #0076a8; border: 1px solid #d7dadd; border-radius: 4px; cursor: pointer; padding: 0; }
+        .nav-toggle:hover { background: #eef7fa; border-color: #0076a8; }
+        .nav-backdrop { display: none; position: fixed; inset: 60px 0 0 0; z-index: 140;
+            background: rgba(0,0,0,.32); opacity: 0; transition: opacity .2s ease; }
+        .nav-backdrop.open { display: block; opacity: 1; }
+
+        /* ≤1023px: off-canvas sidebar; toggle in a reserved top strip */
+        @media (max-width: 1023px) {
+            .nav-toggle { display: inline-flex; top: 70px; left: 14px; }
+            .sidebar { z-index: 190; width: min(300px, 84vw); padding-top: 60px;
+                transform: translateX(-100%); transition: transform .25s ease; }
+            .sidebar.open { transform: translateX(0); box-shadow: 4px 0 24px rgba(0,0,0,.18); }
+            .content { margin-left: 0; padding: 90px 40px 30px 60px; }
         }
-        .model-card {
-            background: #fff; border: 1px solid #0076a8;
-            border-radius: 4px; overflow: hidden;
-            transition: box-shadow 0.2s, transform 0.15s;
-            width: 220px;
-        }
-        .model-card:hover {
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-            transform: translateY(-1px);
-        }
-        .card-header-bar {
-            height: 3px; background: #0076a8;
-        }
-        .card-image {
-            width: 100%; height: 100px; object-fit: contain;
-            background: #f0f4f8; border-bottom: 1px solid #e0e0e0; padding: 6px;
-            box-sizing: border-box;
-        }
-        .card-content {
-            padding: 0.8rem;
-        }
-        .card-content h3 {
-            margin: 0 0 0.3rem 0; font-size: 12px; font-weight: 600;
-            color: #212121; line-height: 1.4;
-        }
-        .card-content p {
-            margin: 0 0 0.6rem 0; font-size: 11px;
-            color: #555; line-height: 1.5;
-        }
-        .card-actions {
-            display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.8rem;
-        }
-        .btn-load {
-            padding: 6px 12px; border: none; border-radius: 4px;
-            font-size: 11px; font-weight: 500; cursor: pointer;
-            transition: background 0.2s; text-decoration: none;
-            display: inline-block; white-space: nowrap;
-        }
-        .btn-load.btn-primary {
-            background: #0076a8; color: #fff;
-        }
-        .btn-load.btn-primary:hover {
-            background: #005a7c; text-decoration: none; color: #fff;
-        }
-        .btn-load.btn-secondary {
-            background: #f5f5f5; color: #0076a8; border: 1px solid #e0e0e0;
-        }
-        .btn-load.btn-secondary:hover {
-            background: #e8f4f8;
-        }
-        .card-code {
-            margin-top: 0.5rem; padding: 0.4rem 0.6rem;
-            background: #f5f5f5; border: 1px solid #e0e0e0;
-            border-radius: 4px; font-family: 'Courier New', monospace;
-            font-size: 11px; color: #212121;
-            word-wrap: break-word; overflow-wrap: break-word; white-space: pre-wrap;
+        @media (max-width: 767px) {
+            .card-grid { grid-template-columns: 1fr; }
+            .content { padding: 78px 16px 30px 56px; }
         }
     </style>
 </head>
 <body>
 
-<!-- ============================================================
-     TITLE: Edit text below
-     ============================================================ -->
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
 <div class="page-title">
     <span class="title-text">Electric Vehicle Design with Simscape</span>
-    <span class="title-logo"><img src="Image/MATLAB_VERSION.png" alt="MATLAB Version"></span>
+    <span class="title-logo"><img src="Image/MATLAB_VERSION.svg" alt="MATLAB Version"></span>
 </div>
 
-<!-- ============================================================
-     SIDEBAR: Add/remove <li> entries to match your content sections.
-     Use class="sub" for indented sub-section links.
-     ============================================================ -->
-<nav class="sidebar">
+<nav class="sidebar" aria-label="Documentation navigation">
     <ul>
         <li><a href="#overview">Overview</a></li>
         <li><a href="#get-started">Get Started</a></li>
         <li><a href="#Workflow">Workflow</a></li>
-        <li class="sub"><a href="#app-ConfigureVehicle">Configure Vehicle</a></li>
-        <li class="sub"><a href="#app-DesignBatteries">Design Batteries</a></li>
-        <li class="sub"><a href="#app-DesignElectricDrive">Design Electric Drive</a></li>
-        <li class="sub"><a href="#app-DesignTransmission">Design Transmission</a></li>
-        <li class="sub"><a href="#app-AnalyzeVehicle">Analyze Vehicle</a></li>
+        <li class="sub" data-auto-nav-fallback><a href="#app-ConfigureVehicle">Configure Vehicle</a></li>
+        <li class="sub" data-auto-nav-fallback><a href="#app-DesignBatteries">Design Batteries</a></li>
+        <li class="sub" data-auto-nav-fallback><a href="#app-DesignElectricDrive">Design Electric Drive</a></li>
+        <li class="sub" data-auto-nav-fallback><a href="#app-DesignTransmission">Design Transmission</a></li>
+        <li class="sub" data-auto-nav-fallback><a href="#app-AnalyzeVehicle">Analyze Vehicle</a></li>
         <li><a href="#components">Components</a></li>
         <li><a href="#test">Testing</a></li>
         <li><a href="#requirements">Requirements</a></li>
     </ul>
 </nav>
 
-<!-- ============================================================
-     CONTENT: Main scrollable area. Edit sections below.
-     ============================================================ -->
-<main class="content">
+<main class="content" id="main-content">
 
-    <!-- Section: Overview -->
     <h1 id="overview">Overview</h1>
     <p>
-        Electric Vehicles, EV, have the potential to reduce overall carbon 
-        emissions. The key challenges in their adoption lie in addressing 
-        the vehicle range anxiety, safety, and the total ownership cost for 
-        the consumer. Most modern EV are powered by Li-ion based battery 
-        chemistry and electric drivetrains with permanent magnet synchronous 
-        motors (PMSM) and/or induction motors. Modeling and simulation 
-        helps you design vehicles that meet the desired range on the road 
-        and perform under all environmental conditions. This project 
-        contains Simscape&trade; based workflows and utilities that 
-        help you create different vehicle platforms and analyze their 
+        Electric Vehicles, EV, have the potential to reduce overall carbon
+        emissions. The key challenges in their adoption lie in addressing
+        the vehicle range anxiety, safety, and the total ownership cost for
+        the consumer. Most modern EVs are powered by Li-ion based battery
+        chemistry and electric drivetrains with permanent magnet synchronous
+        motors (PMSM) and/or induction motors. Modeling and simulation
+        help you design vehicles that meet the desired range on the road
+        and perform under all environmental conditions. This project
+        contains Simscape&trade; based workflows and utilities that
+        help you create different vehicle platforms and analyze their
         components as well as the overall system.
     </p>
 
-    <!-- Section: Get Started -->
     <h1 id="get-started">Get Started</h1>
     <p style="margin-left: 20px;">
         (a) Double-click on the <a href="matlab:openProject('ElectricVehicleSimscape.prj')">
-        ElectricVehicleSimscape PRJ</a> file (in the root folder) to setup the
+        ElectricVehicleSimscape PRJ</a> file (in the root folder) to set up the
         project and get started.<br>
-        (b) To visualize Simscape vehicle models based on pre-saved templates, 
+        (b) To visualize Simscape vehicle models based on pre-saved templates,
         see <a href="matlab:run('OpenPresetPicker')">Pre-set Vehicle Templates</a>.<br>
-        (c) To learn more about the models available in Pre-set Vehicle Templates, 
-        see <a href="matlab:web('BatteryElectricVehicleModelOverview.html')">Documentation for Vehicle Model</a>.<br>
+        (c) To learn more about the models available in Pre-set Vehicle Templates,
+        see <a href="matlab:web(fullfile(currentProject().RootFolder,'Overview','html','BatteryElectricVehicleModelOverview.html'),'-new')">Documentation for Vehicle Model</a>.<br>
     </p>
 
-    <!-- Section: Workflow (parent for collapsible sub-sections) -->
     <h1 id="Workflow">Workflow</h1>
-    
-    <p>
-        Click on the hyperlinks to navigate to the application workflows or
-        live-scripts.
-    </p>
+    <p>See <a href="examples.html">Workflow Documentation</a>, or use the links below to open an application workflow or Live Script.</p>
 
-    <!-- Sub-section: ConfigureVehicle (collapsible, with example grid) -->
-    <h2 id="app-ConfigureVehicle" class="collapsible" onclick="toggle(this)">Configure Vehicle</h2>
-    <div class="collapse-body">
+    <h2 id="app-ConfigureVehicle" class="collapsible open" data-nav onclick="toggle(this)">Configure Vehicle</h2>
+    <div class="collapse-body open">
         <div class="card-grid">
             <div class="model-card">
                 <div class="card-header-bar"></div>
                 <img class="card-image" src="Image/BEVappICON.png" alt="BEV App ICON">
                 <div class="card-content">
                     <h3>Launch App to Configure Vehicle</h3>
-                    <p>Launch the App to configure a vehicle for your requirements — select 
-                        a template, choose component fidelities, and set initial design parameters.</p>
+                    <p>Launch the App to configure a vehicle for your requirements &mdash; select a template, choose component fidelities, and set initial design parameters.</p>
                     <div class="card-actions">
                         <a href="matlab:loadAppShortcut" class="btn-load btn-primary">Open App</a>
-                        <button class="btn-load btn-secondary" onclick="copyCommand(this, &quot;loadAppShortcut&quot;)">Copy Command</button>
+                        <a href="project-builder.html" class="btn-load btn-secondary">App Guide</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Sub-section: DesignBatteries (collapsible, with example grid) -->
-    <h2 id="app-DesignBatteries" class="collapsible" onclick="toggle(this)">Design Batteries</h2>
-    <div class="collapse-body">
+    <h2 id="app-DesignBatteries" class="collapsible open" data-nav onclick="toggle(this)">Design Batteries</h2>
+    <div class="collapse-body open">
         <div class="card-grid">
             <div class="model-card">
                 <div class="card-header-bar"></div>
                 <img class="card-image" src="Image/BEVplantModelbatterysSubs.png" alt="Batteries">
                 <div class="card-content">
                     <h3>Size Battery for Electric Vehicle</h3>
-                    <p>Size the HV battery pack to achieve a target driving range. 
-                        Compare different cell capacities and pack weights over the NEDC 
-                        cycle with HVAC on to find the right trade-off between range and vehicle mass.</p>
+                    <p>Size the HV battery pack to achieve a target driving range. Compare cell capacities and pack weights over the NEDC cycle with HVAC on.</p>
                     <div class="card-actions">
                         <a href="matlab:edit('BEVBatterySizingMain.mlx')" class="btn-load btn-primary">Open Live Script</a>
-                        <button class="btn-load btn-secondary" onclick="copyCommand(this, &quot;edit('BEVBatterySizingMain.mlx')&quot;)">Copy Command</button>
+                        <a href="workflow-battery-sizing.html" class="btn-load btn-secondary">Quick Setup</a>
                     </div>
                 </div>
             </div>
@@ -283,31 +181,28 @@
                 <img class="card-image" src="Image/BatteryNeuralNetResults.png" alt="Sensor">
                 <div class="card-content">
                     <h3>Build Virtual Sensor for BMS</h3>
-                    <p>Train a neural network to predict battery cell temperature from current, 
-                        voltage, and SOC inputs. A pre-trained model is included for verification.</p>
+                    <p>Train a neural network to predict battery cell temperature from current, voltage, and SOC inputs. A pre-trained model is included.</p>
                     <div class="card-actions">
                         <a href="matlab:edit('VirtualSensorNeuralNetModel.mlx')" class="btn-load btn-primary">Open Live Script</a>
-                        <button class="btn-load btn-secondary" onclick="copyCommand(this, &quot;edit('VirtualSensorNeuralNetModel.mlx')&quot;)">Copy Command</button>
+                        <a href="workflow-battery-virtual-sensor.html" class="btn-load btn-secondary">Quick Setup</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Sub-section: DesignElectricDrive (collapsible, with example grid) -->
-    <h2 id="app-DesignElectricDrive" class="collapsible" onclick="toggle(this)">Design Electric Drive</h2>
-    <div class="collapse-body">
+    <h2 id="app-DesignElectricDrive" class="collapsible open" data-nav onclick="toggle(this)">Design Electric Drive</h2>
+    <div class="collapse-body open">
         <div class="card-grid">
             <div class="model-card">
                 <div class="card-header-bar"></div>
                 <img class="card-image" src="Image/PMSMlossMapGen.PNG" alt="Motor Loss Map">
                 <div class="card-content">
                     <h3>Motor Inverter Loss Map Generation</h3>
-                    <p>Generate copper, iron, IGBT, and diode loss maps by sweeping the 
-                        FOC-controlled PMSM across speed, torque, and temperature points.</p>
+                    <p>Generate copper, iron, IGBT, and diode loss maps by sweeping the FOC-controlled PMSM across speed, torque, and temperature.</p>
                     <div class="card-actions">
                         <a href="matlab:edit('generateDULossMap.mlx')" class="btn-load btn-primary">Open Live Script</a>
-                        <button class="btn-load btn-secondary" onclick="copyCommand(this, &quot;edit('generateDULossMap.mlx')&quot;)">Copy Command</button>
+                        <a href="workflow-loss-map.html" class="btn-load btn-secondary">Quick Setup</a>
                     </div>
                 </div>
             </div>
@@ -316,11 +211,10 @@
                 <img class="card-image" src="Image/PMSMThermalTestInverterResult.png" alt="Inverter Life">
                 <div class="card-content">
                     <h3>Estimate Inverter Power Module End of Life</h3>
-                    <p>Capture IGBT and diode junction temperatures from drive-cycle simulations, 
-                        apply rainflow cycle counting, and estimate semiconductor lifetime.</p>
+                    <p>Capture IGBT and diode junction temperatures from drive-cycle simulations, apply rainflow cycle counting, and estimate lifetime.</p>
                     <div class="card-actions">
                         <a href="matlab:edit('inverterPowerModuleLife.mlx')" class="btn-load btn-primary">Open Live Script</a>
-                        <button class="btn-load btn-secondary" onclick="copyCommand(this, &quot;edit('inverterPowerModuleLife.mlx')&quot;)">Copy Command</button>
+                        <a href="workflow-inverter-life.html" class="btn-load btn-secondary">Quick Setup</a>
                     </div>
                 </div>
             </div>
@@ -329,109 +223,132 @@
                 <img class="card-image" src="Image/BatteryElectricVehicleModelOverviewThermalDiagram.png" alt="Thermal Durability">
                 <div class="card-content">
                     <h3>Analyze Thermal Durability for PMSM</h3>
-                    <p>Run the thermal test bench over extended duty cycles at multiple coolant 
-                        sump temperatures to assess winding and magnet thermal margins.</p>
+                    <p>Run the thermal test bench over extended duty cycles at multiple coolant sump temperatures to assess thermal margins.</p>
                     <div class="card-actions">
                         <a href="matlab:edit('DUThermalDurability.mlx')" class="btn-load btn-primary">Open Live Script</a>
-                        <button class="btn-load btn-secondary" onclick="copyCommand(this, &quot;edit('DUThermalDurability.mlx')&quot;)">Copy Command</button>
-                    </div>
-                </div>
-            </div>
-            <div class="model-card">
-                <div class="card-header-bar"></div>
-                <img class="card-image" src="Image/BatteryElectricVehicleModelOverviewThermalDiagram.png" alt="Model">
-                <div class="card-content">
-                    <h3>Test Bench for PMSM Drive Unit</h3>
-                    <p>Model creation to set up test bench for electric drive unit based workflows.</p>
-                    <div class="card-actions">
-                        <a href="matlab:edit('MotorDriveThermalTestBenchDescription.mlx')" class="btn-load btn-primary">Open Live Script</a>
-                        <button class="btn-load btn-secondary" onclick="copyCommand(this, &quot;edit('MotorDriveThermalTestBenchDescription.mlx')&quot;)">Copy Command</button>
+                        <a href="workflow-motor-thermal.html" class="btn-load btn-secondary">Quick Setup</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Sub-section: DesignTransmission (collapsible, with example grid) -->
-    <h2 id="app-DesignTransmission" class="collapsible" onclick="toggle(this)">Design Transmission</h2>
-    <div class="collapse-body">
+    <h2 id="app-DesignTransmission" class="collapsible open" data-nav onclick="toggle(this)">Design Transmission</h2>
+    <div class="collapse-body open">
         <div class="card-grid">
             <div class="model-card">
                 <div class="card-header-bar"></div>
                 <img class="card-image" src="Image/PMSMThermalTestGearResult.png" alt="Gear Ratio">
                 <div class="card-content">
                     <h3>Select Gear Ratio for Electric Vehicle</h3>
-                    <p>Sweep candidate gear ratios over EUDC and US06 cycles on the thermal 
-                        test bench and compare magnet and winding temperatures to find the best ratio.</p>
+                    <p>Sweep candidate gear ratios over EUDC and US06 cycles on the thermal test bench and compare magnet and winding temperatures.</p>
                     <div class="card-actions">
                         <a href="matlab:edit('minimumRequiredGearRatio.mlx')" class="btn-load btn-primary">Open Live Script</a>
-                        <button class="btn-load btn-secondary" onclick="copyCommand(this, &quot;edit('minimumRequiredGearRatio.mlx')&quot;)">Copy Command</button>
+                        <a href="workflow-gear-ratio.html" class="btn-load btn-secondary">Quick Setup</a>
+                    </div>
+                </div>
+            </div>
+            <div class="model-card">
+                <div class="card-header-bar"></div>
+                <img class="card-image" src="Image/DrivelineOrderMap.png" alt="Frequency order map of motor-bearing excitation versus motor speed and order">
+                <div class="card-content">
+                    <h3>Generate Frequency Order Map for BEV Motor Driveline</h3>
+                    <p>Apply PMSM torque ripple to a flexible driveline and map motor-bearing excitation force against rotational speed and order.</p>
+                    <div class="card-actions">
+                        <a href="matlab:edit(fullfile(currentProject().RootFolder,'Workflow','Driveline','DrivelineNVH','generateOrderMap.mlx'))" class="btn-load btn-primary">Open Live Script</a>
+                        <a href="workflow-driveline-order-map.html" class="btn-load btn-secondary">Quick Setup</a>
+                    </div>
+                </div>
+            </div>
+            <div class="model-card">
+                <div class="card-header-bar"></div>
+                <img class="card-image" src="Image/VehicleLaunchJerkComparison.png" alt="Optimized and baseline vehicle jerk during launch">
+                <div class="card-content">
+                    <h3>Optimize Gear Ratios for Vehicle Launch</h3>
+                    <p>Optimize three transmission ratios across launch torque scenarios to reduce vehicle jerk while preserving acceleration.</p>
+                    <div class="card-actions">
+                        <a href="matlab:edit(fullfile(currentProject().RootFolder,'Workflow','Driveline','DrivelineNVH','optimizeVehicleLaunch.mlx'))" class="btn-load btn-primary">Open Live Script</a>
+                        <a href="workflow-vehicle-launch.html" class="btn-load btn-secondary">Quick Setup</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Sub-section: AnalyzeVehicle (collapsible, with example grid) -->
-    <h2 id="app-AnalyzeVehicle" class="collapsible" onclick="toggle(this)">Analyze Vehicle</h2>
-    <div class="collapse-body">
+    <h2 id="app-AnalyzeVehicle" class="collapsible open" data-nav onclick="toggle(this)">Analyze Vehicle</h2>
+    <div class="collapse-body open">
         <div class="card-grid">
             <div class="model-card">
                 <div class="card-header-bar"></div>
                 <img class="card-image" src="Image/BatteryElectricVehicleModelOverview_02.png" alt="BEV">
                 <div class="card-content">
                     <h3>Range Estimation for Electric Vehicle</h3>
-                    <p>Estimate vehicle range over NEDC, WLTC, and EPA drive cycles. 
-                        The actual range depends on ambient temperature, HVAC load, and 
-                        driver profile. Evaluate subsystem losses under hot and cold conditions.</p>
+                    <p>Estimate vehicle range over NEDC, WLTC, and EPA drive cycles. Evaluate subsystem losses under hot and cold conditions.</p>
                     <div class="card-actions">
                         <a href="matlab:edit('BEVRangeEstimationMain.mlx')" class="btn-load btn-primary">Open Live Script</a>
-                        <button class="btn-load btn-secondary" onclick="copyCommand(this, &quot;edit('BEVRangeEstimationMain.mlx')&quot;)">Copy Command</button>
+                        <a href="workflow-vehicle-range.html" class="btn-load btn-secondary">Quick Setup</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Section: Components -->
     <h1 id="components">Components</h1>
-    <!-- Sub-section: Data Center Related Components (collapsible, with example grid) -->
-    <p>
-        To learn more about the components used in this project, see <a href="matlab:web('ElectricVehicleComponentOverview.html')">Component Overview</a>
-    </p>
+    <p>To learn more about the components used in this project, see <a href="components.html">Component Overview</a>.</p>
 
-    <!-- Section: Testing -->
     <h1 id="test">Testing</h1>
-    <p>
-        You can run tests in this project by running the test runner BEVProjectTests.
-    </p>
+    <p>You can run tests in this project by running the test runner <code>BEVProjectTests</code>. See the <a href="matlab:web(fullfile(currentProject().RootFolder,'Test','Documentation','TestFrameworkHome.html'),'-new')">Test Framework Documentation</a> for setup, configuration, and reporting guidance.</p>
 
-    <!-- Section: Requirements -->
     <h1 id="requirements">Requirements</h1>
     <p>This project requires:</p>
     <p style="margin-left: 20px;">
-        MATLAB&reg;, Simulink&reg;, Simscape&trade;, Simscape Battery&trade;, 
-        Simscape Driveline&trade;, Simscape Electrical&trade;, Simscape Fluids&trade;, 
-        Stateflow&trade;, MATLAB Coder&trade;, MATLAB Test&trade;, Simulink Test&trade;, 
-        System Identification Toolbox&trade;, Deep Learning Toolbox&trade;, 
-        Statistics and Machine Learning Toolbox&trade;, Powertrain Blockset&trade;, 
+        MATLAB&reg;, Simulink&reg;, Simscape&trade;, Simscape Battery&trade;,
+        Simscape Driveline&trade;, Simscape Electrical&trade;, Simscape Fluids&trade;,
+        Stateflow&trade;, MATLAB Coder&trade;, MATLAB Test&trade;, Simulink Test&trade;,
+        System Identification Toolbox&trade;, Deep Learning Toolbox&trade;,
+        Statistics and Machine Learning Toolbox&trade;, Powertrain Blockset&trade;,
         Predictive Maintenance Toolbox&trade;, Signal Processing Toolbox&trade;
     </p>
 
-    <p>
-        <br> <br>
-        <i>Copyright 2023 - 2026 The MathWorks, Inc.</i>
-    </p>
+    <p><br><br><i>Copyright 2023 - 2026 The MathWorks, Inc.</i></p>
 
 </main>
 
-<!-- Toggle script for collapsible sub-headings (do not remove) -->
+<script src="assets/app.js?v=20260930-6"></script>
 <script>
 function toggle(el) {
     el.classList.toggle('open');
     el.nextElementSibling.classList.toggle('open');
 }
-
+/* collapsible sidebar toggle for narrow screens (MathWorks-style) */
+(function () {
+    var sidebar = document.querySelector('.sidebar');
+    if (!sidebar) return;
+    var svg = '<svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true">' +
+        '<rect x="1.5" y="3" width="17" height="14" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/>' +
+        '<line x1="7" y1="3" x2="7" y2="17" stroke="currentColor" stroke-width="1.6"/></svg>';
+    var btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'nav-toggle';
+    btn.setAttribute('aria-label', 'Show navigation'); btn.setAttribute('aria-expanded', 'false');
+    btn.innerHTML = svg;
+    document.body.insertBefore(btn, document.body.firstChild);
+    var backdrop = document.createElement('div'); backdrop.className = 'nav-backdrop';
+    document.body.appendChild(backdrop);
+    function setNav(open) {
+        sidebar.classList.toggle('open', open);
+        backdrop.classList.toggle('open', open);
+        btn.setAttribute('aria-expanded', String(open));
+        btn.setAttribute('aria-label', open ? 'Hide navigation' : 'Show navigation');
+    }
+    btn.addEventListener('click', function () { setNav(!sidebar.classList.contains('open')); });
+    backdrop.addEventListener('click', function () { setNav(false); });
+    sidebar.addEventListener('click', function (e) {
+        if (e.target.closest('a') && window.matchMedia('(max-width: 1023px)').matches) setNav(false);
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && sidebar.classList.contains('open')) setNav(false);
+    });
+}());
 function copyCommand(btn, cmd) {
     navigator.clipboard.writeText(cmd).then(function() {
         var original = btn.textContent;

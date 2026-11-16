@@ -4,6 +4,38 @@ This folder contains the high-voltage battery pack Simulink models at different 
 
 ---
 
+## BatteryEq
+
+**File:** `BatteryEq.slx`
+**Parameter File:** `BatteryEqParams.m`
+**Thermal Coupling:** No
+
+### Description
+
+Equivalent-circuit model for a 15S1P, 48 V, 156 Ah pack. Reports battery measurements without relay control; input bus `s` is terminated.
+
+### Workflows
+
+- Rapid prototyping and early integration where relay control is not yet needed.
+
+### Inputs
+
+| Signal | Description |
+|--------|-------------|
+| (none active) | Input bus `s` is terminated in this fidelity |
+
+### Outputs
+
+| Signal | Description |
+|--------|-------------|
+| Voltage | Pack terminal voltage |
+| Current | Pack current |
+| SOC | State of charge |
+| Temperature | Pack temperature |
+| Cell Voltage | Individual cell voltage estimate |
+
+---
+
 ## BatteryLumped
 
 **File:** `BatteryLumped.slx`
@@ -87,7 +119,7 @@ High-fidelity table-based battery model. Electrical characteristics come from lo
 ### Workflows
 
 - **Default battery fidelity** in the assembled BEV system model (`BEVsystemModel.slx`).
-- Used by `BEVSystemModelParams.m` when running range estimation (NEDC, WLTC, EPA) and battery sizing workflows.
+- Used in range estimation (NEDC, WLTC, EPA) and battery sizing workflows.
 - Virtual sensor neural network workflow uses simulation data from this model for training.
 
 ### Inputs
@@ -112,7 +144,9 @@ High-fidelity table-based battery model. Electrical characteristics come from lo
 
 ## Parameter Summary
 
-All parameter scripts share a common structure:
+Defaults below apply to BatteryLumped, BatteryLumpedThermal, and BatteryTableBased. Thermal initialization applies only to thermal variants.
+
+BatteryEq uses 156 Ah and initial SOC 0.5; see [BatteryEqParams.m](BatteryEqParams.m).
 
 | Parameter | Typical Value | Unit |
 |-----------|--------------|------|
@@ -123,4 +157,4 @@ All parameter scripts share a common structure:
 | Coolant pipe diameter | 0.019 | m |
 | Initial coolant temperature | 298.15 | K |
 
-Copyright 2022 - 2025 The MathWorks, Inc.
+Copyright 2022 - 2026 The MathWorks, Inc.

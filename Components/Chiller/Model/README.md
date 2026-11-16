@@ -18,25 +18,29 @@ Models the battery coolant chiller as a controlled current source drawing power 
 
 - Part of the **VehicleElectroThermal** template for full-thermal vehicle simulations.
 - Active during hot-ambient range estimation runs (e.g., 35 degC with AC on/off).
-- Parameters loaded by `BEVSystemModelParams.m` via `ChillerParams.m`.
 - Validated through `ChillerTestHarness.slx`.
 
-### Inputs
+### Input Bus — `s`
 
 | Signal | Description |
 |--------|-------------|
-| Battery status | Pack temperature and thermal state from the BMS |
-| Chiller bypass control | On/off or bypass command from the thermal controller |
-| HV bus connection | Electrical connection for chiller power draw |
-| Coolant port | Thermal-liquid interface for coolant loop heat exchange |
+| cmdChillerByp | Chiller bypass command (0 = active, 1 = bypass) |
+| BatSt | Battery status signal |
 
-### Outputs
+### Output Bus — `m`
 
 | Signal | Description |
 |--------|-------------|
-| Chiller Current | Current drawn from the HV bus |
-| HV Power | Electrical power consumed |
-| Thermal States | Chiller temperature and heat flow to coolant |
+| ChillerCurrent | Current drawn from the HV bus |
+| energy | Cumulative energy consumed |
+
+### Physical Ports
+
+| Port | Domain | Description |
+|------|--------|-------------|
+| HV | Electrical | High-voltage bus connection |
+| A | Thermal liquid | Coolant port |
+| B | Thermal liquid | Coolant port |
 
 ---
 
@@ -55,20 +59,25 @@ Simplified chiller model without coolant loop coupling. The electrical load on t
 - A simplified variant used as a standalone auxiliary load where the coolant loop is not modeled.
 - Suitable for fast electrical-only simulations where auxiliary power consumption matters.
 
-### Inputs
+### Input Bus — `s`
 
 | Signal | Description |
 |--------|-------------|
-| Battery status | Pack state signals |
-| Chiller bypass control | Enable command |
-| HV bus connection | Electrical connection for power draw |
+| cmdChillerByp | Chiller bypass command |
+| BatSt | Battery status signal |
 
-### Outputs
+### Output Bus — `m`
 
 | Signal | Description |
 |--------|-------------|
-| Chiller Current | Current drawn from the HV bus |
-| HV Power | Electrical power consumed |
+| ChillerCurrent | Current drawn from the HV bus |
+| energy | Cumulative energy consumed |
+
+### Physical Ports
+
+| Port | Domain | Description |
+|------|--------|-------------|
+| HV | Electrical | High-voltage bus connection |
 
 ---
 
@@ -85,24 +94,29 @@ Minimal chiller stub with the same port interface as the full Chiller model. Int
 ### Workflows
 
 - Placeholder variant for integration testing or fast electrical-only studies.
-- Can replace `Chiller` in any vehicle template without breaking the coolant loop.
-- Build the model by running `createChillerDummy.m` from this folder.
+- Can replace `Chiller` in the VehicleElectroThermal template without breaking the coolant loop.
 
-### Inputs
-
-| Signal | Description |
-|--------|-------------|
-| Battery status | Pack state signals (terminated internally) |
-| Chiller bypass control | 0 = active (draws load), 1 = bypassed (no load) |
-| HV bus connection | Electrical connection for fixed power draw |
-| Coolant port | Thermal-liquid interface (pass-through, no heat exchange) |
-
-### Outputs
+### Input Bus — `s`
 
 | Signal | Description |
 |--------|-------------|
-| Chiller Current | Fixed current when active, zero when bypassed |
-| HV Power | Nominal electrical power consumed |
+| cmdChillerByp | Chiller bypass command (0 = active, 1 = bypass) |
+| Batt.BatSt | Battery status signal |
+
+### Output Bus — `m`
+
+| Signal | Description |
+|--------|-------------|
+| ChillerCurrent | Fixed current when active, zero when bypassed |
+| energy | Cumulative energy consumed |
+
+### Physical Ports
+
+| Port | Domain | Description |
+|------|--------|-------------|
+| HV | Electrical | High-voltage bus connection |
+| A | Thermal liquid | Coolant port (pass-through) |
+| B | Thermal liquid | Coolant port (pass-through) |
 
 ---
 
@@ -115,4 +129,4 @@ Minimal chiller stub with the same port interface as the full Chiller model. Int
 | Initial coolant temperature | 298.15 | K |
 | Initial coolant pressure | 0.101325 | MPa |
 
-Copyright 2022 - 2025 The MathWorks, Inc.
+Copyright 2022 - 2026 The MathWorks, Inc.

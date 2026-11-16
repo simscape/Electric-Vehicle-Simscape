@@ -66,10 +66,10 @@ function openPresetPicker()
     readmePanel.HTMLSource = localEmptyHtml();
 
     % ---- Buttons ----
-    buttonGrid = uigridlayout(mainGrid, [1 3]);
+    buttonGrid = uigridlayout(mainGrid, [1 4]);
     buttonGrid.Layout.Row    = 3;
     buttonGrid.Layout.Column = [1 2];
-    buttonGrid.ColumnWidth   = {'1x', '1x', '1x'};
+    buttonGrid.ColumnWidth   = {'1x', '1x', '1x', '1x'};
     buttonGrid.Padding       = [0 0 0 0];
     buttonGrid.ColumnSpacing = 8;
 
@@ -77,6 +77,11 @@ function openPresetPicker()
         'Text', 'Apply Preset', ...
         'Enable', 'off', ...
         'ButtonPushedFcn', @(~,~) localApplyPreset(presetListBox, pickerFig));
+
+    exportButton = uibutton(buttonGrid, ...
+        'Text', 'Export Zip', ...
+        'Enable', 'off', ...
+        'ButtonPushedFcn', @(~,~) localExportZip(presetListBox, pickerFig));
 
     openFolderButton = uibutton(buttonGrid, ...
         'Text', 'Open Folder', ...
@@ -86,22 +91,22 @@ function openPresetPicker()
     uibutton(buttonGrid, ...
         'Text', 'Refresh', ...
         'ButtonPushedFcn', @(~,~) localRefresh(presetListBox, readmePanel, ...
-            applyButton, openFolderButton));
+            applyButton, openFolderButton, exportButton));
 
     % ---- Wire selection callback ----
     presetListBox.ValueChangedFcn = @(~,~) localShowDetails( ...
-        presetListBox, readmePanel, applyButton, openFolderButton);
+        presetListBox, readmePanel, applyButton, openFolderButton, exportButton);
 
     % ---- Auto-select first preset ----
     if ~isempty(presets)
-        localShowDetails(presetListBox, readmePanel, applyButton, openFolderButton);
+        localShowDetails(presetListBox, readmePanel, applyButton, openFolderButton, exportButton);
     end
 end
 
 
 %% ========================= Callbacks =========================
 
-function localShowDetails(presetListBox, readmePanel, applyButton, openFolderButton)
+function localShowDetails(presetListBox, readmePanel, applyButton, openFolderButton, exportButton)
 %LOCALSHOWDETAILS Update README panel and button states for selected preset.
 
     selectedIdx = presetListBox.Value;
@@ -111,6 +116,7 @@ function localShowDetails(presetListBox, readmePanel, applyButton, openFolderBut
         readmePanel.HTMLSource    = localEmptyHtml();
         applyButton.Enable       = 'off';
         openFolderButton.Enable  = 'off';
+        exportButton.Enable      = 'off';
         return;
     end
 
@@ -131,6 +137,7 @@ function localShowDetails(presetListBox, readmePanel, applyButton, openFolderBut
 
     applyButton.Enable      = localOnOff(canApply);
     openFolderButton.Enable = 'on';
+    exportButton.Enable     = 'on';
 end
 
 
@@ -188,7 +195,27 @@ function localOpenFolder(presetListBox)
 end
 
 
-function localRefresh(presetListBox, readmePanel, applyButton, openFolderButton)
+function localExportZip(presetListBox, pickerFig)
+%LOCALEXPORTZIP Package preset with all dependencies into a zip.
+
+    selectedIdx = presetListBox.Value;
+    presets = presetListBox.UserData;
+    if isempty(selectedIdx) || isempty(presets), return; end
+
+    selectedPreset = presets(selectedIdx);
+
+    try
+        zipPath = bevPresetUI.exportPresetPackage(selectedPreset.Folder);
+        uialert(pickerFig, ...
+            sprintf('Exported to:\n%s', zipPath), ...
+            'Export Complete', 'Icon', 'success');
+    catch ME
+        uialert(pickerFig, ME.message, 'Export Failed', 'Icon', 'error');
+    end
+end
+
+
+function localRefresh(presetListBox, readmePanel, applyButton, openFolderButton, exportButton)
 %LOCALREFRESH Rescan preset folder and reset UI state.
 
     presets = bevPresetUI.discoverPresets();
@@ -202,9 +229,15 @@ function localRefresh(presetListBox, readmePanel, applyButton, openFolderButton)
         presetListBox.ItemsData = 1:numel(presets);
     end
 
-    readmePanel.HTMLSource  = localEmptyHtml();
-    applyButton.Enable      = 'off';
-    openFolderButton.Enable = 'off';
+    if ~isempty(presets)
+        presetListBox.Value = 1;
+        localShowDetails(presetListBox, readmePanel, applyButton, openFolderButton, exportButton);
+    else
+        readmePanel.HTMLSource  = localEmptyHtml();
+        applyButton.Enable      = 'off';
+        openFolderButton.Enable = 'off';
+        exportButton.Enable     = 'off';
+    end
 end
 
 

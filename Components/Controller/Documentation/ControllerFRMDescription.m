@@ -19,19 +19,26 @@
 open_system('ControllerFRM')
 
 %% Ports
-% *Inputs*
 %
-% * *Drive cycle speed reference* - Target vehicle speed from the drive cycle source.
-% * *Vehicle speed feedback* - Measured vehicle speed from the driveline.
-% * *Battery status* - SOC, voltage, and current from the BMS.
-% * *BMS relay commands* - Battery connection state.
-%
-% *Outputs*
-%
-% * *Front axle torque command* - Torque request to front motor (EM1).
-% * *Rear axle torque command* - Torque request to rear motor (EM2).
-% * *Brake command* - Mechanical braking torque request.
-% * *Battery command* - Charge/discharge mode signal.
+% <html>
+% <h3>Inputs</h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Port</th><th>Type</th><th>Description</th></tr>
+% <tr><td>Spd</td><td>Scalar</td><td>Drive cycle speed reference</td></tr>
+% <tr><td>(measurement bus)</td><td>Bus</td><td>Feedback: m.DV.VehSpd, m.M1.EM.EMrpm, BA.BattSens</td></tr>
+% <tr><td>BMS</td><td>Bus element</td><td>BMS sensor signals (faults, limits, SOC)</td></tr>
+% <tr><td>AWD</td><td>Bus element</td><td>AWD mode flag</td></tr>
+% </table>
+% <h3>Output Bus &mdash; <code>s</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Sub-bus</th><th>Key Signals</th><th>Description</th></tr>
+% <tr><td>DV</td><td>BrakeCmd</td><td>Driveline brake command</td></tr>
+% <tr><td>Battery</td><td>RelayPos, RelayNeg</td><td>Battery relay commands</td></tr>
+% <tr><td>EM1</td><td>EMtrq, Batt</td><td>Front motor torque command</td></tr>
+% <tr><td>EM2</td><td>EMtrq, Batt</td><td>Rear motor torque command</td></tr>
+% <tr><td>Charger</td><td>Batt</td><td>Charger mode signal</td></tr>
+% </table>
+% </html>
 
 %% Workflows
 % The ControllerFRM is selected by |SetupPlantAbstract.m| for the

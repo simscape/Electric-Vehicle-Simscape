@@ -7,9 +7,9 @@ This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
       -->
 <title>MotorDriveGearTh</title>
-<meta name="generator" content="MATLAB 26.1">
+<meta name="generator" content="MATLAB 25.2">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2026-04-21">
+<meta name="DC.date" content="2026-05-06">
 <meta name="DC.source" content="MotorDriveGearThDescription.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
@@ -115,43 +115,32 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <p>
 <b>Thermal Coupling:</b> Yes (motor windings, inverter, coolant jacket)</p>
 <h2 id="2">Open Model</h2>
-<pre class="codeinput">open_system(<span class="string">'MotorDriveGearTh'</span>)
-</pre>
 <img vspace="5" hspace="5" src="images/MotorDriveGearThDescription_01.png" alt=""> <h2 id="3">Ports</h2>
 <p>
-<b>Inputs</b>
+<h3>Input Bus &mdash; <code>s</code></h3>
+<table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+<tr><th>Signal</th><th>Description</th></tr>
+<tr><td>EMtrq</td><td>Motor torque command</td></tr>
+<tr><td>Batt</td><td>Battery status sub-bus (Relay.RelayDchg, BattSensor.BatVolt)</td></tr>
+<tr><td>EMrpm</td><td>Motor speed feedback</td></tr>
+</table>
+<h3>Output Bus &mdash; <code>m</code></h3>
+<table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+<tr><th>Signal</th><th>Description</th></tr>
+<tr><td>EM</td><td>Motor measurement sub-bus</td></tr>
+<tr><td>energy</td><td>Cumulative energy consumed</td></tr>
+</table>
+<h3>Physical Ports</h3>
+<table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+<tr><th>Port</th><th>Domain</th><th>Description</th></tr>
+<tr><td>HV</td><td>Electrical</td><td>High-voltage bus connection</td></tr>
+<tr><td>Ax</td><td>Mechanical rotational</td><td>Axle output shaft</td></tr>
+<tr><td>A</td><td>Thermal liquid</td><td>Coolant port</td></tr>
+<tr><td>B</td><td>Thermal liquid</td><td>Coolant port</td></tr>
+</table>
 </p>
-<div>
-<ul>
-<li>
-<b>Torque command</b> - Requested motor torque.</li>
-<li>
-<b>Control signals</b> - Enable, mode, and limit signals.</li>
-<li>
-<b>Battery signals</b> - HV bus voltage and current.</li>
-<li>
-<b>Coolant port</b> - Thermal-liquid interface for motor and inverter cooling.</li>
-</ul>
-</div>
-<p>
-<b>Outputs</b>
-</p>
-<div>
-<ul>
-<li>
-<b>Motor Torque</b> - Delivered mechanical torque.</li>
-<li>
-<b>Motor Speed</b> - Rotor speed.</li>
-<li>
-<b>Electrical Power</b> - Power drawn from the HV bus.</li>
-<li>
-<b>Thermal States</b> - Motor winding temperature, inverter junction temperature.</li>
-<li>
-<b>Energy</b> - Cumulative energy consumption.</li>
-</ul>
-</div>
 <h2 id="4">Workflows</h2>
-<p>MotorDriveGearTh is the <b>default motor fidelity</b> loaded by <tt>BEVSystemModelParams.m</tt> via <tt>MotorDriveGearThParams.m</tt>. It is used in all electro-thermal range estimation runs (NEDC, WLTC, EPA). Motor losses contribute to EM1 and EM2 energy tracking in range results. Inverter thermal output feeds the inverter life prediction workflow. The model is validated through <tt>MotorTestHarness.slx</tt>.</p>
+<p>MotorDriveGearTh is the <b>default motor fidelity</b> for the <b>VehicleElectroThermal</b> template. It is used in all electro-thermal range estimation runs (NEDC, WLTC, EPA). Motor losses contribute to EM1 and EM2 energy tracking in range results. Inverter thermal output feeds the inverter life prediction workflow. The model is validated through <tt>MotorTestHarness.slx</tt>.</p>
 <h2 id="5">Parameters</h2>
 <p>
 <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
@@ -182,7 +171,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 </ul>
 </div>
 <p class="footer">Copyright 2022 - 2026 The MathWorks, Inc.<br>
-<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2026a</a>
+<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2025b</a>
 <br>
 </p>
 </div>
@@ -215,25 +204,35 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 open_system('MotorDriveGearTh')
 
 %% Ports
-% *Inputs*
 %
-% * *Torque command* - Requested motor torque.
-% * *Control signals* - Enable, mode, and limit signals.
-% * *Battery signals* - HV bus voltage and current.
-% * *Coolant port* - Thermal-liquid interface for motor and inverter cooling.
-%
-% *Outputs*
-%
-% * *Motor Torque* - Delivered mechanical torque.
-% * *Motor Speed* - Rotor speed.
-% * *Electrical Power* - Power drawn from the HV bus.
-% * *Thermal States* - Motor winding temperature, inverter junction temperature.
-% * *Energy* - Cumulative energy consumption.
+% <html>
+% <h3>Input Bus &mdash; <code>s</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>EMtrq</td><td>Motor torque command</td></tr>
+% <tr><td>Batt</td><td>Battery status sub-bus (Relay.RelayDchg, BattSensor.BatVolt)</td></tr>
+% <tr><td>EMrpm</td><td>Motor speed feedback</td></tr>
+% </table>
+% <h3>Output Bus &mdash; <code>m</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>EM</td><td>Motor measurement sub-bus</td></tr>
+% <tr><td>energy</td><td>Cumulative energy consumed</td></tr>
+% </table>
+% <h3>Physical Ports</h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Port</th><th>Domain</th><th>Description</th></tr>
+% <tr><td>HV</td><td>Electrical</td><td>High-voltage bus connection</td></tr>
+% <tr><td>Ax</td><td>Mechanical rotational</td><td>Axle output shaft</td></tr>
+% <tr><td>A</td><td>Thermal liquid</td><td>Coolant port</td></tr>
+% <tr><td>B</td><td>Thermal liquid</td><td>Coolant port</td></tr>
+% </table>
+% </html>
 
 %% Workflows
-% MotorDriveGearTh is the *default motor fidelity* loaded by
-% |BEVSystemModelParams.m| via |MotorDriveGearThParams.m|. It is used in
-% all electro-thermal range estimation runs (NEDC, WLTC, EPA). Motor
+% MotorDriveGearTh is the *default motor fidelity* for the
+% *VehicleElectroThermal* template. It is used in all electro-thermal
+% range estimation runs (NEDC, WLTC, EPA). Motor
 % losses contribute to EM1 and EM2 energy tracking in range results.
 % Inverter thermal output feeds the inverter life prediction workflow.
 % The model is validated through |MotorTestHarness.slx|.

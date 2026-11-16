@@ -18,24 +18,27 @@ Cross-flow heat exchanger that dissipates heat from the coolant loop to the ambi
 
 - Part of the **VehicleElectroThermal** template coolant loop.
 - Active during all electro-thermal drive-cycle simulations to reject heat and maintain coolant temperature.
-- Fan power is tracked as an auxiliary load on the HV bus.
+- The fan command controls airflow; this model has no electrical interface and does not report fan power consumption.
 - Parameters loaded by `BEVThermalParams.m` and `RadiatorParams.m`.
 
-### Inputs
+### Input Bus — `s`
 
 | Signal | Description |
 |--------|-------------|
-| Coolant inlet | Hot coolant from the thermal management loop |
-| Ambient temperature | External air temperature |
-| Fan airflow | Forced-air flow driven by radiator fans |
-| Vehicle speed | Ram-air contribution to airflow at higher speeds |
+| Env | Environment conditions sub-bus (Tenv, Penv, RHenv, CO2env) |
+| VehSpd | Vehicle speed (ram air effect) |
+| cmdFan | Fan speed command |
 
-### Outputs
+### Output Bus
 
-| Signal | Description |
-|--------|-------------|
-| Coolant outlet | Cooled coolant returned to the loop |
-| Heat dissipation rate | Thermal power rejected to ambient |
+No output bus. Operates via physical ports only.
+
+### Physical Ports
+
+| Port | Domain | Description |
+|------|--------|-------------|
+| A | Thermal liquid | Coolant port (inlet) |
+| B | Thermal liquid | Coolant port (outlet) |
 
 ### Key Parameters
 
@@ -51,4 +54,4 @@ Cross-flow heat exchanger that dissipates heat from the coolant loop to the ambi
 | Wall thermal conductivity | 240 | W/m/K |
 | Fan flow area | 0.5 (2 fans) | m^2 |
 
-Copyright 2022 - 2025 The MathWorks, Inc.
+Copyright 2022 - 2026 The MathWorks, Inc.

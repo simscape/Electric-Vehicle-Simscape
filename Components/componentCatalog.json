@@ -1,0 +1,580 @@
+{
+  "generatedAt": "2026-05-26 14:59",
+  "components": [
+    {
+      "name": "BMS",
+      "gridSection": "energy",
+      "busElement": "",
+      "namespace": "BMSData",
+      "fidelities": {
+        "modelName": "BMS",
+        "hasParams": true,
+        "isDummy": false,
+        "isThermal": false,
+        "ports": []
+      }
+    },
+    {
+      "name": "BatteryHV",
+      "gridSection": "energy",
+      "busElement": "BA",
+      "namespace": "battery",
+      "fidelities": [
+        {
+          "modelName": "BatteryEq",
+          "hasParams": true,
+          "isDummy": false,
+          "isThermal": false,
+          "ports": {
+            "name": "HV",
+            "side": "Right"
+          }
+        },
+        {
+          "modelName": "BatteryLumped",
+          "hasParams": true,
+          "isDummy": false,
+          "isThermal": false,
+          "ports": {
+            "name": "HV",
+            "side": "Right"
+          }
+        },
+        {
+          "modelName": "BatteryLumpedThermal",
+          "hasParams": true,
+          "isDummy": false,
+          "isThermal": true,
+          "ports": [
+            {
+              "name": "B",
+              "side": "Left"
+            },
+            {
+              "name": "A",
+              "side": "Right"
+            },
+            {
+              "name": "HV",
+              "side": "Right"
+            }
+          ]
+        },
+        {
+          "modelName": "BatteryTableBased",
+          "hasParams": true,
+          "isDummy": false,
+          "isThermal": true,
+          "ports": [
+            {
+              "name": "B",
+              "side": "Left"
+            },
+            {
+              "name": "A",
+              "side": "Right"
+            },
+            {
+              "name": "HV",
+              "side": "Right"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "BatteryHeater",
+      "gridSection": "energy",
+      "busElement": "HE",
+      "namespace": "batteryHeater",
+      "fidelities": [
+        {
+          "modelName": "Heater",
+          "hasParams": true,
+          "isDummy": false,
+          "isThermal": true,
+          "ports": [
+            {
+              "name": "B",
+              "side": "Right"
+            },
+            {
+              "name": "HV",
+              "side": "Right"
+            },
+            {
+              "name": "A",
+              "side": "Right"
+            }
+          ]
+        },
+        {
+          "modelName": "HeaterDummy",
+          "hasParams": true,
+          "isDummy": true,
+          "isThermal": true,
+          "ports": [
+            {
+              "name": "B",
+              "side": "Right"
+            },
+            {
+              "name": "HV",
+              "side": "Right"
+            },
+            {
+              "name": "A",
+              "side": "Right"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Charger",
+      "gridSection": "energy",
+      "busElement": "CG",
+      "namespace": "batteryCharger",
+      "fidelities": [
+        {
+          "modelName": "Charger",
+          "hasParams": true,
+          "isDummy": false,
+          "isThermal": false,
+          "ports": {
+            "name": "HV",
+            "side": "Left"
+          }
+        },
+        {
+          "modelName": "ChargerDummy",
+          "hasParams": true,
+          "isDummy": true,
+          "isThermal": false,
+          "ports": {
+            "name": "HV",
+            "side": "Left"
+          }
+        },
+        {
+          "modelName": "ChargerThermal",
+          "hasParams": true,
+          "isDummy": false,
+          "isThermal": true,
+          "ports": [
+            {
+              "name": "B",
+              "side": "Left"
+            },
+            {
+              "name": "A",
+              "side": "Right"
+            },
+            {
+              "name": "HV",
+              "side": "Left"
+            }
+          ]
+        },
+        {
+          "modelName": "ChargerThermalDummy",
+          "hasParams": true,
+          "isDummy": true,
+          "isThermal": true,
+          "ports": [
+            {
+              "name": "B",
+              "side": "Left"
+            },
+            {
+              "name": "A",
+              "side": "Right"
+            },
+            {
+              "name": "HV",
+              "side": "Left"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Chiller",
+      "gridSection": "energy",
+      "busElement": "CH",
+      "namespace": "chiller",
+      "fidelities": [
+        {
+          "modelName": "Chiller",
+          "hasParams": true,
+          "isDummy": false,
+          "isThermal": true,
+          "ports": [
+            {
+              "name": "HV",
+              "side": "Left"
+            },
+            {
+              "name": "B",
+              "side": "Left"
+            },
+            {
+              "name": "A",
+              "side": "Right"
+            }
+          ]
+        },
+        {
+          "modelName": "ChillerDummy",
+          "hasParams": true,
+          "isDummy": true,
+          "isThermal": true,
+          "ports": [
+            {
+              "name": "HV",
+              "side": "Left"
+            },
+            {
+              "name": "B",
+              "side": "Right"
+            },
+            {
+              "name": "A",
+              "side": "Left"
+            }
+          ]
+        },
+        {
+          "modelName": "ChillerNoCoolant",
+          "hasParams": true,
+          "isDummy": false,
+          "isThermal": false,
+          "ports": {
+            "name": "HV",
+            "side": "Left"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Controller",
+      "gridSection": "controller",
+      "busElement": "",
+      "namespace": "controller",
+      "fidelities": [
+        {
+          "modelName": "Controller",
+          "hasParams": true,
+          "isDummy": false,
+          "isThermal": false,
+          "ports": []
+        },
+        {
+          "modelName": "Controller3w",
+          "hasParams": false,
+          "isDummy": false,
+          "isThermal": false,
+          "ports": []
+        },
+        {
+          "modelName": "ControllerFRM",
+          "hasParams": false,
+          "isDummy": false,
+          "isThermal": false,
+          "ports": []
+        },
+        {
+          "modelName": "ControllerHVAC",
+          "hasParams": false,
+          "isDummy": false,
+          "isThermal": false,
+          "ports": []
+        }
+      ]
+    },
+    {
+      "name": "Driveline",
+      "gridSection": "driveline",
+      "busElement": "DV",
+      "namespace": "drivetrain",
+      "fidelities": [
+        {
+          "modelName": "Driveline",
+          "hasParams": true,
+          "isDummy": false,
+          "isThermal": false,
+          "ports": [
+            {
+              "name": "FA",
+              "side": "Left"
+            },
+            {
+              "name": "RA",
+              "side": "Right"
+            }
+          ]
+        },
+        {
+          "modelName": "Driveline3W",
+          "hasParams": true,
+          "isDummy": false,
+          "isThermal": false,
+          "ports": [
+            {
+              "name": "RA",
+              "side": "Left"
+            },
+            {
+              "name": "FA",
+              "side": "Right"
+            }
+          ]
+        },
+        {
+          "modelName": "DrivelineWithBraking",
+          "hasParams": true,
+          "isDummy": false,
+          "isThermal": false,
+          "ports": [
+            {
+              "name": "FA",
+              "side": "Left"
+            },
+            {
+              "name": "RA",
+              "side": "Right"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HVAC",
+      "gridSection": "energy",
+      "busElement": "VA",
+      "namespace": "HVAC",
+      "fidelities": [
+        {
+          "modelName": "HVACEmpiricalRef",
+          "hasParams": true,
+          "isDummy": false,
+          "isThermal": false,
+          "ports": {
+            "name": "HV",
+            "side": "Left"
+          }
+        },
+        {
+          "modelName": "HVACsimpleTh",
+          "hasParams": true,
+          "isDummy": false,
+          "isThermal": false,
+          "ports": {
+            "name": "HV",
+            "side": "Left"
+          }
+        }
+      ]
+    },
+    {
+      "name": "MotorDrive",
+      "gridSection": "motor",
+      "busElement": "M",
+      "namespace": "electricDrive",
+      "fidelities": [
+        {
+          "modelName": "MotorDriveGear",
+          "hasParams": true,
+          "isDummy": false,
+          "isThermal": false,
+          "ports": [
+            {
+              "name": "HV",
+              "side": "Left"
+            },
+            {
+              "name": "Ax",
+              "side": "Right"
+            }
+          ]
+        },
+        {
+          "modelName": "MotorDriveGearTh",
+          "hasParams": true,
+          "isDummy": false,
+          "isThermal": true,
+          "ports": [
+            {
+              "name": "HV",
+              "side": "Left"
+            },
+            {
+              "name": "A",
+              "side": "Left"
+            },
+            {
+              "name": "Ax",
+              "side": "Right"
+            },
+            {
+              "name": "B",
+              "side": "Right"
+            }
+          ]
+        },
+        {
+          "modelName": "MotorDriveLube",
+          "hasParams": true,
+          "isDummy": false,
+          "isThermal": true,
+          "ports": [
+            {
+              "name": "HV",
+              "side": "Left"
+            },
+            {
+              "name": "A",
+              "side": "Left"
+            },
+            {
+              "name": "Ax",
+              "side": "Right"
+            },
+            {
+              "name": "B",
+              "side": "Right"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Pump",
+      "gridSection": "energy",
+      "busElement": "BP",
+      "namespace": "pump",
+      "fidelities": [
+        {
+          "modelName": "Pump",
+          "hasParams": true,
+          "isDummy": false,
+          "isThermal": true,
+          "ports": [
+            {
+              "name": "A",
+              "side": "Left"
+            },
+            {
+              "name": "LV",
+              "side": "Left"
+            },
+            {
+              "name": "B",
+              "side": "Right"
+            }
+          ]
+        },
+        {
+          "modelName": "PumpDummy",
+          "hasParams": true,
+          "isDummy": true,
+          "isThermal": false,
+          "ports": {
+            "name": "LV",
+            "side": "Right"
+          }
+        },
+        {
+          "modelName": "PumpDummyTh",
+          "hasParams": true,
+          "isDummy": true,
+          "isThermal": true,
+          "ports": [
+            {
+              "name": "A",
+              "side": "Left"
+            },
+            {
+              "name": "LV",
+              "side": "Left"
+            },
+            {
+              "name": "B",
+              "side": "Right"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "PumpDriver",
+      "gridSection": "energy",
+      "busElement": "",
+      "namespace": "pumpDriver",
+      "fidelities": [
+        {
+          "modelName": "PumpDriver",
+          "hasParams": true,
+          "isDummy": false,
+          "isThermal": false,
+          "ports": [
+            {
+              "name": "LV",
+              "side": "Right"
+            },
+            {
+              "name": "HV",
+              "side": "Right"
+            }
+          ]
+        },
+        {
+          "modelName": "PumpDriverTh",
+          "hasParams": true,
+          "isDummy": false,
+          "isThermal": true,
+          "ports": [
+            {
+              "name": "HV",
+              "side": "Left"
+            },
+            {
+              "name": "A",
+              "side": "Left"
+            },
+            {
+              "name": "LV",
+              "side": "Right"
+            },
+            {
+              "name": "B",
+              "side": "Right"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Radiator",
+      "gridSection": "edge",
+      "busElement": "RA",
+      "namespace": "radiator",
+      "fidelities": {
+        "modelName": "Radiator",
+        "hasParams": true,
+        "isDummy": false,
+        "isThermal": true,
+        "ports": [
+          {
+            "name": "B",
+            "side": "Left"
+          },
+          {
+            "name": "A",
+            "side": "Right"
+          }
+        ]
+      }
+    }
+  ]
+}

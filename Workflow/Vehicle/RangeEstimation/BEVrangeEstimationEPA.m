@@ -26,7 +26,7 @@ battery.T_vec=[278 293 313];                 % [K] Temperature vector T
 battery.AH=34;    % [Ahr] Cell capacity 
 battery.AH_vec=[0.9*battery.AH battery.AH 0.9*battery.AH];    % [Ahr] Cell capacity vector AH(T)
 battery.SOC_vec=[0, .1, .25, .5, .75, .9, 1]; % Cell state of charge vector SOC [-]
-battery.initialPackSOC=0.98;	% Pack intial SOC (-)
+battery.initialPackSOC=0.98;	% Pack initial SOC (-)
 
 % Load module data
 batt_BatteryManagementSystem_param;
@@ -41,22 +41,7 @@ timeDetailed=simoutPack.SimulationMetadata.TimingInfo.ExecutionElapsedWallTime;
 
 % record data
 EPArangedata = simoutPack.logsout;
-Vals = getValuesFromLogsout(simoutPack.logsout.get("EnergyCons"));
-EPArange.EnergyCons = Vals.Data(end);
-Vals = getValuesFromLogsout(simoutPack.logsout.get("EM1energy"));
-EPArange.EM1energy = Vals.Data(end);
-Vals = getValuesFromLogsout(simoutPack.logsout.get("EM2energy"));
-EPArange.EM2energy = Vals.Data(end);
-Vals = getValuesFromLogsout(simoutPack.logsout.get("HVACenergy"));
-EPArange.HVACenergy = Vals.Data(end);
-Vals = getValuesFromLogsout(simoutPack.logsout.get("AuxEnergy"));
-EPArange.AuxEnergy = Vals.Data(end);
-Vals = getValuesFromLogsout(simoutPack.logsout.get("Distance"));
-EPArange.Distance = Vals.Data(end);
-Vals = getValuesFromLogsout(simoutPack.logsout.get("RangeRating"));
-EPArange.RangeRating = Vals.Data(end);
-Vals = getValuesFromLogsout(simoutPack.logsout.get("Energy"));
-EPArange.Energy = Vals.Data(end);
+EPArange = extractEnergyBreakdown(simoutPack.logsout);
 
 %% Save the data to mat file
 proj = matlab.project.rootProject;

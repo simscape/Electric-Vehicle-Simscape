@@ -24,18 +24,29 @@
 open_system('PumpDummyTh')
 
 %% Ports
-% *Inputs*
 %
-% * *Battery status* - Pack state signals (terminated internally).
-% * *Pump command* - Normalized command (0 = off, 1 = full current draw).
-% * *LV bus connection* - Low-voltage electrical connection for current draw.
-% * *Coolant port A* - Thermal-liquid inlet (pass-through, no active pumping).
-%
-% *Outputs*
-%
-% * *Pump Current* - Current drawn from the LV bus (I_fixed x PumpCmd).
-% * *Low Voltage* - Measured LV bus voltage.
-% * *Coolant port B* - Thermal-liquid outlet (pass-through).
+% <html>
+% <h3>Input Bus &mdash; <code>s</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>BatSt</td><td>Battery status (terminated internally)</td></tr>
+% <tr><td>cmdPump</td><td>Pump speed command</td></tr>
+% </table>
+% <h3>Output Bus &mdash; <code>m</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>PumpCurr</td><td>Pump current draw</td></tr>
+% <tr><td>LowVolt</td><td>Low-voltage bus measurement</td></tr>
+% <tr><td>energy</td><td>Cumulative energy consumed</td></tr>
+% </table>
+% <h3>Physical Ports</h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Port</th><th>Domain</th><th>Description</th></tr>
+% <tr><td>LV</td><td>Electrical</td><td>Low-voltage bus connection</td></tr>
+% <tr><td>A</td><td>Thermal liquid</td><td>Coolant port (pass-through)</td></tr>
+% <tr><td>B</td><td>Thermal liquid</td><td>Coolant port (pass-through)</td></tr>
+% </table>
+% </html>
 
 %% Workflows
 % The PumpDummyTh block is a placeholder variant for integration testing

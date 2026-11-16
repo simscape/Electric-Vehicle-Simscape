@@ -19,18 +19,24 @@
 open_system('ChargerThermalDummy')
 
 %% Ports
-% *Inputs*
 %
-% * *Relay command* - Charger enable.
-% * *Battery cell voltage* - CC-CV feedback.
-% * *Charging status* - Charge mode signal.
-% * *Coolant port* - Thermal-liquid interface (pass-through).
-%
-% *Outputs*
-%
-% * *Charging Current* - Nominal or zero current.
-% * *HV Power* - Nominal or zero power.
-% * *Converter Thermal States* - Minimal thermal output.
+% <html>
+% <h3>Input Bus &mdash; <code>s</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>Batt.Relay.RelayChg</td><td>Charge relay command</td></tr>
+% <tr><td>Batt.BattSensor.CellVoltMax</td><td>Maximum cell voltage</td></tr>
+% </table>
+% <h3>Output Bus</h3>
+% <p>No output bus.</p>
+% <h3>Physical Ports</h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Port</th><th>Domain</th><th>Description</th></tr>
+% <tr><td>HV</td><td>Electrical</td><td>High-voltage bus connection</td></tr>
+% <tr><td>A</td><td>Thermal liquid</td><td>Coolant port (pass-through)</td></tr>
+% <tr><td>B</td><td>Thermal liquid</td><td>Coolant port (pass-through)</td></tr>
+% </table>
+% </html>
 
 %% Workflows
 % The ChargerThermalDummy block is a placeholder for thermal-loop

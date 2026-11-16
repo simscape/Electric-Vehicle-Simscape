@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Chiller — Electric Vehicle Design</title><link rel="stylesheet" href="assets/styles.css?v=20261028-3"></head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+  <header class="help-header"><div class="help-header-inner"><a class="help-brand" href="ElectricVehicleDesignOverview.html">MATLAB Help Center<small>Electric Vehicle Design with Simscape</small></a></div></header>
+  <div class="doc-shell">
+    <aside class="category-nav"><nav aria-label="Component reference navigation">
+      <ul class="nav-trail"><li><a href="ElectricVehicleDesignOverview.html">Documentation Home</a></li><li><a href="components.html">Components</a></li></ul>
+      <div class="nav-siblings-label">Thermal and Fluid</div>
+      <ul class="nav-siblings"><li><a href="component-battery-heater.html">Battery Heater</a></li><li aria-current="page"><span>Chiller</span></li><li><a href="component-hvac.html">HVAC</a></li><li><a href="component-pump.html">Pump</a></li><li><a href="component-radiator.html">Radiator</a></li></ul>
+      <div class="on-page"><div class="on-page-label">On this page</div><ul class="on-page-list"><li><a href="#description">Description</a></li><li><a href="#examples">Examples</a></li><li><a href="#interface">Interface</a></li><li><a href="#testing">Testing</a></li><li><a href="#see-also">See Also</a></li></ul></div>
+    <div class="nav-browse"><div class="on-page-label">Category</div><ul class="nav-browse-list"><li><a href="examples.html">Examples</a></li><li><a href="vehicle-range.html">Vehicle Models</a></li><li><a href="project-builder.html">Apps &amp; Utilities</a></li></ul></div>
+    </nav></aside>
+    <main class="doc-main" id="main-content">
+
+      <header class="product-intro reference-heading"><div><h1>Chiller</h1><p class="tagline">Remove heat from the vehicle coolant loop</p><p class="library-path"><strong>Component path:</strong> Components / Chiller</p><div class="action-row"><a class="action" href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','Chiller','Model','Chiller.slx'))">Open Default Model</a><a class="action secondary" href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','Chiller','TestBench','ChillerTestHarness.slx'))">Open Test Harness</a></div></div><figure class="component-header-image"><img src="Image/ChillerDescription_01.png" alt="Chiller model canvas"></figure></header>
+
+      <section id="description"><h2>Description</h2>
+    <div class="component-description-layout">
+      <div class="component-lede"><p>Chiller component for the BEV thermal management system. The chiller removes heat from the battery coolant loop when the pack temperature rises above safe limits, particularly during hot-ambient driving or fast charging. Three fidelity levels are available depending on whether coolant-loop dynamics are needed.</p>
+        <div class="fidelity-decision"><strong>How to choose a fidelity</strong><p>Use <strong>Chiller</strong> for active heat removal through the coolant loop, <strong>ChillerNoCoolant</strong> when only HV auxiliary power matters, and <strong>ChillerDummy</strong> to keep a thermal-liquid loop connected without modelling heat exchange.</p></div>
+      </div>
+
+    </div>
+    <h3 id="models">Fidelity at a glance</h3>
+    <div class="table-scroll"><table><thead><tr><th>Model</th><th>Description</th><th>Use case</th><th>Templates</th><th>Documentation &amp; files</th></tr></thead><tbody>
+<tr><td><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','Chiller','Model','Chiller.slx'))"><strong>Chiller</strong></a></td><td>Controlled current source with thermal mass and coolant coupling.</td><td>Hot-climate range estimation and thermal management strategy evaluation where coolant loop dynamics are important.</td><td>VehicleElectroThermal</td><td><a href="matlab:web(fullfile(currentProject().RootFolder,'Components','Chiller','Documentation','html','ChillerDescription.html'),'-new')">Documentation</a> &middot; <a href="matlab:edit(fullfile(currentProject().RootFolder,'Components','Chiller','Model','ChillerParams.m'))">Parameters</a></td></tr>
+<tr><td><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','Chiller','Model','ChillerNoCoolant.slx'))"><strong>ChillerNoCoolant</strong></a></td><td>Electrical load on HV bus without coolant ports.</td><td>Fast vehicle-level simulations where the chiller electrical load matters but coolant loop dynamics are not needed.</td><td>Not in shipped config</td><td><a href="matlab:web(fullfile(currentProject().RootFolder,'Components','Chiller','Documentation','html','ChillerNoCoolantDescription.html'),'-new')">Documentation</a> &middot; <a href="matlab:edit(fullfile(currentProject().RootFolder,'Components','Chiller','Model','ChillerNoCoolantParams.m'))">Parameters</a></td></tr>
+<tr><td><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','Chiller','Model','ChillerDummy.slx'))"><strong>ChillerDummy</strong></a></td><td>Fixed load with coolant pass-through and no heat exchange.</td><td>Integration testing or fast simulations where chiller behavior is not under study but the model needs a connected chiller block.</td><td>VehicleElectroThermal</td><td><a href="matlab:web(fullfile(currentProject().RootFolder,'Components','Chiller','Documentation','html','ChillerDummyDescription.html'),'-new')">Documentation</a> &middot; <a href="matlab:edit(fullfile(currentProject().RootFolder,'Components','Chiller','Model','ChillerDummyParams.m'))">Parameters</a></td></tr>
+</tbody></table></div>
+    <h3>Where it participates</h3><ul>
+<li><strong>Range Estimation</strong> (<code>Workflow/Vehicle/RangeEstimation/</code>) &mdash; The chiller is active during high-ambient simulations to cool the battery pack. Its energy draw impacts vehicle range.</li>
+<li><strong>Electro-Thermal Vehicle Studies</strong> &mdash; The full-thermal chiller is part of the VehicleElectroThermal template where coolant loop interactions with the battery, radiator, and pump are modeled.</li>
+</ul></section>
+
+      <section id="examples"><h2>Examples</h2><div class="used-by"><strong>Workflows and models that use this component</strong>The chiller is used by electrothermal and low-temperature vehicle configurations for coolant-loop heat removal during hot-ambient and fast-charging scenarios.</div><div class="component-example-grid"><article class="component-example-card"><div class="card-header-bar"></div><img class="component-example-image" src="Image/ChillerTestHarnessDescription_01.png" alt="Chiller example model canvas"><div class="component-example-body"><a href="workflow-vehicle-range.html">Estimate Range with Thermal Loads</a><p><strong>Vehicle workflow</strong> &mdash; Includes chiller electrical and thermal demand in range calculations.</p></div></article>
+</div></section>
+
+      <section id="interface"><h2>Interface</h2><p class="section-intro">All fidelities share the same HV-bus electrical boundary. Chiller and ChillerDummy include coolant ports; ChillerNoCoolant provides only the electrical interface.</p>
+    <div class="table-scroll"><table><thead><tr><th>Port / signal</th><th>Direction</th><th>Description</th></tr></thead><tbody>
+<tr><td>Battery status</td><td>Input</td><td>Pack temperature and thermal state from the BMS.</td></tr>
+<tr><td>Chiller bypass control</td><td>Input</td><td>On/off or bypass command from the thermal controller.</td></tr>
+<tr><td>HV bus connection</td><td>Input</td><td>Electrical connection for chiller power draw.</td></tr>
+<tr><td>Coolant port <em>(Chiller, ChillerDummy)</em></td><td>Conserving</td><td>Thermal-liquid interface for coolant loop heat exchange.</td></tr>
+<tr><td>Chiller Current</td><td>Output</td><td>Current drawn from the HV bus.</td></tr>
+<tr><td>HV Power</td><td>Output</td><td>Electrical power consumed.</td></tr>
+<tr><td>Thermal States <em>(Chiller)</em></td><td>Output</td><td>Chiller temperature and heat flow to coolant.</td></tr>
+</tbody></table></div></section>
+
+      <section id="testing"><h2>Testing</h2><ul class="link-list"><li><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','Chiller','TestBench','ChillerTestHarness.slx'))">Open Chiller Test Harness</a> · <a href="matlab:web(fullfile(currentProject().RootFolder,'Components','Chiller','Documentation','html','ChillerTestHarnessDescription.html'),'-new')">view documentation</a><p>Verify coolant heat exchange and electrical load under controlled thermal inputs.</p></li><li><a href="matlab:runtests(fullfile(currentProject().RootFolder,'Components','Chiller','TestCase','ChillerPassTests.m'))">Run Chiller Component Tests</a><p>Run the maintained Chiller test case before integration.</p></li></ul></section>
+      <section id="see-also"><h2>See Also</h2><p class="see-also-links"><a href="component-radiator.html">Radiator</a> | <a href="component-pump.html">Pump</a> | <a href="component-hvac.html">HVAC</a></p><h3>Topics</h3><ul><li><a href="workflow-motor-thermal.html">Thermal Durability</a></li><li><a href="vehicle-range.html#templates">Vehicle Templates</a></li></ul></section>
+    </main>
+  </div>
+  <script src="assets/app.js?v=20260930-6"></script>
+</body></html>

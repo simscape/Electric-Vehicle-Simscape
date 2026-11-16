@@ -22,6 +22,51 @@ Electric motor drive unit component for the BEV system model. The motor drive co
 | MotorLossMap.mat | Pre-computed motor loss map data |
 | InverterLossMap.mat | Pre-computed inverter loss map data |
 
+## Component Interface
+
+The table below lists the interface exposed by this component. A custom fidelity or replacement subsystem should preserve the required ports and signal names to remain compatible with the vehicle templates.
+
+### Bus Element Name
+
+| Direction | Element | Full Path | Notes |
+|---|---|---|---|
+| Input | `M` | `s.M` | Single motor in template |
+| Output | `M` | `m.M` | Single motor in template |
+| Input | `M1`, `M2` | `s.M1`, `s.M2` | Multiple motors — M1=Front, M2=Rear |
+| Output | `M1`, `M2` | `m.M1`, `m.M2` | Multiple motors — M1=Front, M2=Rear |
+
+### Input Bus — `s`
+
+| Signal | Unit | Description | Required | Used by |
+|---|---|---|---|---|
+| EMtrq | N·m | Motor torque command | Yes | All fidelities |
+| Batt | — | Battery status sub-bus (relay, voltage) | Yes | All fidelities |
+| EMrpm | rpm | Motor speed feedback | Optional | MotorDriveGearTh, MotorDriveLube |
+
+### Output Bus — `m`
+
+| Signal | Unit | Description | Required | Used by |
+|---|---|---|---|---|
+| EM | — | Motor measurement sub-bus | Yes | All fidelities |
+| energy | J | Cumulative energy consumed | Yes | All fidelities |
+| CoolTp | K | Coolant temperature | Optional | MotorDriveGear, MotorDriveLube |
+
+### Physical Interface
+
+| Port name | Domain | Description | Required | Used by |
+|---|---|---|---|---|
+| HV | Electrical | High-voltage bus connection | Yes | All fidelities |
+| Ax | Mechanical rotational | Axle output shaft | Yes | All fidelities |
+| A | Thermal liquid | Coolant port | Optional | Thermal fidelities (MotorDriveGearTh, MotorDriveLube) |
+| B | Thermal liquid | Coolant port | Optional | Thermal fidelities (MotorDriveGearTh, MotorDriveLube) |
+
+### Interface Notes
+
+- Required ports should be preserved when creating a custom fidelity or replacement subsystem.
+- MotorDriveGear supplies constant `CoolTp`; MotorDriveLube measures it. MotorDriveGearTh omits it.
+- MotorDriveGear does not consume `EMrpm`.
+- Internal Simscape connection handles such as `LConn` and `RConn` are intentionally not shown.
+
 ## Folder Structure
 
 ```
@@ -35,9 +80,9 @@ MotorDrive/
 ## Related Workflows
 
 - **Range Estimation** (`Workflow/Vehicle/RangeEstimation/`) -- Motor drive losses directly affect vehicle range. MotorDriveGearTh is the default for electro-thermal runs.
-- **Gear Ratio Selection** (`Workflow/MotorDrive/GearRatioSelect/`) -- Batch simulations sweep gear ratios to find the most efficient fixed ratio for the drive cycle.
+- **Gear Ratio Selection** (`Workflow/MotorDrive/GearRatioSelect/`) -- Compare winding and magnet temperatures across candidate ratios and drive cycles.
 - **Loss Map Generation** (`Workflow/MotorDrive/GenerateMotInvLoss/`) -- Detailed PMSM test bench and loss map generation for motor and inverter (`MotorLossMap.mat`) consumed by the system-level models.
 - **Inverter Life** (`Workflow/MotorDrive/InverterLife/`) -- Junction temperature cycling from the thermal motor model is used to predict inverter power module lifetime.
 - **Thermal Durability** (`Workflow/MotorDrive/ThermalDurability/`) -- Drive-unit thermal behavior over extended duty cycles.
 
-Copyright 2022 - 2025 The MathWorks, Inc.
+Copyright 2022 - 2026 The MathWorks, Inc.

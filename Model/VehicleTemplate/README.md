@@ -11,7 +11,6 @@ Pre-configured vehicle models at different fidelity levels. Each template is a c
 | VehicleElectric | Minimal electrical powertrain -- battery, motor, charger, driveline | No | No | Yes |
 | VehicleElecAux | Electrical powertrain with HVAC, pump, DCDC, and auxiliary loads | No | Yes | Yes |
 | VehicleElectroThermal | Full electro-thermal vehicle with coolant loop, chiller, heater, radiator | Yes | Yes | Yes |
-| VehicleElectroThermalLowTemp | Electro-thermal configured for cold-climate studies; not yet wired into the BEV Setup App JSON configs | Yes | Yes | Direct-open |
 
 ---
 
@@ -33,6 +32,6 @@ Each template selects component fidelities appropriate to its simulation scope:
 | Radiator | -- | -- | Radiator |
 | Controller | ControllerFRM | ControllerHVAC | Controller |
 
-Fidelity mapping is defined in config JSON files under `APP/Config/Preset/`.
+Fidelity mapping is defined in config JSON files under `utils/APP/Config/Preset/`.
 
 Copyright 2022 - 2026 The MathWorks, Inc.

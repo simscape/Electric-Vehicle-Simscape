@@ -18,23 +18,26 @@ Four-wheel driveline with front and rear axle connections. Includes tire models 
 
 - **Default driveline** in the assembled BEV system model (`BEVsystemModel.slx`).
 - Used in all range estimation workflows (NEDC, WLTC, EPA) and battery sizing workflows.
-- Parameters loaded by `BEVSystemModelParams.m` via `DrivelineParams.m`.
 - Validated through `DriveLineTestHarness.slx`.
 
-### Inputs
+### Input Bus — `s`
 
 | Signal | Description |
 |--------|-------------|
-| Front axle torque (FA) | Torque from the front motor drive unit |
-| Rear axle torque (RA) | Torque from the rear motor drive unit |
+| (terminated) | Input bus `s` is terminated in this fidelity |
 
-### Outputs
+### Output Bus — `m`
 
 | Signal | Description |
 |--------|-------------|
-| Vehicle Speed | Longitudinal vehicle speed |
-| Wheel Dynamics | Individual wheel speeds, slip ratios |
-| Body Motion States | Longitudinal and lateral vehicle response |
+| VehSpd | Vehicle speed |
+
+### Physical Ports
+
+| Port | Domain | Description |
+|------|--------|-------------|
+| FA | Mechanical rotational | Front axle connection |
+| RA | Mechanical rotational | Rear axle connection |
 
 ---
 
@@ -53,25 +56,81 @@ Extended driveline model with an integrated braking system on the rear axle. In 
 - Used in vehicle configurations that require explicit mechanical braking behavior.
 - Tested through `DriveLineTestHarness.slx` and `DrivelinePassTests.m`.
 
-### Inputs
+### Input Bus — `s`
 
 | Signal | Description |
 |--------|-------------|
-| Front axle torque (FA) | Torque from the front motor |
-| Rear axle torque (RA) | Torque from the rear motor |
-| Brake command | Mechanical braking torque request |
+| BrkCmd | Mechanical braking force command |
 
-### Outputs
+### Output Bus — `m`
 
 | Signal | Description |
 |--------|-------------|
-| Vehicle Speed | Longitudinal vehicle speed |
-| Wheel Dynamics | Wheel speeds, slip, traction forces |
-| Braking Response | Braking force and deceleration |
+| VehSpd | Vehicle speed |
+
+### Physical Ports
+
+| Port | Domain | Description |
+|------|--------|-------------|
+| FA | Mechanical rotational | Front axle connection |
+| RA | Mechanical rotational | Rear axle connection |
 
 ---
 
-## Key Parameters
+## Driveline3W
+
+**File:** `Driveline3W.slx`
+**Parameter File:** `Driveline3WParams.m`
+**Thermal Coupling:** No
+
+### Description
+
+Three-wheel driveline variant with front and rear axle connections adapted for a three-wheeled vehicle layout. Includes tire models and vehicle body with appropriate weight distribution for the three-wheel configuration.
+
+### Workflows
+
+- Supports three-wheel range and vehicle-dynamics studies.
+
+### Input Bus — `s`
+
+| Signal | Description |
+|--------|-------------|
+| (terminated) | Input bus `s` is terminated in this fidelity |
+
+### Output Bus — `m`
+
+| Signal | Description |
+|--------|-------------|
+| VehSpd | Vehicle speed |
+
+### Physical Ports
+
+| Port | Domain | Description |
+|------|--------|-------------|
+| FA | Mechanical rotational | Front axle connection |
+| RA | Mechanical rotational | Rear axle connection |
+
+---
+
+## FlexibleDriveline
+
+**File:** `FlexibleDriveline.slx`
+**Parameter File:** [FlexibleDrivelineParams.m](FlexibleDrivelineParams.m)
+**Thermal Coupling:** No
+
+Flexible shafts, gear backlash, and bearing dynamics for torsional NVH and launch studies.
+
+| Port | Type | Description |
+|------|------|-------------|
+| `I` | Mechanical rotational | Motor shaft |
+| `D1`, `D2` | Mechanical rotational | Left/right drive shafts |
+| `meas` | Output bus | Driveline measurements |
+
+Use [FlexibleDriveLineTestHarness.slx](../TestBench/FlexibleDriveLineTestHarness.slx) with [its parameter script](../TestBench/FlexibleDriveLineTestHarnessParams.m). See [Driveline NVH](../../../Workflow/Driveline/DrivelineNVH/README.md).
+
+---
+
+## Vehicle Variant Parameters
 
 | Parameter | Typical Value | Unit |
 |-----------|--------------|------|
@@ -80,4 +139,4 @@ Extended driveline model with an integrated braking system on the rear axle. In 
 | Max vehicle speed | 140 | km/h |
 | Brake factor | 0.4 | - |
 
-Copyright 2022 - 2025 The MathWorks, Inc.
+Copyright 2022 - 2026 The MathWorks, Inc.

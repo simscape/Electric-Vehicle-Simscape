@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pump Driver — Electric Vehicle Design</title><link rel="stylesheet" href="assets/styles.css?v=20261028-3"></head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+  <header class="help-header"><div class="help-header-inner"><a class="help-brand" href="ElectricVehicleDesignOverview.html">MATLAB Help Center<small>Electric Vehicle Design with Simscape</small></a></div></header>
+  <div class="doc-shell">
+    <aside class="category-nav"><nav aria-label="Component reference navigation">
+      <ul class="nav-trail"><li><a href="ElectricVehicleDesignOverview.html">Documentation Home</a></li><li><a href="components.html">Components</a></li></ul>
+      <div class="nav-siblings-label">Electrical and Energy Storage</div>
+      <ul class="nav-siblings"><li><a href="component-battery.html">High-Voltage Battery</a></li><li><a href="component-charger.html">Charger</a></li><li><a href="component-motor-drive.html">Motor Drive</a></li><li aria-current="page"><span>Pump Driver</span></li></ul>
+      <div class="on-page"><div class="on-page-label">On this page</div><ul class="on-page-list"><li><a href="#description">Description</a></li><li><a href="#examples">Examples</a></li><li><a href="#interface">Interface</a></li><li><a href="#testing">Testing</a></li><li><a href="#see-also">See Also</a></li></ul></div>
+    <div class="nav-browse"><div class="on-page-label">Category</div><ul class="nav-browse-list"><li><a href="examples.html">Examples</a></li><li><a href="vehicle-range.html">Vehicle Models</a></li><li><a href="project-builder.html">Apps &amp; Utilities</a></li></ul></div>
+    </nav></aside>
+    <main class="doc-main" id="main-content">
+
+      <header class="product-intro reference-heading"><div><h1>Pump Driver</h1><p class="tagline">Electrical drive and command interface for coolant pumps</p><p class="library-path"><strong>Component path:</strong> Components / PumpDriver</p><div class="action-row"><a class="action" href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','PumpDriver','Model','PumpDriver.slx'))">Open Default Model</a><a class="action secondary" href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','PumpDriver','TestBench','PumpDriverTestHarness.slx'))">Open Test Harness</a></div></div><figure class="component-header-image"><img src="Image/PumpDriverDescription_01.png" alt="PumpDriver model canvas"></figure></header>
+
+      <section id="description"><h2>Description</h2>
+    <div class="component-description-layout">
+      <div class="component-lede"><p>DC-DC converter component for the BEV system. Translates thermal management commands into pump speed signals for the coolant circulation pump. Two fidelity levels are available depending on whether thermal coupling is needed.</p>
+        <div class="fidelity-decision"><strong>How to choose a fidelity</strong><p>Use <strong>PumpDriver</strong> with the non-thermal auxiliary configuration. Use <strong>PumpDriverTh</strong> when converter heat and the coolant-system interface must remain part of the electrothermal plant.</p></div>
+      </div>
+
+    </div>
+    <h3 id="models">Fidelity at a glance</h3>
+    <div class="table-scroll"><table><thead><tr><th>Model</th><th>Description</th><th>Use case</th><th>Templates</th><th>Documentation &amp; files</th></tr></thead><tbody>
+<tr><td><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','PumpDriver','Model','PumpDriver.slx'))"><strong>PumpDriver</strong></a></td><td>DC-DC converter with electrical conversion and control logic only.</td><td>Non-thermal auxiliary configurations. Pairs with PumpDummy.</td><td>VehicleElecAux</td><td><a href="matlab:web(fullfile(currentProject().RootFolder,'Components','PumpDriver','Documentation','html','PumpDriverDescription.html'),'-new')">Documentation</a> &middot; <a href="matlab:edit(fullfile(currentProject().RootFolder,'Components','PumpDriver','Model','PumpDriverParams.m'))">Parameters</a></td></tr>
+<tr><td><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','PumpDriver','Model','PumpDriverTh.slx'))"><strong>PumpDriverTh</strong></a></td><td>Adds coolant system interface and thermal coupling to conversion.</td><td>Electro-thermal configurations. Pairs with the Pump component for full coolant loop.</td><td>VehicleElectroThermal</td><td><a href="matlab:web(fullfile(currentProject().RootFolder,'Components','PumpDriver','Documentation','html','PumpDriverThDescription.html'),'-new')">Documentation</a> &middot; <a href="matlab:edit(fullfile(currentProject().RootFolder,'Components','PumpDriver','Model','PumpDriverThParams.m'))">Parameters</a></td></tr>
+</tbody></table></div>
+    <h3>Where it participates</h3><ul>
+<li><strong>Auxiliary Vehicle Studies</strong> &mdash; PumpDriver (non-thermal) is used in VehicleElecAux alongside PumpDummy.</li>
+<li><strong>Electro-Thermal Vehicle Studies</strong> &mdash; PumpDriverTh controls coolant flow rate in response to thermal conditions, working alongside the Pump, Radiator, and other thermal components in VehicleElectroThermal.</li>
+</ul></section>
+
+      <section id="examples"><h2>Examples</h2><div class="used-by"><strong>Workflows and models that use this component</strong>The pump driver is used by auxiliary and electrothermal vehicle configurations to convert thermal management commands into pump speed setpoints.</div><div class="component-example-grid"><article class="component-example-card"><div class="card-header-bar"></div><img class="component-example-image" src="Image/PumpDriverTestHarnessDescription_01.png" alt="PumpDriver example model canvas"><div class="component-example-body"><a href="workflow-vehicle-range.html">Estimate Vehicle Range with Auxiliary Loads</a><p><strong>Vehicle workflow</strong> &mdash; Includes pump-driver electrical consumption in range calculations.</p></div></article>
+</div></section>
+
+      <section id="interface"><h2>Interface</h2><p class="section-intro">Both fidelities share the same command boundary. PumpDriverTh adds a coolant interface for thermal coupling.</p>
+    <div class="table-scroll"><table><thead><tr><th>Port / signal</th><th>Direction</th><th>Description</th></tr></thead><tbody>
+<tr><td>Thermal status</td><td>Input</td><td>System temperatures and thermal controller commands.</td></tr>
+<tr><td>Pump enable</td><td>Input</td><td>Enable signal from the thermal management controller.</td></tr>
+<tr><td>Coolant port <em>(PumpDriverTh)</em></td><td>Conserving</td><td>Thermal-liquid interface for coolant system interaction.</td></tr>
+<tr><td>Pump speed command</td><td>Output</td><td>Shaft speed setpoint for the Pump.</td></tr>
+</tbody></table></div></section>
+
+      <section id="testing"><h2>Testing</h2><ul class="link-list"><li><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','PumpDriver','TestBench','PumpDriverTestHarness.slx'))">Open Pump Driver Test Harness</a> · <a href="matlab:web(fullfile(currentProject().RootFolder,'Components','PumpDriver','Documentation','html','PumpDriverTestHarnessDescription.html'),'-new')">view documentation</a><p>Verify command-to-speed conversion and thermal coupling under controlled inputs.</p></li><li><a href="matlab:runtests(fullfile(currentProject().RootFolder,'Components','PumpDriver','TestCase','PumpDriverPassTests.m'))">Run PumpDriver Component Tests</a><p>Run the maintained PumpDriver test case before integration.</p></li></ul></section>
+      <section id="see-also"><h2>See Also</h2><p class="see-also-links"><a href="component-pump.html">Pump</a> | <a href="component-radiator.html">Radiator</a> | <a href="vehicle-range.html#templates">Vehicle Templates</a></p><h3>Topics</h3><ul><li><a href="workflow-vehicle-range.html">Estimate Vehicle Range</a></li></ul></section>
+    </main>
+  </div>
+  <script src="assets/app.js?v=20260930-6"></script>
+</body></html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Framework Documentation</title>
+    <link rel="stylesheet" href="styles/mathworks-like-doc.css">
+</head>
+<body>
+
+<div class="page-title">
+    <span class="title-text">Test Framework Documentation</span>
+    <span class="breadcrumb">Test Framework</span>
+</div>
+
+<nav class="sidebar">
+    <ul>
+        <li><a href="TestFrameworkHome.html" class="active">Home</a></li>
+        <li><a href="pages/GettingStarted.html">Getting Started</a></li>
+        <li><a href="pages/ConfigurationGuide.html">Configuration Guide</a></li>
+        <li><a href="pages/TestFrameworkReference.html">Framework Reference</a></li>
+    </ul>
+</nav>
+
+<main class="content">
+
+    <h1 id="overview">Overview</h1>
+    <p class="subtitle">Comprehensive guide for the MATLAB/Simulink project test framework</p>
+    <p>
+        This test framework provides automated smoke testing, code coverage, and reporting
+        for MATLAB/Simulink projects. It is designed to integrate with CI/CD pipelines
+        and supports configurable test subsets.
+    </p>
+
+    <h1 id="test-pipeline-overview">Test Pipeline Overview</h1>
+    <div style="overflow-x: auto; margin: 1em 0;">
+        <img src="images/TestPipelineOverview.svg" alt="Test Framework Pipeline Diagram" style="width:100%; height:auto;">
+    </div>
+
+    <h1 id="documentation-pages">Documentation Pages</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Document</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><a href="pages/GettingStarted.html">Getting Started</a></td>
+                <td>Quick-start guide covering prerequisites, installation, and running your first test.</td>
+            </tr>
+            <tr>
+                <td><a href="pages/ConfigurationGuide.html">Configuration Guide</a></td>
+                <td>How to create and customize <code>testConfig.m</code> files, including the two-phase inclusion/exclusion discovery pipeline.</td>
+            </tr>
+            <tr>
+                <td><a href="pages/TestFrameworkReference.html">Framework Reference</a></td>
+                <td>Detailed API reference for all framework classes, functions, and utilities.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h1 id="folder-structure">Folder Structure</h1>
+    <pre><code>Test/
+├── Documentation/              <span class="comment">% This documentation</span>
+│   ├── TestFrameworkHome.html
+│   ├── images/
+│   ├── pages/
+│   └── styles/
+├── Framework/                  <span class="comment">% Test framework engine</span>
+│   ├── ProjectSmokeTests.m
+│   ├── TestExecutor.m
+│   ├── TestFileDiscovery.m
+│   ├── TestReportBuilder.m
+│   └── Utilities/
+│       ├── excludeByDirectory.m
+│       ├── isFunctionFile.m
+│       └── resolveProjectPaths.m
+├── testConfig_&lt;1&gt;.m            <span class="comment">% Test configuration</span>
+└── testConfig_&lt;2&gt;.m            <span class="comment">% Add more subsets as needed</span></code></pre>
+
+    <h1 id="advantages">Why Use This Framework</h1>
+    <ul>
+        <li>
+            <strong>Zero Test Authoring for Smoke Tests</strong> &mdash;
+            The framework automatically generates parameterized test points for every
+            discovered model and script. You do not need to write individual test files
+            for each Simulink model or workflow script.
+        </li>
+        <li>
+            <strong>No Additional Toolbox Dependencies</strong> &mdash;
+            The framework relies entirely on <code>matlab.unittest</code> and its built-in
+            plugins, all of which ship with base MATLAB.
+        </li>
+        <li>
+            <strong>Configuration-Driven Design</strong> &mdash;
+            All test behavior is controlled through a single <code>testConfig_&lt;Name&gt;.m</code>
+            file. There is no hardcoded logic binding the framework to specific project
+            structures.
+        </li>
+        <li>
+            <strong>Built-in CI/CD Integration</strong> &mdash;
+            The framework generates JUnit XML reports that are natively consumed by
+            CI systems.
+        </li>
+        <li>
+            <strong>Automatic Code Coverage</strong> &mdash;
+            Code coverage measurement is built into the test execution pipeline. The
+            framework discovers your production source files, attaches coverage
+            instrumentation, and generates an interactive HTML coverage report.
+        </li>
+        <li>
+            <strong>Test Isolation and Cleanup</strong> &mdash;
+            Each test runs in a temporary working folder. All Simulink models and figures
+            opened during a test are automatically closed in teardown.
+        </li>
+        <li>
+            <strong>Flexible Discovery</strong> &mdash;
+            The inclusion/exclusion pipeline gives you fine-grained control over which
+            files are tested. You can include entire directory trees with recursive search,
+            add specific files explicitly, then surgically exclude directories or individual
+            files.
+        </li>
+        <li>
+            <strong>Multiple Independent Test Subsets</strong> &mdash;
+            You can define as many <code>testConfig_&lt;Name&gt;.m</code> files as needed,
+            each producing independent test results and reports.
+        </li>
+        <li>
+            <strong>Selective Execution</strong> &mdash;
+            The framework provides dedicated methods (<code>runModelsOnly</code>,
+            <code>runWorkflowsOnly</code>, <code>runCustomOnly</code>) that allow you to
+            execute only the portion of the test suite relevant to your current work.
+        </li>
+        <li>
+            <strong>Extensibility via Custom Tests</strong> &mdash;
+            Beyond smoke tests, you can include any <code>matlab.unittest.TestCase</code>
+            classes in the same test run.
+        </li>
+        <li>
+            <strong>Dry Run Support</strong> &mdash;
+            The <code>TestExecutor.dryRun()</code> method previews exactly which files the
+            framework will discover and test, without executing any simulations or scripts.
+        </li>
+    </ul>
+
+    <h1 id="key-concepts">Key Concepts</h1>
+    <ul>
+        <li><strong>Test Subsets</strong> &mdash; Each <code>testConfig.m</code> defines an independent test subset with its own models, workflows, coverage, and report settings.</li>
+        <li><strong>Two-Phase Discovery</strong> &mdash; Files are first included (via recursive directory search + explicit files), then excluded (via directory/file ignore lists). Exclusion always wins.</li>
+        <li><strong>Smoke Tests</strong> &mdash; Models are loaded and simulated; scripts are executed inside <code>verifyWarningFree()</code>.</li>
+        <li><strong>Custom Tests</strong> &mdash; Additional <code>matlab.unittest.TestCase</code> files or directories can be included alongside smoke tests.</li>
+        <li><strong>Reporting</strong> &mdash; JUnit XML (for CI), HTML test reports, and code coverage reports are generated automatically.</li>
+    </ul>
+
+    <div class="footer">
+        <p>Copyright 2026 The MathWorks, Inc.</p>
+    </div>
+</main>
+
+</body>
+</html>

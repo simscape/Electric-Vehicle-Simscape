@@ -7,9 +7,9 @@ This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
       -->
 <title>ChillerNoCoolant</title>
-<meta name="generator" content="MATLAB 26.1">
+<meta name="generator" content="MATLAB 25.2">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2026-04-21">
+<meta name="DC.date" content="2026-05-06">
 <meta name="DC.source" content="ChillerNoCoolantDescription.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
@@ -111,33 +111,26 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <p>
 <b>Thermal Coupling:</b> None</p>
 <h2 id="2">Open Model</h2>
-<pre class="codeinput">open_system(<span class="string">'ChillerNoCoolant'</span>)
-</pre>
 <img vspace="5" hspace="5" src="images/ChillerNoCoolantDescription_01.png" alt=""> <h2 id="3">Ports</h2>
 <p>
-<b>Inputs</b>
+<h3>Input Bus &mdash; <code>s</code></h3>
+<table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+<tr><th>Signal</th><th>Description</th></tr>
+<tr><td>cmdChillerByp</td><td>Chiller bypass command</td></tr>
+<tr><td>BatSt</td><td>Battery status signal</td></tr>
+</table>
+<h3>Output Bus &mdash; <code>m</code></h3>
+<table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+<tr><th>Signal</th><th>Description</th></tr>
+<tr><td>ChillerCurrent</td><td>Current drawn from the HV bus</td></tr>
+<tr><td>energy</td><td>Cumulative energy consumed</td></tr>
+</table>
+<h3>Physical Ports</h3>
+<table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+<tr><th>Port</th><th>Domain</th><th>Description</th></tr>
+<tr><td>HV</td><td>Electrical</td><td>High-voltage bus connection</td></tr>
+</table>
 </p>
-<div>
-<ul>
-<li>
-<b>Battery status</b> - Pack state signals.</li>
-<li>
-<b>Chiller bypass control</b> - Enable command.</li>
-<li>
-<b>HV bus connection</b> - Electrical connection for power draw.</li>
-</ul>
-</div>
-<p>
-<b>Outputs</b>
-</p>
-<div>
-<ul>
-<li>
-<b>Chiller Current</b> - Current drawn from the HV bus.</li>
-<li>
-<b>HV Power</b> - Electrical power consumed.</li>
-</ul>
-</div>
 <h2 id="4">Workflows</h2>
 <p>The ChillerNoCoolant block is a simplified variant used as a standalone auxiliary load model where the coolant loop is not modeled, suitable for fast electrical-only simulations where auxiliary power consumption matters.</p>
 <h2 id="5">See Also</h2>
@@ -155,7 +148,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 </ul>
 </div>
 <p class="footer">Copyright 2022 - 2026 The MathWorks, Inc.<br>
-<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2026a</a>
+<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2025b</a>
 <br>
 </p>
 </div>
@@ -182,16 +175,26 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 open_system('ChillerNoCoolant')
 
 %% Ports
-% *Inputs*
 %
-% * *Battery status* - Pack state signals.
-% * *Chiller bypass control* - Enable command.
-% * *HV bus connection* - Electrical connection for power draw.
-%
-% *Outputs*
-%
-% * *Chiller Current* - Current drawn from the HV bus.
-% * *HV Power* - Electrical power consumed.
+% <html>
+% <h3>Input Bus &mdash; <code>s</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>cmdChillerByp</td><td>Chiller bypass command</td></tr>
+% <tr><td>BatSt</td><td>Battery status signal</td></tr>
+% </table>
+% <h3>Output Bus &mdash; <code>m</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>ChillerCurrent</td><td>Current drawn from the HV bus</td></tr>
+% <tr><td>energy</td><td>Cumulative energy consumed</td></tr>
+% </table>
+% <h3>Physical Ports</h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Port</th><th>Domain</th><th>Description</th></tr>
+% <tr><td>HV</td><td>Electrical</td><td>High-voltage bus connection</td></tr>
+% </table>
+% </html>
 
 %% Workflows
 % The ChillerNoCoolant block is a simplified variant used as a standalone

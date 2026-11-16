@@ -20,22 +20,27 @@
 open_system('Driveline')
 
 %% Ports
-% *Inputs*
 %
-% * *Front axle torque (FA)* - Torque from the front motor drive unit.
-% * *Rear axle torque (RA)* - Torque from the rear motor drive unit.
-%
-% *Outputs*
-%
-% * *Vehicle Speed* - Longitudinal vehicle speed.
-% * *Wheel Dynamics* - Individual wheel speeds and slip ratios.
-% * *Body Motion States* - Longitudinal and lateral vehicle response.
+% <html>
+% <h3>Input Bus &mdash; <code>s</code></h3>
+% <p>Input bus <code>s</code> is terminated in this fidelity.</p>
+% <h3>Output Bus &mdash; <code>m</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>VehSpd</td><td>Vehicle speed</td></tr>
+% </table>
+% <h3>Physical Ports</h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Port</th><th>Domain</th><th>Description</th></tr>
+% <tr><td>FA</td><td>Mechanical rotational</td><td>Front axle connection</td></tr>
+% <tr><td>RA</td><td>Mechanical rotational</td><td>Rear axle connection</td></tr>
+% </table>
+% </html>
 
 %% Workflows
 % The Driveline block is the *default driveline* in the assembled BEV
 % system model (|BEVsystemModel.slx|). It is used in all range estimation
-% workflows (NEDC, WLTC, EPA) and battery sizing workflows. Parameters are
-% loaded by |BEVSystemModelParams.m| via |DrivelineParams.m|. The model is
+% workflows (NEDC, WLTC, EPA) and battery sizing workflows. The model is
 % validated through |DriveLineTestHarness.slx|.
 
 %% Parameters

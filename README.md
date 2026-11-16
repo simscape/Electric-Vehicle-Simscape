@@ -6,7 +6,7 @@
 
 <table>
   <tr>
-    <td class="text-column" width="1200">
+    <td class="text-column" width=1200>
       In this project, you will find Simscape workflows for designing battery electric vehicles.
       Modeling and simulation help you meet range targets under different environmental conditions
       and evaluate components and complete vehicle platforms.
@@ -16,7 +16,9 @@
 
 <table>
   <tr>
-    <td class="image-column" width="1200"><img src="Overview/html/Image/BatteryElectricVehicleModelOverview_01.png" alt="BEV vehicle-level system model"></td>
+    <td class="image-column" width=1200 align="center">
+      <p align="center"><img src="Overview/html/Image/BatteryElectricVehicleModelOverview_01.png" width="78%" alt="BEV vehicle-level system model"></p>
+    </td>
   </tr>
 </table>
 
@@ -24,10 +26,10 @@
 
 <table>
   <tr>
-    <td class="text-column" width="1200">
+    <td class="text-column" width=1200>
       On the electrical side, you size battery packs to meet range targets, build virtual
-      sensors for battery temperature estimation, generate motor and inverter loss maps,
-      and compare vehicle range across drive cycles and ambient conditions.
+      sensors for battery temperature estimation, generate motor and inverter loss maps, and
+      compare vehicle range across drive cycles, ambient temperatures, and HVAC loads.
     </td>
   </tr>
 </table>
@@ -43,10 +45,10 @@
 
 <table>
   <tr>
-    <td class="text-column" width="1200">
-      On the mechanical side, you select a fixed gear ratio for the electric drivetrain.
-      Sweep candidate gear ratios over EUDC and US06 drive cycles, compare motor winding
-      and magnet temperatures, and identify a suitable ratio based on motor thermal performance.
+    <td class="text-column" width=1200>
+      On the mechanical side, you select gear ratios within motor thermal limits, evaluate
+      torque ripple and driveline vibration using frequency order maps, and optimize launch
+      ratios to reduce vehicle jerk while maintaining acceleration.
     </td>
   </tr>
 </table>
@@ -61,11 +63,10 @@
 
 <table>
   <tr>
-    <td class="text-column" width="1200">
-      On the thermal side, you explore vehicle thermal management and assess motor thermal
-      durability over extended duty cycles at different coolant temperatures. Compare winding
-      and magnet temperatures against limits, and estimate inverter power-module life from
-      junction-temperature cycles.
+    <td class="text-column" width=1200>
+      On the thermal side, you assess motor thermal durability over extended duty cycles at
+      different coolant temperatures, compare winding and magnet temperatures against limits,
+      and estimate inverter power-module life from junction-temperature cycles.
     </td>
   </tr>
 </table>
@@ -82,11 +83,27 @@
 ## To Get Started
 
 * Clone this repository and open `ElectricVehicleSimscape.prj`.
-* Launch the BEV Setup App (`BEVapp`) or select presets using `OpenPresetPicker`.
+* Select a preset using `OpenPresetPicker` to get started.
+* Use the BEV Setup App (`BEVapp`) when you want a custom vehicle configuration.
 
-## Requirements
+## Requirement(s)
 
-* MATLAB&reg; release R2024b or newer.
-* Simulink&reg;, Simscape&trade;, Simscape Battery&trade;, Simscape Driveline&trade;, Simscape Fluids&trade;, and Simscape Electrical&trade;.
+* MATLAB&reg; release R2025b or newer
+* Simulink&reg;
+* Simscape&trade;
+* Simscape Battery&trade;
+* Simscape Driveline&trade;
+* Simscape Fluids&trade;
+* Simscape Electrical&trade;
+* Stateflow&reg;
+* Powertrain Blockset&trade;
+* Deep Learning Toolbox&trade;
+* MATLAB Coder&trade;
+* Predictive Maintenance Toolbox&trade;
+* Signal Processing Toolbox&trade;
+* System Identification Toolbox&trade;
+* Statistics and Machine Learning Toolbox&trade;
+* Optimization Toolbox&trade;
+* Global Optimization Toolbox&trade;
 
 Copyright 2022 - 2026 The MathWorks, Inc.

@@ -20,25 +20,37 @@
 open_system('BatteryTableBased')
 
 %% Ports
-% *Inputs*
 %
-% * *Positive relay command* - HV bus positive connection.
-% * *Negative relay command* - HV bus negative connection.
-% * *Coolant port* - Thermal-liquid interface for coolant and heater coupling.
-%
-% *Outputs*
-%
-% * *Voltage* - Pack terminal voltage.
-% * *Current* - Pack current.
-% * *SOC* - State of charge.
-% * *Cell Voltage* - Individual cell voltage.
-% * *Temperature* - Pack temperature from thermal dynamics.
+% <html>
+% <h3>Input Bus &mdash; <code>s</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>RelayPos</td><td>Positive relay command</td></tr>
+% <tr><td>RelayNeg</td><td>Negative relay command</td></tr>
+% </table>
+% <h3>Output Bus &mdash; <code>m</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>BattSens.SoC</td><td>State of charge</td></tr>
+% <tr><td>BattSens.Current</td><td>Pack current</td></tr>
+% <tr><td>BattSens.Cellvolt</td><td>Cell voltage</td></tr>
+% <tr><td>BattSens.ParVolt</td><td>Parallel string voltage</td></tr>
+% <tr><td>BattSens.temp</td><td>Pack temperature</td></tr>
+% <tr><td>CoolTp</td><td>Coolant temperature</td></tr>
+% </table>
+% <h3>Physical Ports</h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Port</th><th>Domain</th><th>Description</th></tr>
+% <tr><td>HV</td><td>Electrical</td><td>High-voltage bus connection</td></tr>
+% <tr><td>A</td><td>Thermal liquid</td><td>Coolant port (inlet)</td></tr>
+% <tr><td>B</td><td>Thermal liquid</td><td>Coolant port (outlet)</td></tr>
+% </table>
+% </html>
 
 %% Workflows
 % BatteryTableBased is the *default battery fidelity* in the assembled
-% BEV system model (|BEVsystemModel.slx|). It is used by
-% |BEVSystemModelParams.m| when running range estimation (NEDC, WLTC, EPA)
-% and battery sizing workflows.
+% BEV system model (|BEVsystemModel.slx|). It is used in range estimation
+% (NEDC, WLTC, EPA) and battery sizing workflows.
 
 %% Parameters
 %

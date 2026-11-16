@@ -15,11 +15,11 @@ catch
 end
 
 %% Environment setting
-vehicleThermal.ambient   = 25+273.15;          % [K] Ambient temperature
+vehicleThermal.ambient   = 25 +273.15;          % [K] Ambient temperature
 
 %% Initialization from the UI for thermal and HVAC
 vehicleThermal.CabinSpTp       = 20+273.15;        % [K] Cabin set point for HVAC
-vehicleThermal.AConoff         = true;              % AC on/off flag, On==1, Off==0
+vehicleThermal.AConoff         = 1;              % AC on/off flag, On==1, Off==0
 vehicleThermal.cabin_T_init    = vehicleThermal.ambient;   % [K] Cabin initial temp
 vehicleThermal.coolant_T_init  = vehicleThermal.ambient;   % [K] Coolant initial temp
 vehicleThermal.cabin_CO2_init  = 0.0004;   % Cabin initial CO2

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Battery Management System — Electric Vehicle Design</title><link rel="stylesheet" href="assets/styles.css?v=20261028-3"></head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+  <header class="help-header"><div class="help-header-inner"><a class="help-brand" href="ElectricVehicleDesignOverview.html">MATLAB Help Center<small>Electric Vehicle Design with Simscape</small></a></div></header>
+  <div class="doc-shell">
+    <aside class="category-nav"><nav aria-label="Component reference navigation">
+      <ul class="nav-trail"><li><a href="ElectricVehicleDesignOverview.html">Documentation Home</a></li><li><a href="components.html">Components</a></li></ul>
+      <div class="nav-siblings-label">Controls</div>
+      <ul class="nav-siblings"><li aria-current="page"><span>Battery Management System</span></li><li><a href="component-controller.html">Vehicle Controller</a></li></ul>
+      <div class="on-page"><div class="on-page-label">On this page</div><ul class="on-page-list"><li><a href="#description">Description</a></li><li><a href="#examples">Examples</a></li><li><a href="#interface">Interface</a></li><li><a href="#testing">Testing</a></li><li><a href="#see-also">See Also</a></li></ul></div>
+    <div class="nav-browse"><div class="on-page-label">Category</div><ul class="nav-browse-list"><li><a href="examples.html">Examples</a></li><li><a href="vehicle-range.html">Vehicle Models</a></li><li><a href="project-builder.html">Apps &amp; Utilities</a></li></ul></div>
+    </nav></aside>
+    <main class="doc-main" id="main-content">
+
+      <header class="product-intro reference-heading"><div><h1>Battery Management System</h1><p class="tagline">Battery supervision and state-of-charge estimation</p><p class="library-path"><strong>Component path:</strong> Components / BMS</p><div class="action-row"><a class="action" href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','BMS','Model','BMS.slx'))">Open Default Model</a><a class="action secondary" href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','BMS','TestBench','BMSTestHarness.slx'))">Open Test Harness</a></div></div><figure class="component-header-image"><img src="Image/BMSDescription_01.png" alt="BMS model canvas"></figure></header>
+
+      <section id="description"><h2>Description</h2>
+    <div class="component-description-layout">
+      <div class="component-lede"><p>Battery management system component for the BEV high-voltage battery. The BMS monitors cell voltages, currents, and temperatures against configurable safety limits, issues relay commands, provides SOC estimation, and raises fault flags when operating limits are exceeded.</p>
+        <div class="fidelity-decision"><strong>How to choose a fidelity</strong><p>Treat <strong>BMS</strong> as the protection and relay-management shell. Choose the SOC estimator inside it: direct coulomb counting is fast and transparent, while the EKF is appropriate when observer accuracy and measurement noise are part of the study.</p></div>
+      </div>
+
+    </div>
+    <h3 id="models">Fidelity at a glance</h3>
+    <div class="table-scroll"><table><thead><tr><th>Model</th><th>Description</th><th>Use case</th><th>Templates</th><th>Documentation &amp; files</th></tr></thead><tbody>
+<tr><td><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','BMS','Model','BMS.slx'))"><strong>BMS</strong></a></td><td>Fault monitoring, relay commands, and configurable SOC estimation.</td><td>All vehicle configurations requiring battery protection, relay management, and SOC reporting.</td><td>VehicleElectric, VehicleElecAux, VehicleElectroThermal</td><td><a href="matlab:web(fullfile(currentProject().RootFolder,'Components','BMS','Documentation','html','BMSDescription.html'),'-new')">Documentation</a> &middot; <a href="matlab:edit(fullfile(currentProject().RootFolder,'Components','BMS','Model','BMSParams.m'))">Parameters</a></td></tr>
+<tr><td><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','BMS','Model','SOC','BMSSoCDirect.slx'))"><strong>BMSSoCDirect</strong></a></td><td>Coulomb-counting SOC estimation with drift-free short simulations.</td><td>Simulations where SOC estimation accuracy is secondary or as a baseline for comparison.</td><td>VehicleElectric, VehicleElecAux, VehicleElectroThermal</td><td><a href="matlab:web(fullfile(currentProject().RootFolder,'Components','BMS','Documentation','html','BMSSoCDirectDescription.html'),'-new')">Documentation</a> &middot; <a href="matlab:edit(fullfile(currentProject().RootFolder,'Components','BMS','Model','BMSParams.m'))">Parameters</a></td></tr>
+<tr><td><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','BMS','Model','SOC','BMSSoCEKF.slx'))"><strong>BMSSoCEKF</strong></a></td><td>Extended Kalman filter for improved SOC accuracy under noise.</td><td>Studies focused on SOC estimation performance, observer tuning, or BMS algorithm development.</td><td>VehicleElectroThermal</td><td><a href="matlab:web(fullfile(currentProject().RootFolder,'Components','BMS','Documentation','html','BMSSoCEKFDescription.html'),'-new')">Documentation</a> &middot; <a href="matlab:edit(fullfile(currentProject().RootFolder,'Components','BMS','Model','BMSParams.m'))">Parameters</a></td></tr>
+</tbody></table></div>
+    <h3>Where it participates</h3><ul>
+<li><strong>Range Estimation</strong> (<code>Workflow/Vehicle/RangeEstimation/</code>) &mdash; The BMS monitors battery health and issues relay commands during drive-cycle runs.</li>
+<li><strong>Battery Sizing</strong> (<code>Workflow/Battery/BatterySizing/</code>) &mdash; BMS parameters (cell limits, thermal thresholds) affect the feasible operating range during sizing sweeps.</li>
+</ul></section>
+
+      <section id="examples"><h2>Examples</h2><div class="used-by"><strong>Workflows and models that use this component</strong>The BMS is used by all vehicle controller variants and participates in the battery sizing and virtual sensor workflows.</div><div class="component-example-grid">
+<article class="component-example-card"><div class="card-header-bar"></div><img class="component-example-image" src="Image/BMSDescription_01.png" alt="BMS example model canvas"><div class="component-example-body"><a href="component-controller.html">Vehicle Controller Variants</a><p><strong>Component models</strong> &mdash; Controller, ControllerFRM, and ControllerHVAC reference BMS for relay and SOC signals.</p></div></article>
+<article class="component-example-card"><div class="card-header-bar"></div><img class="component-example-image" src="Image/BMSDescription_01.png" alt="BMS example model canvas"><div class="component-example-body"><a href="workflow-battery-virtual-sensor.html">Build Virtual Sensor for BMS</a><p><strong>Related workflow</strong> &mdash; Develops an additional temperature signal for battery management.</p></div></article></div></section>
+
+      <section id="interface"><h2>Interface</h2><p class="section-intro">All fidelities share the same boundary so variants can be exchanged in place. The SOC output computation differs (coulomb counting vs. EKF) but port names and directions are identical.</p>
+    <div class="table-scroll"><table><thead><tr><th>Port / signal</th><th>Direction</th><th>Description</th></tr></thead><tbody>
+<tr><td>Cell voltage</td><td>Input</td><td>Measured cell terminal voltage.</td></tr>
+<tr><td>Pack current</td><td>Input</td><td>Measured pack current.</td></tr>
+<tr><td>Cell temperature</td><td>Input</td><td>Measured cell temperature.</td></tr>
+<tr><td>Charge command</td><td>Input</td><td>Requested charge/discharge mode.</td></tr>
+<tr><td>Positive relay command</td><td>Output</td><td>Connects battery positive terminal.</td></tr>
+<tr><td>Negative relay command</td><td>Output</td><td>Connects battery negative terminal.</td></tr>
+<tr><td>SOC estimate</td><td>Output</td><td>Estimated state of charge.</td></tr>
+<tr><td>Fault flags</td><td>Output</td><td>Over-voltage, under-voltage, over-current, over-temperature.</td></tr>
+<tr><td>Coolant command</td><td>Output</td><td>Thermal management enable based on temperature thresholds.</td></tr>
+</tbody></table></div></section>
+
+      <section id="testing"><h2>Testing</h2><ul class="link-list"><li><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','BMS','TestBench','BMSTestHarness.slx'))">Open BMS Test Harness</a> · <a href="matlab:web(fullfile(currentProject().RootFolder,'Components','BMS','Documentation','html','BMSDescription.html'),'-new')">view documentation</a><p>Verify relay logic, fault thresholds, and SOC estimation under controlled inputs.</p></li><li><a href="matlab:runtests(fullfile(currentProject().RootFolder,'Components','BMS','TestCase','BMSPassTests.m'))">Run BMS Component Tests</a><p>Run the maintained BMS test case before integration.</p></li></ul></section>
+      <section id="see-also"><h2>See Also</h2><p class="see-also-links"><a href="component-battery.html">High-Voltage Battery</a> | <a href="component-controller.html">Vehicle Controller</a> | <a href="workflow-battery-virtual-sensor.html">Virtual Sensor</a></p><h3>Topics</h3><ul><li><a href="workflow-battery-sizing.html">Size Battery Pack</a></li><li><a href="vehicle-range.html#templates">Vehicle Templates</a></li></ul></section>
+    </main>
+  </div>
+  <script src="assets/app.js?v=20260930-6"></script>
+</body></html>

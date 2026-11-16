@@ -20,14 +20,19 @@
 open_system('PumpDriverTh')
 
 %% Ports
-% *Inputs*
 %
-% * *Thermal status* - System temperatures and thermal controller commands.
-% * *Pump enable* - Enable signal from the thermal management controller.
-%
-% *Outputs*
-%
-% * *Pump speed command* - Shaft speed setpoint for the Pump.
+% <html>
+% <h3>Input / Output Bus</h3>
+% <p>No Simulink signal bus interface. Operates entirely through physical connections.</p>
+% <h3>Physical Ports</h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Port</th><th>Domain</th><th>Description</th></tr>
+% <tr><td>HV</td><td>Electrical</td><td>High-voltage bus input</td></tr>
+% <tr><td>LV</td><td>Electrical</td><td>Low-voltage bus output</td></tr>
+% <tr><td>A</td><td>Thermal liquid</td><td>Coolant port</td></tr>
+% <tr><td>B</td><td>Thermal liquid</td><td>Coolant port</td></tr>
+% </table>
+% </html>
 
 %% Workflows
 % The PumpDriverTh is part of the coolant loop in the

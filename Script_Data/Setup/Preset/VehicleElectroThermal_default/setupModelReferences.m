@@ -18,7 +18,6 @@ vehBlk    = 'BEVsystemModel/Vehicle';
 controlBlk = 'BEVsystemModel/Controller';
 vehTarget = 'VehicleElectroThermal';
 setRef(vehBlk, vehTarget);
-saveAll(topModelName);
 
 % ---- Apply component references ----
 setRef('BEVsystemModel/Vehicle/Battery', 'BatteryTableBased');
@@ -36,7 +35,7 @@ alignMaskFields('BEVsystemModel/Vehicle/Chiller', {'chillerMaxPower','coolant_pi
 setRef('BEVsystemModel/Vehicle/Heater', 'Heater');
 alignMaskFields('BEVsystemModel/Vehicle/Heater', {'heaterMaxPower','coolant_pipe_D','coolant_channel_D'}, {'batteryHeater','batteryHeater','batteryHeater'});
 setRef('BEVsystemModel/Vehicle/Driveline', 'Driveline');
-alignMaskFields('BEVsystemModel/Vehicle/Driveline', {'tireRollingRadius_cm','vehMass_kg','MaxSpeed','BrakeFactor'}, {'driveline','driveline','driveline','vehicle'});
+alignMaskFields('BEVsystemModel/Vehicle/Driveline', {'tireRollingRadius_cm','vehMass_kg','MaxSpeed','BrakeFactor'}, {'drivetrain','drivetrain','drivetrain','controller'});
 setRef('BEVsystemModel/Vehicle/Battery Pump', 'Pump');
 alignMaskFields('BEVsystemModel/Vehicle/Battery Pump', {'pump_displacement','pump_speed_max','coolant_pipe_D'}, {'pump','pump','pump'});
 setRef('BEVsystemModel/Vehicle/Motor Pump', 'Pump');
@@ -46,19 +45,14 @@ alignMaskFields('BEVsystemModel/Vehicle/DCDC', {'outputVoltage','outputPower','c
 setRef('BEVsystemModel/Vehicle/Radiator', 'Radiator');
 alignMaskFields('BEVsystemModel/Vehicle/Radiator', {'L','W','H','N_tubes','tube_H','fin_spacing','wall_thickness','wall_conductivity','gap_H','air_area_flow','air_area_primary','N_fins','air_area_fins','tube_Leq','fan_area','duct_area','coolant_pipe_D'}, {'radiator','radiator','radiator','radiator','radiator','radiator','radiator','radiator','radiator','radiator','radiator','radiator','radiator','radiator','radiator','radiator','radiator'});
 setRef('BEVsystemModel/Controller', 'Controller');
-set_param('BEVsystemModel/Drive Cycle Source','cycleVar','FTP72');
-saveAll(topModelName);
-disp('Setup complete and saved.');
+set_param('BEVsystemModel/HMI/AWD', 'Value', '1');
+set_param('BEVsystemModel/HMI/BatCmd Input', 'Value', '3');
+set_param('BEVsystemModel/Drive Cycle Source','cycleVar','FTP75');
+disp('Setup complete.');
 
 % ================= Helpers =================
 function setRef(blockPath, refTarget)
     set_param(blockPath, 'ReferencedSubsystem', refTarget);
-end
-
-function saveAll(mdl)
-    try save_system(mdl, 'SaveDirtyReferencedModels', 'on');
-    catch, save_system(mdl);
-    end
 end
 
 function alignMaskFields(blockPath, targetFields, targetNs)

@@ -1,55 +1,27 @@
-# Workflow
+# Engineering Workflows
 
-Design workflows and analysis scripts for the BEV project. Each workflow is a self-contained study organized by subsystem.
-
----
-
-## Folder Structure
-
-```
-Workflow/
-  Battery/
-    BatterySizing/                  - Battery pack sizing for range targets
-    VirtualSensorNeuralNetModel/    - Neural network-based virtual battery sensor
-  MotorDrive/
-    GearRatioSelect/                - Optimal gear ratio sweep
-    GenerateMotInvLoss/             - Motor and inverter loss map generation
-    InverterLife/                    - Power module lifetime estimation
-    Model/                          - Motor drive thermal and detailed test benches
-    ThermalDurability/              - Drive unit thermal stress analysis
-  Vehicle/
-    RangeEstimation/                - Vehicle range over EPA, NEDC, WLTC drive cycles
-```
-
----
+Run battery, motor-drive, vehicle-range, and driveline studies. Open `ElectricVehicleSimscape.prj` first, then follow the selected workflow's setup instructions.
 
 ## Workflow Inventory
 
-### Battery
+| Domain | Workflow | Purpose | Entry point |
+|--------|----------|---------|-------------|
+| Battery | [Battery sizing](Battery/BatterySizing/README.md) | Compare battery capacity, mass, and range | `BEVBatterySizingMain.mlx` |
+| Battery | [Virtual sensor](Battery/VirtualSensorNeuralNetModel/README.md) | Predict battery temperature with a neural network | `VirtualSensorNeuralNetModel.mlx` |
+| MotorDrive | [Gear ratio selection](MotorDrive/GearRatioSelect/README.md) | Compare thermal Pass/Fail across candidate ratios | `minimumRequiredGearRatio.mlx` |
+| MotorDrive | [Loss map generation](MotorDrive/GenerateMotInvLoss/README.md) | Generate PMSM and inverter loss maps | `generateDULossMap.mlx` |
+| MotorDrive | [Inverter life](MotorDrive/InverterLife/README.md) | Estimate life from equivalent temperature cycles | `inverterPowerModuleLife.mlx` |
+| MotorDrive | [Thermal durability](MotorDrive/ThermalDurability/README.md) | Evaluate winding and magnet thermal limits | `DUThermalDurability.mlx` |
+| Vehicle | [Range estimation](Vehicle/RangeEstimation/README.md) | Compare range over EPA, NEDC, and WLTC cycles | `BEVRangeEstimationMain.mlx` |
+| Driveline | [NVH](Driveline/DrivelineNVH/README.md) | Analyze order maps and optimize launch gear ratios | `generateOrderMap.mlx`, `optimizeVehicleLaunch.mlx` |
 
-| Workflow | Description | Entry Point |
-|----------|-------------|-------------|
-| [BatterySizing](Battery/BatterySizing/README.md) | Sweep battery configurations against range targets using NEDC drive cycle data | `BEVBatterySizingMain.mlx` |
-| [VirtualSensorNeuralNetModel](Battery/VirtualSensorNeuralNetModel/README.md) | Train and verify a neural network model for battery state estimation | `VirtualSensorNeuralNetModel.mlx` |
+Motor-drive studies share the [thermal test benches](MotorDrive/Model/README.md).
 
+## Before Running
 
-### MotorDrive
-
-| Workflow | Description | Entry Point |
-|----------|-------------|-------------|
-| [GearRatioSelect](MotorDrive/GearRatioSelect/README.md) | Batch-sweep gear ratios to find the most efficient fixed ratio for a drive cycle | `minimumRequiredGearRatio.mlx` |
-| [GenerateMotInvLoss](MotorDrive/GenerateMotInvLoss/README.md) | Generate motor and inverter loss maps from detailed PMSM FOC simulation. Includes `PMSMdetailTestbench.slx` for motor-level characterization | `generateDULossMap.mlx` |
-| [InverterLife](MotorDrive/InverterLife/README.md) | Estimate inverter power module lifetime from thermal cycling data | `inverterPowerModuleLife.mlx` |
-| [ThermalDurability](MotorDrive/ThermalDurability/README.md) | Evaluate drive unit thermal behavior over extended duty cycles | `DUThermalDurability.mlx` |
-
-### Vehicle
-
-| Workflow | Description | Entry Point |
-|----------|-------------|-------------|
-| [RangeEstimation](Vehicle/RangeEstimation/README.md) | Estimate vehicle range over standard drive cycles (EPA, NEDC, WLTC) | `BEVRangeEstimationMain.mlx` |
-
----
-
-Open the MATLAB project (`ElectricVehicleSimscape.prj`) before running any workflow.
+- Load the workflow's parameter files and required drive-cycle profiles.
+- Check operation-specific toolbox requirements.
+- Distinguish bundled results from new simulation runs.
+- Confirm input conditions and acceptance criteria before interpreting results.
 
 Copyright 2022 - 2026 The MathWorks, Inc.

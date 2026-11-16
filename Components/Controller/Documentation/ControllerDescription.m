@@ -19,19 +19,33 @@
 open_system('Controller')
 
 %% Ports
-% *Inputs*
 %
-% * *Drive cycle speed reference* - Target vehicle speed from the drive cycle source.
-% * *Vehicle speed feedback* - Measured vehicle speed from the driveline.
-% * *Battery status* - SOC, voltage, and current from the BMS.
-% * *BMS relay commands* - Battery connection state.
-%
-% *Outputs*
-%
-% * *Front axle torque command* - Torque request to front motor (EM1).
-% * *Rear axle torque command* - Torque request to rear motor (EM2).
-% * *Brake command* - Mechanical braking torque request.
-% * *Battery command* - Charge/discharge mode signal.
+% <html>
+% <h3>Inputs</h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Port</th><th>Type</th><th>Description</th></tr>
+% <tr><td>Spd</td><td>Scalar</td><td>Drive cycle speed reference</td></tr>
+% <tr><td>(measurement bus)</td><td>Bus</td><td>Feedback: m.DV.VehSpd, m.M1.EM.EMrpm, m.M1.EM.coilT, m.BA.CoolTp, BA.BattSens, Env.Tenv, VA.Tcabin</td></tr>
+% <tr><td>BMS</td><td>Bus element</td><td>BMS sensor signals (faults, limits, SOC)</td></tr>
+% <tr><td>AWD</td><td>Bus element</td><td>AWD mode flag</td></tr>
+% </table>
+% <h3>Output Bus &mdash; <code>s</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Sub-bus</th><th>Key Signals</th><th>Description</th></tr>
+% <tr><td>DV</td><td>BrkCmd</td><td>Driveline brake command</td></tr>
+% <tr><td>Battery</td><td>RelayPos, RelayNeg</td><td>Battery relay commands</td></tr>
+% <tr><td>EM1</td><td>EMtrq, Batt</td><td>Front motor torque command</td></tr>
+% <tr><td>EM2</td><td>EMtrq, Batt</td><td>Rear motor torque command</td></tr>
+% <tr><td>Charger</td><td>Batt</td><td>Charger mode signal</td></tr>
+% <tr><td>Radiator</td><td>cmdFan, Env, VehSpd</td><td>Radiator fan control</td></tr>
+% <tr><td>MotorPump</td><td>cmdPump, BatSt</td><td>Motor coolant pump</td></tr>
+% <tr><td>BatteryPump</td><td>cmdPump, BatSt</td><td>Battery coolant pump</td></tr>
+% <tr><td>Heater</td><td>cmdHeater, BatSt</td><td>Battery heater</td></tr>
+% <tr><td>HVAC</td><td>Env, Batt, Cntrl</td><td>HVAC cabin commands</td></tr>
+% <tr><td>ChillerValve</td><td>cmdChillerByp</td><td>Chiller bypass valve</td></tr>
+% <tr><td>ControlValve</td><td>cmdParallelSerieal</td><td>Coolant control valve</td></tr>
+% </table>
+% </html>
 
 %% Workflows
 % The Controller is the *default vehicle controller* selected by

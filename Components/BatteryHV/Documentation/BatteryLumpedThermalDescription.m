@@ -20,19 +20,32 @@
 open_system('BatteryLumpedThermal')
 
 %% Ports
-% *Inputs*
 %
-% * *Positive relay command* - HV bus positive connection.
-% * *Negative relay command* - HV bus negative connection.
-% * *Coolant port* - Thermal-liquid interface for coolant loop heat exchange.
-%
-% *Outputs*
-%
-% * *Voltage* - Pack terminal voltage.
-% * *Current* - Pack current.
-% * *SOC* - State of charge.
-% * *Temperature* - Lumped pack temperature.
-% * *Cell Voltage* - Individual cell voltage estimate.
+% <html>
+% <h3>Input Bus &mdash; <code>s</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>RelayPos</td><td>Positive relay command</td></tr>
+% <tr><td>RelayNeg</td><td>Negative relay command</td></tr>
+% </table>
+% <h3>Output Bus &mdash; <code>m</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>BattSens.SoC</td><td>State of charge</td></tr>
+% <tr><td>BattSens.Current</td><td>Pack current</td></tr>
+% <tr><td>BattSens.Cellvolt</td><td>Cell voltage</td></tr>
+% <tr><td>BattSens.ParVolt</td><td>Parallel string voltage</td></tr>
+% <tr><td>BattSens.temp</td><td>Lumped pack temperature</td></tr>
+% <tr><td>CoolTp</td><td>Coolant temperature</td></tr>
+% </table>
+% <h3>Physical Ports</h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Port</th><th>Domain</th><th>Description</th></tr>
+% <tr><td>HV</td><td>Electrical</td><td>High-voltage bus connection</td></tr>
+% <tr><td>A</td><td>Thermal liquid</td><td>Coolant port (inlet)</td></tr>
+% <tr><td>B</td><td>Thermal liquid</td><td>Coolant port (outlet)</td></tr>
+% </table>
+% </html>
 
 %% Workflows
 % The BatteryLumpedThermal block is used in the *VehicleElectroThermal*

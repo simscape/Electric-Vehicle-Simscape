@@ -1,74 +1,69 @@
 # Components
 
-Self-contained, reusable subsystem modules for the Battery Electric Vehicle (BEV) Simscape system model. Each component encapsulates its Simulink models, parameters, tests, and documentation in one folder. Components are referenced by the system-level model (`Model/BEVsystemModel.slx`) via subsystem references, so any component can be swapped, upgraded, or extracted independently.
-
----
+Reusable subsystem packages for the battery electric vehicle (BEV) model. Component folders group models, parameters, tests, and documentation. Vehicle templates connect them through subsystem references.
 
 ## Component Inventory
 
-| Component | Description | Fidelities | Thermal | Test Harness |
-|-----------|-------------|:----------:|:-------:|:------------:|
-| [BatteryHV](BatteryHV/README.md) | High-voltage battery pack (lumped, lumped-thermal, table-based) | 3 | Yes | Yes |
-| [BatteryHeater](BatteryHeater/README.md) | PTC heater for cold-climate battery warming (full, dummy) | 2 | Yes | Yes |
-| [BMS](BMS/README.md) | Battery management system with SOC estimation variants | 3 | Yes | Yes |
-| [Charger](Charger/README.md) | On-board charger with CC-CV control and thermal variants | 4 | Yes | Yes |
-| [Chiller](Chiller/README.md) | Refrigerant-to-coolant chiller for battery thermal management (full, no-coolant, dummy) | 3 | Yes | Yes |
-| [Controller](Controller/README.md) | Vehicle-level supervisory controller (standard, FRM, HVAC) | 3 | No | No |
-| [Driveline](Driveline/README.md) | Mechanical driveline with optional braking | 2 | No | Yes |
-| [HVAC](HVAC/README.md) | Cabin climate system (empirical, simple-thermal) | 2 | Yes | Yes |
-| [MotorDrive](MotorDrive/README.md) | Electric motor drive unit with gear, thermal, and lubrication variants | 3 | Yes | Yes |
-| [Pump](Pump/README.md) | Coolant circulation pump (full, dummy, dummy-thermal) | 3 | Yes | Yes |
-| [DCDC](PumpDriver/README.md) | DC-DC converter driving the coolant pump (PumpDriver, PumpDriverTh) | 2 | Yes | Yes |
-| [Radiator](Radiator/README.md) | Coolant-to-air radiator with fan | 1 | Yes | Yes |
+| Component | Description | Model files | Thermal behavior | Test Harness |
+|-----------|-------------|:-----------:|------------------|:------------:|
+| [BatteryHV](BatteryHV/README.md) | Battery pack variants | 4 | Thermal variants | Yes |
+| [BatteryHeater](BatteryHeater/README.md) | Battery heater and dummy | 2 | Coolant heat exchange | Yes |
+| [BMS](BMS/README.md) | Battery protection and two internal SOC algorithms | 3 | Temperature monitoring | Yes |
+| [Charger](Charger/README.md) | Electrical and thermal chargers | 4 | Thermal variants | Yes |
+| [Chiller](Chiller/README.md) | Full, no-coolant, and dummy chillers | 3 | Coolant heat exchange | Yes |
+| [Controller](Controller/README.md) | Vehicle supervisory controllers | 4 | Control commands | No |
+| [Driveline](Driveline/README.md) | Vehicle variants and flexible NVH model | 4 | None | Yes |
+| [HVAC](HVAC/README.md) | Cabin climate models | 2 | Cabin temperature dynamics | Yes |
+| [MotorDrive](MotorDrive/README.md) | Electrical, thermal, and lubrication variants | 3 | Thermal variants | Yes |
+| [Pump](Pump/README.md) | Coolant pump and dummy variants | 3 | Coolant circulation | Yes |
+| [DCDC](PumpDriver/README.md) | DC-DC converter variants | 2 | Thermal variant | Yes |
+| [Radiator](Radiator/README.md) | Coolant-to-air heat exchanger | 1 | Coolant heat rejection | Yes |
 
----
+The 35 model files include two internal BMS SOC algorithms. Available vehicle-template combinations come from [the preset configuration](../utils/APP/Config/Preset/README.md).
 
-## Most components follow this standardized layout
+## Folder Structure
 
 ```
 Components/<ComponentName>/
-  Model/           - Simulink models (.slx) and parameter scripts (*Params.m)   [always]
-  TestBench/       - Standalone test harness with boundary conditions            [optional]
-  TestCase/        - MATLAB unit tests (*PassTests.m)                            [optional]
-  Documentation/   - Published HTML documentation                                [always]
-    html/          - HTML pages                                                  [always]
-    images/        - Screenshots and figures                                     [always]
-  Utilities/       - Plot functions and helpers                                  [optional]
-  Library/         - Reusable Simulink library blocks (BatteryHV, HVAC, MotorDrive only) [optional]
-  README.md        - Component overview and fidelity table                       [always]
+  Model/                  - Models and parameter scripts
+  TestBench/              - Standalone harnesses, when provided
+  TestCase/               - Component unit tests, when provided
+  Documentation/          - Publish sources
+    html/                 - Published pages
+      images/             - Screenshots and result figures
+  Library/                - Shared blocks or data, when provided
+  Utilities/              - Plotting helpers, when provided
+  README.md               - Component reference
 ```
 
-**Exceptions:** Controller has no TestBench/ or TestCase/ folders (supervisory logic is validated at system level). BMS has no Utilities/ folder.
+Controller has no standalone harness or test class. BMS has no Utilities folder.
 
----
+## Reuse and Integration
 
-## Modularity
+Preserve the selected model's signal and physical interfaces. Thermal variants add coolant connections; FlexibleDriveline has a separate analysis interface.
 
-Each component is fully self-contained. Models, parameters, test harnesses, unit tests, and documentation all live inside the component folder. To reuse a component in another project, copy the entire folder -- no external dependencies need to be resolved.
+Resolve dependencies when reusing a package. Controller uses BMS; thermal parameter scripts require environment values from the system or harness setup.
 
-Most components offer multiple fidelity levels sharing the same port interface. Switching fidelity is a single subsystem reference change at the system level. Thermal components expose Simscape conserving ports for coolant flow, allowing them to be connected into a thermal loop at the system level while remaining independently testable with their own coolant boundary conditions.
-
----
-
-## System Integration
+## Saved System Configuration
 
 ```
 BEVsystemModel.slx
-  ├── BatteryHV         → Components/BatteryHV/Model/BatteryLumpedThermal.slx
-  ├── BMS               → Components/BMS/Model/BMS.slx
-  ├── MotorDrive        → Components/MotorDrive/Model/MotorDriveGearTh.slx
-  ├── Controller        → Components/Controller/Model/ControllerHVAC.slx
-  ├── Driveline         → Components/Driveline/Model/DrivelineWithBraking.slx
-  ├── Charger           → Components/Charger/Model/ChargerThermal.slx
-  ├── HVAC              → Components/HVAC/Model/HVACsimpleTh.slx
-  ├── Battery Pump      → Components/Pump/Model/Pump.slx
-  ├── Motor Pump        → Components/Pump/Model/Pump.slx
-  ├── DCDC              → Components/PumpDriver/Model/PumpDriverTh.slx
-  ├── Radiator          → Components/Radiator/Model/Radiator.slx
-  ├── BatteryHeater     → Components/BatteryHeater/Model/Heater.slx
-  └── Chiller           → Components/Chiller/Model/Chiller.slx
+  Controller.slx
+    BMS.slx
+      BMSSoCDirect.slx
+  VehicleElectroThermal.slx
+    BatteryTableBased.slx
+    MotorDriveGearTh.slx      (front and rear)
+    Driveline.slx
+    ChargerThermal.slx
+    HVACsimpleTh.slx
+    Chiller.slx
+    Heater.slx
+    Pump.slx                 (battery and motor loops)
+    PumpDriverTh.slx
+    Radiator.slx
 ```
 
-The system model is purely a wiring diagram. All physics, control, and parameter definitions live inside the component folders.
+The setup app changes these references in memory. See [vehicle templates](../Model/VehicleTemplate/README.md) and [setup presets](../Script_Data/Setup/Preset/README.md).
 
 Copyright 2026 The MathWorks, Inc.

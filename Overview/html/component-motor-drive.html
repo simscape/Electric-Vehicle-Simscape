@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Motor Drive — Electric Vehicle Design</title><link rel="stylesheet" href="assets/styles.css?v=20261028-3"></head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+  <header class="help-header"><div class="help-header-inner"><a class="help-brand" href="ElectricVehicleDesignOverview.html">MATLAB Help Center<small>Electric Vehicle Design with Simscape</small></a></div></header>
+  <div class="doc-shell">
+    <aside class="category-nav"><nav aria-label="Component reference navigation">
+      <ul class="nav-trail"><li><a href="ElectricVehicleDesignOverview.html">Documentation Home</a></li><li><a href="components.html">Components</a></li></ul>
+      <div class="nav-siblings-label">Electrical and Energy Storage</div>
+      <ul class="nav-siblings"><li><a href="component-battery.html">High-Voltage Battery</a></li><li><a href="component-charger.html">Charger</a></li><li aria-current="page"><span>Motor Drive</span></li><li><a href="component-pump-driver.html">Pump Driver</a></li></ul>
+      <div class="on-page"><div class="on-page-label">On this page</div><ul class="on-page-list"><li><a href="#description">Description</a></li><li><a href="#examples">Examples</a></li><li><a href="#interface">Interface</a></li><li><a href="#testing">Testing</a></li><li><a href="#see-also">See Also</a></li></ul></div>
+    <div class="nav-browse"><div class="on-page-label">Category</div><ul class="nav-browse-list"><li><a href="examples.html">Examples</a></li><li><a href="vehicle-range.html">Vehicle Models</a></li><li><a href="project-builder.html">Apps &amp; Utilities</a></li></ul></div>
+    </nav></aside>
+    <main class="doc-main" id="main-content">
+
+      <header class="product-intro reference-heading"><div><h1>Motor Drive</h1><p class="tagline">Electric traction motor, inverter, gearbox, losses, and thermal behavior</p><p class="library-path"><strong>Component path:</strong> Components / MotorDrive</p><div class="action-row"><a class="action" href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','MotorDrive','Model','MotorDriveGear.slx'))">Open Default Model</a><a class="action secondary" href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','MotorDrive','TestBench','MotorTestHarness.slx'))">Open Test Harness</a></div></div><figure class="component-header-image"><img src="Image/MotorDriveGearDescription_01.png" alt="MotorDriveGear model canvas"></figure></header>
+
+      <section id="description"><h2>Description</h2>
+    <div class="component-description-layout">
+      <div class="component-lede"><p>Electric motor drive unit component for the BEV system model. The motor drive converts electrical energy from the HV battery into mechanical torque delivered to the driveline through a fixed gear. Multiple fidelity levels are available, progressing from a fast electrical-only model through thermal-coupled and lubrication-aware variants.</p>
+        <div class="fidelity-decision"><strong>How to choose a fidelity</strong><p>Use <strong>MotorDriveGear</strong> for fast electrical-mechanical studies, <strong>MotorDriveGearTh</strong> when motor and inverter temperatures feed vehicle or durability results, and <strong>MotorDriveLube</strong> when gearbox oil losses and gearbox thermal states must close the efficiency balance.</p></div>
+      </div>
+
+    </div>
+    <h3 id="models">Fidelity at a glance</h3>
+    <div class="table-scroll"><table><thead><tr><th>Model</th><th>Description</th><th>Use case</th><th>Templates</th><th>Documentation &amp; files</th></tr></thead><tbody>
+<tr><td><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','MotorDrive','Model','MotorDriveGear.slx'))"><strong>MotorDriveGear</strong></a></td><td>Lumped motor with fixed gear at constant temperature.</td><td>Fast vehicle-level range estimation and controller tuning where motor thermal behavior is not needed.</td><td>VehicleElectric, VehicleElecAux</td><td><a href="matlab:web(fullfile(currentProject().RootFolder,'Components','MotorDrive','Documentation','html','MotorDriveGearDescription.html'),'-new')">Documentation</a> &middot; <a href="matlab:edit(fullfile(currentProject().RootFolder,'Components','MotorDrive','Model','MotorDriveGearParams.m'))">Parameters</a></td></tr>
+<tr id="model-motordrivegearth"><td><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','MotorDrive','Model','MotorDriveGearTh.slx'))"><strong>MotorDriveGearTh</strong></a></td><td>Full thermal coupling with motor and inverter coolant jacket.</td><td>Electro-thermal vehicle simulations where motor and inverter temperatures affect performance and range.</td><td>VehicleElectroThermal</td><td><a href="matlab:web(fullfile(currentProject().RootFolder,'Components','MotorDrive','Documentation','html','MotorDriveGearThDescription.html'),'-new')">Documentation</a> &middot; <a href="matlab:edit(fullfile(currentProject().RootFolder,'Components','MotorDrive','Model','MotorDriveGearThParams.m'))">Parameters</a></td></tr>
+<tr><td><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','MotorDrive','Model','MotorDriveLube.slx'))"><strong>MotorDriveLube</strong></a></td><td>Adds gearbox oil losses and thermal interface to the drive unit.</td><td>High-fidelity powertrain studies including gear lubrication effects on efficiency and thermal behavior.</td><td>VehicleElectroThermal</td><td><a href="matlab:web(fullfile(currentProject().RootFolder,'Components','MotorDrive','Documentation','html','MotorDriveLubeDescription.html'),'-new')">Documentation</a> &middot; <a href="matlab:edit(fullfile(currentProject().RootFolder,'Components','MotorDrive','Model','MotorDriveLubeParams.m'))">Parameters</a></td></tr>
+</tbody></table></div>
+    <h3>Where it participates</h3><ul>
+<li><strong>Range Estimation</strong> (<code>Workflow/Vehicle/RangeEstimation/</code>) &mdash; Motor drive losses directly affect vehicle range. MotorDriveGearTh is the default for electro-thermal runs.</li>
+<li><strong>Gear Ratio Selection</strong> (<code>Workflow/MotorDrive/GearRatioSelect/</code>) &mdash; Batch simulations compare winding and magnet temperatures across candidate gear ratios and report thermal Pass/Fail for each drive cycle.</li>
+<li><strong>Loss Map Generation</strong> (<code>Workflow/MotorDrive/GenerateMotInvLoss/</code>) &mdash; Detailed PMSM test bench and loss map generation for motor and inverter.</li>
+<li><strong>Inverter Life</strong> (<code>Workflow/MotorDrive/InverterLife/</code>) &mdash; Junction temperature cycling from the thermal motor model is used to predict inverter power module lifetime.</li>
+<li><strong>Thermal Durability</strong> (<code>Workflow/MotorDrive/ThermalDurability/</code>) &mdash; Drive-unit thermal behavior over extended duty cycles.</li>
+</ul></section>
+
+      <section id="examples"><h2>Examples</h2><div class="used-by"><strong>Workflows and models that use this component</strong>The motor drive is used by the gear ratio, loss map, thermal durability, and inverter life workflows, and by all shipped vehicle configurations.</div><div class="component-example-grid"><article class="component-example-card"><div class="card-header-bar"></div><img class="component-example-image" src="Image/MotorTestHarnessDescription_01.png" alt="MotorDrive example model canvas"><div class="component-example-body"><a href="workflow-loss-map.html">Generate Motor and Inverter Loss Maps</a><p><strong>Workflow</strong> &mdash; Generates loss data across motor operating points.</p></div></article>
+<article class="component-example-card"><div class="card-header-bar"></div><img class="component-example-image" src="Image/MotorTestHarnessDescription_01.png" alt="MotorDrive example model canvas"><div class="component-example-body"><a href="workflow-motor-thermal.html">Analyze Motor Drive Thermal Durability</a><p><strong>Workflow</strong> &mdash; Uses the electrothermal drive and shared thermal test bench.</p></div></article>
+<article class="component-example-card"><div class="card-header-bar"></div><img class="component-example-image" src="Image/MotorTestHarnessDescription_01.png" alt="MotorDrive example model canvas"><div class="component-example-body"><a href="workflow-gear-ratio.html">Select Gear Ratio for Electric Vehicle</a><p><strong>Workflow</strong> &mdash; Compares motor thermal response across candidate ratios.</p></div></article>
+<article class="component-example-card"><div class="card-header-bar"></div><img class="component-example-image" src="Image/MotorTestHarnessDescription_01.png" alt="MotorDrive example model canvas"><div class="component-example-body"><a href="workflow-inverter-life.html">Estimate Inverter Power Module End of Life</a><p><strong>Workflow</strong> &mdash; Uses inverter junction-temperature histories.</p></div></article>
+<article class="component-example-card"><div class="card-header-bar"></div><img class="component-example-image" src="Image/MotorTestHarnessDescription_01.png" alt="MotorDrive example model canvas"><div class="component-example-body"><a href="workflow-vehicle-range.html">Estimate Electric Vehicle Range</a><p><strong>Vehicle workflow</strong> &mdash; Uses MotorDrive with battery and driveline components.</p></div></article></div></section>
+
+      <section id="interface"><h2>Interface</h2><p class="section-intro">All three fidelities use torque and battery-status inputs, an HV electrical port, and an axle shaft port. <code>MotorDriveGearTh</code> and <code>MotorDriveLube</code> also read motor-speed feedback and add coolant ports. Use Simscape logging to inspect the thermal states computed by the selected model.</p>
+    <div class="table-scroll"><table><thead><tr><th>Port / signal</th><th>Direction</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>s.EMtrq</code></td><td>Input</td><td>Requested motor torque from the controller.</td></tr>
+<tr><td><code>s.Batt</code></td><td>Input</td><td>Battery relay state and HV bus voltage.</td></tr>
+<tr><td><code>s.EMrpm</code> <em>(thermal fidelities)</em></td><td>Input</td><td>Motor-speed feedback.</td></tr>
+<tr><td><code>HV</code></td><td>Conserving</td><td>High-voltage electrical connection.</td></tr>
+<tr><td><code>Ax</code></td><td>Conserving</td><td>Mechanical rotational axle connection.</td></tr>
+<tr><td><code>A</code>, <code>B</code> <em>(thermal fidelities)</em></td><td>Conserving</td><td>Thermal-liquid connections to the drive-unit coolant loop.</td></tr>
+<tr><td><code>m.EM</code></td><td>Output</td><td>Motor measurement sub-bus.</td></tr>
+<tr><td><code>m.energy</code></td><td>Output</td><td>Cumulative energy consumption.</td></tr>
+<tr><td><code>m.CoolTp</code> <em>(MotorDriveGear, MotorDriveLube)</em></td><td>Output</td><td>Fixed coolant temperature in MotorDriveGear; measured coolant temperature in MotorDriveLube.</td></tr>
+</tbody></table></div></section>
+
+      <section id="testing"><h2>Testing</h2><ul class="link-list"><li><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','MotorDrive','TestBench','MotorTestHarness.slx'))">Open Motor Test Harness</a> · <a href="matlab:web(fullfile(currentProject().RootFolder,'Components','MotorDrive','Documentation','html','MotorTestHarnessDescription.html'),'-new')">view documentation</a><p>Uses the shared Emotor library for independent drive-unit verification.</p></li><li><a href="matlab:runtests(fullfile(currentProject().RootFolder,'Components','MotorDrive','TestCase','MotorDrivePassTests.m'))">Run MotorDrive Component Tests</a><p>Run the maintained MotorDrive test case before integration.</p></li></ul></section>
+      <section id="see-also"><h2>See Also</h2><p class="see-also-links"><a href="workflow-loss-map.html">Loss Map Generation</a> | <a href="workflow-gear-ratio.html">Select Gear Ratio</a> | <a href="workflow-motor-thermal.html">Thermal Durability</a></p><h3>Topics</h3><ul><li><a href="component-driveline.html">Driveline</a></li><li><a href="vehicle-range.html#templates">Vehicle Templates</a></li></ul></section>
+    </main>
+  </div>
+  <script src="assets/app.js?v=20260930-6"></script>
+</body></html>

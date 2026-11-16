@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>HVAC — Electric Vehicle Design</title><link rel="stylesheet" href="assets/styles.css?v=20261028-3"></head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+  <header class="help-header"><div class="help-header-inner"><a class="help-brand" href="ElectricVehicleDesignOverview.html">MATLAB Help Center<small>Electric Vehicle Design with Simscape</small></a></div></header>
+  <div class="doc-shell">
+    <aside class="category-nav"><nav aria-label="Component reference navigation">
+      <ul class="nav-trail"><li><a href="ElectricVehicleDesignOverview.html">Documentation Home</a></li><li><a href="components.html">Components</a></li></ul>
+      <div class="nav-siblings-label">Thermal and Fluid</div>
+      <ul class="nav-siblings"><li><a href="component-battery-heater.html">Battery Heater</a></li><li><a href="component-chiller.html">Chiller</a></li><li aria-current="page"><span>HVAC</span></li><li><a href="component-pump.html">Pump</a></li><li><a href="component-radiator.html">Radiator</a></li></ul>
+      <div class="on-page"><div class="on-page-label">On this page</div><ul class="on-page-list"><li><a href="#description">Description</a></li><li><a href="#examples">Examples</a></li><li><a href="#interface">Interface</a></li><li><a href="#testing">Testing</a></li><li><a href="#see-also">See Also</a></li></ul></div>
+    <div class="nav-browse"><div class="on-page-label">Category</div><ul class="nav-browse-list"><li><a href="examples.html">Examples</a></li><li><a href="vehicle-range.html">Vehicle Models</a></li><li><a href="project-builder.html">Apps &amp; Utilities</a></li></ul></div>
+    </nav></aside>
+    <main class="doc-main" id="main-content">
+
+      <header class="product-intro reference-heading"><div><h1>HVAC</h1><p class="tagline">Cabin climate and auxiliary thermal-load model</p><p class="library-path"><strong>Component path:</strong> Components / HVAC</p><div class="action-row"><a class="action" href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','HVAC','Model','HVACsimpleTh.slx'))">Open Default Model</a><a class="action secondary" href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','HVAC','TestBench','HVACTestHarness.slx'))">Open Test Harness</a></div></div><figure class="component-header-image"><img src="Image/HVACSimpleThDescription_01.png" alt="HVACsimpleTh model canvas"></figure></header>
+
+      <section id="description"><h2>Description</h2>
+    <div class="component-description-layout">
+      <div class="component-lede"><p>Heating, ventilation, and air conditioning component for the BEV system model. The HVAC subsystem manages cabin comfort by controlling blower airflow, PTC heating, and compressor-based cooling. It draws power from the HV bus and has a significant impact on vehicle range, especially under extreme ambient conditions. Two fidelity levels are available.</p>
+        <div class="fidelity-decision"><strong>How to choose a fidelity</strong><p>Use <strong>HVACsimpleTh</strong> when cabin temperature is a state that must respond to ambient conditions, occupants, heating, and cooling. Use <strong>HVACEmpiricalRef</strong> for faster energy-demand studies driven by calibrated performance maps rather than physical cabin and refrigerant dynamics.</p></div>
+      </div>
+
+    </div>
+    <h3 id="models">Fidelity at a glance</h3>
+    <div class="table-scroll"><table><thead><tr><th>Model</th><th>Description</th><th>Use case</th><th>Templates</th><th>Documentation &amp; files</th></tr></thead><tbody>
+<tr><td><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','HVAC','Model','HVACEmpiricalRef.slx'))"><strong>HVACEmpiricalRef</strong></a></td><td>Lookup-table-driven cabin and refrigeration performance.</td><td>Fast cabin-comfort and HVAC energy-demand studies where refrigerant loop dynamics are not needed.</td><td>VehicleElecAux, VehicleElectroThermal</td><td><a href="matlab:web(fullfile(currentProject().RootFolder,'Components','HVAC','Documentation','html','HVACEmpiricalRefDescription.html'),'-new')">Documentation</a> &middot; <a href="matlab:edit(fullfile(currentProject().RootFolder,'Components','HVAC','Model','HVACEmpiricalRefParams.m'))">Parameters</a></td></tr>
+<tr><td><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','HVAC','Model','HVACsimpleTh.slx'))"><strong>HVACsimpleTh</strong></a></td><td>Cabin air volume, heat transfer, blower, cooler, and PTC heater.</td><td>System-level range estimation studies where cabin temperature response and HVAC energy consumption matter.</td><td>VehicleElecAux, VehicleElectroThermal</td><td><a href="matlab:web(fullfile(currentProject().RootFolder,'Components','HVAC','Documentation','html','HVACSimpleThDescription.html'),'-new')">Documentation</a> &middot; <a href="matlab:edit(fullfile(currentProject().RootFolder,'Components','HVAC','Model','HVACsimpleThParams.m'))">Parameters</a></td></tr>
+</tbody></table></div>
+    <h3>Where it participates</h3><ul>
+<li><strong>Range Estimation</strong> (<code>Workflow/Vehicle/RangeEstimation/</code>) &mdash; HVAC power consumption is a major factor in range under cold (heating) and hot (cooling) ambient conditions. The AC on/off flag directly toggles HVAC load in the simulation.</li>
+<li><strong>Electro-Thermal Vehicle Studies</strong> &mdash; HVACsimpleTh and HVACEmpiricalRef are used in the VehicleElectroThermal template for cabin-comfort analysis.</li>
+</ul></section>
+
+      <section id="examples"><h2>Examples</h2><div class="used-by"><strong>Workflows and models that use this component</strong>The HVAC is used by auxiliary and electrothermal vehicle configurations to model cabin-comfort energy demand under hot and cold ambient conditions.</div><div class="component-example-grid"><article class="component-example-card"><div class="card-header-bar"></div><img class="component-example-image" src="Image/HVACTestHarnessDescription_01.png" alt="HVAC example model canvas"><div class="component-example-body"><a href="workflow-vehicle-range.html">Estimate Range with HVAC Loads</a><p><strong>Vehicle workflow</strong> &mdash; Compares energy use across ambient and cabin conditions.</p></div></article>
+</div></section>
+
+      <section id="interface"><h2>Interface</h2><p class="section-intro">Both fidelities share the same control-signal boundary so variants can be exchanged in place. Outputs differ in whether cabin temperature comes from thermal dynamics or empirical curves.</p>
+    <div class="table-scroll"><table><thead><tr><th>Port / signal</th><th>Direction</th><th>Description</th></tr></thead><tbody>
+<tr><td>Environment temperature</td><td>Input</td><td>Ambient air temperature.</td></tr>
+<tr><td>Blower command</td><td>Input</td><td>Blower speed or enable signal.</td></tr>
+<tr><td>PTC command</td><td>Input</td><td>Cabin heater power command.</td></tr>
+<tr><td>Compressor command</td><td>Input</td><td>AC compressor enable.</td></tr>
+<tr><td>Cabin Temperature</td><td>Output</td><td>Simulated cabin air temperature.</td></tr>
+<tr><td>HVAC Energy</td><td>Output</td><td>Cumulative HVAC energy consumption.</td></tr>
+<tr><td>Blower/Cooler/PTC States</td><td>Output</td><td>Operating states of HVAC actuators.</td></tr>
+</tbody></table></div></section>
+
+      <section id="testing"><h2>Testing</h2><ul class="link-list"><li><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','HVAC','TestBench','HVACTestHarness.slx'))">Open HVAC Test Harness</a> · <a href="matlab:web(fullfile(currentProject().RootFolder,'Components','HVAC','Documentation','html','HVACTestHarnessDescription.html'),'-new')">view documentation</a><p>Verify cabin temperature response and HVAC energy consumption under controlled ambient conditions.</p></li><li><a href="matlab:runtests(fullfile(currentProject().RootFolder,'Components','HVAC','TestCase','HVACPassTests.m'))">Run HVAC Component Tests</a><p>Run the maintained HVAC test case before integration.</p></li></ul></section>
+      <section id="see-also"><h2>See Also</h2><p class="see-also-links"><a href="component-chiller.html">Chiller</a> | <a href="component-battery-heater.html">Battery Heater</a> | <a href="component-controller.html">Vehicle Controller</a></p><h3>Topics</h3><ul><li><a href="vehicle-range.html#templates">VehicleElectroThermal</a></li><li><a href="workflow-vehicle-range.html">Estimate Vehicle Range</a></li></ul></section>
+    </main>
+  </div>
+  <script src="assets/app.js?v=20260930-6"></script>
+</body></html>

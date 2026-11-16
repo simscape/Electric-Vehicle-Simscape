@@ -1,72 +1,50 @@
-# Test
+# Project Tests
 
-System-level and workflow tests for the BEV Simscape project. All test classes inherit from `BaseTest` which handles working folder setup, figure/model cleanup, and warning suppression.
+System and workflow test classes use `BaseTest` for shared fixtures and cleanup. The parameterized smoke-test framework uses `ProjectSmokeTests`, which inherits `matlab.unittest.TestCase` directly.
 
-Component-level tests are inside each component folder (`Components/<Name>/TestCase/`).
-
-### Test Locations
+## Test Locations
 
 | Location | Scope |
 |----------|-------|
-| `Test/` | System-level simulation and workflow tests |
-| `Components/<Name>/TestCase/` | Per-component unit tests |
-| `APP/Test/` | BEV Setup App configuration and UI tests |
+| `Test/` | System and workflow test classes |
+| `Components/<Name>/TestCase/` | Component tests |
+| [utils/APP/Test](../utils/APP/Test/README.md) | Setup-app unit tests and standalone UI check |
+| `Test/CheckProject/` | MATLAB Project checks |
+| `Test/Framework/` | Discovery, execution, and report utilities |
 
-## Folder Structure
-
-```
-Test/
-  BaseTest.m                          -- Base test class (shared fixtures)
-  BEVSystemMainModel.m                -- System model simulation tests
-  BatteryWorkflowTests.m              -- Battery workflow tests
-  MotorDriveWorkflowTests.m           -- Motor drive workflow tests
-  VehicleWorkflowTests.m              -- Vehicle workflow tests
-  CheckProject/
-    BEVProjectCheckProject.m          -- Project integrity checks
-    BEVProjectRuntestsCheckProject.m  -- CI runner with JUnit XML + coverage
-```
-
-## Test Classes
-
-| Class | Inherits | What It Tests |
-|-------|----------|---------------|
-| `BaseTest` | `matlab.unittest.TestCase` | Shared setup: working folder fixture, open figure/model tracking, teardown cleanup |
-| `BEVSystemMainModel` | `BaseTest` | Simulates `BEVsystemModel` under Default, PlantAbstract, and PlantElectroThermal configurations |
-| `BatteryWorkflowTests` | `BaseTest` | Battery sizing, `.mlx` workflows, virtual sensor neural net |
-| `MotorDriveWorkflowTests` | `BaseTest` | Gear ratio selection, motor inverter loss generation, thermal bench run and plot |
-| `VehicleWorkflowTests` | `BaseTest` | Range estimation scripts (NEDC, WLTC) and `.mlx` workflow |
-
-## CI / Check Project
+## Test Classes and Runners
 
 | File | Purpose |
 |------|---------|
-| `BEVProjectCheckProject.m` | Runs `runChecks(prj)` on the MATLAB project and asserts all checks pass |
-| `BEVProjectRuntestsCheckProject.m` | Creates test suite, runs with JUnit XML output and code coverage report |
+| `BaseTest.m` | Shared working-folder, figure, model, and warning fixtures |
+| `BEVSystemMainModel.m` | Simulate system configurations |
+| `BatteryWorkflowTests.m` | Battery sizing and virtual-sensor workflows |
+| `MotorDriveWorkflowTests.m` | Gear-ratio, loss-map, and thermal workflows |
+| `VehicleWorkflowTests.m` | Range-estimation workflows |
+| `BEVProjectTests.m` | Run system/workflow and component suites with reports |
+| `CheckProject/BEVProjectCheckProject.m` | Verify MATLAB Project checks |
+| `CheckProject/BEVProjectRuntestsCheckProject.m` | Project-check runner with reports |
+| `Framework/ProjectSmokeTests.m` | Parameterized model and workflow smoke tests |
+| `Framework/TestFileDiscovery.m` | Discover included targets and apply exclusions |
+| `Framework/TestExecutor.m` | Build suites, run tests, and generate reports |
+| `Framework/TestReportBuilder.m` | Build the framework report |
 
-## APP Tests
-
-Tests under `APP/Test/` verify the BEV Setup App configuration layer:
-
-| File | Purpose |
-|------|---------|
-| `BuildComponentEntriesTest.m` | Validates component entry struct generation for all components |
-| `BEVFidelityTest.m` | Compile-checks every template × fidelity combination from JSON config |
-| `BEVFidelityAppCheck.m` | Drives the app UI to validate setup output for all fidelity variants |
-| `BEVHyperlinkTest.m` | Validates all hyperlinks and image references across project HTML files |
-| `BEVPresetTest.m` | Clears workspace, applies each discovered preset, and compile-checks the model |
-| `runBEVFidelityReport.m` | Generates a summary report of fidelity coverage across presets |
-| `runBEVHyperlinkReport.m` | Generates HTML + JUnit report for hyperlink validation |
+See [the test-framework guide](Documentation/TestFrameworkHome.html) for configuration and discovery.
 
 ## Running Tests
 
-```matlab
-% System-level and workflow tests
-results = runtests('Test');
-disp(results);
+Open `ElectricVehicleSimscape.prj` before running tests.
 
-% APP configuration tests
-appResults = runtests('APP/Test');
-disp(appResults);
+```matlab
+root = currentProject().RootFolder;
+
+% Run one system test class
+results = runtests(fullfile(root, 'Test', 'BEVSystemMainModel.m'));
+
+% Run app unit tests
+appResults = runtests(fullfile(root, 'utils', 'APP', 'Test'));
 ```
+
+For the maintained system/workflow/component runner, run `BEVProjectTests`. It excludes the virtual-sensor Live Script test from that suite. Component and app suites have different scopes; inspect results before claiming whole-project coverage.
 
 Copyright 2022 - 2026 The MathWorks, Inc.

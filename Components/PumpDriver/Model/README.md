@@ -12,25 +12,23 @@ This folder contains the DC-DC pump driver Simulink models and parameter scripts
 
 ### Description
 
-Simplified DC-DC converter that translates thermal management status signals and pump enable commands into shaft speed setpoints for the coolant circulation pump. This variant has no coolant ports or thermal coupling - it provides only the electrical conversion and control logic.
+DC-DC converter supplying the LV bus from HV electrical power. No coolant ports or signal commands.
 
 ### Workflows
 
 - Non-thermal DCDC variant used in the **VehicleElecAux** template.
-- Pairs with PumpDummy to provide pump control without coolant loop modelling.
+- Supplies PumpDummy's electrical load.
 
-### Inputs
+### Input / Output Bus
 
-| Signal | Description |
-|--------|-------------|
-| Thermal status | System temperatures and thermal controller commands |
-| Pump enable | Enable signal from the thermal management controller |
+No Simulink signal bus interface. Operates entirely through physical connections.
 
-### Outputs
+### Physical Ports
 
-| Signal | Description |
-|--------|-------------|
-| Pump speed command | Shaft speed setpoint for the Pump |
+| Port | Domain | Description |
+|------|--------|-------------|
+| HV | Electrical | High-voltage bus input |
+| LV | Electrical | Low-voltage bus output |
 
 ### Key Parameters
 
@@ -49,7 +47,7 @@ Simplified DC-DC converter that translates thermal management status signals and
 
 ### Description
 
-Controller that converts thermal management status signals and pump enable commands into shaft speed setpoints for the coolant circulation pump. The PumpDriverTh determines the required coolant flow rate based on the thermal state of the system (battery temperature, motor temperature, etc.) and drives the Pump component accordingly. Includes thermal coupling for coolant interaction.
+DC-DC converter with converter thermal mass and coolant-jacket heat exchange. Supplies LV electrical power; pump commands come from the vehicle controller.
 
 ### Workflows
 
@@ -57,18 +55,18 @@ Controller that converts thermal management status signals and pump enable comma
 - Pairs with the Pump component to form the coolant circulation subsystem.
 - Parameters include coolant pipe and jacket dimensions shared with other thermal components.
 
-### Inputs
+### Input / Output Bus
 
-| Signal | Description |
-|--------|-------------|
-| Thermal status | System temperatures and thermal controller commands |
-| Pump enable | Enable signal from the thermal management controller |
+No Simulink signal bus interface. Operates entirely through physical connections.
 
-### Outputs
+### Physical Ports
 
-| Signal | Description |
-|--------|-------------|
-| Pump speed command | Shaft speed setpoint for the Pump |
+| Port | Domain | Description |
+|------|--------|-------------|
+| HV | Electrical | High-voltage bus input |
+| LV | Electrical | Low-voltage bus output |
+| A | Thermal liquid | Coolant port |
+| B | Thermal liquid | Coolant port |
 
 ### Key Parameters
 

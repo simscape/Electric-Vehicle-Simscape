@@ -18,7 +18,6 @@ vehBlk    = 'BEVsystemModel/Vehicle';
 controlBlk = 'BEVsystemModel/Controller';
 vehTarget = 'VehicleElectric';
 setRef(vehBlk, vehTarget);
-saveAll(topModelName);
 
 % ---- Apply component references ----
 setRef('BEVsystemModel/Vehicle/Battery', 'BatteryLumped');
@@ -30,21 +29,16 @@ alignMaskFields('BEVsystemModel/Vehicle/Front Motor (EM1)', {'max_torque','max_p
 setRef('BEVsystemModel/Vehicle/Charger', 'Charger');
 alignMaskFields('BEVsystemModel/Vehicle/Charger', {'MaxVolt','Kp','Ki','Kaw','CC_A'}, {'batteryCharger','batteryCharger','batteryCharger','batteryCharger','batteryCharger'});
 setRef('BEVsystemModel/Vehicle/Driveline', 'Driveline');
-alignMaskFields('BEVsystemModel/Vehicle/Driveline', {'tireRollingRadius_cm','vehMass_kg','MaxSpeed','BrakeFactor'}, {'driveline','driveline','driveline','vehicle'});
+alignMaskFields('BEVsystemModel/Vehicle/Driveline', {'tireRollingRadius_cm','vehMass_kg','MaxSpeed','BrakeFactor'}, {'drivetrain','drivetrain','drivetrain','controller'});
 setRef('BEVsystemModel/Controller', 'ControllerFRM');
-set_param('BEVsystemModel/Drive Cycle Source','cycleVar','FTP72');
-saveAll(topModelName);
-disp('Setup complete and saved.');
+set_param('BEVsystemModel/HMI/AWD', 'Value', '1');
+set_param('BEVsystemModel/HMI/BatCmd Input', 'Value', '3');
+set_param('BEVsystemModel/Drive Cycle Source','cycleVar','FTP75');
+disp('Setup complete.');
 
 % ================= Helpers =================
 function setRef(blockPath, refTarget)
     set_param(blockPath, 'ReferencedSubsystem', refTarget);
-end
-
-function saveAll(mdl)
-    try save_system(mdl, 'SaveDirtyReferencedModels', 'on');
-    catch, save_system(mdl);
-    end
 end
 
 function alignMaskFields(blockPath, targetFields, targetNs)

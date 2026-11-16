@@ -25,18 +25,28 @@
 open_system('MotorDriveGear')
 
 %% Ports
-% *Inputs*
 %
-% * *Torque command* - Requested motor torque from the controller.
-% * *Control signals* - Enable, mode, and limit signals.
-% * *Battery signals* - HV bus voltage and current availability.
-%
-% *Outputs*
-%
-% * *Motor Torque* - Delivered mechanical torque.
-% * *Motor Speed* - Rotor speed.
-% * *Electrical Power* - Power drawn from the HV bus.
-% * *Energy* - Cumulative energy consumption.
+% <html>
+% <h3>Input Bus &mdash; <code>s</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>EMtrq</td><td>Motor torque command</td></tr>
+% <tr><td>Batt</td><td>Battery status sub-bus (Relay.RelayDchg, BattSensor.BatVolt)</td></tr>
+% </table>
+% <h3>Output Bus &mdash; <code>m</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Signal</th><th>Description</th></tr>
+% <tr><td>EM</td><td>Motor measurement sub-bus</td></tr>
+% <tr><td>energy</td><td>Cumulative energy consumed</td></tr>
+% <tr><td>CoolTp</td><td>Coolant temperature (fixed constant)</td></tr>
+% </table>
+% <h3>Physical Ports</h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Port</th><th>Domain</th><th>Description</th></tr>
+% <tr><td>HV</td><td>Electrical</td><td>High-voltage bus connection</td></tr>
+% <tr><td>Ax</td><td>Mechanical rotational</td><td>Axle output shaft</td></tr>
+% </table>
+% </html>
 
 %% Workflows
 % The MotorDriveGear block is listed in the *VehicleElectric* and

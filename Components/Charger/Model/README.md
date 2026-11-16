@@ -19,20 +19,22 @@ Constant-current / constant-voltage (CC-CV) charging controller without thermal 
 - Listed in the **VehicleElectric** and **VehicleElecAux** templates in `VehicleTemplateConfig.json`.
 - Suitable for electrical-only charging studies without thermal management.
 
-### Inputs
+### Input Bus — `s`
 
 | Signal | Description |
 |--------|-------------|
-| Relay command | Enables charger connection to the HV bus |
-| Battery cell voltage | Feedback for CC-CV transition |
-| Charging state | Charge enable and mode signal from the BMS |
+| Batt.Relay.RelayChg | Charge relay command |
+| Batt.BattSensor.CellVoltMax | Maximum cell voltage for CC-CV transition |
 
-### Outputs
+### Output Bus
 
-| Signal | Description |
-|--------|-------------|
-| Charging Current | Current delivered to the battery pack |
-| HV Power | Electrical power drawn from the grid |
+No output bus. Operates via physical HV port only.
+
+### Physical Ports
+
+| Port | Domain | Description |
+|------|--------|-------------|
+| HV | Electrical | High-voltage bus connection |
 
 ---
 
@@ -50,20 +52,21 @@ Minimal stub charger providing the same port interface as the full Charger model
 
 - Placeholder variant for integration testing or when charger behavior is not under study.
 
-### Inputs
+### Input Bus — `s`
 
 | Signal | Description |
 |--------|-------------|
-| Relay command | Charger enable |
-| Battery cell voltage | CC-CV feedback (passed through) |
-| Charging state | Charge mode signal |
+| (terminated) | Input bus `s` is terminated in this fidelity |
 
-### Outputs
+### Output Bus
 
-| Signal | Description |
-|--------|-------------|
-| Charging Current | Nominal or zero current |
-| HV Power | Nominal or zero power |
+No output bus.
+
+### Physical Ports
+
+| Port | Domain | Description |
+|------|--------|-------------|
+| HV | Electrical | High-voltage bus connection |
 
 ---
 
@@ -80,25 +83,26 @@ CC-CV charger with a thermal representation of the power converter. The controll
 ### Workflows
 
 - Used in the **VehicleElectroThermal** template for full-thermal charging studies.
-- Parameters loaded by `BEVSystemModelParams.m` (via `ChargerThermalParams.m`).
 - Referenced by the charger test harness (`ChargerTestHarness.slx`).
 
-### Inputs
+### Input Bus — `s`
 
 | Signal | Description |
 |--------|-------------|
-| Relay command | Charger enable |
-| Battery cell voltage | CC-CV transition feedback |
-| Charging status | Charge mode from BMS |
-| Coolant port | Thermal-liquid interface for converter cooling |
+| Batt.Relay.RelayChg | Charge relay command |
+| Batt.BattSensor.CellVoltMax | Maximum cell voltage for CC-CV transition |
 
-### Outputs
+### Output Bus
 
-| Signal | Description |
-|--------|-------------|
-| Charging Current | Current delivered to the battery |
-| HV Power | Electrical power consumed |
-| Converter Thermal States | Converter temperature, heat flow to coolant |
+No output bus.
+
+### Physical Ports
+
+| Port | Domain | Description |
+|------|--------|-------------|
+| HV | Electrical | High-voltage bus connection |
+| A | Thermal liquid | Coolant port |
+| B | Thermal liquid | Coolant port |
 
 ---
 
@@ -116,22 +120,24 @@ Dummy variant of the thermal charger. Exposes the same thermal ports as ChargerT
 
 - Placeholder for thermal-loop integration testing.
 
-### Inputs
+### Input Bus — `s`
 
 | Signal | Description |
 |--------|-------------|
-| Relay command | Charger enable |
-| Battery cell voltage | CC-CV feedback |
-| Charging status | Charge mode signal |
-| Coolant port | Thermal-liquid interface (pass-through) |
+| Batt.Relay.RelayChg | Charge relay command |
+| Batt.BattSensor.CellVoltMax | Maximum cell voltage |
 
-### Outputs
+### Output Bus
 
-| Signal | Description |
-|--------|-------------|
-| Charging Current | Nominal or zero current |
-| HV Power | Nominal or zero power |
-| Converter Thermal States | Minimal thermal output |
+No output bus.
+
+### Physical Ports
+
+| Port | Domain | Description |
+|------|--------|-------------|
+| HV | Electrical | High-voltage bus connection |
+| A | Thermal liquid | Coolant port (pass-through) |
+| B | Thermal liquid | Coolant port (pass-through) |
 
 ---
 
@@ -146,4 +152,4 @@ Dummy variant of the thermal charger. Exposes the same thermal ports as ChargerT
 | Coolant jacket channel diameter | 0.0092 | m |
 | Initial coolant temperature | 298.15 | K |
 
-Copyright 2022 - 2025 The MathWorks, Inc.
+Copyright 2022 - 2026 The MathWorks, Inc.

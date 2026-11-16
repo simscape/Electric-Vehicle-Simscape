@@ -7,9 +7,9 @@ This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
       -->
 <title>Controller</title>
-<meta name="generator" content="MATLAB 26.1">
+<meta name="generator" content="MATLAB 25.2">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2026-04-21">
+<meta name="DC.date" content="2026-05-06">
 <meta name="DC.source" content="ControllerDescription.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
@@ -114,39 +114,33 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <p>
 <b>Thermal Coupling:</b> No</p>
 <h2 id="2">Open Model</h2>
-<pre class="codeinput">open_system(<span class="string">'Controller'</span>)
-</pre>
-<img vspace="5" hspace="5" src="images/ControllerDescription_01.png" alt=""> <h2 id="3">Ports</h2>
+<img vspace="5" hspace="5" src="images/ControllerDescription_01.png" alt=""> <img vspace="5" hspace="5" src="images/ControllerDescription_02.png" alt=""> <h2 id="3">Ports</h2>
 <p>
-<b>Inputs</b>
+<h3>Inputs</h3>
+<table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+<tr><th>Port</th><th>Type</th><th>Description</th></tr>
+<tr><td>Spd</td><td>Scalar</td><td>Drive cycle speed reference</td></tr>
+<tr><td>(measurement bus)</td><td>Bus</td><td>Feedback: m.DV.VehSpd, m.M1.EM.EMrpm, m.M1.EM.coilT, m.BA.CoolTp, BA.BattSens, Env.Tenv, VA.Tcabin</td></tr>
+<tr><td>BMS</td><td>Bus element</td><td>BMS sensor signals (faults, limits, SOC)</td></tr>
+<tr><td>AWD</td><td>Bus element</td><td>AWD mode flag</td></tr>
+</table>
+<h3>Output Bus &mdash; <code>s</code></h3>
+<table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+<tr><th>Sub-bus</th><th>Key Signals</th><th>Description</th></tr>
+<tr><td>DV</td><td>BrkCmd</td><td>Driveline brake command</td></tr>
+<tr><td>Battery</td><td>RelayPos, RelayNeg</td><td>Battery relay commands</td></tr>
+<tr><td>EM1</td><td>EMtrq, Batt</td><td>Front motor torque command</td></tr>
+<tr><td>EM2</td><td>EMtrq, Batt</td><td>Rear motor torque command</td></tr>
+<tr><td>Charger</td><td>Batt</td><td>Charger mode signal</td></tr>
+<tr><td>Radiator</td><td>cmdFan, Env, VehSpd</td><td>Radiator fan control</td></tr>
+<tr><td>MotorPump</td><td>cmdPump, BatSt</td><td>Motor coolant pump</td></tr>
+<tr><td>BatteryPump</td><td>cmdPump, BatSt</td><td>Battery coolant pump</td></tr>
+<tr><td>Heater</td><td>cmdHeater, BatSt</td><td>Battery heater</td></tr>
+<tr><td>HVAC</td><td>Env, Batt, Cntrl</td><td>HVAC cabin commands</td></tr>
+<tr><td>ChillerValve</td><td>cmdChillerByp</td><td>Chiller bypass valve</td></tr>
+<tr><td>ControlValve</td><td>cmdParallelSerieal</td><td>Coolant control valve</td></tr>
+</table>
 </p>
-<div>
-<ul>
-<li>
-<b>Drive cycle speed reference</b> - Target vehicle speed from the drive cycle source.</li>
-<li>
-<b>Vehicle speed feedback</b> - Measured vehicle speed from the driveline.</li>
-<li>
-<b>Battery status</b> - SOC, voltage, and current from the BMS.</li>
-<li>
-<b>BMS relay commands</b> - Battery connection state.</li>
-</ul>
-</div>
-<p>
-<b>Outputs</b>
-</p>
-<div>
-<ul>
-<li>
-<b>Front axle torque command</b> - Torque request to front motor (EM1).</li>
-<li>
-<b>Rear axle torque command</b> - Torque request to rear motor (EM2).</li>
-<li>
-<b>Brake command</b> - Mechanical braking torque request.</li>
-<li>
-<b>Battery command</b> - Charge/discharge mode signal.</li>
-</ul>
-</div>
 <h2 id="4">Workflows</h2>
 <p>The Controller is the <b>default vehicle controller</b> selected by <tt>SetupPlantElectroThermal.m</tt> for the VehicleElectroThermal template. It is used in all range estimation workflows (NEDC, WLTC, EPA) and battery sizing workflows. Dashboard parameters (AWD, regen, charging mode) are set by <tt>modelDashboardSetup.m</tt> in the BEV Setup App.</p>
 <h2 id="5">Parameters</h2>
@@ -175,7 +169,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 </ul>
 </div>
 <p class="footer">Copyright 2022 - 2026 The MathWorks, Inc.<br>
-<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2026a</a>
+<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2025b</a>
 <br>
 </p>
 </div>
@@ -202,19 +196,33 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 open_system('Controller')
 
 %% Ports
-% *Inputs*
 %
-% * *Drive cycle speed reference* - Target vehicle speed from the drive cycle source.
-% * *Vehicle speed feedback* - Measured vehicle speed from the driveline.
-% * *Battery status* - SOC, voltage, and current from the BMS.
-% * *BMS relay commands* - Battery connection state.
-%
-% *Outputs*
-%
-% * *Front axle torque command* - Torque request to front motor (EM1).
-% * *Rear axle torque command* - Torque request to rear motor (EM2).
-% * *Brake command* - Mechanical braking torque request.
-% * *Battery command* - Charge/discharge mode signal.
+% <html>
+% <h3>Inputs</h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Port</th><th>Type</th><th>Description</th></tr>
+% <tr><td>Spd</td><td>Scalar</td><td>Drive cycle speed reference</td></tr>
+% <tr><td>(measurement bus)</td><td>Bus</td><td>Feedback: m.DV.VehSpd, m.M1.EM.EMrpm, m.M1.EM.coilT, m.BA.CoolTp, BA.BattSens, Env.Tenv, VA.Tcabin</td></tr>
+% <tr><td>BMS</td><td>Bus element</td><td>BMS sensor signals (faults, limits, SOC)</td></tr>
+% <tr><td>AWD</td><td>Bus element</td><td>AWD mode flag</td></tr>
+% </table>
+% <h3>Output Bus &mdash; <code>s</code></h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Sub-bus</th><th>Key Signals</th><th>Description</th></tr>
+% <tr><td>DV</td><td>BrkCmd</td><td>Driveline brake command</td></tr>
+% <tr><td>Battery</td><td>RelayPos, RelayNeg</td><td>Battery relay commands</td></tr>
+% <tr><td>EM1</td><td>EMtrq, Batt</td><td>Front motor torque command</td></tr>
+% <tr><td>EM2</td><td>EMtrq, Batt</td><td>Rear motor torque command</td></tr>
+% <tr><td>Charger</td><td>Batt</td><td>Charger mode signal</td></tr>
+% <tr><td>Radiator</td><td>cmdFan, Env, VehSpd</td><td>Radiator fan control</td></tr>
+% <tr><td>MotorPump</td><td>cmdPump, BatSt</td><td>Motor coolant pump</td></tr>
+% <tr><td>BatteryPump</td><td>cmdPump, BatSt</td><td>Battery coolant pump</td></tr>
+% <tr><td>Heater</td><td>cmdHeater, BatSt</td><td>Battery heater</td></tr>
+% <tr><td>HVAC</td><td>Env, Batt, Cntrl</td><td>HVAC cabin commands</td></tr>
+% <tr><td>ChillerValve</td><td>cmdChillerByp</td><td>Chiller bypass valve</td></tr>
+% <tr><td>ControlValve</td><td>cmdParallelSerieal</td><td>Coolant control valve</td></tr>
+% </table>
+% </html>
 
 %% Workflows
 % The Controller is the *default vehicle controller* selected by

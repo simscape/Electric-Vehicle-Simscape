@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Vehicle Controller — Electric Vehicle Design</title><link rel="stylesheet" href="assets/styles.css?v=20261028-3"></head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+  <header class="help-header"><div class="help-header-inner"><a class="help-brand" href="ElectricVehicleDesignOverview.html">MATLAB Help Center<small>Electric Vehicle Design with Simscape</small></a></div></header>
+  <div class="doc-shell">
+    <aside class="category-nav"><nav aria-label="Component reference navigation">
+      <ul class="nav-trail"><li><a href="ElectricVehicleDesignOverview.html">Documentation Home</a></li><li><a href="components.html">Components</a></li></ul>
+      <div class="nav-siblings-label">Controls</div>
+      <ul class="nav-siblings"><li><a href="component-bms.html">Battery Management System</a></li><li aria-current="page"><span>Vehicle Controller</span></li></ul>
+      <div class="on-page"><div class="on-page-label">On this page</div><ul class="on-page-list"><li><a href="#description">Description</a></li><li><a href="#examples">Examples</a></li><li><a href="#interface">Interface</a></li><li><a href="#testing">Testing</a></li><li><a href="#see-also">See Also</a></li></ul></div>
+    <div class="nav-browse"><div class="on-page-label">Category</div><ul class="nav-browse-list"><li><a href="examples.html">Examples</a></li><li><a href="vehicle-range.html">Vehicle Models</a></li><li><a href="project-builder.html">Apps &amp; Utilities</a></li></ul></div>
+    </nav></aside>
+    <main class="doc-main" id="main-content">
+
+      <header class="product-intro reference-heading"><div><h1>Vehicle Controller</h1><p class="tagline">Supervisory control for electrical and electrothermal vehicles</p><p class="library-path"><strong>Component path:</strong> Components / Controller</p><div class="action-row"><a class="action" href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','Controller','Model','Controller.slx'))">Open Default Model</a><a class="action secondary" href="matlab:open_system(fullfile(currentProject().RootFolder,'Model','BEVsystemModel.slx'))">Open Vehicle Model</a></div></div><figure class="component-header-image"><img src="Image/ControllerDescription_01.png" alt="Controller model canvas"></figure></header>
+
+      <section id="description"><h2>Description</h2>
+    <div class="component-description-layout">
+      <div class="component-lede"><p>Vehicle controller for the BEV system model. Manages torque distribution, regenerative braking, and drive-mode selection. Multiple controller variants are available for different simulation fidelities. For the battery management system, see the <a href="component-bms.html">BMS component</a>.</p>
+        <div class="fidelity-decision"><strong>How to choose a fidelity</strong><p>Use <strong>Controller</strong> for the maintained full torque, AWD, and regenerative-braking logic; <strong>ControllerFRM</strong> for large sweeps where controller execution cost dominates; and <strong>ControllerHVAC</strong> when cabin commands must be coordinated with propulsion control.</p></div>
+      </div>
+
+    </div>
+    <h3 id="models">Fidelity at a glance</h3>
+    <div class="table-scroll"><table><thead><tr><th>Model</th><th>Description</th><th>Use case</th><th>Templates</th><th>Documentation &amp; files</th></tr></thead><tbody>
+<tr><td><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','Controller','Model','Controller.slx'))"><strong>Controller</strong></a></td><td>Torque control with motor split, AWD logic, and regen braking.</td><td>Full electro-thermal drive-cycle simulations with torque control, AWD, and regenerative braking.</td><td>VehicleElectroThermal</td><td><a href="matlab:web(fullfile(currentProject().RootFolder,'Components','Controller','Documentation','html','ControllerDescription.html'),'-new')">Documentation</a> &middot; <a href="matlab:edit(fullfile(currentProject().RootFolder,'Components','Controller','Model','ControllerParams.m'))">Parameters</a></td></tr>
+<tr><td><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','Controller','Model','ControllerFRM.slx'))"><strong>ControllerFRM</strong></a></td><td>Simplified logic for rapid parameter sweeps.</td><td>Abstract configurations for rapid sweeps and range estimation where simulation speed is prioritized.</td><td>VehicleElectric</td><td><a href="matlab:web(fullfile(currentProject().RootFolder,'Components','Controller','Documentation','html','ControllerFRMDescription.html'),'-new')">Documentation</a> &middot; <a href="matlab:edit(fullfile(currentProject().RootFolder,'Components','Controller','Model','ControllerParams.m'))">Parameters</a></td></tr>
+<tr><td><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','Controller','Model','ControllerHVAC.slx'))"><strong>ControllerHVAC</strong></a></td><td>Adds blower, compressor, and PTC commands to propulsion control.</td><td>Simulations requiring coordinated drivetrain and cabin HVAC control.</td><td>VehicleElecAux</td><td><a href="matlab:web(fullfile(currentProject().RootFolder,'Components','Controller','Documentation','html','ControllerHVACDescription.html'),'-new')">Documentation</a> &middot; <a href="matlab:edit(fullfile(currentProject().RootFolder,'Components','Controller','Model','ControllerParams.m'))">Parameters</a></td></tr>
+</tbody></table></div>
+    <h3>Where it participates</h3><ul>
+<li><strong>Range Estimation</strong> (<code>Workflow/Vehicle/RangeEstimation/</code>) &mdash; Controller manages torque split and regenerative braking during drive-cycle runs.</li>
+<li><strong>All Vehicle Templates</strong> &mdash; Every shipped vehicle configuration references a Controller variant for supervisory control.</li>
+</ul></section>
+
+      <section id="examples"><h2>Examples</h2><div class="used-by"><strong>Workflows and models that use this component</strong>The vehicle controller is used by the BEV system model and all vehicle range estimation workflows. Each vehicle template selects the appropriate controller variant.</div><div class="component-example-grid"><article class="component-example-card"><div class="card-header-bar"></div><img class="component-example-image" src="Image/ControllerDescription_01.png" alt="Controller example model canvas"><div class="component-example-body"><a href="workflow-vehicle-range.html">Estimate Electric Vehicle Range</a><p><strong>Vehicle workflow</strong> &mdash; Uses controller outputs to coordinate the configured vehicle.</p></div></article>
+<article class="component-example-card"><div class="card-header-bar"></div><img class="component-example-image" src="Image/ControllerDescription_01.png" alt="Controller example model canvas"><div class="component-example-body"><a href="component-bms.html">Battery Management Integration</a><p><strong>Component</strong> &mdash; All controller variants reference the shared BMS for relay and SOC signals.</p></div></article>
+<article class="component-example-card"><div class="card-header-bar"></div><img class="component-example-image" src="Image/ControllerDescription_01.png" alt="Controller example model canvas"><div class="component-example-body"><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Model','BEVsystemModel.slx'))">Open BEVsystemModel</a><p><strong>System model</strong> &mdash; Top-level model that integrates the controller with all plant components.</p><div class="component-example-actions"><a class="component-example-action secondary" href="BatteryElectricVehicleModelOverview.html">Vehicle documentation</a></div></div></article></div></section>
+
+      <section id="interface"><h2>Interface</h2><p class="section-intro">All fidelities share the same drive-cycle and battery-status boundary. ControllerHVAC adds cabin-comfort inputs and HVAC-actuator outputs.</p>
+    <div class="table-scroll"><table><thead><tr><th>Port / signal</th><th>Direction</th><th>Description</th></tr></thead><tbody>
+<tr><td>Drive cycle speed reference</td><td>Input</td><td>Target vehicle speed from the drive cycle source.</td></tr>
+<tr><td>Vehicle speed feedback</td><td>Input</td><td>Measured vehicle speed from driveline.</td></tr>
+<tr><td>Battery status</td><td>Input</td><td>SOC, voltage, and current from BMS.</td></tr>
+<tr><td>BMS relay commands</td><td>Input</td><td>Battery connection state.</td></tr>
+<tr><td>Cabin temperature feedback <em>(ControllerHVAC)</em></td><td>Input</td><td>Measured cabin air temperature.</td></tr>
+<tr><td>HVAC setpoint <em>(ControllerHVAC)</em></td><td>Input</td><td>Target cabin temperature.</td></tr>
+<tr><td>Front axle torque command</td><td>Output</td><td>Torque request to front motor (EM1).</td></tr>
+<tr><td>Rear axle torque command</td><td>Output</td><td>Torque request to rear motor (EM2).</td></tr>
+<tr><td>Brake command</td><td>Output</td><td>Mechanical braking torque request.</td></tr>
+<tr><td>Battery command</td><td>Output</td><td>Charge/discharge mode signal.</td></tr>
+<tr><td>Blower command <em>(ControllerHVAC)</em></td><td>Output</td><td>HVAC blower speed/enable.</td></tr>
+<tr><td>Compressor command <em>(ControllerHVAC)</em></td><td>Output</td><td>AC compressor enable.</td></tr>
+<tr><td>PTC heater command <em>(ControllerHVAC)</em></td><td>Output</td><td>Cabin heater enable.</td></tr>
+</tbody></table></div></section>
+
+      <section id="testing"><h2>Testing</h2><ul class="link-list"><li><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Model','BEVsystemModel.slx'))">Open BEV System Model</a> · <a href="matlab:web(fullfile(currentProject().RootFolder,'Components','Controller','Documentation','html','ControllerDescription.html'),'-new')">view documentation</a><p>The controller is validated within the full BEV system model using drive-cycle simulations.</p></li></ul></section>
+      <section id="see-also"><h2>See Also</h2><p class="see-also-links"><a href="component-bms.html">Battery Management System</a> | <a href="component-motor-drive.html">Motor Drive</a> | <a href="vehicle-range.html">Vehicle Models</a></p><h3>Topics</h3><ul><li><a href="workflow-vehicle-range.html">Estimate Vehicle Range</a></li><li><a href="vehicle-range.html#templates">Vehicle Templates</a></li></ul></section>
+    </main>
+  </div>
+  <script src="assets/app.js?v=20260930-6"></script>
+</body></html>

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Radiator — Electric Vehicle Design</title><link rel="stylesheet" href="assets/styles.css?v=20261028-3"></head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+  <header class="help-header"><div class="help-header-inner"><a class="help-brand" href="ElectricVehicleDesignOverview.html">MATLAB Help Center<small>Electric Vehicle Design with Simscape</small></a></div></header>
+  <div class="doc-shell">
+    <aside class="category-nav"><nav aria-label="Component reference navigation">
+      <ul class="nav-trail"><li><a href="ElectricVehicleDesignOverview.html">Documentation Home</a></li><li><a href="components.html">Components</a></li></ul>
+      <div class="nav-siblings-label">Thermal and Fluid</div>
+      <ul class="nav-siblings"><li><a href="component-battery-heater.html">Battery Heater</a></li><li><a href="component-chiller.html">Chiller</a></li><li><a href="component-hvac.html">HVAC</a></li><li><a href="component-pump.html">Pump</a></li><li aria-current="page"><span>Radiator</span></li></ul>
+      <div class="on-page"><div class="on-page-label">On this page</div><ul class="on-page-list"><li><a href="#description">Description</a></li><li><a href="#examples">Examples</a></li><li><a href="#interface">Interface</a></li><li><a href="#testing">Testing</a></li><li><a href="#see-also">See Also</a></li></ul></div>
+    <div class="nav-browse"><div class="on-page-label">Category</div><ul class="nav-browse-list"><li><a href="examples.html">Examples</a></li><li><a href="vehicle-range.html">Vehicle Models</a></li><li><a href="project-builder.html">Apps &amp; Utilities</a></li></ul></div>
+    </nav></aside>
+    <main class="doc-main" id="main-content">
+
+      <header class="product-intro reference-heading"><div><h1>Radiator</h1><p class="tagline">Reject coolant heat to ambient air</p><p class="library-path"><strong>Component path:</strong> Components / Radiator</p><div class="action-row"><a class="action" href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','Radiator','Model','Radiator.slx'))">Open Model</a><a class="action secondary" href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','Radiator','TestBench','RadiatorTestHarness.slx'))">Open Test Harness</a></div></div><figure class="component-header-image"><img src="Image/RadiatorDescription_01.png" alt="Radiator model canvas"></figure></header>
+
+      <section id="description"><h2>Description</h2>
+    <div class="component-description-layout">
+      <div class="component-lede"><p>Radiator component for the BEV thermal management system. The radiator dissipates heat from the coolant loop to the ambient air, maintaining coolant temperature within acceptable limits for battery, motor, and charger operation.</p>
+        <div class="fidelity-decision"><strong>How to choose a fidelity</strong><p><strong>Radiator</strong> is the maintained physical heat-rejection fidelity. Keep it whenever the coolant-loop energy balance, ambient conditions, ram air, or fan demand can limit battery, motor, inverter, or charger temperature.</p></div>
+      </div>
+
+    </div>
+    <h3 id="models">Fidelity at a glance</h3>
+    <div class="table-scroll"><table><thead><tr><th>Model</th><th>Description</th><th>Use case</th><th>Templates</th><th>Documentation &amp; files</th></tr></thead><tbody>
+<tr><td><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','Radiator','Model','Radiator.slx'))"><strong>Radiator</strong></a></td><td>Coolant tubes, air fins, and fan-driven heat dissipation to ambient.</td><td>All electro-thermal vehicle configurations that include a coolant loop. Essential for maintaining thermal balance during sustained driving and charging.</td><td>VehicleElectroThermal</td><td><a href="matlab:web(fullfile(currentProject().RootFolder,'Components','Radiator','Documentation','html','RadiatorDescription.html'),'-new')">Documentation</a> &middot; <a href="matlab:edit(fullfile(currentProject().RootFolder,'Components','Radiator','Model','RadiatorParams.m'))">Parameters</a></td></tr>
+</tbody></table></div>
+    <h3>Where it participates</h3><ul>
+<li><strong>Range Estimation</strong> (<code>Workflow/Vehicle/RangeEstimation/</code>) &mdash; The radiator rejects heat from the coolant loop during drive-cycle runs. Fan commands and vehicle speed determine airflow.</li>
+<li><strong>Electro-Thermal Vehicle Studies</strong> &mdash; The radiator is a critical part of the VehicleElectroThermal template coolant loop, balancing heat input from the battery, motor, and charger against ambient dissipation.</li>
+</ul></section>
+
+      <section id="examples"><h2>Examples</h2><div class="used-by"><strong>Workflows and models that use this component</strong>The radiator is used by the VehicleElectroThermal template as its primary heat-rejection component during all drive-cycle simulations.</div><div class="component-example-grid"><article class="component-example-card"><div class="card-header-bar"></div><img class="component-example-image" src="Image/RadiatorTestHarnessDescription_01.png" alt="Radiator example model canvas"><div class="component-example-body"><a href="workflow-vehicle-range.html">Estimate Range Under Hot Ambient Conditions</a><p><strong>Vehicle workflow</strong> &mdash; Exercises radiator heat rejection under hot-ambient conditions.</p></div></article>
+</div></section>
+
+      <section id="interface"><h2>Interface</h2><p class="section-intro">Input bus <code>s</code> supplies environment conditions, vehicle speed, and the fan command. Coolant ports <code>A</code> and <code>B</code> connect the thermal-liquid loop. Use Simscape logging to inspect heat transfer.</p>
+    <div class="table-scroll"><table><thead><tr><th>Port / signal</th><th>Direction</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>s.Env</code></td><td>Input</td><td>Ambient temperature, pressure, relative humidity, and CO2 conditions.</td></tr>
+<tr><td><code>s.VehSpd</code></td><td>Input</td><td>Vehicle speed used for ram-air flow.</td></tr>
+<tr><td><code>s.cmdFan</code></td><td>Input</td><td>Fan speed command used for forced airflow.</td></tr>
+<tr><td><code>A</code></td><td>Conserving</td><td>Thermal-liquid coolant inlet connection.</td></tr>
+<tr><td><code>B</code></td><td>Conserving</td><td>Thermal-liquid coolant outlet connection.</td></tr>
+</tbody></table></div></section>
+
+      <section id="testing"><h2>Testing</h2><ul class="link-list"><li><a href="matlab:open_system(fullfile(currentProject().RootFolder,'Components','Radiator','TestBench','RadiatorTestHarness.slx'))">Open Radiator Test Harness</a> · <a href="matlab:web(fullfile(currentProject().RootFolder,'Components','Radiator','Documentation','html','RadiatorTestHarnessDescription.html'),'-new')">view documentation</a><p>Verify heat dissipation under controlled coolant flow and ambient conditions.</p></li><li><a href="matlab:runtests(fullfile(currentProject().RootFolder,'Components','Radiator','TestCase','RadiatorPassTests.m'))">Run Radiator Component Tests</a><p>Run the maintained Radiator test case before integration.</p></li></ul></section>
+      <section id="see-also"><h2>See Also</h2><p class="see-also-links"><a href="component-chiller.html">Chiller</a> | <a href="component-pump.html">Pump</a> | <a href="component-battery-heater.html">Battery Heater</a></p><h3>Topics</h3><ul><li><a href="workflow-motor-thermal.html">Thermal Durability</a></li><li><a href="vehicle-range.html#templates">Vehicle Templates</a></li></ul></section>
+    </main>
+  </div>
+  <script src="assets/app.js?v=20260930-6"></script>
+</body></html>

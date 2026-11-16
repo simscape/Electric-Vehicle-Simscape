@@ -20,16 +20,18 @@
 open_system('ChargerDummy')
 
 %% Ports
-% *Inputs*
 %
-% * *Relay command* - Charger enable.
-% * *Battery cell voltage* - CC-CV feedback (passed through).
-% * *Charging state* - Charge mode signal.
-%
-% *Outputs*
-%
-% * *Charging Current* - Nominal or zero current.
-% * *HV Power* - Nominal or zero power.
+% <html>
+% <h3>Input Bus &mdash; <code>s</code></h3>
+% <p>Input bus <code>s</code> is terminated in this fidelity.</p>
+% <h3>Output Bus</h3>
+% <p>No output bus.</p>
+% <h3>Physical Ports</h3>
+% <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse">
+% <tr><th>Port</th><th>Domain</th><th>Description</th></tr>
+% <tr><td>HV</td><td>Electrical</td><td>High-voltage bus connection</td></tr>
+% </table>
+% </html>
 
 %% Workflows
 % The ChargerDummy block is a placeholder variant for integration testing

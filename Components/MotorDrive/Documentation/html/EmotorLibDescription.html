@@ -7,9 +7,9 @@ This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
       -->
 <title>EmotorLib</title>
-<meta name="generator" content="MATLAB 26.1">
+<meta name="generator" content="MATLAB 25.2">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2026-04-21">
+<meta name="DC.date" content="2026-05-06">
 <meta name="DC.source" content="EmotorLibDescription.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
@@ -118,13 +118,8 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <h2 id="1">Library Overview</h2>
 <p>The EmotorLib library provides two motor subsystem blocks that are referenced by all MotorDrive fidelity models. The library separates the motor plant into a non-thermal variant (<b>Emotor</b>) and a thermal variant (<b>Emotor Thermal</b>) so that each vehicle-level fidelity can select the appropriate level of detail.</p>
 <p>Motor losses are defined by a speed-torque-loss lookup table stored in <tt>MotorLossMap.mat</tt>. Electrical parameters (max torque, max power, time constant) are defined in <tt>MotorDriveGearThParams.m</tt>. Inverter thermal and heatsink properties are defined in <tt>InverterMotorDriveParam.m</tt>.</p>
-<pre class="codeinput">open_system(<span class="string">'EmotorLib'</span>)
-</pre>
 <img vspace="5" hspace="5" src="images/EmotorLibDescription_01.png" alt=""> <h2 id="2">Emotor (Non-Thermal)</h2>
 <p>The <b>Emotor</b> block is the non-thermal variant of the motor plant. It models the electrical and mechanical behavior of the motor without any temperature dependence or thermal coupling.</p>
-<pre class="codeinput">open_system(<span class="string">'EmotorLib/Emotor'</span>)
-captureSubsystemImage(<span class="string">'EmotorLib/Emotor'</span>)
-</pre>
 <img vspace="5" hspace="5" src="images/EmotorLibDescription_02.png" alt=""> <p>The Emotor block contains the following subsystems:</p>
 <div>
 <ul>
@@ -163,9 +158,6 @@ captureSubsystemImage(<span class="string">'EmotorLib/Emotor'</span>)
 <p>See <tt>MotorDriveGearThParams.m</tt> for a complete list.</p>
 <h2 id="5">Emotor Thermal</h2>
 <p>The <b>Emotor Thermal</b> block extends the non-thermal variant with full thermal dynamics. In addition to the electrical and mechanical model it includes loss estimation and thermal coupling for motor windings, rotor, and coolant jacket.</p>
-<pre class="codeinput">open_system(<span class="string">'EmotorLib/Emotor Thermal'</span>)
-captureSubsystemImage(<span class="string">'EmotorLib/Emotor Thermal'</span>)
-</pre>
 <img vspace="5" hspace="5" src="images/EmotorLibDescription_03.png" alt=""> <p>The Emotor Thermal block adds the following subsystems on top of the base Emotor model:</p>
 <div>
 <ul>
@@ -237,7 +229,7 @@ captureSubsystemImage(<span class="string">'EmotorLib/Emotor Thermal'</span>)
 </ul>
 </div>
 <p class="footer">Copyright 2022 - 2026 The MathWorks, Inc.<br>
-<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2026a</a>
+<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2025b</a>
 <br>
 </p>
 </div>
