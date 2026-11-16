@@ -9,13 +9,12 @@
 # For details about the syntax of this file, see
 # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
 
-# Copyright 2021-2025 The MathWorks, Inc.
+# Copyright 2021-2026 The MathWorks, Inc.
 
 name: CI using MATLAB
 
 on:
   push:
-    branches: [ main ]
     paths-ignore:
       - 'docs/**'
       - '**.md'
@@ -25,7 +24,6 @@ on:
       - '**.xml'
 
   pull_request:
-    branches: [ main ]
     paths-ignore:
       - 'docs/**'
       - '**.md'
@@ -33,6 +31,9 @@ on:
       - '**.svg'
       - '**.txt'
       - '**.xml'
+
+  schedule:
+    - cron: '0 3 * * 1' # schedule a weekly-ish build
 
 jobs:
 
@@ -46,7 +47,8 @@ jobs:
       - name: Setup MATLAB
         uses: matlab-actions/setup-matlab@v3
         with:
-          release: R2025b
+          release: R2025bu5
+          cache: true
 
       - name: Run tests
         uses: matlab-actions/run-command@v3
@@ -67,7 +69,7 @@ jobs:
       - name: Setup MATLAB
         uses: matlab-actions/setup-matlab@v3
         with:
-          release: R2025b
+          release: R2025bu5
           cache: true
           products: |
             Simscape
