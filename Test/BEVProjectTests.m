@@ -72,5 +72,12 @@ addPlugin(runner, codeCoveragePlugin)
 
 %% Run tests
 
+% Simscape Battery extracts mask callback code to a temp folder and adds it to
+% the path once per session. Load the libraries before the runner snapshots
+% the path so the per-test path restore does not remove that folder.
+load_system("BatteryThermalManagement");
+load_system("BatteryCurrentManagement");
+
 results = run(runner, suite);
+bdclose('all');   % discard unsaved test changes so project close cannot block on a dialog in CI
 assertSuccess(results)

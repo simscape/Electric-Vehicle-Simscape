@@ -97,6 +97,7 @@ classdef TestExecutor
             TestExecutor.setWarningAppData(config);
             try
                 results = run(runner, suite);
+                bdclose('all');   % discard unsaved test changes so project close cannot block on a dialog in CI
             catch runErr
                 TestExecutor.clearWarningAppData();
                 rethrow(runErr);
@@ -145,6 +146,7 @@ classdef TestExecutor
             TestExecutor.setWarningAppData(config);
             try
                 results = run(runner, suite);
+                bdclose('all');   % discard unsaved test changes so project close cannot block on a dialog in CI
             catch runErr
                 TestExecutor.clearWarningAppData();
                 rethrow(runErr);
@@ -184,6 +186,7 @@ classdef TestExecutor
             TestExecutor.setWarningAppData(config);
             try
                 results = run(runner, suite);
+                bdclose('all');   % discard unsaved test changes so project close cannot block on a dialog in CI
             catch runErr
                 TestExecutor.clearWarningAppData();
                 rethrow(runErr);
@@ -225,6 +228,7 @@ classdef TestExecutor
 
             runner = TestExecutor.configureRunner(config, reportFolder, releaseStr);
             results = run(runner, suite);
+            bdclose('all');   % discard unsaved test changes so project close cannot block on a dialog in CI
             disp(results);
         end
 
@@ -558,6 +562,20 @@ classdef TestExecutor
                     coverageFiles, reportFolder, releaseStr);
                 addPlugin(runner, covPlugin);
             end
+
+            TestExecutor.preloadMaskCallbackLibraries();
+        end
+
+        function preloadMaskCallbackLibraries()
+        % preloadMaskCallbackLibraries - Loads Simscape Battery libraries before tests run
+        %
+        % Simscape Battery extracts mask callback code to a temp folder and adds
+        % it to the path once per session. Loading the libraries before the
+        % runner snapshots the path ensures the per-test path restore does not
+        % remove that folder.
+
+            load_system("BatteryThermalManagement");
+            load_system("BatteryCurrentManagement");
         end
 
         function files = discoverFiles(configSection, prjRoot, excludeFunctions)

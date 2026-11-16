@@ -41,24 +41,6 @@
   </tr>
 </table>
 
-## Mechanical Analysis
-
-<table>
-  <tr>
-    <td class="text-column" width=1200>
-      On the mechanical side, you select gear ratios within motor thermal limits, evaluate
-      torque ripple and driveline vibration using frequency order maps, and optimize launch
-      ratios to reduce vehicle jerk while maintaining acceleration.
-    </td>
-  </tr>
-</table>
-
-<table>
-  <tr>
-    <td class="image-column" width="1200" align="center" valign="middle"><img src="Overview/html/Image/PMSMThermalTestGearResult.png" alt="Motor winding and magnet temperatures for different gear ratios over the EUDC drive cycle"></td>
-  </tr>
-</table>
-
 ## Thermal Analysis
 
 <table>
@@ -78,6 +60,25 @@
   </tr>
 </table>
 
+## Mechanical Analysis
+
+<table>
+  <tr>
+    <td class="text-column" width=1200>
+      On the mechanical side, you select gear ratios within motor thermal limits, evaluate
+      torque ripple and driveline vibration using frequency order maps, and optimize launch
+      ratios to reduce vehicle jerk while maintaining acceleration.
+    </td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td class="image-column" width="600" align="center" valign="middle"><img src="Overview/html/Image/DrivelineOrderMap.png" alt="Frequency order map of motor-bearing excitation versus motor speed and order"></td>
+    <td class="image-column" width="600" align="center" valign="middle"><img src="Overview/html/Image/VehicleLaunchJerkComparison.png" alt="Optimized and baseline vehicle jerk during launch"></td>
+  </tr>
+</table>
+
 <hr color="gray" size="10">
 
 ## To Get Started
@@ -89,21 +90,6 @@
 ## Requirement(s)
 
 * MATLAB&reg; release R2025b or newer
-* Simulink&reg;
-* Simscape&trade;
-* Simscape Battery&trade;
-* Simscape Driveline&trade;
-* Simscape Fluids&trade;
-* Simscape Electrical&trade;
-* Stateflow&reg;
-* Powertrain Blockset&trade;
-* Deep Learning Toolbox&trade;
-* MATLAB Coder&trade;
-* Predictive Maintenance Toolbox&trade;
-* Signal Processing Toolbox&trade;
-* System Identification Toolbox&trade;
-* Statistics and Machine Learning Toolbox&trade;
-* Optimization Toolbox&trade;
-* Global Optimization Toolbox&trade;
+* Simulink&reg;, Simscape&trade;, Simscape Battery&trade;, Simscape Driveline&trade;, Simscape Fluids&trade;, Simscape Electrical&trade;, Stateflow&reg;, Powertrain Blockset&trade;, Deep Learning Toolbox&trade;, MATLAB Coder&trade;, Predictive Maintenance Toolbox&trade;, Signal Processing Toolbox&trade;, System Identification Toolbox&trade;, Statistics and Machine Learning Toolbox&trade;, Optimization Toolbox&trade;, Global Optimization Toolbox&trade;
 
 Copyright 2022 - 2026 The MathWorks, Inc.
